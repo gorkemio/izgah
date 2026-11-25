@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.*
+.env*
+!.env.example
+
+# Build & tool outputs
+.svelte-kit/
+dist/
+build/
+out/
+.output/
+.wxt/
+coverage/
+*.tsbuildinfo
+extensions/safari/
+DerivedData/
+xcuserdata/
+
+# Local data & test artifacts
+.local-data/
+playwright-report/
+test-results/
+extensions/playwright-report/
+extensions/test-results/
+
+# macOS
+.DS_Store

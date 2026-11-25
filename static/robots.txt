@@ -1,0 +1,3 @@
+# Izgah instances are private team spaces; keep them out of search engines.
+User-agent: *
+Disallow: /

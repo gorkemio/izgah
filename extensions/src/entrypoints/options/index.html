@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="color-scheme" content="light dark" />
+		<meta name="manifest.open_in_tab" content="true" />
+		<title data-i18n-title="optionsTitle">Izgah extension settings</title>
+		<link rel="stylesheet" href="../../styles/tokens.css" />
+		<link rel="stylesheet" href="./options.css" />
+	</head>
+	<body>
+		<main class="options-main">
+			<header class="options-header">
+				<h1 data-i18n="optionsTitle">Izgah extension settings</h1>
+				<p class="options-subtitle" data-i18n="optionsSubtitle">
+					Connect the browser extension to your team’s server and your personal API key.
+				</p>
+			</header>
+
+			<div id="options-status-card" class="banner banner-info status-card">
+				<h2 class="status-title" data-i18n="connectionStatus">Connection status</h2>
+				<p id="options-status-text" class="banner-message"></p>
+				<p id="options-user-summary" class="status-meta" hidden></p>
+			</div>
+
+			<div id="options-cors-note" class="banner banner-info cors-note" hidden>
+				<p id="options-cors-note-text" class="banner-message" data-i18n="corsNote">
+					For a server other than the default address, requests are sent through the server’s
+					/api/v1/* CORS headers without asking for extra browser permissions.
+				</p>
+			</div>
+
+			<form id="options-form" novalidate>
+				<div class="form-field">
+					<label for="server-origin" class="form-label" data-i18n="serverOrigin"
+						>Your Izgah server address</label
+					>
+					<p id="server-origin-hint" class="field-hint" data-i18n="serverOriginHint">
+						The address your team uses for Izgah, e.g. https://links.example.com.
+					</p>
+					<input
+						id="server-origin"
+						name="serverOrigin"
+						type="url"
+						required
+						autocorrect="off"
+						autocapitalize="none"
+						spellcheck="false"
+						placeholder="https://links.example.com"
+						aria-invalid="false"
+						aria-describedby="server-origin-hint"
+						data-hint="server-origin-hint"
+						data-error="server-origin-error"
+					/>
+					<p id="server-origin-error" class="field-error" hidden></p>
+				</div>
+
+				<div class="form-field">
+					<label for="api-key" class="form-label" data-i18n="apiKey">Personal API key</label>
+					<p class="field-hint">
+						<span id="api-key-hint" data-i18n="apiKeyHint">
+							Enter the personal API key (starting with izk_) you created in the web app.
+						</span>
+						<a
+							id="api-keys-link"
+							href="https://links.example.com/settings/api-keys"
+							target="_blank"
+							rel="noopener noreferrer"
+							data-i18n="openApiKeys"
+							>Open /settings/api-keys</a
+						>
+					</p>
+					<div class="secret-input-row">
+						<input
+							id="api-key"
+							name="apiKey"
+							type="password"
+							required
+							autocomplete="off"
+							autocorrect="off"
+							autocapitalize="none"
+							spellcheck="false"
+							data-1p-ignore="true"
+							data-lpignore="true"
+							placeholder="izk_..."
+							aria-invalid="false"
+							aria-describedby="api-key-hint"
+							data-hint="api-key-hint"
+							data-error="api-key-error"
+						/>
+						<button
+							id="toggle-api-key-btn"
+							type="button"
+							class="btn btn-secondary"
+							aria-pressed="false"
+							aria-describedby="toggle-api-key-warning"
+							data-i18n="show"
+						>
+							Show
+						</button>
+					</div>
+					<span id="toggle-api-key-warning" class="visually-hidden" data-i18n="revealWarning">
+						Warning: this button shows your API key on screen.
+					</span>
+					<p id="api-key-error" class="field-error" hidden></p>
+				</div>
+
+				<div id="options-error-banner" class="banner banner-error" role="alert" hidden>
+					<p id="options-error-message" class="banner-message"></p>
+					<div id="options-request-id-row" class="request-id-row" hidden>
+						<span
+							><span data-i18n="requestIdLabel">Tracking code:</span>
+							<code id="options-request-id"></code
+						></span>
+						<span class="copy-control">
+							<button
+								id="options-copy-btn"
+								type="button"
+								class="btn btn-secondary btn-sm"
+								command="--copy"
+								commandfor="options-request-id"
+								data-i18n="copy"
+							>
+								Copy
+							</button>
+							<span
+								id="options-copy-feedback"
+								class="copy-feedback"
+								role="status"
+								aria-live="polite"
+							></span>
+						</span>
+					</div>
+				</div>
+
+				<div class="options-actions">
+					<button
+						id="test-connection-btn"
+						type="button"
+						class="btn btn-secondary"
+						data-i18n="testConnection"
+					>
+						Test connection
+					</button>
+					<button id="save-settings-btn" type="submit" class="btn btn-primary" data-i18n="save">
+						Save
+					</button>
+					<button
+						id="clear-settings-btn"
+						type="button"
+						class="btn btn-danger-outline"
+						data-i18n="clearKey"
+					>
+						Delete saved key
+					</button>
+				</div>
+			</form>
+
+			<div id="options-live-region" class="visually-hidden" aria-live="polite"></div>
+		</main>
+		<script type="module" src="./main.ts"></script>
+	</body>
+</html>

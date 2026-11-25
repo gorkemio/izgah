@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:16-bookworm
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: izgah
+      POSTGRES_PASSWORD: izgah
+      POSTGRES_DB: izgah
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    configs:
+      - source: init_test_db
+        target: /docker-entrypoint-initdb.d/01-init-test-db.sql
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'pg_isready -U izgah -d izgah && (psql -U izgah -d izgah -tAc "SELECT 1 FROM pg_database WHERE datname=''izgah_test''" | grep -q 1 || createdb -U izgah izgah_test)'
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+configs:
+  init_test_db:
+    content: |
+      CREATE DATABASE izgah_test OWNER izgah;
+
+volumes:
+  pgdata:

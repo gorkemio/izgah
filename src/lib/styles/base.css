@@ -1,0 +1,248 @@
+@layer reset {
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+
+	html {
+		-webkit-text-size-adjust: 100%;
+		text-size-adjust: 100%;
+	}
+
+	body,
+	h1,
+	h2,
+	h3,
+	h4,
+	p,
+	figure,
+	blockquote,
+	dl,
+	dd {
+		margin: 0;
+	}
+
+	img,
+	svg {
+		display: block;
+		max-inline-size: 100%;
+	}
+
+	input,
+	button,
+	textarea,
+	select {
+		font: inherit;
+		color: inherit;
+	}
+}
+
+@layer base {
+	html {
+		font: var(--text-body);
+		color: var(--color-text);
+		background: var(--color-bg);
+		accent-color: var(--color-accent);
+		scroll-padding-block-start: calc(var(--sticky-top) + var(--space-3));
+		scroll-padding-block-end: calc(var(--tab-bar-h) + var(--space-3));
+		font-synthesis: none;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		text-rendering: optimizeLegibility;
+	}
+
+	body {
+		min-block-size: 100dvh;
+		background: var(--color-bg);
+		color: var(--color-text);
+	}
+
+	/* Background scroll lock while a modal dialog is open. */
+	html:has(dialog:modal) {
+		overflow: hidden;
+	}
+
+	@supports (scrollbar-gutter: stable) {
+		html {
+			scrollbar-gutter: stable;
+		}
+	}
+
+	h1,
+	h2,
+	h3 {
+		text-wrap: balance;
+	}
+
+	/* Strict serif boundary (izgah-ui-v3 §2.2): page h1 uses Newsreader Variable. */
+	h1 {
+		font: var(--text-display);
+		letter-spacing: -0.02em;
+	}
+
+	p {
+		text-wrap: pretty;
+	}
+
+	a {
+		color: inherit;
+		text-decoration-line: underline;
+		text-decoration-thickness: 1px;
+		text-decoration-color: var(--color-line-strong);
+		text-underline-offset: 0.2em;
+		transition:
+			color var(--dur-fast) var(--ease),
+			text-decoration-color var(--dur-fast) var(--ease);
+	}
+
+	a:hover {
+		color: var(--color-accent-text);
+		text-decoration-color: currentColor;
+	}
+
+	::selection {
+		background: var(--color-accent);
+		color: var(--color-on-accent);
+	}
+
+	/*
+	 * Two-layer crisp focus ring (izgah-ui-v3 §3):
+	 * 2px bg separator + 2px dual-polarity accent (all accents >= 4.75:1 against bg/s2),
+	 * plus transparent outline so Windows High Contrast / forced-colors keeps it visible.
+	 */
+	:focus-visible {
+		outline: 2px solid transparent;
+		outline-offset: 2px;
+		box-shadow:
+			0 0 0 2px var(--color-bg),
+			0 0 0 4px var(--color-accent);
+	}
+
+	code,
+	kbd,
+	samp,
+	pre {
+		font-family: var(--font-mono);
+		font-variant-numeric: tabular-nums;
+	}
+
+	hr {
+		border: 0;
+		border-block-start: 1px solid var(--color-line);
+	}
+
+	.visually-hidden:where(:not(:focus-within, :active)) {
+		position: absolute !important;
+		clip-path: inset(50%) !important;
+		overflow: hidden !important;
+		width: 1px !important;
+		height: 1px !important;
+		margin: -1px !important;
+		padding: 0 !important;
+		border: 0 !important;
+		white-space: nowrap !important;
+	}
+
+	.skip-link {
+		position: fixed;
+		inset-block-start: var(--space-3);
+		inset-inline-start: var(--space-3);
+		z-index: 1000;
+		display: inline-flex;
+		align-items: center;
+		min-block-size: 44px;
+		padding: var(--space-2) var(--space-4);
+		background: var(--color-accent);
+		color: var(--color-on-accent);
+		font: var(--text-ui);
+		font-weight: 600;
+		text-decoration: none;
+		border: 1px solid var(--color-accent);
+		border-radius: var(--radius-sm);
+		transform: translateY(-200%);
+	}
+
+	.skip-link:hover {
+		color: var(--color-on-accent);
+	}
+
+	.skip-link:focus {
+		transform: translateY(0);
+	}
+
+	/* Like heart pulse (§8: 280ms ease-out, 1 -> 1.2 -> 1) */
+	@keyframes like-pop {
+		0% {
+			scale: 1;
+		}
+		45% {
+			scale: 1.2;
+		}
+		100% {
+			scale: 1;
+		}
+	}
+
+	@keyframes izgah-vt-out {
+		from {
+			opacity: 1;
+			translate: 0 0;
+		}
+		to {
+			opacity: 0;
+			translate: 0 -4px;
+		}
+	}
+
+	@keyframes izgah-vt-in {
+		from {
+			opacity: 0;
+			translate: 0 4px;
+		}
+		to {
+			opacity: 1;
+			translate: 0 0;
+		}
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		::view-transition-old(root) {
+			animation: izgah-vt-out var(--dur-base) var(--ease) both;
+		}
+
+		::view-transition-new(root) {
+			animation: izgah-vt-in var(--dur-base) var(--ease) both;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		*,
+		*::before,
+		*::after {
+			transition-duration: 0ms !important;
+			animation-duration: 0ms !important;
+			animation-iteration-count: 1 !important;
+		}
+
+		::view-transition-group(*),
+		::view-transition-old(*),
+		::view-transition-new(*) {
+			animation: none !important;
+		}
+	}
+
+	@media (forced-colors: active) {
+		:focus-visible {
+			outline: 2px solid CanvasText;
+			outline-offset: 2px;
+			box-shadow: none;
+		}
+
+		.skip-link {
+			background: Highlight;
+			color: HighlightText;
+			border-color: HighlightText;
+		}
+	}
+}

@@ -1,0 +1,6 @@
+# Minimal Caddy reverse proxy for one Izgah instance.
+# Replace links.example.com with your domain; Caddy fetches the TLS certificate automatically.
+links.example.com {
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:3000
+}

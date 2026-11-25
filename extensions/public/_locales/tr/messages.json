@@ -1,0 +1,326 @@
+{
+	"actionTitle": {
+		"message": "İzgah'a paylaş"
+	},
+	"addedSilently": {
+		"message": "Bağlantı yalnızca seçili bölümlere sessiz kaynak olarak eklendi."
+	},
+	"apiKey": {
+		"message": "Kişisel API anahtarı"
+	},
+	"apiKeyEmpty": {
+		"message": "Kişisel API anahtarı boş bırakılamaz."
+	},
+	"apiKeyHint": {
+		"message": "Web uygulamasından oluşturduğunuz izk_... ön ekli kişisel API anahtarını girin."
+	},
+	"apiKeyInvalid": {
+		"message": "Geçerli bir izk_... kişisel API anahtarı girin."
+	},
+	"autoDetect": {
+		"message": "Otomatik algıla"
+	},
+	"autoDetectSuggested": {
+		"message": "Otomatik algıla (Önerilen: $1)"
+	},
+	"checkingLink": {
+		"message": "Bağlantı kontrol ediliyor…"
+	},
+	"clearKey": {
+		"message": "Kayıtlı anahtarı sil"
+	},
+	"cleared": {
+		"message": "Kayıtlı ayarlar ve API anahtarı silindi."
+	},
+	"close": {
+		"message": "Kapat"
+	},
+	"commandOpen": {
+		"message": "İzgah paylaşım penceresini aç"
+	},
+	"connectionStatus": {
+		"message": "Bağlantı durumu"
+	},
+	"contentType": {
+		"message": "İçerik türü"
+	},
+	"contentType_article": {
+		"message": "Makale"
+	},
+	"contentType_repo": {
+		"message": "Repo"
+	},
+	"contentType_social": {
+		"message": "Sosyal"
+	},
+	"contentType_video": {
+		"message": "Video"
+	},
+	"contentType_web": {
+		"message": "Web"
+	},
+	"contextExpired": {
+		"message": "Sağ tık bağlamının süresi dolduğu için sekme adresi otomatik alınamadı; paylaşmak istediğiniz http:// veya https:// adresini yapıştırabilirsiniz."
+	},
+	"contextMenuShare": {
+		"message": "İzgah'a paylaş"
+	},
+	"copied": {
+		"message": "Kopyalandı"
+	},
+	"copy": {
+		"message": "Kopyala"
+	},
+	"copyFailed": {
+		"message": "Kopyalanamadı — takip kodunu elle seçip kopyalayın"
+	},
+	"corsNote": {
+		"message": "Varsayılan adres dışında bir İzgah sunucusu kullandığınızda istekler ek tarayıcı izni istenmeden sunucunun /api/v1/* CORS başlıkları üzerinden gönderilir."
+	},
+	"dupSections": {
+		"message": "Bölümler: $1."
+	},
+	"dupSharedBefore": {
+		"message": "Bu link daha önce İzgah ekibinde paylaşıldı."
+	},
+	"dupSharedBy": {
+		"message": "Bu link daha önce $1 tarafından $2 paylaşıldı."
+	},
+	"dupSilent": {
+		"message": "Yalnızca sessiz kaynak olarak kayıtlı ($1); normal paylaşım yaparsanız ana akışa da eklenir."
+	},
+	"dupTotal": {
+		"message": "Toplam $1 paylaşım."
+	},
+	"errBadRequest": {
+		"message": "İstek biçimi sunucu tarafından kabul edilmedi. Girdileri kontrol edip yeniden deneyin."
+	},
+	"errConflict": {
+		"message": "İstek mevcut sunucu durumuyla çakıştı. Lütfen yeniden deneyin."
+	},
+	"errForbidden": {
+		"message": "Bu işlem için yetkiniz bulunmuyor (örneğin sessiz kaynak yalnızca admin rolü tarafından eklenebilir)."
+	},
+	"errNetwork": {
+		"message": "İzgah sunucusuna bağlanılamadı. İnternet bağlantınızı ve Ayarlardaki sunucu adresini kontrol edin."
+	},
+	"errNotFound": {
+		"message": "Belirtilen İzgah sunucu adresinde bu API uç noktası bulunamadı veya HTTP yöntemi desteklenmiyor. Ayarlardaki sunucu adresini kontrol edin."
+	},
+	"errRateLimited": {
+		"message": "Çok fazla istek gönderildi (hız sınırına ulaşıldı). $1"
+	},
+	"errRetryAfter": {
+		"message": "Lütfen $1 saniye bekleyip yeniden deneyin."
+	},
+	"errRetrySoon": {
+		"message": "Lütfen kısa süre bekleyip yeniden deneyin."
+	},
+	"errServer": {
+		"message": "İzgah sunucusunda beklenmeyen bir hata oluştu. Sorun sürerse bu takip kodunu yöneticinizle paylaşın."
+	},
+	"errUnauthorized": {
+		"message": "API anahtarınız geçersiz, eksik veya iptal edilmiş. Lütfen /settings/api-keys sayfasından yeni bir anahtar oluşturup eklenti ayarlarını güncelleyin."
+	},
+	"errUnknown": {
+		"message": "İstek sunucu tarafından tamamlanamadı. Lütfen yeniden deneyin."
+	},
+	"errValidation": {
+		"message": "Gönderilen alanlar doğrulanamadı. Lütfen işaretli alanları kontrol edin."
+	},
+	"extDescription": {
+		"message": "İnternette bulduğunuz yararlı bağlantıları İzgah ekibinizle paylaşın."
+	},
+	"extName": {
+		"message": "İzgah"
+	},
+	"fixFormErrors": {
+		"message": "Form alanlarındaki hataları düzeltin."
+	},
+	"hide": {
+		"message": "Gizle"
+	},
+	"linkAddress": {
+		"message": "Bağlantı adresi"
+	},
+	"loadedSaved": {
+		"message": "Kayıtlı bağlantı bilgileri yüklendi."
+	},
+	"loadedSavedTest": {
+		"message": "Kayıtlı ayarlar yüklendi. Bağlantıyı test edebilirsiniz."
+	},
+	"newShare": {
+		"message": "Yeni paylaşım"
+	},
+	"noSectionInfo": {
+		"message": "bölüm bilgisi yok"
+	},
+	"noSections": {
+		"message": "Henüz tanımlı konu bölümü bulunmuyor."
+	},
+	"notConfigured": {
+		"message": "Henüz yapılandırılmadı. İzgah sunucu adresini ve kişisel API anahtarınızı girin."
+	},
+	"noteLabel": {
+		"message": "Not (isteğe bağlı)"
+	},
+	"notePlaceholder": {
+		"message": "Neden paylaşmaya değer? (Cmd/Ctrl+Enter ile gönder)"
+	},
+	"openApiKeys": {
+		"message": "/settings/api-keys sayfasını aç"
+	},
+	"openSettings": {
+		"message": "Ayarları aç"
+	},
+	"optionsSubtitle": {
+		"message": "Tarayıcı eklentisini ekip sunucunuza ve kişisel API anahtarınıza bağlayın."
+	},
+	"optionsTitle": {
+		"message": "İzgah Eklenti Ayarları"
+	},
+	"originCredentials": {
+		"message": "Sunucu adresinde kullanıcı adı veya parola bulunamaz."
+	},
+	"originEmpty": {
+		"message": "İzgah sunucu adresi boş bırakılamaz."
+	},
+	"originHttps": {
+		"message": "Uzak İzgah sunucuları için https:// adresi gereklidir (http:// yalnız localhost için desteklenir)."
+	},
+	"originInvalid": {
+		"message": "Geçerli bir İzgah sunucu adresi girin (ör. https://links.example.com)."
+	},
+	"originScheme": {
+		"message": "Sunucu adresi yalnızca https:// veya yerel geliştirme için http:// olabilir."
+	},
+	"popupTitle": {
+		"message": "İzgah'a paylaş"
+	},
+	"popupWordmarkSuffix": {
+		"message": ": bağlantı paylaş"
+	},
+	"publishedToFeed": {
+		"message": "Bağlantı ana akışta yayınlandı."
+	},
+	"reloadSections": {
+		"message": "Bölümleri yeniden yükle"
+	},
+	"requestAborted": {
+		"message": "İstek iptal edildi."
+	},
+	"requestIdLabel": {
+		"message": "Takip kodu:"
+	},
+	"requestTimeout": {
+		"message": "İstek zaman aşımına uğradı."
+	},
+	"revealWarning": {
+		"message": "Uyarı: bu düğme API anahtarınızı ekranda görünür kılar."
+	},
+	"roleAdmin": {
+		"message": "Yönetici"
+	},
+	"roleMember": {
+		"message": "Üye"
+	},
+	"roleSummary": {
+		"message": "$1 ($2) · Rol: $3"
+	},
+	"save": {
+		"message": "Kaydet"
+	},
+	"savedAndVerified": {
+		"message": "Ayarlar kaydedildi ve bağlantı doğrulandı."
+	},
+	"sectionsLoadFailed": {
+		"message": "Konu bölümleri yüklenemedi. Normal paylaşım yapabilir veya bölümleri yeniden yükleyebilirsiniz."
+	},
+	"sectionsLoaded": {
+		"message": "Konu bölümleri yüklendi."
+	},
+	"sectionsOptional": {
+		"message": "Konu Bölümleri (isteğe bağlı)"
+	},
+	"sectionsRequired": {
+		"message": "Konu Bölümleri (en az bir bölüm zorunlu)"
+	},
+	"serverOrigin": {
+		"message": "İzgah sunucu adresi"
+	},
+	"serverOriginHint": {
+		"message": "Ekibinizin İzgah adresi, ör. https://links.example.com (uzak sunucular için https:// zorunludur). Emin değilseniz yöneticinize sorun."
+	},
+	"settings": {
+		"message": "Ayarlar"
+	},
+	"setupDescription": {
+		"message": "Bağlantı paylaşmadan önce eklenti ayarlarından İzgah sunucu adresini ve kişisel API anahtarınızı tanımlayın."
+	},
+	"share": {
+		"message": "Paylaş"
+	},
+	"shareUnexpected": {
+		"message": "Paylaşım sırasında beklenmeyen bir hata oluştu."
+	},
+	"sharedHeading": {
+		"message": "Bağlantı İzgah'a paylaşıldı"
+	},
+	"sharedToIzgah": {
+		"message": "Bağlantı İzgah'a paylaşıldı."
+	},
+	"sharing": {
+		"message": "Paylaşılıyor…"
+	},
+	"show": {
+		"message": "Göster"
+	},
+	"silentNeedsLoadedSections": {
+		"message": "Konu bölümleri yüklenemediği için sessiz kaynak eklenemiyor; lütfen önce bölümleri yeniden yükleyin."
+	},
+	"silentNeedsSection": {
+		"message": "Sessiz kaynak için en az bir konu bölümü seçmelisiniz."
+	},
+	"silentOption": {
+		"message": "Ana akışta yayınlama (yalnızca seçili bölümlere sessiz ekle)"
+	},
+	"sourceContextLink": {
+		"message": "Sağ tık: Bağlantı"
+	},
+	"sourceContextPage": {
+		"message": "Sağ tık: Sayfa"
+	},
+	"tabUrlRestricted": {
+		"message": "Aktif sekmenin adresi tarayıcı kısıtlaması nedeniyle okunamadı; geçerli bir http:// veya https:// adresi yapıştırabilirsiniz."
+	},
+	"testConnection": {
+		"message": "Bağlantıyı test et"
+	},
+	"titleLabel": {
+		"message": "Başlık:"
+	},
+	"unexpectedOptions": {
+		"message": "Beklenmeyen bir hata oluştu. Lütfen ayarları kontrol edip yeniden deneyin."
+	},
+	"urlCredentials": {
+		"message": "Paylaşılacak bağlantıda kullanıcı adı veya parola yer alamaz."
+	},
+	"urlInvalid": {
+		"message": "Geçerli bir http:// veya https:// bağlantısı girin."
+	},
+	"urlPlaceholder": {
+		"message": "https://ornek.com/yazi"
+	},
+	"urlScheme": {
+		"message": "Yalnızca http:// veya https:// bağlantıları İzgah ile paylaşılabilir."
+	},
+	"urlTooLong": {
+		"message": "Paylaşılacak bağlantı en fazla $1 karakter olabilir."
+	},
+	"verified": {
+		"message": "Bağlantı doğrulandı."
+	},
+	"verifiedNotSaved": {
+		"message": "Bağlantı doğrulandı (henüz yerel depoya kaydedilmedi)."
+	}
+}

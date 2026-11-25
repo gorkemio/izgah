@@ -1,0 +1,326 @@
+{
+	"actionTitle": {
+		"message": "Share to Izgah"
+	},
+	"addedSilently": {
+		"message": "The link was added silently to the selected sections only."
+	},
+	"apiKey": {
+		"message": "Personal API key"
+	},
+	"apiKeyEmpty": {
+		"message": "The personal API key cannot be empty."
+	},
+	"apiKeyHint": {
+		"message": "Enter the personal API key (starting with izk_) you created in the web app."
+	},
+	"apiKeyInvalid": {
+		"message": "Enter a valid izk_... personal API key."
+	},
+	"autoDetect": {
+		"message": "Detect automatically"
+	},
+	"autoDetectSuggested": {
+		"message": "Detect automatically (suggested: $1)"
+	},
+	"checkingLink": {
+		"message": "Checking the link…"
+	},
+	"clearKey": {
+		"message": "Delete saved key"
+	},
+	"cleared": {
+		"message": "Saved settings and API key deleted."
+	},
+	"close": {
+		"message": "Close"
+	},
+	"commandOpen": {
+		"message": "Open the Izgah share window"
+	},
+	"connectionStatus": {
+		"message": "Connection status"
+	},
+	"contentType": {
+		"message": "Content type"
+	},
+	"contentType_article": {
+		"message": "Article"
+	},
+	"contentType_repo": {
+		"message": "Repo"
+	},
+	"contentType_social": {
+		"message": "Social"
+	},
+	"contentType_video": {
+		"message": "Video"
+	},
+	"contentType_web": {
+		"message": "Web"
+	},
+	"contextExpired": {
+		"message": "The right-click context expired, so the tab address could not be read; paste the http:// or https:// address you want to share."
+	},
+	"contextMenuShare": {
+		"message": "Share to Izgah"
+	},
+	"copied": {
+		"message": "Copied"
+	},
+	"copy": {
+		"message": "Copy"
+	},
+	"copyFailed": {
+		"message": "Could not copy — select the tracking code and copy it manually"
+	},
+	"corsNote": {
+		"message": "For a server other than the default address, requests are sent through the server’s /api/v1/* CORS headers without asking for extra browser permissions."
+	},
+	"dupSections": {
+		"message": "Sections: $1."
+	},
+	"dupSharedBefore": {
+		"message": "This link has already been shared with your team."
+	},
+	"dupSharedBy": {
+		"message": "This link was shared by $1 on $2."
+	},
+	"dupSilent": {
+		"message": "Saved only as a silent resource ($1); a normal share also posts it to the feed."
+	},
+	"dupTotal": {
+		"message": "$1 shares in total."
+	},
+	"errBadRequest": {
+		"message": "The server did not accept the request. Check the inputs and try again."
+	},
+	"errConflict": {
+		"message": "The request conflicted with the current server state. Please try again."
+	},
+	"errForbidden": {
+		"message": "You do not have permission for this (for example, only admins can add silent resources)."
+	},
+	"errNetwork": {
+		"message": "Could not reach the Izgah server. Check your internet connection and the server address in Settings."
+	},
+	"errNotFound": {
+		"message": "This API endpoint was not found at the Izgah server address, or the HTTP method is not supported. Check the server address in Settings."
+	},
+	"errRateLimited": {
+		"message": "Too many requests (rate limit reached). $1"
+	},
+	"errRetryAfter": {
+		"message": "Please wait $1 seconds and try again."
+	},
+	"errRetrySoon": {
+		"message": "Please wait a moment and try again."
+	},
+	"errServer": {
+		"message": "Something went wrong on the Izgah server. If it keeps happening, share this tracking code with your admin."
+	},
+	"errUnauthorized": {
+		"message": "Your API key is invalid, missing or revoked. Create a new key at /settings/api-keys and save it in the extension settings."
+	},
+	"errUnknown": {
+		"message": "The server could not complete the request. Please try again."
+	},
+	"errValidation": {
+		"message": "The submitted fields could not be validated. Please check the marked fields."
+	},
+	"extDescription": {
+		"message": "Share useful links you find on the web with your team on Izgah."
+	},
+	"extName": {
+		"message": "Izgah"
+	},
+	"fixFormErrors": {
+		"message": "Fix the errors in the form fields."
+	},
+	"hide": {
+		"message": "Hide"
+	},
+	"linkAddress": {
+		"message": "Link address"
+	},
+	"loadedSaved": {
+		"message": "Saved connection details loaded."
+	},
+	"loadedSavedTest": {
+		"message": "Saved settings loaded. You can test the connection."
+	},
+	"newShare": {
+		"message": "New share"
+	},
+	"noSectionInfo": {
+		"message": "no section info"
+	},
+	"noSections": {
+		"message": "No sections have been created yet."
+	},
+	"notConfigured": {
+		"message": "Not configured yet. Enter your Izgah server address and personal API key."
+	},
+	"noteLabel": {
+		"message": "Note (optional)"
+	},
+	"notePlaceholder": {
+		"message": "Why is it worth sharing? (Cmd/Ctrl+Enter to send)"
+	},
+	"openApiKeys": {
+		"message": "Open /settings/api-keys"
+	},
+	"openSettings": {
+		"message": "Open settings"
+	},
+	"optionsSubtitle": {
+		"message": "Connect the browser extension to your team’s server and your personal API key."
+	},
+	"optionsTitle": {
+		"message": "Izgah extension settings"
+	},
+	"originCredentials": {
+		"message": "The server address cannot contain a username or password."
+	},
+	"originEmpty": {
+		"message": "The Izgah server address cannot be empty."
+	},
+	"originHttps": {
+		"message": "Remote Izgah servers need an https:// address (http:// is only supported for localhost)."
+	},
+	"originInvalid": {
+		"message": "Enter a valid Izgah server address (e.g. https://links.example.com)."
+	},
+	"originScheme": {
+		"message": "The server address must use https://, or http:// for local development."
+	},
+	"popupTitle": {
+		"message": "Share to Izgah"
+	},
+	"popupWordmarkSuffix": {
+		"message": ": share a link"
+	},
+	"publishedToFeed": {
+		"message": "The link was posted to the feed."
+	},
+	"reloadSections": {
+		"message": "Reload sections"
+	},
+	"requestAborted": {
+		"message": "The request was cancelled."
+	},
+	"requestIdLabel": {
+		"message": "Tracking code:"
+	},
+	"requestTimeout": {
+		"message": "The request timed out."
+	},
+	"revealWarning": {
+		"message": "Warning: this button shows your API key on screen."
+	},
+	"roleAdmin": {
+		"message": "Admin"
+	},
+	"roleMember": {
+		"message": "Member"
+	},
+	"roleSummary": {
+		"message": "$1 ($2) · Role: $3"
+	},
+	"save": {
+		"message": "Save"
+	},
+	"savedAndVerified": {
+		"message": "Settings saved and connection verified."
+	},
+	"sectionsLoadFailed": {
+		"message": "Sections could not be loaded. You can still share normally or reload the sections."
+	},
+	"sectionsLoaded": {
+		"message": "Sections loaded."
+	},
+	"sectionsOptional": {
+		"message": "Sections (optional)"
+	},
+	"sectionsRequired": {
+		"message": "Sections (at least one required)"
+	},
+	"serverOrigin": {
+		"message": "Your Izgah server address"
+	},
+	"serverOriginHint": {
+		"message": "The address your team uses for Izgah, e.g. https://links.example.com (https:// is required for remote servers). Ask your admin if you are not sure."
+	},
+	"settings": {
+		"message": "Settings"
+	},
+	"setupDescription": {
+		"message": "Before sharing, set your Izgah server address and personal API key in the extension settings."
+	},
+	"share": {
+		"message": "Share"
+	},
+	"shareUnexpected": {
+		"message": "Something went wrong while sharing."
+	},
+	"sharedHeading": {
+		"message": "Link shared to Izgah"
+	},
+	"sharedToIzgah": {
+		"message": "The link was shared to Izgah."
+	},
+	"sharing": {
+		"message": "Sharing…"
+	},
+	"show": {
+		"message": "Show"
+	},
+	"silentNeedsLoadedSections": {
+		"message": "A silent resource cannot be added because the sections could not be loaded; please reload the sections first."
+	},
+	"silentNeedsSection": {
+		"message": "Select at least one section for a silent resource."
+	},
+	"silentOption": {
+		"message": "Do not post to the feed (add silently to the selected sections only)"
+	},
+	"sourceContextLink": {
+		"message": "Right-click: link"
+	},
+	"sourceContextPage": {
+		"message": "Right-click: page"
+	},
+	"tabUrlRestricted": {
+		"message": "The active tab’s address could not be read because of a browser restriction; you can paste a valid http:// or https:// address."
+	},
+	"testConnection": {
+		"message": "Test connection"
+	},
+	"titleLabel": {
+		"message": "Title:"
+	},
+	"unexpectedOptions": {
+		"message": "Something went wrong. Please check the settings and try again."
+	},
+	"urlCredentials": {
+		"message": "The link cannot contain a username or password."
+	},
+	"urlInvalid": {
+		"message": "Enter a valid http:// or https:// link."
+	},
+	"urlPlaceholder": {
+		"message": "https://example.com/article"
+	},
+	"urlScheme": {
+		"message": "Only http:// or https:// links can be shared to Izgah."
+	},
+	"urlTooLong": {
+		"message": "The link can be at most $1 characters."
+	},
+	"verified": {
+		"message": "Connection verified."
+	},
+	"verifiedNotSaved": {
+		"message": "Connection verified (not saved yet)."
+	}
+}

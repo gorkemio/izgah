@@ -1,0 +1,650 @@
+/*
+ * İzgah Stüdyo design tokens (docs/designs/izgah-ui-v3.md §1–§3 & §8, docs/designs/izgah-themes.md §4).
+ *
+ * Three-layer token architecture:
+ *   1. Primitive layer (--p-*): raw neutral, semantic and dual-polarity accent hex stops.
+ *      Assigned only to palette/accent slots inside this file; components never reference --p-*.
+ *   2. Semantic layer (--light-*, --dark-*, --accent-* -> --color-*): palette slots resolved via
+ *      light-dark() so data-theme only switches color-scheme. Palette selectors carry no :root
+ *      prefix and the semantic mapping is mirrored on .theme-preview so /settings preview cards
+ *      render any palette independently.
+ *   3. Component layer (--card-*, --btn-*, --rail-*, --attach-*, --input-*, depth/radii/layout):
+ *      surface roles, shadows, top specular highlights, radii, shell dimensions and motion timings.
+ */
+@layer tokens {
+	/* ---------------------------------------------------------------------
+	 * 1. Primitive Layer (--p-*)
+	 * ------------------------------------------------------------------- */
+	:root {
+		/* Light neutrals (Warm Alabaster & High-Contrast) */
+		--p-white: #ffffff;
+		--p-alabaster-50: #fafaf8;
+		--p-alabaster-100: #f3f2ee;
+		--p-alabaster-150: #f0efea;
+		--p-alabaster-200: #e8e6df;
+		--p-alabaster-250: #e6e4dd;
+		--p-alabaster-300: #e2e0d8;
+		--p-stone-500: #77756e;
+		--p-stone-550: #73716a;
+		--p-stone-600: #63625c;
+		--p-stone-700: #52514d;
+		--p-stone-800: #42413d;
+		--p-stone-900: #262522;
+		--p-stone-925: #1c1b19;
+		--p-ink-950: #141413;
+		--p-black: #000000;
+
+		/* Dark neutrals (Warm Graphite, Dim Slate & High-Contrast) */
+		--p-graphite-950: #0d0e10;
+		--p-graphite-925: #0e0f11;
+		--p-graphite-900: #141518;
+		--p-graphite-850: #181a1e;
+		--p-graphite-800: #1c1e22;
+		--p-graphite-750: #24272d;
+		--p-graphite-700: #25282e;
+		--p-graphite-650: #26282f;
+		--p-graphite-500: #6c6f78;
+		--p-graphite-450: #808288;
+		--p-graphite-400: #8e9096;
+		--p-graphite-300: #a3a4a8;
+		--p-graphite-200: #c8cacf;
+		--p-graphite-150: #cecec9;
+		--p-graphite-100: #e5e5e2;
+		--p-graphite-50: #f3f3f1;
+
+		--p-slate-900: #1a1c20;
+		--p-slate-850: #22252b;
+		--p-slate-800: #2b2f37;
+		--p-slate-700: #353a44;
+		--p-slate-500: #808592;
+		--p-slate-400: #9fa3ac;
+		--p-slate-300: #b4b7be;
+		--p-slate-50: #efefed;
+
+		/* Soft neutral avatar tones */
+		--p-avatar-l1: #eeede8;
+		--p-avatar-l2: #eaecef;
+		--p-avatar-l3: #f0ece6;
+		--p-avatar-l4: #ebeae6;
+		--p-avatar-d1: #222429;
+		--p-avatar-d2: #20252b;
+		--p-avatar-d3: #272422;
+		--p-avatar-d4: #242329;
+
+		/* Semantic danger / warning / highlight stops */
+		--p-red-50: #fef2f2;
+		--p-red-200: #fecaca;
+		--p-red-250: #ffa3a3;
+		--p-red-300: #fca5a5;
+		--p-red-400: #f87171;
+		--p-red-700: #c81e1e;
+		--p-red-800: #5c2224;
+		--p-red-850: #961007;
+		--p-red-900: #341b1e;
+		--p-red-925: #692d31;
+		--p-red-950: #2c1315;
+		--p-red-975: #2c0d10;
+
+		--p-amber-100: #fef3c7;
+		--p-amber-200: #fde68a;
+		--p-amber-250: #fef08a;
+		--p-amber-300: #fde047;
+		--p-amber-350: #f5d08a;
+		--p-amber-400: #fbbf24;
+		--p-amber-700: #92400e;
+		--p-amber-750: #78350f;
+		--p-amber-800: #63511f;
+		--p-amber-850: #3e3314;
+		--p-amber-900: #362d12;
+		--p-amber-950: #4a3b08;
+
+		/* Dual-polarity accents (§1.3) */
+		/* Forest Teal (default) */
+		--p-teal-50: #e6f4f1;
+		--p-teal-200: #b2dfd8;
+		--p-teal-300: #5eead4;
+		--p-teal-400: #2dd4bf;
+		--p-teal-700: #0f766e;
+		--p-teal-800: #0d635c;
+		--p-teal-850: #1c4440;
+		--p-teal-875: #0b524c;
+		--p-teal-900: #122a28;
+		--p-teal-950: #061a18;
+
+		/* Cobalt */
+		--p-cobalt-50: #eff6ff;
+		--p-cobalt-200: #bfdbfe;
+		--p-cobalt-300: #93c5fd;
+		--p-cobalt-400: #60a5fa;
+		--p-cobalt-700: #1d4ed8;
+		--p-cobalt-800: #1e40af;
+		--p-cobalt-850: #22395c;
+		--p-cobalt-900: #142238;
+		--p-cobalt-950: #071324;
+
+		/* Terracotta */
+		--p-terracotta-50: #fdece3;
+		--p-terracotta-200: #f6c7b0;
+		--p-terracotta-300: #fdba74;
+		--p-terracotta-400: #fb923c;
+		--p-terracotta-700: #9a3412;
+		--p-terracotta-800: #7c2d12;
+		--p-terracotta-850: #4c301c;
+		--p-terracotta-900: #2e1d11;
+		--p-terracotta-950: #1c0d03;
+
+		/* Plum */
+		--p-plum-50: #f3eeff;
+		--p-plum-200: #ddd6fe;
+		--p-plum-300: #ddd6fe;
+		--p-plum-400: #c4b5fd;
+		--p-plum-700: #6d28d9;
+		--p-plum-800: #5b21b6;
+		--p-plum-850: #392a5c;
+		--p-plum-900: #231a38;
+		--p-plum-950: #180c2e;
+	}
+
+	/* ---------------------------------------------------------------------
+	 * 2. Palette & Accent Slots (--light-*, --dark-*, --accent-*)
+	 * ------------------------------------------------------------------- */
+
+	/* Light palette: default (Warm Alabaster, §1.1) */
+	:root,
+	[data-light-theme='default'] {
+		--light-bg: var(--p-alabaster-50);
+		--light-surface-1: var(--p-white);
+		--light-surface-2: var(--p-alabaster-100);
+		--light-surface-3: var(--p-alabaster-200);
+		--light-text: var(--p-ink-950);
+		--light-text-secondary: var(--p-stone-700);
+		--light-text-muted: var(--p-stone-600);
+		--light-line: var(--p-alabaster-250);
+		--light-line-strong: var(--p-stone-500);
+		--light-danger: var(--p-red-700);
+		--light-on-danger: var(--p-white);
+		--light-danger-soft: var(--p-red-50);
+		--light-danger-border: var(--p-red-200);
+		--light-ok: var(--p-teal-700);
+		--light-ok-soft: var(--p-teal-50);
+		--light-ok-text: var(--p-teal-800);
+		--light-ok-border: var(--p-teal-200);
+		--light-warn: var(--p-amber-700);
+		--light-warn-soft: var(--p-amber-100);
+		--light-warn-text: var(--p-amber-750);
+		--light-warn-border: var(--p-amber-350);
+		--light-focus-inner: var(--p-ink-950);
+		--light-highlight-bg: var(--p-amber-100);
+		--light-highlight-fg: var(--p-ink-950);
+		--light-backdrop: rgb(20 20 19 / 0.44);
+		--light-avatar-1-bg: var(--p-avatar-l1);
+		--light-avatar-2-bg: var(--p-avatar-l2);
+		--light-avatar-3-bg: var(--p-avatar-l3);
+		--light-avatar-4-bg: var(--p-avatar-l4);
+		--light-shadow-xs: 0 1px 2px rgb(20 20 19 / 0.05);
+		--light-shadow-sm: 0 1px 2px rgb(20 20 19 / 0.04), 0 4px 14px rgb(20 20 19 / 0.03);
+		--light-shadow-lg: 0 16px 44px rgb(20 20 19 / 0.14);
+		--light-specular-top: none;
+	}
+
+	/* Light palette: high contrast (§1.1 — AAA text, >= 4.5:1 hairlines, zero depth effects) */
+	[data-light-theme='contrast'] {
+		--light-bg: var(--p-white);
+		--light-surface-1: var(--p-white);
+		--light-surface-2: var(--p-alabaster-150);
+		--light-surface-3: var(--p-alabaster-300);
+		--light-text: var(--p-black);
+		--light-text-secondary: var(--p-stone-900);
+		--light-text-muted: var(--p-stone-800);
+		--light-line: var(--p-stone-550);
+		--light-line-strong: var(--p-stone-925);
+		--light-danger: var(--p-red-850);
+		--light-on-danger: var(--p-white);
+		--light-danger-soft: var(--p-red-50);
+		--light-danger-border: var(--p-red-850);
+		--light-ok: var(--p-teal-875);
+		--light-ok-soft: var(--p-teal-50);
+		--light-ok-text: var(--p-teal-875);
+		--light-ok-border: var(--p-teal-875);
+		--light-warn: var(--p-amber-750);
+		--light-warn-soft: var(--p-amber-100);
+		--light-warn-text: var(--p-amber-750);
+		--light-warn-border: var(--p-amber-750);
+		--light-focus-inner: var(--p-black);
+		--light-highlight-bg: var(--p-amber-300);
+		--light-highlight-fg: var(--p-black);
+		--light-backdrop: rgb(0 0 0 / 0.65);
+		--light-avatar-1-bg: var(--p-alabaster-150);
+		--light-avatar-2-bg: var(--p-alabaster-150);
+		--light-avatar-3-bg: var(--p-alabaster-150);
+		--light-avatar-4-bg: var(--p-alabaster-150);
+		--light-shadow-xs: none;
+		--light-shadow-sm: none;
+		--light-shadow-lg: none;
+		--light-specular-top: none;
+	}
+
+	/* Dark palette: default (Warm Graphite, §1.2) */
+	:root,
+	[data-dark-theme='default'] {
+		--dark-bg: var(--p-graphite-950);
+		--dark-surface-1: var(--p-graphite-900);
+		--dark-surface-2: var(--p-graphite-800);
+		--dark-surface-3: var(--p-graphite-700);
+		--dark-text: var(--p-graphite-50);
+		--dark-text-secondary: var(--p-graphite-300);
+		--dark-text-muted: var(--p-graphite-400);
+		--dark-line: var(--p-graphite-650);
+		--dark-line-strong: var(--p-graphite-500);
+		--dark-danger: var(--p-red-400);
+		--dark-on-danger: var(--p-graphite-950);
+		--dark-danger-soft: var(--p-red-950);
+		--dark-danger-border: var(--p-red-800);
+		--dark-ok: var(--p-teal-400);
+		--dark-ok-soft: var(--p-teal-900);
+		--dark-ok-text: var(--p-teal-300);
+		--dark-ok-border: var(--p-teal-850);
+		--dark-warn: var(--p-amber-400);
+		--dark-warn-soft: var(--p-amber-900);
+		--dark-warn-text: var(--p-amber-200);
+		--dark-warn-border: var(--p-amber-800);
+		--dark-focus-inner: var(--p-graphite-50);
+		--dark-highlight-bg: var(--p-amber-900);
+		--dark-highlight-fg: var(--p-amber-200);
+		--dark-backdrop: rgb(0 0 0 / 0.7);
+		--dark-avatar-1-bg: var(--p-avatar-d1);
+		--dark-avatar-2-bg: var(--p-avatar-d2);
+		--dark-avatar-3-bg: var(--p-avatar-d3);
+		--dark-avatar-4-bg: var(--p-avatar-d4);
+		--dark-shadow-xs: inset 0 1px 0 rgb(255 255 255 / 0.05);
+		--dark-shadow-sm: inset 0 1px 0 rgb(255 255 255 / 0.05);
+		--dark-shadow-lg: 0 24px 64px rgb(0 0 0 / 0.65), inset 0 1px 0 rgb(255 255 255 / 0.07);
+		--dark-specular-top: inset 0 1px 0 rgb(255 255 255 / 0.05);
+	}
+
+	/* Dark palette: dim (Dim Slate, §1.2) */
+	[data-dark-theme='dim'] {
+		--dark-bg: var(--p-slate-900);
+		--dark-surface-1: var(--p-slate-850);
+		--dark-surface-2: var(--p-slate-800);
+		--dark-surface-3: var(--p-slate-700);
+		--dark-text: var(--p-slate-50);
+		--dark-text-secondary: var(--p-slate-300);
+		--dark-text-muted: var(--p-slate-400);
+		--dark-line: var(--p-slate-700);
+		--dark-line-strong: var(--p-slate-500);
+		--dark-danger: var(--p-red-300);
+		--dark-on-danger: var(--p-slate-900);
+		--dark-danger-soft: var(--p-red-900);
+		--dark-danger-border: var(--p-red-925);
+		--dark-ok: var(--p-teal-400);
+		--dark-ok-soft: var(--p-teal-900);
+		--dark-ok-text: var(--p-teal-300);
+		--dark-ok-border: var(--p-teal-850);
+		--dark-warn: var(--p-amber-400);
+		--dark-warn-soft: var(--p-amber-850);
+		--dark-warn-text: var(--p-amber-250);
+		--dark-warn-border: var(--p-amber-800);
+		--dark-focus-inner: var(--p-slate-50);
+		--dark-highlight-bg: var(--p-amber-850);
+		--dark-highlight-fg: var(--p-amber-250);
+		--dark-backdrop: rgb(0 0 0 / 0.65);
+		--dark-avatar-1-bg: var(--p-slate-800);
+		--dark-avatar-2-bg: var(--p-slate-700);
+		--dark-avatar-3-bg: var(--p-slate-800);
+		--dark-avatar-4-bg: var(--p-slate-700);
+		--dark-shadow-xs: inset 0 1px 0 rgb(255 255 255 / 0.05);
+		--dark-shadow-sm: inset 0 1px 0 rgb(255 255 255 / 0.05);
+		--dark-shadow-lg: 0 24px 64px rgb(0 0 0 / 0.58), inset 0 1px 0 rgb(255 255 255 / 0.07);
+		--dark-specular-top: inset 0 1px 0 rgb(255 255 255 / 0.05);
+	}
+
+	/* Dark palette: high contrast (§1.2 — AAA text, >= 4.5:1 hairlines, zero depth effects) */
+	[data-dark-theme='contrast'] {
+		--dark-bg: var(--p-black);
+		--dark-surface-1: var(--p-graphite-925);
+		--dark-surface-2: var(--p-graphite-850);
+		--dark-surface-3: var(--p-graphite-750);
+		--dark-text: var(--p-white);
+		--dark-text-secondary: var(--p-graphite-100);
+		--dark-text-muted: var(--p-graphite-150);
+		--dark-line: var(--p-graphite-450);
+		--dark-line-strong: var(--p-graphite-200);
+		--dark-danger: var(--p-red-250);
+		--dark-on-danger: var(--p-black);
+		--dark-danger-soft: var(--p-red-975);
+		--dark-danger-border: var(--p-red-250);
+		--dark-ok: var(--p-teal-300);
+		--dark-ok-soft: var(--p-teal-900);
+		--dark-ok-text: var(--p-teal-300);
+		--dark-ok-border: var(--p-teal-300);
+		--dark-warn: var(--p-amber-250);
+		--dark-warn-soft: var(--p-amber-950);
+		--dark-warn-text: var(--p-amber-250);
+		--dark-warn-border: var(--p-amber-250);
+		--dark-focus-inner: var(--p-white);
+		--dark-highlight-bg: var(--p-amber-950);
+		--dark-highlight-fg: var(--p-amber-250);
+		--dark-backdrop: rgb(0 0 0 / 0.82);
+		--dark-avatar-1-bg: var(--p-graphite-850);
+		--dark-avatar-2-bg: var(--p-graphite-850);
+		--dark-avatar-3-bg: var(--p-graphite-850);
+		--dark-avatar-4-bg: var(--p-graphite-850);
+		--dark-shadow-xs: none;
+		--dark-shadow-sm: none;
+		--dark-shadow-lg: none;
+		--dark-specular-top: none;
+	}
+
+	/* Dual-polarity accents (§1.3): calibrated independently for light & dark schemes (all >= 4.5:1). */
+	:root,
+	[data-accent='teal'] {
+		--accent-light: var(--p-teal-700);
+		--on-accent-light: var(--p-white);
+		--accent-soft-light: var(--p-teal-50);
+		--accent-text-light: var(--p-teal-800);
+		--accent-border-light: var(--p-teal-200);
+		--accent-dark: var(--p-teal-400);
+		--on-accent-dark: var(--p-teal-950);
+		--accent-soft-dark: var(--p-teal-900);
+		--accent-text-dark: var(--p-teal-300);
+		--accent-border-dark: var(--p-teal-850);
+	}
+
+	[data-accent='cobalt'] {
+		--accent-light: var(--p-cobalt-700);
+		--on-accent-light: var(--p-white);
+		--accent-soft-light: var(--p-cobalt-50);
+		--accent-text-light: var(--p-cobalt-800);
+		--accent-border-light: var(--p-cobalt-200);
+		--accent-dark: var(--p-cobalt-400);
+		--on-accent-dark: var(--p-cobalt-950);
+		--accent-soft-dark: var(--p-cobalt-900);
+		--accent-text-dark: var(--p-cobalt-300);
+		--accent-border-dark: var(--p-cobalt-850);
+	}
+
+	[data-accent='terracotta'] {
+		--accent-light: var(--p-terracotta-700);
+		--on-accent-light: var(--p-white);
+		--accent-soft-light: var(--p-terracotta-50);
+		--accent-text-light: var(--p-terracotta-800);
+		--accent-border-light: var(--p-terracotta-200);
+		--accent-dark: var(--p-terracotta-400);
+		--on-accent-dark: var(--p-terracotta-950);
+		--accent-soft-dark: var(--p-terracotta-900);
+		--accent-text-dark: var(--p-terracotta-300);
+		--accent-border-dark: var(--p-terracotta-850);
+	}
+
+	[data-accent='plum'] {
+		--accent-light: var(--p-plum-700);
+		--on-accent-light: var(--p-white);
+		--accent-soft-light: var(--p-plum-50);
+		--accent-text-light: var(--p-plum-800);
+		--accent-border-light: var(--p-plum-200);
+		--accent-dark: var(--p-plum-400);
+		--on-accent-dark: var(--p-plum-950);
+		--accent-soft-dark: var(--p-plum-900);
+		--accent-text-dark: var(--p-plum-300);
+		--accent-border-dark: var(--p-plum-850);
+	}
+
+	/* ---------------------------------------------------------------------
+	 * 3. Semantic & Component Layer (:root + .theme-preview)
+	 *    Unregistered custom properties keep light-dark() live on subtrees.
+	 * ------------------------------------------------------------------- */
+	:root,
+	.theme-preview {
+		--color-bg: light-dark(var(--light-bg), var(--dark-bg));
+		--color-surface-1: light-dark(var(--light-surface-1), var(--dark-surface-1));
+		--color-surface-2: light-dark(var(--light-surface-2), var(--dark-surface-2));
+		--color-surface-3: light-dark(var(--light-surface-3), var(--dark-surface-3));
+		--color-text: light-dark(var(--light-text), var(--dark-text));
+		--color-text-secondary: light-dark(var(--light-text-secondary), var(--dark-text-secondary));
+		--color-text-muted: light-dark(var(--light-text-muted), var(--dark-text-muted));
+		--color-line: light-dark(var(--light-line), var(--dark-line));
+		--color-line-strong: light-dark(var(--light-line-strong), var(--dark-line-strong));
+
+		--color-accent: light-dark(var(--accent-light), var(--accent-dark));
+		--color-on-accent: light-dark(var(--on-accent-light), var(--on-accent-dark));
+		--color-accent-soft: light-dark(var(--accent-soft-light), var(--accent-soft-dark));
+		--color-accent-text: light-dark(var(--accent-text-light), var(--accent-text-dark));
+		--color-accent-border: light-dark(var(--accent-border-light), var(--accent-border-dark));
+
+		--color-danger: light-dark(var(--light-danger), var(--dark-danger));
+		--color-on-danger: light-dark(var(--light-on-danger), var(--dark-on-danger));
+		--color-danger-soft: light-dark(var(--light-danger-soft), var(--dark-danger-soft));
+		--color-danger-border: light-dark(var(--light-danger-border), var(--dark-danger-border));
+
+		--color-ok: light-dark(var(--light-ok), var(--dark-ok));
+		--color-ok-soft: light-dark(var(--light-ok-soft), var(--dark-ok-soft));
+		--color-ok-text: light-dark(var(--light-ok-text), var(--dark-ok-text));
+		--color-ok-border: light-dark(var(--light-ok-border), var(--dark-ok-border));
+
+		--color-warn: light-dark(var(--light-warn), var(--dark-warn));
+		--color-warn-soft: light-dark(var(--light-warn-soft), var(--dark-warn-soft));
+		--color-warn-text: light-dark(var(--light-warn-text), var(--dark-warn-text));
+		--color-warn-border: light-dark(var(--light-warn-border), var(--dark-warn-border));
+
+		--color-focus-inner: light-dark(var(--light-focus-inner), var(--dark-focus-inner));
+		--color-focus-outer: var(--color-accent);
+		--color-highlight-bg: light-dark(var(--light-highlight-bg), var(--dark-highlight-bg));
+		--color-highlight-fg: light-dark(var(--light-highlight-fg), var(--dark-highlight-fg));
+		--color-backdrop: light-dark(var(--light-backdrop), var(--dark-backdrop));
+
+		--color-avatar-1-bg: light-dark(var(--light-avatar-1-bg), var(--dark-avatar-1-bg));
+		--color-avatar-2-bg: light-dark(var(--light-avatar-2-bg), var(--dark-avatar-2-bg));
+		--color-avatar-3-bg: light-dark(var(--light-avatar-3-bg), var(--dark-avatar-3-bg));
+		--color-avatar-4-bg: light-dark(var(--light-avatar-4-bg), var(--dark-avatar-4-bg));
+
+		/* Non-color depth tokens (light-dark() accepts only <color>). */
+		--shadow-xs: var(--light-shadow-xs);
+		--shadow-sm: var(--light-shadow-sm);
+		--shadow-lg: var(--light-shadow-lg);
+		--specular-top: var(--light-specular-top);
+
+		/* Component-layer tokens. */
+		--card-bg: var(--color-surface-1);
+		--card-border: var(--color-line);
+		--card-shadow: var(--shadow-sm);
+		--btn-primary-bg: var(--color-accent);
+		--btn-primary-fg: var(--color-on-accent);
+		--rail-bg: var(--color-surface-1);
+		--rail-border: var(--color-line);
+		--attach-bg: light-dark(var(--light-bg), var(--dark-surface-2));
+		--input-bg: light-dark(var(--light-surface-1), var(--dark-bg));
+
+		/* Backward-compatibility aliases (preserved until A2–A6 migrate every screen). */
+		--color-surface: var(--color-surface-2);
+		--color-signal: var(--color-accent);
+		--color-on-signal: var(--color-on-accent);
+		--color-surface-muted: var(--color-surface-2);
+		--color-surface-accent: var(--color-accent-soft);
+		--color-surface-warn: var(--color-warn-soft);
+		--color-surface-danger: var(--color-danger-soft);
+		--color-surface-success: var(--color-ok-soft);
+		--color-text-subtle: var(--color-text-muted);
+		--color-link: var(--color-text);
+		--color-focus: var(--color-focus-inner);
+		--color-primary: var(--color-accent);
+		--color-primary-contrast: var(--color-on-accent);
+		--color-danger-text: var(--color-danger);
+		--color-success-text: var(--color-ok-text);
+		--color-border: var(--color-line);
+		--color-border-strong: var(--color-line-strong);
+		--color-border-danger: var(--color-danger-border);
+		--color-border-success: var(--color-ok-border);
+		--color-border-warn: var(--color-warn-border);
+		--shadow-card: var(--shadow-sm);
+		--shadow-card-hover: var(--shadow-sm);
+		--shadow-overlay: var(--shadow-lg);
+		--shadow-popover: var(--shadow-lg);
+		--shadow-dialog: var(--shadow-lg);
+		--edge-highlight: var(--specular-top);
+		--surface-sheen: none;
+		--glow-primary: 0 0 0 0 transparent;
+		--glow-primary-hover: 0 0 0 0 transparent;
+		--glow-nav: 0 0 0 0 transparent;
+		--glow-focus: 0 0 0 0 transparent;
+	}
+
+	.theme-preview.is-light {
+		--shadow-xs: var(--light-shadow-xs);
+		--shadow-sm: var(--light-shadow-sm);
+		--shadow-lg: var(--light-shadow-lg);
+		--specular-top: var(--light-specular-top);
+	}
+
+	@media (prefers-color-scheme: dark) {
+		:root:not([data-theme='light']),
+		:root:not([data-theme='light']) .theme-preview:not(.is-light) {
+			--shadow-xs: var(--dark-shadow-xs);
+			--shadow-sm: var(--dark-shadow-sm);
+			--shadow-lg: var(--dark-shadow-lg);
+			--specular-top: var(--dark-specular-top);
+		}
+	}
+
+	:root[data-theme='dark'],
+	:root[data-theme='dark'] .theme-preview:not(.is-light),
+	.theme-preview.is-dark {
+		--shadow-xs: var(--dark-shadow-xs);
+		--shadow-sm: var(--dark-shadow-sm);
+		--shadow-lg: var(--dark-shadow-lg);
+		--specular-top: var(--dark-specular-top);
+	}
+
+	/* Typography, spacing, radii, shell dimensions and motion (§2, §3, §4, §8). */
+	:root {
+		color-scheme: light dark;
+
+		--font-display: 'Newsreader Variable', Georgia, 'Iowan Old Style', serif;
+		--font-sans: 'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+		--font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+		--text-display: 600 clamp(1.625rem, 1.35rem + 1.1vw, 2rem) / 1.15 var(--font-display);
+		--text-day: italic 600 1.125rem / 1.2 var(--font-display);
+		--text-title: 600 1.0625rem / 1.32 var(--font-display);
+		--text-section: 600 1rem / 1.35 var(--font-sans);
+		--text-body: 400 0.9375rem / 1.6 var(--font-sans);
+		--text-ui: 500 0.84375rem / 1.35 var(--font-sans);
+		--text-hint: 400 0.8125rem / 1.45 var(--font-sans);
+		--text-meta: 400 0.75rem / 1.3 var(--font-mono);
+		--text-micro: 500 0.75rem / 1.2 var(--font-mono);
+
+		--space-1: 4px;
+		--space-2: 8px;
+		--space-3: 12px;
+		--space-4: 16px;
+		--space-5: 24px;
+		--space-6: 32px;
+		--space-7: 48px;
+		--space-8: 64px;
+		--gutter: 16px;
+
+		--radius-xs: 5px;
+		--radius-sm: 7px;
+		--radius-md: 11px;
+		--radius-lg: 14px;
+		--radius-pill: 9999px;
+
+		/* Backward-compatibility radius aliases */
+		--radius-1: var(--radius-xs);
+		--radius-2: var(--radius-sm);
+		--radius-3: var(--radius-md);
+
+		/* Shell dimensions (§4) */
+		--rail-w: 238px;
+		--icon-rail-w: 68px;
+		--context-rail-w: 280px;
+		--read-w: 672px;
+		--wide-w: 1000px;
+		--topbar-h: 48px;
+		--header-h: var(--topbar-h);
+		--tab-bar-h: 0px;
+		--sticky-top: var(--header-h);
+
+		/* Motion (§8) */
+		--dur-fast: 120ms;
+		--dur-base: 180ms;
+		--dur-panel: 220ms;
+		--ease: cubic-bezier(0.2, 0, 0, 1);
+
+		/* Backward-compatibility duration aliases */
+		--dur-1: var(--dur-fast);
+		--dur-2: var(--dur-base);
+	}
+
+	:root[data-theme='light'] {
+		color-scheme: light;
+	}
+
+	:root[data-theme='dark'] {
+		color-scheme: dark;
+	}
+
+	@media (max-width: 767px) {
+		:root {
+			--topbar-h: 0px;
+			--header-h: 54px;
+			--tab-bar-h: 62px;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		:root {
+			--gutter: 24px;
+		}
+	}
+
+	/* §4: the reading column is 680px until the 3-column layout (≥ 1280px) narrows it to 672px. */
+	@media (max-width: 1279px) {
+		:root {
+			--read-w: 680px;
+		}
+	}
+
+	/* High-contrast & forced-colors rule (§1.3): zero out all shadows, specular highlights and glows. */
+	@media (prefers-contrast: more), (forced-colors: active) {
+		:root,
+		[data-light-theme],
+		[data-dark-theme],
+		.theme-preview {
+			--light-shadow-xs: none;
+			--light-shadow-sm: none;
+			--light-shadow-lg: none;
+			--light-specular-top: none;
+			--dark-shadow-xs: none;
+			--dark-shadow-sm: none;
+			--dark-shadow-lg: none;
+			--dark-specular-top: none;
+			--shadow-xs: none;
+			--shadow-sm: none;
+			--shadow-lg: none;
+			--specular-top: none;
+			--card-shadow: none;
+			--shadow-card: none;
+			--shadow-card-hover: none;
+			--shadow-overlay: none;
+			--shadow-popover: none;
+			--shadow-dialog: none;
+			--edge-highlight: none;
+			--glow-primary: 0 0 0 0 transparent;
+			--glow-primary-hover: 0 0 0 0 transparent;
+			--glow-nav: 0 0 0 0 transparent;
+			--glow-focus: 0 0 0 0 transparent;
+		}
+	}
+
+	/* Reduced motion (§8): zero out all durations. */
+	@media (prefers-reduced-motion: reduce) {
+		:root {
+			--dur-fast: 0ms;
+			--dur-base: 0ms;
+			--dur-panel: 0ms;
+			--dur-1: 0ms;
+			--dur-2: 0ms;
+		}
+	}
+}
