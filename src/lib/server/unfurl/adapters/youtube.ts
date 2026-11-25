@@ -1,5 +1,9 @@
 import { asciiLower, matchesDomain, splitPathSegments } from '#lib/server/links/canonicalize.ts';
-import { isHostCircuitOpen, recordHostStatus } from '#lib/server/unfurl/circuit-breaker.ts';
+import {
+	isHostCircuitOpen,
+	PROVIDER_BREAKER_KEYS,
+	recordHostStatus
+} from '#lib/server/unfurl/circuit-breaker.ts';
 import { MAX_TEXT_BYTES, safeFetchText } from '#lib/server/unfurl/safe-fetch.ts';
 import {
 	emptyUnfurlMetadata,
@@ -11,8 +15,6 @@ import {
 	type AdapterFetchResult,
 	type AdapterOptions
 } from './types';
-
-const YOUTUBE_OEMBED_HOST = 'www.youtube.com';
 
 export function isYouTubeUnfurlTarget(parsedUrl: URL): boolean {
 	const hostname = asciiLower(parsedUrl.hostname);
@@ -46,7 +48,7 @@ export async function fetchYouTubeMetadata(
 	targetUrl: string,
 	options: AdapterOptions = {}
 ): Promise<AdapterFetchResult> {
-	if (isHostCircuitOpen(YOUTUBE_OEMBED_HOST)) {
+	if (isHostCircuitOpen(PROVIDER_BREAKER_KEYS.youtubeOembed)) {
 		return { metadata: emptyUnfurlMetadata(), shortCircuited: true };
 	}
 
@@ -61,7 +63,10 @@ export async function fetchYouTubeMetadata(
 		}
 	});
 
-	recordHostStatus(YOUTUBE_OEMBED_HOST, response.status);
+	// 401/403 from oEmbed describe one item (private or not embeddable), not the provider's health.
+	if (response.status !== 401 && response.status !== 403) {
+		recordHostStatus(PROVIDER_BREAKER_KEYS.youtubeOembed, response.status);
+	}
 
 	if (response.status >= 500 || response.status === 429) {
 		throw new UnfurlUpstreamError(

@@ -210,10 +210,16 @@ export async function processAndWriteThumbnailToDisk(
 		};
 	}
 
-	const { data, info } = await sharp(Buffer.from(rawBytes), {
-		limitInputPixels: MAX_INPUT_PIXELS,
-		animated: false
-	})
+	const input = Buffer.from(rawBytes);
+	const sharpOptions = { limitInputPixels: MAX_INPUT_PIXELS, animated: false } as const;
+	// Do not rely on libvips loader order: the decoder libvips picks must match the format the magic
+	// bytes promised, so an SVG/XML polyglot can never reach svgload.
+	const decodedFormat = (await sharp(input, sharpOptions).metadata()).format;
+	if (decodedFormat !== detected) {
+		throw new UnsupportedMediaFormatError();
+	}
+
+	const { data, info } = await sharp(input, sharpOptions)
 		.rotate()
 		.resize({
 			width: THUMBNAIL_MAX_WIDTH,

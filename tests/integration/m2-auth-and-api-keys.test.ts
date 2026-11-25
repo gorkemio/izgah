@@ -837,10 +837,26 @@ describe('M2 auth, single-use invite/reset tokens, API keys, rate limiting, and 
 			.where(eq(sessions.userId, member.id));
 		expect(sessionRowsBeforeLogout).toHaveLength(1);
 
+		// A body-less cross-site POST must not log the user out (SvelteKit's form CSRF check skips it).
+		const crossSiteLogout = createMockEvent({
+			url: '/logout',
+			method: 'POST',
+			headers: {
+				cookie: memberCookie,
+				origin: 'https://evil.example',
+				'sec-fetch-site': 'cross-site'
+			}
+		});
+		const crossSiteResponse = await handle({
+			event: crossSiteLogout.event,
+			resolve: async (ev) => logoutPost(ev as Parameters<typeof logoutPost>[0])
+		});
+		expect(crossSiteResponse.status).toBe(403);
+
 		const logoutMock = createMockEvent({
 			url: '/logout',
 			method: 'POST',
-			headers: { cookie: memberCookie }
+			headers: { cookie: memberCookie, origin: 'http://localhost:3000' }
 		});
 		const logoutResponse = await handle({
 			event: logoutMock.event,

@@ -25,6 +25,21 @@ function normalizeHostKey(hostname: string): string {
 	return asciiLower(hostname.trim());
 }
 
+/**
+ * Breaker keys for fixed provider endpoints. Only the provider adapters record these, so links that
+ * members share to pages on the same hostname (handled by html-meta under the bare host key) can
+ * neither trip nor reset a provider's breaker.
+ */
+export const PROVIDER_BREAKER_KEYS = {
+	githubApi: 'provider:github-api',
+	youtubeOembed: 'provider:youtube-oembed',
+	xOembed: 'provider:x-oembed'
+} as const;
+
+function isProviderKey(key: string): boolean {
+	return key.startsWith('provider:');
+}
+
 function evictOldestIfNeeded(store: Map<string, HostCircuitEntry>, nowMs: number): void {
 	if (store.size < CIRCUIT_BREAKER_MAX_HOSTS) {
 		return;
@@ -39,9 +54,21 @@ function evictOldestIfNeeded(store: Map<string, HostCircuitEntry>, nowMs: number
 		}
 	}
 
-	const oldestKey = store.keys().next().value;
-	if (oldestKey !== undefined) {
-		store.delete(oldestKey);
+	// Prefer evicting a closed page-host streak: provider keys and open breakers must not be pushed
+	// out by a flood of distinct hostnames.
+	let fallbackKey: string | undefined;
+	for (const [key, entry] of store) {
+		if (isProviderKey(key)) {
+			continue;
+		}
+		fallbackKey ??= key;
+		if (entry.openUntilMs === null) {
+			store.delete(key);
+			return;
+		}
+	}
+	if (fallbackKey !== undefined) {
+		store.delete(fallbackKey);
 	}
 }
 

@@ -35,6 +35,7 @@ import {
 } from '#lib/server/http/theme.ts';
 import { wireSafeFetchShortUrlResolver } from '#lib/server/links/service.ts';
 import { runWithLocale, resolveRequestLocale } from '#lib/server/i18n.ts';
+import { isSameOriginRequest } from '#lib/server/http/same-origin.ts';
 import { logger } from '#lib/server/logger.ts';
 import {
 	DEFAULT_SHUTDOWN_TIMEOUT_MS,
@@ -407,26 +408,6 @@ function isAdminPath(pathname: string): boolean {
 	return pathname === '/admin' || pathname.startsWith('/admin/');
 }
 
-function isSameOriginInternalRequest(event: RequestEvent): boolean {
-	const secFetchSite = event.request.headers.get('sec-fetch-site')?.trim().toLowerCase();
-	if (secFetchSite && secFetchSite !== 'same-origin' && secFetchSite !== 'none') {
-		return false;
-	}
-
-	const origin = event.request.headers.get('origin')?.trim();
-	if (origin && origin !== event.url.origin) {
-		return false;
-	}
-
-	const method = event.request.method.toUpperCase();
-	if (!['GET', 'HEAD', 'OPTIONS'].includes(method)) {
-		// Mutating internal endpoints require explicit same-origin Origin or Sec-Fetch-Site evidence.
-		return origin === event.url.origin || secFetchSite === 'same-origin';
-	}
-
-	return true;
-}
-
 function escapeAttribute(value: string): string {
 	return value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 }
@@ -434,10 +415,10 @@ function escapeAttribute(value: string): string {
 /** Fills the language and instance placeholders of src/app.html. */
 function fillInstancePlaceholders(html: string, locale: Locale): string {
 	return html
-		.replace('%izgah.lang%', locale)
-		.replace('%izgah.timeZone%', escapeAttribute(appTimeZone()))
-		.replace('%izgah.sourceUrl%', escapeAttribute(sourceUrl()))
-		.replace('%izgah.instanceName%', escapeAttribute(instanceName()));
+		.replace('%izgah.lang%', () => locale)
+		.replace('%izgah.timeZone%', () => escapeAttribute(appTimeZone()))
+		.replace('%izgah.sourceUrl%', () => escapeAttribute(sourceUrl()))
+		.replace('%izgah.instanceName%', () => escapeAttribute(instanceName()));
 }
 
 /** Runs every request in its member's locale (docs/designs/izgah-i18n-oss.md §2). */
@@ -546,7 +527,7 @@ async function handleRequest(
 
 	// 2. Internal Web API (/api/internal/*): Strictly cookie session + Origin/Sec-Fetch-Site.
 	if (isApiInternalPath(pathname)) {
-		if (!isSameOriginInternalRequest(event)) {
+		if (!isSameOriginRequest(event)) {
 			return jsonErrorResponse(403, 'FORBIDDEN', t('api.crossOrigin'), requestId, {
 				varyInternal: true
 			});

@@ -7,6 +7,13 @@ node_modules/
 .env*
 !.env.example
 
+# Keys and database dumps
+*.pem
+*.key
+*.p12
+*.dump
+*.sql.gz
+
 # Build & tool outputs
 .svelte-kit/
 dist/

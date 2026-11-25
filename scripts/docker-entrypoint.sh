@@ -27,6 +27,9 @@ fi
 if [ -z "${BETTER_AUTH_SECRET:-}" ] || [ "${#BETTER_AUTH_SECRET}" -lt 32 ]; then
 	fail_startup "Startup failed: BETTER_AUTH_SECRET must be at least 32 characters" '"field":"BETTER_AUTH_SECRET"'
 fi
+if [ "${BETTER_AUTH_SECRET}" = "replace-with-at-least-32-char-random-secret" ]; then
+	fail_startup "Startup failed: BETTER_AUTH_SECRET is the public example value; generate one with: openssl rand -base64 32" '"field":"BETTER_AUTH_SECRET"'
+fi
 
 if [ "${NODE_ENV:-production}" = "production" ] && [ -z "${ORIGIN:-}" ]; then
 	fail_startup "Startup failed: missing required environment variable in production" '"field":"ORIGIN"'

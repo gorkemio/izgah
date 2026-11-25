@@ -29,6 +29,20 @@ function shouldLog(level: LogLevel): boolean {
 	return LOG_WEIGHTS[level] >= LOG_WEIGHTS[env.LOG_LEVEL];
 }
 
+const SECRET_FIELD_PATTERN = /token|secret|password|authorization|cookie|api_?key/i;
+
+/** Defense in depth: never write a secret-looking field, even if a future call site passes one. */
+function redactSecrets(fields?: Record<string, unknown>): Record<string, unknown> {
+	if (!fields) {
+		return {};
+	}
+	const out: Record<string, unknown> = {};
+	for (const [key, value] of Object.entries(fields)) {
+		out[key] = SECRET_FIELD_PATTERN.test(key) ? '[redacted]' : value;
+	}
+	return out;
+}
+
 function writeLog(
 	level: LogLevel,
 	context: LogContext,
@@ -40,7 +54,7 @@ function writeLog(
 	}
 
 	const payload = {
-		...(fields ?? {}),
+		...redactSecrets(fields),
 		timestamp: new Date().toISOString(),
 		level,
 		request_id: context.request_id ?? null,

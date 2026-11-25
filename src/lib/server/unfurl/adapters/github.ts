@@ -1,6 +1,10 @@
 import { env } from '#lib/server/env.ts';
 import { asciiLower, splitPathSegments } from '#lib/server/links/canonicalize.ts';
-import { isHostCircuitOpen, recordHostStatus } from '#lib/server/unfurl/circuit-breaker.ts';
+import {
+	isHostCircuitOpen,
+	PROVIDER_BREAKER_KEYS,
+	recordHostStatus
+} from '#lib/server/unfurl/circuit-breaker.ts';
 import { MAX_TEXT_BYTES, SafeFetchError, safeFetchText } from '#lib/server/unfurl/safe-fetch.ts';
 import { fetchHtmlMetadata } from './html-meta';
 import {
@@ -12,8 +16,6 @@ import {
 	type AdapterFetchResult,
 	type AdapterOptions
 } from './types';
-
-const GITHUB_API_HOST = 'api.github.com';
 
 export function parseGitHubRepoTarget(parsedUrl: URL): { owner: string; repo: string } | null {
 	const hostname = asciiLower(parsedUrl.hostname);
@@ -63,7 +65,7 @@ export async function fetchGitHubRepoMetadata(
 	const htmlPageUrl = `https://github.com/${encodeURIComponent(repoTarget.owner)}/${encodeURIComponent(repoTarget.repo)}`;
 	const token = options.githubToken ?? env.GITHUB_TOKEN;
 
-	if (!token || isHostCircuitOpen(GITHUB_API_HOST)) {
+	if (!token || isHostCircuitOpen(PROVIDER_BREAKER_KEYS.githubApi)) {
 		return fetchHtmlMetadata(htmlPageUrl, options);
 	}
 
@@ -93,7 +95,7 @@ export async function fetchGitHubRepoMetadata(
 		return fetchHtmlMetadata(htmlPageUrl, options);
 	}
 
-	recordHostStatus(GITHUB_API_HOST, apiResponse.status);
+	recordHostStatus(PROVIDER_BREAKER_KEYS.githubApi, apiResponse.status);
 
 	if (
 		apiResponse.status === 401 ||

@@ -10,6 +10,12 @@ import {
 	registerServerInstanceConfig
 } from '#lib/instance.ts';
 
+/** Example values shipped in .env.example; an instance must never run with a public secret. */
+const KNOWN_PLACEHOLDER_SECRETS = new Set(['replace-with-at-least-32-char-random-secret']);
+
+/** ORIGIN and SOURCE_URL end up in links and CSRF checks, so only http(s) URLs are accepted. */
+const httpUrlSchema = z.url({ protocol: /^https?$/ });
+
 const emptyToUndefined = (value: unknown): unknown => {
 	if (typeof value === 'string' && value.trim() === '') {
 		return undefined;
@@ -36,7 +42,7 @@ const baseEnvSchema = z.object({
 		z.coerce.number().int().min(1).max(100).default(12)
 	),
 	BETTER_AUTH_SECRET: z.preprocess(emptyToUndefined, z.string().min(32)),
-	ORIGIN: z.preprocess(emptyToUndefined, z.string().url().optional()),
+	ORIGIN: z.preprocess(emptyToUndefined, httpUrlSchema.optional()),
 	HOST: z.preprocess(emptyToUndefined, z.string().min(1).default('0.0.0.0')),
 	PORT: z.preprocess(emptyToUndefined, z.coerce.number().int().min(1).max(65535).default(3000)),
 	ADDRESS_HEADER: z.preprocess(emptyToUndefined, z.string().min(1).default('x-forwarded-for')),
@@ -75,21 +81,28 @@ const baseEnvSchema = z.object({
 		emptyToUndefined,
 		z.string().trim().min(1).max(40).default(DEFAULT_INSTANCE_NAME)
 	),
-	SOURCE_URL: z.preprocess(emptyToUndefined, z.string().url().default(DEFAULT_SOURCE_URL))
+	SOURCE_URL: z.preprocess(emptyToUndefined, httpUrlSchema.default(DEFAULT_SOURCE_URL))
 });
 
 function createEnvSchema(isCliMode: boolean) {
 	return baseEnvSchema.superRefine((val, ctx) => {
 		if (val.NODE_ENV === 'production' && !val.ORIGIN && !isCliMode) {
 			ctx.addIssue({
-				code: z.ZodIssueCode.custom,
+				code: 'custom',
 				path: ['ORIGIN'],
 				message: 'Required in production'
 			});
 		}
+		if (val.NODE_ENV === 'production' && KNOWN_PLACEHOLDER_SECRETS.has(val.BETTER_AUTH_SECRET)) {
+			ctx.addIssue({
+				code: 'custom',
+				path: ['BETTER_AUTH_SECRET'],
+				message: 'Replace the example secret with a random value (openssl rand -base64 32)'
+			});
+		}
 		if (val.NODE_ENV === 'test' && !val.TEST_DATABASE_URL) {
 			ctx.addIssue({
-				code: z.ZodIssueCode.custom,
+				code: 'custom',
 				path: ['TEST_DATABASE_URL'],
 				message: 'Required in test'
 			});

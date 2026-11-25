@@ -86,12 +86,23 @@ async function checkStorage(): Promise<CheckStatus> {
 	}
 }
 
+type ReadinessChecks = { database: CheckStatus; migrations: CheckStatus; storage: CheckStatus };
+
+// /readyz is unauthenticated, so concurrent probes share one in-flight check instead of each
+// running database queries and a storage write.
+let inFlight: Promise<ReadinessChecks> | null = null;
+
+function runChecks(): Promise<ReadinessChecks> {
+	inFlight ??= Promise.all([checkDatabase(), checkMigrations(), checkStorage()])
+		.then(([database, migrations, storage]) => ({ database, migrations, storage }))
+		.finally(() => {
+			inFlight = null;
+		});
+	return inFlight;
+}
+
 export const GET: RequestHandler = async ({ locals }) => {
-	const [database, migrations, storage] = await Promise.all([
-		checkDatabase(),
-		checkMigrations(),
-		checkStorage()
-	]);
+	const { database, migrations, storage } = await runChecks();
 
 	const checks = { database, migrations, storage };
 	const isReady = database === 'ok' && migrations === 'ok' && storage === 'ok';

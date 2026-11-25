@@ -1,5 +1,5 @@
 import fs from 'node:fs/promises';
-import { eq } from 'drizzle-orm';
+import { and, eq, isNull } from 'drizzle-orm';
 import { db } from '#lib/server/db/client.ts';
 import { mediaAssets } from '#lib/server/db/schema.ts';
 import {
@@ -52,7 +52,8 @@ export const GET: RequestHandler = async ({ locals, params }) => {
 			mimeType: mediaAssets.mimeType
 		})
 		.from(mediaAssets)
-		.where(eq(mediaAssets.assetKey, assetKey))
+		// An orphaned asset belongs only to deleted shares; hide it like the shares themselves.
+		.where(and(eq(mediaAssets.assetKey, assetKey), isNull(mediaAssets.orphanedAt)))
 		.limit(1);
 
 	if (!assetRow) {

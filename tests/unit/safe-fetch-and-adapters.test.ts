@@ -25,8 +25,10 @@ import {
 import {
 	CIRCUIT_BREAKER_COOLDOWN_MS,
 	CIRCUIT_BREAKER_FAILURE_THRESHOLD,
+	CIRCUIT_BREAKER_MAX_HOSTS,
 	getHostCircuitState,
 	isHostCircuitOpen,
+	PROVIDER_BREAKER_KEYS,
 	recordHostStatus,
 	resetCircuitBreakers
 } from '../../src/lib/server/unfurl/circuit-breaker';
@@ -136,6 +138,7 @@ const BLOCKED_BOUNDARY_CASES: Array<{ cidr: string; ip: string }> = [
 	{ cidr: '172.16.0.0/12', ip: '172.31.255.254' },
 	{ cidr: '192.0.0.0/24', ip: '192.0.0.1' },
 	{ cidr: '192.0.2.0/24', ip: '192.0.2.1' },
+	{ cidr: '192.88.99.0/24', ip: '192.88.99.1' },
 	{ cidr: '192.168.0.0/16', ip: '192.168.1.1' },
 	{ cidr: '198.18.0.0/15', ip: '198.18.0.1' },
 	{ cidr: '198.18.0.0/15', ip: '198.19.255.254' },
@@ -153,6 +156,7 @@ const BLOCKED_BOUNDARY_CASES: Array<{ cidr: string; ip: string }> = [
 	{ cidr: '::ffff:0:0/96', ip: '::ffff:127.0.0.1' },
 	{ cidr: '::ffff:0:0/96', ip: '::ffff:93.184.216.34' },
 	{ cidr: '::ffff:0:0/96', ip: '::ffff:7f00:1' },
+	{ cidr: '::ffff:0:0:0/96', ip: '::ffff:0:7f00:1' },
 	{ cidr: '64:ff9b::/96', ip: '64:ff9b::1' },
 	{ cidr: '64:ff9b:1::/48', ip: '64:ff9b:1::1' },
 	{ cidr: '100::/64', ip: '100::1' },
@@ -299,9 +303,9 @@ describe('SSRF safeFetch, Circuit Breaker, and Unfurl Adapters (unit)', () => {
 	});
 
 	describe('SSRF CIDR blocklist (§5 single source of truth)', () => {
-		it('covers all 15 IPv4 and 14 IPv6 CIDRs defined in §5', () => {
-			expect(BLOCKED_IPV4_CIDRS).toHaveLength(15);
-			expect(BLOCKED_IPV6_CIDRS).toHaveLength(14);
+		it('covers all 16 IPv4 and 15 IPv6 CIDRs defined in §5', () => {
+			expect(BLOCKED_IPV4_CIDRS).toHaveLength(16);
+			expect(BLOCKED_IPV6_CIDRS).toHaveLength(15);
 
 			const testedCidrs = new Set(BLOCKED_BOUNDARY_CASES.map((entry) => entry.cidr));
 			for (const cidr of [...BLOCKED_IPV4_CIDRS, ...BLOCKED_IPV6_CIDRS]) {
@@ -637,6 +641,36 @@ describe('SSRF safeFetch, Circuit Breaker, and Unfurl Adapters (unit)', () => {
 			recordHostStatus('github.com', 401, baseNow);
 			recordHostStatus('github.com', 200, baseNow + 10);
 			expect(getHostCircuitState('github.com', baseNow + 10).consecutiveFailures).toBe(0);
+		});
+
+		it('keeps provider breakers apart from member-shared pages on the same host', () => {
+			const baseNow = 1_700_100_000_000;
+			// Five member-shared api.github.com pages answering 401 trip only the page-host key.
+			for (let i = 0; i < CIRCUIT_BREAKER_FAILURE_THRESHOLD; i += 1) {
+				recordHostStatus('api.github.com', 401, baseNow + i);
+			}
+			expect(isHostCircuitOpen('api.github.com', baseNow + 10)).toBe(true);
+			expect(isHostCircuitOpen(PROVIDER_BREAKER_KEYS.githubApi, baseNow + 10)).toBe(false);
+
+			// A member page answering 200 does not reset the provider's failure streak.
+			for (let i = 0; i < CIRCUIT_BREAKER_FAILURE_THRESHOLD - 1; i += 1) {
+				recordHostStatus(PROVIDER_BREAKER_KEYS.githubApi, 429, baseNow + 20 + i);
+			}
+			recordHostStatus('api.github.com', 200, baseNow + 30);
+			expect(recordHostStatus(PROVIDER_BREAKER_KEYS.githubApi, 429, baseNow + 31).opened).toBe(
+				true
+			);
+		});
+
+		it('does not evict an open provider breaker when many hosts are recorded', () => {
+			const baseNow = 1_700_200_000_000;
+			for (let i = 0; i < CIRCUIT_BREAKER_FAILURE_THRESHOLD; i += 1) {
+				recordHostStatus(PROVIDER_BREAKER_KEYS.youtubeOembed, 429, baseNow + i);
+			}
+			for (let i = 0; i < CIRCUIT_BREAKER_MAX_HOSTS + 50; i += 1) {
+				recordHostStatus(`h${i}.example.test`, 403, baseNow + 100);
+			}
+			expect(isHostCircuitOpen(PROVIDER_BREAKER_KEYS.youtubeOembed, baseNow + 200)).toBe(true);
 		});
 	});
 

@@ -41,6 +41,8 @@ docker compose --env-file .env.production -f docker-compose.prod.yml up -d --bui
 
 The container runs database migrations on start and listens on `127.0.0.1:3000` only.
 
+> **Keep port 3000 private.** Izgah trusts the last `X-Forwarded-For` hop (`XFF_DEPTH=1`) for rate limiting, which is only safe behind exactly one reverse proxy. If the app port is reachable directly, clients can spoof that header and spread login attempts across fake addresses. Add a rate limit at the proxy as well if your instance is exposed to the open internet.
+
 ## 5. Put Caddy in front
 
 Install Caddy on the host and use [`docs/deploy/Caddyfile`](./Caddyfile):

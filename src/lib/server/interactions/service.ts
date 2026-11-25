@@ -173,14 +173,8 @@ function normalizeCommentBody(rawBody: string): string {
 		});
 	}
 	if (trimmed.length > MAX_COMMENT_LENGTH) {
-		throw new InteractionServiceError(
-			422,
-			'VALIDATION_ERROR',
-			`Yorum en fazla ${MAX_COMMENT_LENGTH} karakter olabilir.`,
-			{
-				body: [`Yorum en fazla ${MAX_COMMENT_LENGTH} karakter olabilir.`]
-			}
-		);
+		const message = t('comment.tooLong', { max: MAX_COMMENT_LENGTH });
+		throw new InteractionServiceError(422, 'VALIDATION_ERROR', message, { body: [message] });
 	}
 	return trimmed;
 }
