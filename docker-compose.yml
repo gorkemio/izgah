@@ -3,7 +3,8 @@ services:
     image: postgres:16-bookworm
     restart: unless-stopped
     ports:
-      - '5432:5432'
+      # Loopback only: the development password below is public.
+      - '127.0.0.1:5432:5432'
     environment:
       POSTGRES_USER: izgah
       POSTGRES_PASSWORD: izgah

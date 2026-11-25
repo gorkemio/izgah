@@ -1,4 +1,4 @@
-import { auth, toSvelteKitHandler } from '$lib/server/auth/better-auth';
+import { auth, toSvelteKitHandler } from '#lib/server/auth/better-auth.ts';
 
 const handler = toSvelteKitHandler(auth);
 

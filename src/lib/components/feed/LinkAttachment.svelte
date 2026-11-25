@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { t, intlLocale, formatCompactNumber, formatNumber } from '$lib/i18n';
-	import { watchImageError } from '$lib/client/image-error';
-	import Highlight from '$lib/components/ui/Highlight.svelte';
-	import Icon from '$lib/components/ui/Icon.svelte';
-	import Skeleton from '$lib/components/ui/Skeleton.svelte';
-	import { contentTypeLabel, type FeedShareItem } from '$lib/types/feed';
+	import { t, intlLocale, formatCompactNumber, formatNumber } from '#lib/i18n/index.ts';
+	import { watchImageError } from '#lib/client/image-error.ts';
+	import Highlight from '#lib/components/ui/Highlight.svelte';
+	import Icon from '#lib/components/ui/Icon.svelte';
+	import Skeleton from '#lib/components/ui/Skeleton.svelte';
+	import { contentTypeLabel, type FeedShareItem } from '#lib/types/feed.ts';
 
 	interface Props {
 		item: FeedShareItem;

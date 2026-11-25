@@ -1,22 +1,22 @@
 import { error, fail, redirect, type Cookies } from '@sveltejs/kit';
-import { recordAuditLog } from '$lib/server/audit';
+import { recordAuditLog } from '#lib/server/audit.ts';
 import {
 	changeUserPassword,
 	PasswordChangeError,
 	useSecureCookies
-} from '$lib/server/auth/better-auth';
-import { checkPasswordChangeRateLimit } from '$lib/server/auth/rate-limit';
-import { isLocale, LOCALE_COOKIE, t } from '$lib/i18n';
-import { setHeadersOnce } from '$lib/server/http/headers';
-import { sanitizeInternalPath } from '$lib/server/http/safe-path';
-import { PALETTE_COOKIES, THEME_COOKIE, THEME_VALUES } from '$lib/server/http/theme';
+} from '#lib/server/auth/better-auth.ts';
+import { checkPasswordChangeRateLimit } from '#lib/server/auth/rate-limit.ts';
+import { isLocale, LOCALE_COOKIE, t } from '#lib/i18n/index.ts';
+import { setHeadersOnce } from '#lib/server/http/headers.ts';
+import { sanitizeInternalPath } from '#lib/server/http/safe-path.ts';
+import { PALETTE_COOKIES, THEME_COOKIE, THEME_VALUES } from '#lib/server/http/theme.ts';
 import {
 	ACCENT_VALUES,
 	DARK_THEME_VALUES,
 	LIGHT_THEME_VALUES,
 	parseAllowed,
 	type Palette
-} from '$lib/types/appearance';
+} from '#lib/types/appearance.ts';
 import type { Actions, PageServerLoad } from './$types';
 
 /** Shared flags of the appearance cookies (docs/designs/izgah-ui-v2.md §9, izgah-themes.md §3). */
@@ -34,10 +34,7 @@ export const load: PageServerLoad = async ({ locals, request, setHeaders }) => {
 	setHeadersOnce({ request, setHeaders }, { 'Cache-Control': 'no-store' });
 
 	if (!locals.user || !locals.session) {
-		error(401, {
-			message: t('auth.signInRequired'),
-			requestId: locals.requestId
-		});
+		error(401, t('auth.signInRequired'), { requestId: locals.requestId });
 	}
 
 	return {
@@ -53,7 +50,7 @@ export const actions: Actions = {
 	 */
 	setTheme: async ({ locals, request, cookies }) => {
 		if (!locals.user) {
-			error(401, { message: t('auth.signInRequired'), requestId: locals.requestId });
+			error(401, t('auth.signInRequired'), { requestId: locals.requestId });
 		}
 		const formData = await request.formData();
 		const theme = parseAllowed(THEME_VALUES, formData.get('theme'));
@@ -73,7 +70,7 @@ export const actions: Actions = {
 	 */
 	setPalette: async ({ locals, request, cookies }) => {
 		if (!locals.user) {
-			error(401, { message: t('auth.signInRequired'), requestId: locals.requestId });
+			error(401, t('auth.signInRequired'), { requestId: locals.requestId });
 		}
 		const formData = await request.formData();
 		const lightTheme = parseAllowed(LIGHT_THEME_VALUES, formData.get('lightTheme'));
@@ -99,7 +96,7 @@ export const actions: Actions = {
 	 */
 	setLocale: async ({ locals, request, cookies }) => {
 		if (!locals.user) {
-			error(401, { message: t('error.unauthorized'), requestId: locals.requestId });
+			error(401, t('error.unauthorized'), { requestId: locals.requestId });
 		}
 		const formData = await request.formData();
 		const locale = formData.get('locale');
@@ -114,10 +111,7 @@ export const actions: Actions = {
 		setHeadersOnce({ request, setHeaders }, { 'Cache-Control': 'no-store' });
 
 		if (!locals.user || !locals.session) {
-			error(401, {
-				message: t('auth.signInRequired'),
-				requestId: locals.requestId
-			});
+			error(401, t('auth.signInRequired'), { requestId: locals.requestId });
 		}
 
 		const rateLimit = checkPasswordChangeRateLimit(locals.user.id);

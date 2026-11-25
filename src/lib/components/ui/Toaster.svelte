@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	import { toasts, type Toast } from '$lib/client/toast.svelte';
+	import { t } from '#lib/i18n/index.ts';
+	import { toasts, type Toast } from '#lib/client/toast.svelte.ts';
 	import Icon from './Icon.svelte';
 
 	const statusToasts = $derived(toasts.items.filter((item) => item.tone !== 'error'));

@@ -1,20 +1,20 @@
 import { error, fail, redirect } from '@sveltejs/kit';
-import { recordAuditLog } from '$lib/server/audit';
-import { clearSessionCookies } from '$lib/server/auth/better-auth';
+import { recordAuditLog } from '#lib/server/audit.ts';
+import { clearSessionCookies } from '#lib/server/auth/better-auth.ts';
 import {
 	checkAuthTokenPostRateLimit,
 	checkAuthTokenRateLimit,
 	extractClientIp
-} from '$lib/server/auth/rate-limit';
+} from '#lib/server/auth/rate-limit.ts';
 import {
 	consumeInviteToken,
 	inspectInviteToken,
 	InviteTokenGoneError,
 	InviteTokenValidationError
-} from '$lib/server/auth/tokens';
-import { setHeadersOnce } from '$lib/server/http/headers';
+} from '#lib/server/auth/tokens.ts';
+import { setHeadersOnce } from '#lib/server/http/headers.ts';
 import type { Actions, PageServerLoad } from './$types';
-import { t } from '$lib/i18n';
+import { t } from '#lib/i18n/index.ts';
 
 const AUTH_SECURITY_HEADERS = {
 	'Referrer-Policy': 'no-referrer',
@@ -31,18 +31,12 @@ export const load: PageServerLoad = async (event) => {
 			...AUTH_SECURITY_HEADERS,
 			'Retry-After': String(rateLimit.retryAfterSeconds)
 		});
-		error(429, {
-			message: t('auth.tooManyAttempts'),
-			requestId: event.locals.requestId
-		});
+		error(429, t('auth.tooManyAttempts'), { requestId: event.locals.requestId });
 	}
 
 	const inspected = await inspectInviteToken(token, 'password_reset');
 	if (!inspected) {
-		error(410, {
-			message: t('auth.resetInvalid'),
-			requestId: event.locals.requestId
-		});
+		error(410, t('auth.resetInvalid'), { requestId: event.locals.requestId });
 	}
 
 	return {

@@ -1,8 +1,8 @@
 import { json } from '@sveltejs/kit';
-import { checkQuickSearchRateLimit } from '$lib/server/auth/rate-limit';
-import { searchResources } from '$lib/server/search/service';
+import { checkQuickSearchRateLimit } from '#lib/server/auth/rate-limit.ts';
+import { searchResources } from '#lib/server/search/service.ts';
 import type { RequestHandler } from './$types';
-import { t } from '$lib/i18n';
+import { t } from '#lib/i18n/index.ts';
 
 const QUICK_SEARCH_LIMIT = 6;
 const QUICK_SEARCH_MIN_CHARS = 2;

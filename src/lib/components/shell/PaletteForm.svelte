@@ -1,11 +1,10 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	import { enhance } from '$app/forms';
-	import { toasts } from '$lib/client/toast.svelte';
+	import { t } from '#lib/i18n/index.ts';
+	import { enhance, type SubmitFunction } from '$app/forms';
+	import { toasts } from '#lib/client/toast.svelte.ts';
 	import { page } from '$app/state';
-	import type { SubmitFunction } from '@sveltejs/kit';
-	import Icon from '$lib/components/ui/Icon.svelte';
-	import { getThemeState } from '$lib/client/theme.svelte';
+	import Icon from '#lib/components/ui/Icon.svelte';
+	import { getThemeState } from '#lib/client/theme.svelte.ts';
 	import {
 		ACCENT_VALUES,
 		DARK_THEME_VALUES,
@@ -16,7 +15,7 @@
 		type DarkTheme,
 		type LightTheme,
 		type Palette
-	} from '$lib/types/appearance';
+	} from '#lib/types/appearance.ts';
 
 	interface Props {
 		/** Server-rendered palette; the shared ThemeState wins once it exists. */
@@ -67,7 +66,8 @@
 		return async ({ result, update }) => {
 			if (result.type !== 'success') {
 				toasts.push(t('palette.saveFailed'), { tone: 'error' });
-				await update();
+				// The action lives on /settings; stay on the current page (SvelteKit 3 would navigate).
+				await update({ navigate: false });
 			}
 		};
 	};

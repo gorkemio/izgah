@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	import { instanceName } from '$lib/instance';
+	import { t } from '#lib/i18n/index.ts';
+	import { instanceName } from '#lib/instance.ts';
 	import { page } from '$app/state';
-	import Icon from '$lib/components/ui/Icon.svelte';
-	import Tooltip from '$lib/components/ui/Tooltip.svelte';
-	import { shortcutLabel, type ModifierKey } from '$lib/platform';
+	import Icon from '#lib/components/ui/Icon.svelte';
+	import Tooltip from '#lib/components/ui/Tooltip.svelte';
+	import { shortcutLabel, type ModifierKey } from '#lib/platform.ts';
 
 	interface SectionRef {
 		id: string;
@@ -91,8 +91,10 @@
 						<a
 							href={`${page.url.pathname}${page.url.search}`}
 							class="crumb-current"
-							aria-current="page">{part.label}</a
+							aria-current="page"
 						>
+							{part.label}
+						</a>
 					{/if}
 				</li>
 			{/each}

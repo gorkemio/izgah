@@ -1,6 +1,6 @@
 import { asc, inArray } from 'drizzle-orm';
-import { db, type Database } from '$lib/server/db/client';
-import { sections } from '$lib/server/db/schema';
+import { db, type Database } from '#lib/server/db/client.ts';
+import { sections } from '#lib/server/db/schema.ts';
 
 export interface SectionListItem {
 	id: string;

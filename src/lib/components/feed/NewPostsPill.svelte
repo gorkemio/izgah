@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	import { toasts } from '$lib/client/toast.svelte';
-	import { startVisibilityPoller, type PollOutcome } from '$lib/client/visibility-poller';
-	import Icon from '$lib/components/ui/Icon.svelte';
-	import type { ContentType } from '$lib/types/domain';
+	import { t } from '#lib/i18n/index.ts';
+	import { toasts } from '#lib/client/toast.svelte.ts';
+	import { startVisibilityPoller, type PollOutcome } from '#lib/client/visibility-poller.ts';
+	import Icon from '#lib/components/ui/Icon.svelte';
+	import type { ContentType } from '#lib/types/domain.ts';
 
 	interface Props {
 		/** Poll only on the cursor-less first page (izgah-ui-v2 §8.5). */

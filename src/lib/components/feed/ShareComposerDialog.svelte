@@ -1,21 +1,20 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	import { contentTypeLabel } from '$lib/types/feed';
+	import { t } from '#lib/i18n/index.ts';
+	import { contentTypeLabel } from '#lib/types/feed.ts';
 	import { page } from '$app/state';
-	import { shortcutLabel, type ModifierKey } from '$lib/platform';
-	import { formatDate } from '$lib/format/date';
-	import { enhance } from '$app/forms';
+	import { shortcutLabel, type ModifierKey } from '#lib/platform.ts';
+	import { formatDate } from '#lib/format/date.ts';
+	import { enhance, type SubmitFunction } from '$app/forms';
 	import { goto, invalidate } from '$app/navigation';
-	import type { SubmitFunction } from '@sveltejs/kit';
 	import { untrack } from 'svelte';
-	import { toasts } from '$lib/client/toast.svelte';
-	import Avatar from '$lib/components/ui/Avatar.svelte';
-	import Dialog from '$lib/components/ui/Dialog.svelte';
-	import Icon from '$lib/components/ui/Icon.svelte';
-	import { extractFirstUrlFromText } from '$lib/links/parse-url';
-	import type { SectionListItem } from '$lib/server/sections/service';
-	import { getComposerController } from '$lib/share/composer-controller.svelte';
-	import type { ContentType } from '$lib/types/domain';
+	import { toasts } from '#lib/client/toast.svelte.ts';
+	import Avatar from '#lib/components/ui/Avatar.svelte';
+	import Dialog from '#lib/components/ui/Dialog.svelte';
+	import Icon from '#lib/components/ui/Icon.svelte';
+	import { extractFirstUrlFromText } from '#lib/links/parse-url.ts';
+	import type { SectionListItem } from '#lib/server/sections/service.ts';
+	import { getComposerController } from '#lib/share/composer-controller.svelte.ts';
+	import type { ContentType } from '#lib/types/domain.ts';
 
 	interface DuplicateCheckResult {
 		exists: boolean;
@@ -128,6 +127,7 @@
 	const displayedErrorMessage = $derived(
 		hasClientFeedback ? errorMessage : (errorMessage ?? initialValues?.errorMessage ?? null)
 	);
+
 	const displayedFieldErrors = $derived(
 		hasClientFeedback
 			? fieldErrors
@@ -351,7 +351,7 @@
 			if (result.type === 'redirect') {
 				resetForm();
 				open = false;
-				await goto(result.location, { invalidateAll: true });
+				await goto(result.location, { refreshAll: true });
 				return;
 			}
 
@@ -410,9 +410,9 @@
 		<input type="hidden" name="returnTo" value={returnTo} />
 
 		<div class="field">
-			<label for={urlInputId} class="field-label" class:visually-hidden={variant === 'feed'}
-				>{t('composer.urlLabel')}</label
-			>
+			<label for={urlInputId} class="field-label" class:visually-hidden={variant === 'feed'}>
+				{t('composer.urlLabel')}
+			</label>
 			<div class="composer-url-row">
 				{#if variant === 'feed' && currentUserName}
 					<Avatar name={currentUserName} self size={30} />
@@ -440,12 +440,9 @@
 					class="input url-input"
 				/>
 				{#if variant === 'feed'}
-					<span class="kbd composer-kbd" aria-hidden="true"
-						>{shortcutLabel(
-							(page.data as { modifierKey?: ModifierKey }).modifierKey ?? 'meta',
-							'V'
-						)}</span
-					>
+					<span class="kbd composer-kbd" aria-hidden="true">
+						{shortcutLabel((page.data as { modifierKey?: ModifierKey }).modifierKey ?? 'meta', 'V')}
+					</span>
 				{/if}
 			</div>
 			{#if pasteHint}
@@ -524,8 +521,7 @@
 					}}
 					aria-invalid={Boolean(displayedFieldErrors.note?.length) || undefined}
 					aria-describedby={displayedFieldErrors.note?.length ? `${noteInputId}-err` : undefined}
-					class="textarea textarea-input"
-				></textarea>
+					class="textarea textarea-input"></textarea>
 				{#if displayedFieldErrors.note?.length}
 					<p id="{noteInputId}-err" class="field-error">{displayedFieldErrors.note[0]}</p>
 				{/if}
@@ -606,9 +602,9 @@
 
 		<div class="composer-actions">
 			{#if onCancelClick}
-				<button type="button" class="btn btn-outline" onclick={onCancelClick}
-					>{t('common.cancel')}</button
-				>
+				<button type="button" class="btn btn-outline" onclick={onCancelClick}>
+					{t('common.cancel')}
+				</button>
 			{/if}
 			<button type="submit" class="btn btn-primary" disabled={submitting}>
 				{submitting ? t('composer.sharing') : t('nav.share')}

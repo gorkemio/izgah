@@ -2,9 +2,9 @@ import dns from 'node:dns';
 import net from 'node:net';
 import { domainToASCII } from 'node:url';
 import { Agent, buildConnector, fetch as undiciFetch, type Dispatcher } from 'undici';
-import { MAX_URL_LENGTH } from '$lib/links/parse-url';
-import { asciiLower } from '$lib/server/links/canonicalize';
-import { t } from '$lib/i18n';
+import { MAX_URL_LENGTH } from '#lib/links/parse-url.ts';
+import { asciiLower } from '#lib/server/links/canonicalize.ts';
+import { t } from '#lib/i18n/index.ts';
 
 export const UNFURL_USER_AGENT = 'IzgahUnfurl/1.0';
 export const DEFAULT_MAX_REDIRECTS = 3;
@@ -25,6 +25,8 @@ export const BLOCKED_IPV4_CIDRS = [
 	'172.16.0.0/12',
 	'192.0.0.0/24',
 	'192.0.2.0/24',
+	// Deprecated 6to4 relay anycast (RFC 7526).
+	'192.88.99.0/24',
 	'192.168.0.0/16',
 	'198.18.0.0/15',
 	'198.51.100.0/24',
@@ -40,6 +42,8 @@ export const BLOCKED_IPV6_CIDRS = [
 	// IPv4-compatible addresses (deprecated, RFC 4291): ::7f00:1 would reach 127.0.0.1 on some stacks.
 	'::/96',
 	'::ffff:0:0/96',
+	// IPv4-translated addresses (RFC 2765/6145): ::ffff:0:7f00:1 maps to 127.0.0.1 via SIIT.
+	'::ffff:0:0:0/96',
 	'64:ff9b::/96',
 	'64:ff9b:1::/48',
 	// Discard-only prefix (RFC 6666).

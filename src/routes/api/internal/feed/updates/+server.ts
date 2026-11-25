@@ -1,16 +1,16 @@
 import { json } from '@sveltejs/kit';
 import { and, eq, ne, sql } from 'drizzle-orm';
-import { db } from '$lib/server/db/client';
+import { db } from '#lib/server/db/client.ts';
 import {
 	canonicalResources,
 	contentTypeEnum,
 	linkShares,
 	sections,
 	type ContentType
-} from '$lib/server/db/schema';
-import { feedScopeConditions } from '$lib/server/feed/query';
+} from '#lib/server/db/schema.ts';
+import { feedScopeConditions } from '#lib/server/feed/query.ts';
 import type { RequestHandler } from './$types';
-import { t } from '$lib/i18n';
+import { t } from '#lib/i18n/index.ts';
 
 const NEW_POSTS_COUNT_CAP = 100;
 const ID_PATTERN = /^[A-Za-z0-9_-]{1,128}$/;

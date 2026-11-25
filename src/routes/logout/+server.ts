@@ -1,10 +1,17 @@
 import { eq } from 'drizzle-orm';
-import { auth, clearSessionCookies } from '$lib/server/auth/better-auth';
-import { db } from '$lib/server/db/client';
-import { sessions } from '$lib/server/db/schema';
+import { auth, clearSessionCookies } from '#lib/server/auth/better-auth.ts';
+import { db } from '#lib/server/db/client.ts';
+import { sessions } from '#lib/server/db/schema.ts';
+import { isSameOriginRequest } from '#lib/server/http/same-origin.ts';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async (event) => {
+	// A body-less POST has no form content type, so SvelteKit's CSRF check skips it. Without this,
+	// a same-site sibling origin could log users out.
+	if (!isSameOriginRequest(event)) {
+		return new Response(null, { status: 403, headers: { 'Cache-Control': 'no-store' } });
+	}
+
 	try {
 		await auth.api.signOut({
 			headers: event.request.headers,

@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 import { and, asc, desc, eq, exists, inArray, isNull, sql } from 'drizzle-orm';
-import { db } from '$lib/server/db/client';
+import { db } from '#lib/server/db/client.ts';
 import {
 	canonicalResources,
 	contentTypeEnum,
@@ -14,9 +14,9 @@ import {
 	type ProviderMeta,
 	type SourceChannel,
 	type UnfurlStatus
-} from '$lib/server/db/schema';
-import { getViewerLikedResourceIds } from '$lib/server/interactions/service';
-import { getResourceShareReferences } from '$lib/server/links/service';
+} from '#lib/server/db/schema.ts';
+import { getViewerLikedResourceIds } from '#lib/server/interactions/service.ts';
+import { getResourceShareReferences } from '#lib/server/links/service.ts';
 
 export const DEFAULT_SEARCH_LIMIT = 25;
 export const MAX_SEARCH_QUERY_LENGTH = 200;

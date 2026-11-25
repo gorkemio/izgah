@@ -1,11 +1,11 @@
 import { and, eq, exists, isNull, type SQL } from 'drizzle-orm';
-import { db } from '$lib/server/db/client';
+import { db } from '#lib/server/db/client.ts';
 import {
 	canonicalResources,
 	linkShareSections,
 	linkShares,
 	type ContentType
-} from '$lib/server/db/schema';
+} from '#lib/server/db/schema.ts';
 
 /**
  * Scope of a feed view, shared by the feed/section page loader and the new-posts counter so a

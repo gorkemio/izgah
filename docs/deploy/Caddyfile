@@ -2,5 +2,7 @@
 # Replace links.example.com with your domain; Caddy fetches the TLS certificate automatically.
 links.example.com {
 	encode zstd gzip
+	# HSTS: Izgah does not set it itself; browsers then refuse plain HTTP for this domain.
+	header Strict-Transport-Security "max-age=31536000; includeSubDomains"
 	reverse_proxy 127.0.0.1:3000
 }

@@ -1,5 +1,5 @@
 import { error, fail, redirect } from '@sveltejs/kit';
-import { sanitizeInternalPath } from '$lib/server/http/safe-path';
+import { sanitizeInternalPath } from '#lib/server/http/safe-path.ts';
 import {
 	addResourceComment,
 	getResourceDiscussion,
@@ -7,15 +7,15 @@ import {
 	softDeleteResourceComment,
 	toggleResourceLike,
 	updateResourceComment
-} from '$lib/server/interactions/service';
+} from '#lib/server/interactions/service.ts';
 import {
 	getResourceShareReference,
 	LinkServiceError,
 	softDeleteLinkShare
-} from '$lib/server/links/service';
+} from '#lib/server/links/service.ts';
 import { _feedShareActions } from '../../+page.server';
 import type { Actions, PageServerLoad } from './$types';
-import { t } from '$lib/i18n';
+import { t } from '#lib/i18n/index.ts';
 
 function parseDesiredLike(raw: FormDataEntryValue | null): boolean | undefined {
 	if (raw === 'true') {

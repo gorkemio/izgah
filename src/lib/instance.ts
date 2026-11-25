@@ -1,7 +1,7 @@
 /**
  * Per-instance settings shared by server and browser (docs/designs/izgah-i18n-oss.md §6).
  *
- * The server registers the values from the environment once (`$lib/server/env`) and writes them
+ * The server registers the values from the environment once (`#lib/server/env.ts`) and writes them
  * into `src/app.html` (`<html data-tz data-source>`, `<meta name="application-name">`), so the browser reads the
  * same values back without extra page data. Defaults apply outside a configured server (tests).
  */

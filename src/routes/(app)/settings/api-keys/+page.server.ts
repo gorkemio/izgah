@@ -1,5 +1,5 @@
 import { error, fail } from '@sveltejs/kit';
-import { recordAuditLog } from '$lib/server/audit';
+import { recordAuditLog } from '#lib/server/audit.ts';
 import {
 	ApiKeyLimitError,
 	ApiKeyValidationError,
@@ -7,19 +7,16 @@ import {
 	listUserApiKeys,
 	MAX_ACTIVE_API_KEYS_PER_USER,
 	revokeApiKey
-} from '$lib/server/auth/api-keys';
-import { setHeadersOnce } from '$lib/server/http/headers';
+} from '#lib/server/auth/api-keys.ts';
+import { setHeadersOnce } from '#lib/server/http/headers.ts';
 import type { Actions, PageServerLoad } from './$types';
-import { t } from '$lib/i18n';
+import { t } from '#lib/i18n/index.ts';
 
 export const load: PageServerLoad = async ({ locals, request, setHeaders, url }) => {
 	setHeadersOnce({ request, setHeaders }, { 'Cache-Control': 'no-store' });
 
 	if (!locals.user || !locals.session) {
-		error(401, {
-			message: t('auth.signInRequired'),
-			requestId: locals.requestId
-		});
+		error(401, t('auth.signInRequired'), { requestId: locals.requestId });
 	}
 
 	const apiKeys = await listUserApiKeys(locals.user.id);
@@ -38,10 +35,7 @@ export const actions: Actions = {
 		setHeadersOnce({ request, setHeaders }, { 'Cache-Control': 'no-store' });
 
 		if (!locals.user || !locals.session) {
-			error(401, {
-				message: t('auth.signInRequired'),
-				requestId: locals.requestId
-			});
+			error(401, t('auth.signInRequired'), { requestId: locals.requestId });
 		}
 
 		const formData = await request.formData();
@@ -91,10 +85,7 @@ export const actions: Actions = {
 		setHeadersOnce({ request, setHeaders }, { 'Cache-Control': 'no-store' });
 
 		if (!locals.user || !locals.session) {
-			error(401, {
-				message: t('auth.signInRequired'),
-				requestId: locals.requestId
-			});
+			error(401, t('auth.signInRequired'), { requestId: locals.requestId });
 		}
 
 		const formData = await request.formData();

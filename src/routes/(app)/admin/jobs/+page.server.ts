@@ -6,9 +6,9 @@ import {
 	requireAdmin,
 	retryAllDeadUnfurlJobs,
 	retryDeadUnfurlJob
-} from '$lib/server/admin/service';
+} from '#lib/server/admin/service.ts';
 import type { PageServerLoad } from './$types';
-import { t } from '$lib/i18n';
+import { t } from '#lib/i18n/index.ts';
 
 export const load: PageServerLoad = async ({ depends, locals }) => {
 	depends('izgah:admin:jobs');

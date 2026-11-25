@@ -1,23 +1,23 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
+	import { t } from '#lib/i18n/index.ts';
 	import { goto, invalidate, preloadData } from '$app/navigation';
 	import { page } from '$app/state';
 	import { tick, untrack } from 'svelte';
-	import { toasts } from '$lib/client/toast.svelte';
-	import FeedFilterBar from '$lib/components/feed/FeedFilterBar.svelte';
-	import NewPostsPill from '$lib/components/feed/NewPostsPill.svelte';
-	import PostCard from '$lib/components/feed/PostCard.svelte';
+	import { toasts } from '#lib/client/toast.svelte.ts';
+	import FeedFilterBar from '#lib/components/feed/FeedFilterBar.svelte';
+	import NewPostsPill from '#lib/components/feed/NewPostsPill.svelte';
+	import PostCard from '#lib/components/feed/PostCard.svelte';
 	import ShareComposerDialog, {
 		type ShareComposerInitialState
-	} from '$lib/components/feed/ShareComposerDialog.svelte';
-	import SidePeekDialog from '$lib/components/feed/SidePeekDialog.svelte';
-	import Icon from '$lib/components/ui/Icon.svelte';
-	import { FeedState } from '$lib/feed/feed-state.svelte';
-	import { groupByDay } from '$lib/feed/group-by-day';
-	import { dayKey, dayLabel, formatTime } from '$lib/format/date';
-	import type { SectionListItem } from '$lib/server/sections/service';
-	import type { ContentType } from '$lib/types/domain';
-	import type { FeedShareItem, FeedSnapshot, ShareCardFormError } from '$lib/types/feed';
+	} from '#lib/components/feed/ShareComposerDialog.svelte';
+	import SidePeekDialog from '#lib/components/feed/SidePeekDialog.svelte';
+	import Icon from '#lib/components/ui/Icon.svelte';
+	import { FeedState } from '#lib/feed/feed-state.svelte.ts';
+	import { groupByDay } from '#lib/feed/group-by-day.ts';
+	import { dayKey, dayLabel, formatTime } from '#lib/format/date.ts';
+	import type { SectionListItem } from '#lib/server/sections/service.ts';
+	import type { ContentType } from '#lib/types/domain.ts';
+	import type { FeedShareItem, FeedSnapshot, ShareCardFormError } from '#lib/types/feed.ts';
 
 	export interface FeedViewData {
 		items: FeedShareItem[];
@@ -221,7 +221,7 @@
 	}
 
 	const cleanReturnTo = $derived.by(() => {
-		const params = new URLSearchParams(page.url.searchParams);
+		const params = new URLSearchParams(page.url.search);
 		params.delete('compose');
 		params.delete('edit');
 		params.delete('delete');
@@ -377,7 +377,8 @@
 		loadMoreFailed = false;
 		try {
 			const result = await preloadData(targetHref);
-			if (result.type === 'loaded' && result.status >= 500) {
+			// SvelteKit 3 reports a failed load as an error result rather than a loaded 5xx.
+			if (result.type === 'error' || (result.type === 'loaded' && result.status >= 500)) {
 				// Keep the reader in place instead of replacing the feed with an error page.
 				loadMoreFailed = true;
 				return;
@@ -466,9 +467,9 @@
 						<li class:is-deferred={index >= DEFERRED_FROM_INDEX} class:is-first-seen={firstSeen}>
 							{#if firstSeen && lastSeenMarker}
 								<p class="last-seen-label">
-									<span aria-hidden="true"
-										>{t('feed.lastVisit', { time: lastSeenMarker.label })}</span
-									>
+									<span aria-hidden="true">
+										{t('feed.lastVisit', { time: lastSeenMarker.label })}
+									</span>
 									<span class="visually-hidden">{t('feed.lastVisitSr')}</span>
 								</p>
 							{/if}

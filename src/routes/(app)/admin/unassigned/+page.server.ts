@@ -4,10 +4,10 @@ import {
 	bulkAssignSharesToSections,
 	listUnassignedShares,
 	requireAdmin
-} from '$lib/server/admin/service';
-import { listSections } from '$lib/server/sections/service';
+} from '#lib/server/admin/service.ts';
+import { listSections } from '#lib/server/sections/service.ts';
 import type { PageServerLoad } from './$types';
-import { t } from '$lib/i18n';
+import { t } from '#lib/i18n/index.ts';
 
 export const load: PageServerLoad = async ({ depends, locals, url }) => {
 	depends('izgah:admin:unassigned');

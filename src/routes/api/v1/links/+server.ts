@@ -9,17 +9,19 @@ import {
 	getRequestId,
 	handleApiV1Error,
 	requireApiV1User
-} from '$lib/server/api/response';
-import { contentTypeEnum } from '$lib/server/db/schema';
-import { createLinkShare } from '$lib/server/links/service';
-import { t } from '$lib/i18n';
+} from '#lib/server/api/response.ts';
+import { contentTypeEnum } from '#lib/server/db/schema.ts';
+import { createLinkShare } from '#lib/server/links/service.ts';
+import { t } from '#lib/i18n/index.ts';
 
 /** Built per request so validation messages use the request locale. */
 function createLinkBodySchema() {
 	return z
 		.object({
 			url: z
-				.string({ required_error: t('api.urlRequired') })
+				.string({
+					error: (issue) => (issue.input === undefined ? t('api.urlRequired') : undefined)
+				})
 				.trim()
 				.min(1, t('api.urlEmpty')),
 			note: z.string().nullable().optional(),

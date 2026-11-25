@@ -399,7 +399,7 @@ describe('M1 schema, triggers, env validation, and health endpoints', () => {
 		const canarySecret = 'SHORT_CANARY_SECRET_999';
 		const canaryDb = 'http://LEAK_DB_CANARY_999';
 		const envImportLoader =
-			'data:text/javascript,import{registerHooks}from"node:module";registerHooks({resolve(s,c,n){return s==="$app/environment"?{shortCircuit:true,url:"data:text/javascript,export const building=false;"}:n(s,c);}})';
+			'data:text/javascript,import{registerHooks}from"node:module";registerHooks({resolve(s,c,n){return s==="$app/env"?{shortCircuit:true,url:"data:text/javascript,export const building=false;"}:n(s,c);}})';
 
 		const proc = spawnSync(
 			'node',

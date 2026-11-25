@@ -1,4 +1,4 @@
-import { getAdminSidebarCounts, requireAdmin } from '$lib/server/admin/service';
+import { getAdminSidebarCounts, requireAdmin } from '#lib/server/admin/service.ts';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ depends, locals }) => {

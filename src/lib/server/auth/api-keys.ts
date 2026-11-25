@@ -1,9 +1,9 @@
 import crypto from 'node:crypto';
 import { and, count, desc, eq, isNull, lte, or } from 'drizzle-orm';
-import { db } from '$lib/server/db/client';
-import { apiKeys, users, type UserRole } from '$lib/server/db/schema';
+import { db } from '#lib/server/db/client.ts';
+import { apiKeys, users, type UserRole } from '#lib/server/db/schema.ts';
 import { sha256Hex } from './tokens';
-import { t } from '$lib/i18n';
+import { t } from '#lib/i18n/index.ts';
 
 export const API_KEY_PREFIX = 'izk_';
 export const API_KEY_RANDOM_BYTES = 30;

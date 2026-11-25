@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { getLocale, LOCALE_NATIVE_NAMES, LOCALES, t } from '$lib/i18n';
-	import { instanceName, pageTitle, sourceUrl } from '$lib/instance';
+	import { getLocale, LOCALE_NATIVE_NAMES, LOCALES, t } from '#lib/i18n/index.ts';
+	import { instanceName, pageTitle, sourceUrl } from '#lib/instance.ts';
 	import { enhance } from '$app/forms';
 	import { page } from '$app/state';
-	import PaletteForm from '$lib/components/shell/PaletteForm.svelte';
-	import ThemeForm from '$lib/components/shell/ThemeForm.svelte';
-	import Avatar from '$lib/components/ui/Avatar.svelte';
-	import Icon from '$lib/components/ui/Icon.svelte';
-	import { getShortcutPreference } from '$lib/client/shortcuts.svelte';
-	import type { ThemeChoice } from '$lib/client/theme.svelte';
-	import { DEFAULT_PALETTE, type Palette } from '$lib/types/appearance';
+	import PaletteForm from '#lib/components/shell/PaletteForm.svelte';
+	import ThemeForm from '#lib/components/shell/ThemeForm.svelte';
+	import Avatar from '#lib/components/ui/Avatar.svelte';
+	import Icon from '#lib/components/ui/Icon.svelte';
+	import { getShortcutPreference } from '#lib/client/shortcuts.svelte.ts';
+	import type { ThemeChoice } from '#lib/client/theme.svelte.ts';
+	import { DEFAULT_PALETTE, type Palette } from '#lib/types/appearance.ts';
 	import type { ActionData, PageData } from './$types';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -270,9 +270,9 @@
 								</label>
 							{/each}
 						</fieldset>
-						<noscript
-							><button type="submit" class="btn btn-outline">{t('common.apply')}</button></noscript
-						>
+						<noscript>
+							<button type="submit" class="btn btn-outline">{t('common.apply')}</button>
+						</noscript>
 					</form>
 				</div>
 			</div>
@@ -280,9 +280,9 @@
 			{#if shortcutPreference}
 				<div class="settings-row">
 					<div class="settings-row-info">
-						<label for="single-key-shortcuts" class="settings-row-title"
-							>{t('settings.shortcuts')}</label
-						>
+						<label for="single-key-shortcuts" class="settings-row-title">
+							{t('settings.shortcuts')}
+						</label>
 						<p id="single-key-shortcuts-hint" class="field-hint">
 							{t('settings.shortcutsHint')}
 						</p>

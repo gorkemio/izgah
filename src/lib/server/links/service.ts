@@ -1,5 +1,5 @@
 import { and, asc, count, eq, inArray, isNull } from 'drizzle-orm';
-import { db, type Database } from '$lib/server/db/client';
+import { db, type Database } from '#lib/server/db/client.ts';
 import {
 	canonicalResources,
 	linkShareSections,
@@ -11,12 +11,12 @@ import {
 	type SourceChannel,
 	type UnfurlStatus,
 	type UserRole
-} from '$lib/server/db/schema';
-import { findExistingSectionIds } from '$lib/server/sections/service';
-import { createResourceNotificationsInTx } from '$lib/server/interactions/service';
-import { detachResourceThumbnailInTx } from '$lib/server/media/storage';
-import { safeFetchDiscardBody, type SafeFetchOptions } from '$lib/server/unfurl/safe-fetch';
-import { notifyUnfurlWorker } from '$lib/server/unfurl/worker';
+} from '#lib/server/db/schema.ts';
+import { findExistingSectionIds } from '#lib/server/sections/service.ts';
+import { createResourceNotificationsInTx } from '#lib/server/interactions/service.ts';
+import { detachResourceThumbnailInTx } from '#lib/server/media/storage.ts';
+import { safeFetchDiscardBody, type SafeFetchOptions } from '#lib/server/unfurl/safe-fetch.ts';
+import { notifyUnfurlWorker } from '#lib/server/unfurl/worker.ts';
 import {
 	asciiLower,
 	canonicalizeUrl,
@@ -24,7 +24,7 @@ import {
 	type CanonicalizedUrl
 } from './canonicalize';
 import { classifyContentType } from './classify';
-import { t } from '$lib/i18n';
+import { t } from '#lib/i18n/index.ts';
 
 export const CANONICALIZER_VERSION = 1;
 export const MAX_NOTE_LENGTH = 1000;

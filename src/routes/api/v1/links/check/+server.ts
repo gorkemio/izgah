@@ -9,15 +9,17 @@ import {
 	getRequestId,
 	handleApiV1Error,
 	requireApiV1User
-} from '$lib/server/api/response';
-import { checkDuplicateLink } from '$lib/server/links/service';
-import { t } from '$lib/i18n';
+} from '#lib/server/api/response.ts';
+import { checkDuplicateLink } from '#lib/server/links/service.ts';
+import { t } from '#lib/i18n/index.ts';
 
 /** Built per request so validation messages use the request locale. */
 function checkQuerySchema() {
 	return z.object({
 		url: z
-			.string({ required_error: t('api.urlQueryMissing') })
+			.string({
+				error: (issue) => (issue.input === undefined ? t('api.urlQueryMissing') : undefined)
+			})
 			.trim()
 			.min(1, t('api.urlQueryEmpty'))
 	});

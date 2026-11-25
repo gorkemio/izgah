@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	import { instanceName } from '$lib/instance';
+	import { t } from '#lib/i18n/index.ts';
+	import { instanceName } from '#lib/instance.ts';
 	import { page } from '$app/state';
-	import NotificationBell from '$lib/components/notifications/NotificationBell.svelte';
-	import Avatar from '$lib/components/ui/Avatar.svelte';
-	import Icon from '$lib/components/ui/Icon.svelte';
-	import PopoverPanel from '$lib/components/ui/PopoverPanel.svelte';
-	import ThemeForm from '$lib/components/shell/ThemeForm.svelte';
+	import NotificationBell from '#lib/components/notifications/NotificationBell.svelte';
+	import Avatar from '#lib/components/ui/Avatar.svelte';
+	import Icon from '#lib/components/ui/Icon.svelte';
+	import PopoverPanel from '#lib/components/ui/PopoverPanel.svelte';
+	import ThemeForm from '#lib/components/shell/ThemeForm.svelte';
 
 	interface SectionLink {
 		id: string;
@@ -59,9 +59,9 @@
 		{#if !onSearchPage}
 			<search class="rail-search" aria-label={t('search.landmark')}>
 				<form method="GET" action="/search">
-					<label for="rail-search-input" class="visually-hidden"
-						>{t('search.inInstance', { name: instanceName() })}</label
-					>
+					<label for="rail-search-input" class="visually-hidden">
+						{t('search.inInstance', { name: instanceName() })}
+					</label>
 					<div class="rail-search-bar">
 						<div class="rail-search-field">
 							<input
@@ -77,9 +77,9 @@
 							/>
 							<kbd class="kbd kbd-hint rail-search-kbd" aria-hidden="true">/</kbd>
 						</div>
-						<button type="submit" class="btn btn-subtle btn-sm rail-search-submit"
-							>{t('search.submit')}</button
-						>
+						<button type="submit" class="btn btn-subtle btn-sm rail-search-submit">
+							{t('search.submit')}
+						</button>
 					</div>
 					{#if activeSection}
 						<label class="scope-toggle">
@@ -195,9 +195,9 @@
 					<Avatar name={user.name} self size={30} />
 					<span class="nav-label account-meta">
 						<span class="account-name">{user.name}</span>
-						<span class="account-role"
-							>{user.role === 'admin' ? t('role.admin') : t('role.member')}</span
-						>
+						<span class="account-role">
+							{user.role === 'admin' ? t('role.admin') : t('role.member')}
+						</span>
 					</span>
 				{/snippet}
 				{#snippet children({ close })}

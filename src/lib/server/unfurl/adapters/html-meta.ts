@@ -1,7 +1,7 @@
 import { Parser } from 'htmlparser2';
-import { asciiLower } from '$lib/server/links/canonicalize';
-import { isHostCircuitOpen, recordHostStatus } from '$lib/server/unfurl/circuit-breaker';
-import { MAX_TEXT_BYTES, safeFetchStream } from '$lib/server/unfurl/safe-fetch';
+import { asciiLower } from '#lib/server/links/canonicalize.ts';
+import { isHostCircuitOpen, recordHostStatus } from '#lib/server/unfurl/circuit-breaker.ts';
+import { MAX_TEXT_BYTES, safeFetchStream } from '#lib/server/unfurl/safe-fetch.ts';
 import {
 	emptyUnfurlMetadata,
 	MAX_DESCRIPTION_LENGTH,

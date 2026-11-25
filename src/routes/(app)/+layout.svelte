@@ -1,28 +1,31 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
+	import { t } from '#lib/i18n/index.ts';
 	import { untrack, type Snippet } from 'svelte';
 	import { goto, onNavigate } from '$app/navigation';
 	import { page } from '$app/state';
 	import ShareComposerDialog, {
 		type ShareComposerInitialState
-	} from '$lib/components/feed/ShareComposerDialog.svelte';
-	import BottomTabBar from '$lib/components/shell/BottomTabBar.svelte';
-	import CommandPalette from '$lib/components/shell/CommandPalette.svelte';
-	import KeyboardHelpDialog from '$lib/components/shell/KeyboardHelpDialog.svelte';
-	import SiteHeader from '$lib/components/shell/SiteHeader.svelte';
-	import TopContextBar from '$lib/components/shell/TopContextBar.svelte';
-	import Toaster from '$lib/components/ui/Toaster.svelte';
-	import { ComposerController, setComposerController } from '$lib/share/composer-controller.svelte';
-	import { extractShareFromText, firstUriFromUriList } from '$lib/share/paste';
-	import { resolveShortcut } from '$lib/client/keyboard-filter';
-	import { ThemeState, setThemeState } from '$lib/client/theme.svelte';
+	} from '#lib/components/feed/ShareComposerDialog.svelte';
+	import BottomTabBar from '#lib/components/shell/BottomTabBar.svelte';
+	import CommandPalette from '#lib/components/shell/CommandPalette.svelte';
+	import KeyboardHelpDialog from '#lib/components/shell/KeyboardHelpDialog.svelte';
+	import SiteHeader from '#lib/components/shell/SiteHeader.svelte';
+	import TopContextBar from '#lib/components/shell/TopContextBar.svelte';
+	import Toaster from '#lib/components/ui/Toaster.svelte';
+	import {
+		ComposerController,
+		setComposerController
+	} from '#lib/share/composer-controller.svelte.ts';
+	import { extractShareFromText, firstUriFromUriList } from '#lib/share/paste.ts';
+	import { resolveShortcut } from '#lib/client/keyboard-filter.ts';
+	import { ThemeState, setThemeState } from '#lib/client/theme.svelte.ts';
 	import {
 		ShortcutPreference,
 		focusedPost,
 		listPosts,
 		movePostFocus,
 		setShortcutPreference
-	} from '$lib/client/shortcuts.svelte';
+	} from '#lib/client/shortcuts.svelte.ts';
 	import type { LayoutData } from './$types';
 
 	interface CreateShareFormPayload {
@@ -330,6 +333,8 @@
 	let heldTransition: { superseded: boolean } | null = null;
 
 	onNavigate((navigation) => {
+		if (navigation.shallow && navigation.type === 'goto') return;
+
 		if (heldTransition) {
 			heldTransition.superseded = true;
 			heldTransition = null;
@@ -399,11 +404,11 @@
 		});
 	});
 
-	function buildCleanReturnTo(currentUrl: URL): string {
+	function buildCleanReturnTo(currentUrl: { pathname: string; search: string }): string {
 		if (currentUrl.pathname.startsWith('/settings') || currentUrl.pathname.startsWith('/admin')) {
 			return '/';
 		}
-		const params = new URLSearchParams(currentUrl.searchParams);
+		const params = new URLSearchParams(currentUrl.search);
 		params.delete('compose');
 		params.delete('edit');
 		params.delete('delete');
@@ -489,7 +494,7 @@
 	ondragover={handleDragOver}
 	ondragleave={handleDragLeave}
 	ondrop={handleDrop}
-/>
+></svelte:document>
 
 {#if dropActive}
 	<div class="drop-zone" aria-hidden="true">{t('share.dropHint')}</div>

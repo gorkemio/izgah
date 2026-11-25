@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	import { formatShortDateTime } from '$lib/format/date';
-	import { startVisibilityPoller } from '$lib/client/visibility-poller';
-	import Icon from '$lib/components/ui/Icon.svelte';
-	import PopoverPanel from '$lib/components/ui/PopoverPanel.svelte';
-	import type { NotificationFeedItem } from '$lib/server/interactions/service';
+	import { t } from '#lib/i18n/index.ts';
+	import { formatShortDateTime } from '#lib/format/date.ts';
+	import { startVisibilityPoller } from '#lib/client/visibility-poller.ts';
+	import Icon from '#lib/components/ui/Icon.svelte';
+	import PopoverPanel from '#lib/components/ui/PopoverPanel.svelte';
+	import type { NotificationFeedItem } from '#lib/server/interactions/service.ts';
 
 	const POLL_INTERVAL_MS = 60_000;
 	const VISIBILITY_MIN_ELAPSED_MS = 15_000;
@@ -187,9 +187,9 @@
 										<span class="notif-item-message">{notif.message}</span>
 										<span class="notif-item-meta">
 											{notif.resourceTitle || notif.resourceDomain} ·
-											<time datetime={notif.createdAt}
-												>{formatTrRelativeOrDate(notif.createdAt)}</time
-											>
+											<time datetime={notif.createdAt}>
+												{formatTrRelativeOrDate(notif.createdAt)}
+											</time>
 										</span>
 									</span>
 								</a>

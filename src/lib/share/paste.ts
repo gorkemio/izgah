@@ -1,4 +1,4 @@
-import { extractFirstUrlFromText } from '$lib/links/parse-url';
+import { extractFirstUrlFromText } from '#lib/links/parse-url.ts';
 
 export interface PastedShare {
 	url: string;

@@ -1,5 +1,5 @@
 import { fail, type Actions } from '@sveltejs/kit';
-import { env } from '$lib/server/env';
+import { env } from '#lib/server/env.ts';
 import {
 	AdminServiceError,
 	changeAdminUserRole,
@@ -9,10 +9,10 @@ import {
 	listAdminUsers,
 	regenerateUserInvite,
 	requireAdmin
-} from '$lib/server/admin/service';
-import type { UserRole } from '$lib/server/db/schema';
+} from '#lib/server/admin/service.ts';
+import type { UserRole } from '#lib/server/db/schema.ts';
 import type { PageServerLoad } from './$types';
-import { t } from '$lib/i18n';
+import { t } from '#lib/i18n/index.ts';
 
 export const load: PageServerLoad = async ({ depends, locals, url }) => {
 	depends('izgah:admin:users');

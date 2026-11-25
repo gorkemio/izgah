@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
+	import { t } from '#lib/i18n/index.ts';
 	import type { Snippet } from 'svelte';
 	import { page } from '$app/state';
 	import type { LayoutData } from './$types';

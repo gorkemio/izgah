@@ -4,7 +4,7 @@ import {
 	DEFAULT_PALETTE,
 	type Palette,
 	type ThemePreference
-} from '$lib/types/appearance';
+} from '#lib/types/appearance.ts';
 
 export type ThemeChoice = ThemePreference;
 

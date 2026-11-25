@@ -14,6 +14,18 @@ export function preciseTimestampText(column: SQLWrapper): SQL<string> {
 
 const CURSOR_TIMESTAMP_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?Z$/;
 
+/**
+ * `new Date()` silently normalizes impossible dates (2026-02-31 becomes 03-03), which PostgreSQL
+ * then rejects in the `::timestamptz` cast. Require the parsed date to round-trip to the same
+ * second so a crafted cursor is ignored instead of turning the request into a 500.
+ */
+function isCalendarValid(createdAt: string): boolean {
+	const parsed = new Date(createdAt);
+	return (
+		!Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 19) === createdAt.slice(0, 19)
+	);
+}
+
 export interface TimeIdCursor {
 	/** ISO-8601 UTC timestamp with up to microsecond precision. */
 	createdAt: string;
@@ -37,7 +49,7 @@ export function decodeTimeIdCursor(raw: string | null | undefined): TimeIdCursor
 		if (
 			typeof createdAt !== 'string' ||
 			!CURSOR_TIMESTAMP_PATTERN.test(createdAt) ||
-			Number.isNaN(new Date(createdAt).getTime()) ||
+			!isCalendarValid(createdAt) ||
 			typeof id !== 'string' ||
 			id.trim() === '' ||
 			id.length > 128

@@ -102,6 +102,9 @@ function createMockCookies(initialCookieHeader?: string): MockCookies {
 			store.delete(name);
 			_deletedLog.push({ name, opts });
 		},
+		parse: (() => {
+			throw new Error('cookies.parse is not used in tests');
+		}) as never,
 		serialize(name, value) {
 			return `${name}=${encodeURIComponent(value)}`;
 		},
@@ -834,10 +837,26 @@ describe('M2 auth, single-use invite/reset tokens, API keys, rate limiting, and 
 			.where(eq(sessions.userId, member.id));
 		expect(sessionRowsBeforeLogout).toHaveLength(1);
 
+		// A body-less cross-site POST must not log the user out (SvelteKit's form CSRF check skips it).
+		const crossSiteLogout = createMockEvent({
+			url: '/logout',
+			method: 'POST',
+			headers: {
+				cookie: memberCookie,
+				origin: 'https://evil.example',
+				'sec-fetch-site': 'cross-site'
+			}
+		});
+		const crossSiteResponse = await handle({
+			event: crossSiteLogout.event,
+			resolve: async (ev) => logoutPost(ev as Parameters<typeof logoutPost>[0])
+		});
+		expect(crossSiteResponse.status).toBe(403);
+
 		const logoutMock = createMockEvent({
 			url: '/logout',
 			method: 'POST',
-			headers: { cookie: memberCookie }
+			headers: { cookie: memberCookie, origin: 'http://localhost:3000' }
 		});
 		const logoutResponse = await handle({
 			event: logoutMock.event,
@@ -876,7 +895,7 @@ describe('M2 auth, single-use invite/reset tokens, API keys, rate limiting, and 
 				method: 'POST',
 				formEntries: { name: `Anahtar ${i}` }
 			});
-			keyMock.event.locals = {
+			Object.assign(keyMock.event.locals, {
 				requestId: `req_k_${i}`,
 				user: {
 					id: user.id,
@@ -888,7 +907,7 @@ describe('M2 auth, single-use invite/reset tokens, API keys, rate limiting, and 
 				session: { id: 'sess_mock', expiresAt: new Date(Date.now() + 60_000) },
 				authChannel: 'cookie',
 				apiKeyId: null
-			};
+			});
 			const result = await apiKeysActions.create(
 				keyMock.event as unknown as Parameters<typeof apiKeysActions.create>[0]
 			);
@@ -913,7 +932,7 @@ describe('M2 auth, single-use invite/reset tokens, API keys, rate limiting, and 
 			method: 'POST',
 			formEntries: { name: 'Altıncı Anahtar' }
 		});
-		sixthMock.event.locals = {
+		Object.assign(sixthMock.event.locals, {
 			requestId: 'req_k_6',
 			user: {
 				id: user.id,
@@ -925,7 +944,7 @@ describe('M2 auth, single-use invite/reset tokens, API keys, rate limiting, and 
 			session: { id: 'sess_mock', expiresAt: new Date(Date.now() + 60_000) },
 			authChannel: 'cookie',
 			apiKeyId: null
-		};
+		});
 		const sixthRes = await apiKeysActions.create(
 			sixthMock.event as unknown as Parameters<typeof apiKeysActions.create>[0]
 		);
@@ -973,7 +992,7 @@ describe('M2 auth, single-use invite/reset tokens, API keys, rate limiting, and 
 			url: '/settings/api-keys',
 			method: 'GET'
 		});
-		loadMock.event.locals = {
+		Object.assign(loadMock.event.locals, {
 			requestId: 'req_keys_load',
 			user: {
 				id: user.id,
@@ -985,7 +1004,7 @@ describe('M2 auth, single-use invite/reset tokens, API keys, rate limiting, and 
 			session: { id: 'sess_mock', expiresAt: new Date(Date.now() + 60_000) },
 			authChannel: 'cookie',
 			apiKeyId: null
-		};
+		});
 		const loadData = await apiKeysLoad(
 			loadMock.event as unknown as Parameters<typeof apiKeysLoad>[0]
 		);
@@ -1198,10 +1217,9 @@ describe('M2 auth, single-use invite/reset tokens, API keys, rate limiting, and 
 
 		// Verify handleError returns sanitized error + requestId
 		const errOut = handleError({
+			kind: 'unknown',
 			error: new Error('Internal failure'),
-			event: createMockEvent({ url: '/settings' }).event,
-			status: 500,
-			message: 'boom'
+			event: createMockEvent({ url: '/settings' }).event
 		});
 		expect(errOut).toEqual({
 			message: 'Beklenmeyen bir sunucu hatası oluştu.',

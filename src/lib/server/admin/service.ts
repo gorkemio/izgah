@@ -8,15 +8,15 @@ import {
 	recordAuditLog,
 	type AdminAuditAction,
 	type KnownAuditAction
-} from '$lib/server/audit';
-import { createInviteToken, type DbOrTx, type DbTransaction } from '$lib/server/auth/tokens';
-import { db } from '$lib/server/db/client';
+} from '#lib/server/audit.ts';
+import { createInviteToken, type DbOrTx, type DbTransaction } from '#lib/server/auth/tokens.ts';
+import { db } from '#lib/server/db/client.ts';
 import {
 	decodeTimeIdCursor,
 	encodeTimeIdCursor,
 	preciseTimestampText,
 	type TimeIdCursor
-} from '$lib/server/db/cursor';
+} from '#lib/server/db/cursor.ts';
 import {
 	accounts,
 	apiKeys,
@@ -29,11 +29,11 @@ import {
 	users,
 	unfurlJobs,
 	type UserRole
-} from '$lib/server/db/schema';
-import { logger } from '$lib/server/logger';
-import { findExistingSectionIds } from '$lib/server/sections/service';
-import { notifyUnfurlWorker } from '$lib/server/unfurl/worker';
-import { t } from '$lib/i18n';
+} from '#lib/server/db/schema.ts';
+import { logger } from '#lib/server/logger.ts';
+import { findExistingSectionIds } from '#lib/server/sections/service.ts';
+import { notifyUnfurlWorker } from '#lib/server/unfurl/worker.ts';
+import { t } from '#lib/i18n/index.ts';
 
 export {
 	ADMIN_AUDIT_ACTIONS,

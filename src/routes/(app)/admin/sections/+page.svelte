@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { cssText, t } from '$lib/i18n';
-	import { pageTitle } from '$lib/instance';
+	import { cssText, t } from '#lib/i18n/index.ts';
+	import { pageTitle } from '#lib/instance.ts';
 	import { flushSync, onMount, untrack } from 'svelte';
 	import { applyAction, enhance } from '$app/forms';
-	import type { AdminSectionItem } from '$lib/server/admin/service';
-	import Dialog from '$lib/components/ui/Dialog.svelte';
-	import Icon from '$lib/components/ui/Icon.svelte';
+	import type { AdminSectionItem } from '#lib/server/admin/service.ts';
+	import Dialog from '#lib/components/ui/Dialog.svelte';
+	import Icon from '#lib/components/ui/Icon.svelte';
 	import type { ActionData, PageData } from './$types';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -573,9 +573,9 @@
 												}}
 											>
 												{t('sectionsAdmin.up')}
-												<span class="visually-hidden"
-													>{t('sectionsAdmin.moveSr', { name: section.name })}</span
-												>
+												<span class="visually-hidden">
+													{t('sectionsAdmin.moveSr', { name: section.name })}
+												</span>
 											</button>
 										</form>
 
@@ -622,9 +622,9 @@
 												}}
 											>
 												{t('sectionsAdmin.down')}
-												<span class="visually-hidden"
-													>{t('sectionsAdmin.moveSr', { name: section.name })}</span
-												>
+												<span class="visually-hidden">
+													{t('sectionsAdmin.moveSr', { name: section.name })}
+												</span>
 											</button>
 										</form>
 									</div>

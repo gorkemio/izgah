@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { cssText, t } from '$lib/i18n';
-	import { pageTitle } from '$lib/instance';
-	import { formatDateTime } from '$lib/format/date';
+	import { cssText, t } from '#lib/i18n/index.ts';
+	import { pageTitle } from '#lib/instance.ts';
+	import { formatDateTime } from '#lib/format/date.ts';
 	import { onMount } from 'svelte';
 	import { enhance } from '$app/forms';
-	import type { AdminUserItem } from '$lib/server/admin/service';
-	import Avatar from '$lib/components/ui/Avatar.svelte';
-	import Dialog from '$lib/components/ui/Dialog.svelte';
-	import Icon from '$lib/components/ui/Icon.svelte';
+	import type { AdminUserItem } from '#lib/server/admin/service.ts';
+	import Avatar from '#lib/components/ui/Avatar.svelte';
+	import Dialog from '#lib/components/ui/Dialog.svelte';
+	import Icon from '#lib/components/ui/Icon.svelte';
 	import type { ActionData, PageData } from './$types';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -286,9 +286,9 @@
 			</h2>
 			<p class="panel-desc">
 				{t('users.issuedFor', { name: form.issuedLink.userName, email: form.issuedLink.userEmail })}
-				<time class="mono-inline" datetime={form.issuedLink.expiresAt}
-					>{formatDate(form.issuedLink.expiresAt)}</time
-				>.
+				<time class="mono-inline" datetime={form.issuedLink.expiresAt}>
+					{formatDate(form.issuedLink.expiresAt)}
+				</time>.
 			</p>
 			<div class="field">
 				<label for="inline-issued-link-input">{t('users.link')}</label>
@@ -477,9 +477,9 @@
 										}}
 									>
 										<input type="hidden" name="userId" value={user.id} />
-										<label for="role-{user.id}" class="visually-hidden"
-											>{t('users.roleFor', { name: user.name })}</label
-										>
+										<label for="role-{user.id}" class="visually-hidden">
+											{t('users.roleFor', { name: user.name })}
+										</label>
 										<select id="role-{user.id}" name="role" value={user.role} class="role-select">
 											<option value="member">{t('role.member')}</option>
 											<option value="admin">{t('role.admin')}</option>
@@ -489,9 +489,9 @@
 										</button>
 									</form>
 								{:else}
-									<span class="passive-role"
-										>{user.role === 'admin' ? t('role.admin') : t('role.member')}</span
-									>
+									<span class="passive-role">
+										{user.role === 'admin' ? t('role.admin') : t('role.member')}
+									</span>
 								{/if}
 							</td>
 							<td class="date-cell">
@@ -630,17 +630,17 @@
 				{#if activeIssuedLink?.expiresAt}
 					<p class="hint">
 						{t('users.validUntil')}
-						<time class="mono-inline" datetime={activeIssuedLink.expiresAt}
-							>{formatDate(activeIssuedLink.expiresAt)}</time
-						>
+						<time class="mono-inline" datetime={activeIssuedLink.expiresAt}>
+							{formatDate(activeIssuedLink.expiresAt)}
+						</time>
 					</p>
 				{/if}
 			</div>
 
 			<div class="dialog-footer">
-				<button type="button" class="btn btn-outline" onclick={() => closeNow()}
-					>{t('common.close')}</button
-				>
+				<button type="button" class="btn btn-outline" onclick={() => closeNow()}>
+					{t('common.close')}
+				</button>
 			</div>
 		</div>
 	{/snippet}

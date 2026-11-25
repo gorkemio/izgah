@@ -4,10 +4,10 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { and, eq, inArray, isNotNull, lte, sql } from 'drizzle-orm';
 import sharp from 'sharp';
-import { db, type Database } from '$lib/server/db/client';
-import { canonicalResources, mediaAssets } from '$lib/server/db/schema';
-import { env } from '$lib/server/env';
-import { logger } from '$lib/server/logger';
+import { db, type Database } from '#lib/server/db/client.ts';
+import { canonicalResources, mediaAssets } from '#lib/server/db/schema.ts';
+import { env } from '#lib/server/env.ts';
+import { logger } from '#lib/server/logger.ts';
 
 // Configure libvips global bounds once on module load per Technical Plan §2.
 sharp.cache(false);
@@ -210,10 +210,16 @@ export async function processAndWriteThumbnailToDisk(
 		};
 	}
 
-	const { data, info } = await sharp(Buffer.from(rawBytes), {
-		limitInputPixels: MAX_INPUT_PIXELS,
-		animated: false
-	})
+	const input = Buffer.from(rawBytes);
+	const sharpOptions = { limitInputPixels: MAX_INPUT_PIXELS, animated: false } as const;
+	// Do not rely on libvips loader order: the decoder libvips picks must match the format the magic
+	// bytes promised, so an SVG/XML polyglot can never reach svgload.
+	const decodedFormat = (await sharp(input, sharpOptions).metadata()).format;
+	if (decodedFormat !== detected) {
+		throw new UnsupportedMediaFormatError();
+	}
+
+	const { data, info } = await sharp(input, sharpOptions)
 		.rotate()
 		.resize({
 			width: THUMBNAIL_MAX_WIDTH,

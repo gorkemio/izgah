@@ -215,7 +215,7 @@ Aşağıdakiler İzgah arayüzünde ve eklentide kullanılmaz; kod incelemesinde
 
 ### 5. Bileşen Envanteri ve Stil Mimarisi
 
-Stil katmanları `@layer reset, tokens, base, components, utilities;` sırasıyla [`src/lib/styles/tokens.css`](../../src/lib/styles/tokens.css), [`src/lib/styles/base.css`](../../src/lib/styles/base.css) ve [`src/lib/styles/components.css`](../../src/lib/styles/components.css) içinde tanımlanır. Svelte `<style>` blokları katmansız olduğu için her zaman katmanlı kuralları ezer; bu bilinçli bir karardır (bileşene özgü düzen kuralları kazanır). Koyu tema `light-dark()` semantik token'ları ve `:root[data-theme]` üzerindeki `color-scheme` ile uygulanır (§9; palet yuvaları için [izgah-themes.md](./izgah-themes.md) §4). Paylaşılan istemci tipleri `$lib/server/...` yerine `src/lib/types/` altından içe aktarılır.
+Stil katmanları `@layer reset, tokens, base, components, utilities;` sırasıyla [`src/lib/styles/tokens.css`](../../src/lib/styles/tokens.css), [`src/lib/styles/base.css`](../../src/lib/styles/base.css) ve [`src/lib/styles/components.css`](../../src/lib/styles/components.css) içinde tanımlanır. Svelte `<style>` blokları katmansız olduğu için her zaman katmanlı kuralları ezer; bu bilinçli bir karardır (bileşene özgü düzen kuralları kazanır). Koyu tema `light-dark()` semantik token'ları ve `:root[data-theme]` üzerindeki `color-scheme` ile uygulanır (§9; palet yuvaları için [izgah-themes.md](./izgah-themes.md) §4). Paylaşılan istemci tipleri `#lib/server/...` yerine `src/lib/types/` altından içe aktarılır.
 
 **Kural:** Davranış taşımayan görsel ilkeller **CSS sınıfıdır**; Svelte bileşeni yalnız durum, olay veya erişilebilirlik davranışı taşıyan parçalar için yazılır.
 

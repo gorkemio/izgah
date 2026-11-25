@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { splitHighlights } from '$lib/search/highlight';
+	import { splitHighlights } from '#lib/search/highlight.ts';
 
 	let { text, terms = [] }: { text: string; terms?: readonly string[] } = $props();
 
@@ -7,5 +7,6 @@
 </script>
 
 <!-- Plain text split into nodes; never {@html} (izgah-ui-v2 §13). -->
-{#each parts as part, index (index)}{#if part.match}<mark class="hl">{part.text}</mark
-		>{:else}{part.text}{/if}{/each}
+{#each parts as part, index (index)}{#if part.match}<mark class="hl">
+			{part.text}
+		</mark>{:else}{part.text}{/if}{/each}

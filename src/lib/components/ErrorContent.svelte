@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	import { pageTitle } from '$lib/instance';
+	import { t } from '#lib/i18n/index.ts';
+	import { pageTitle } from '#lib/instance.ts';
 	import { page } from '$app/state';
-	import Icon from '$lib/components/ui/Icon.svelte';
+	import Icon from '#lib/components/ui/Icon.svelte';
 
 	interface Props {
 		/** Where the "home" link points; signed-out visitors go to /login. */

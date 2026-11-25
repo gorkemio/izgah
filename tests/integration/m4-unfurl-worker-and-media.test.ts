@@ -220,7 +220,7 @@ async function dispatchMediaGet(options: { assetKey: string; headers?: HeadersIn
 	return handle({
 		event,
 		resolve: async (ev) => {
-			ev.params = { assetKey: options.assetKey };
+			Object.assign(ev.params, { assetKey: options.assetKey });
 			return mediaThumbnailGet(ev as Parameters<typeof mediaThumbnailGet>[0]);
 		}
 	});

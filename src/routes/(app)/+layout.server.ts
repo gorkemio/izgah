@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit';
-import { parsePalette, parseThemePreference, THEME_COOKIE } from '$lib/server/http/theme';
-import { detectModifierKey } from '$lib/platform';
-import { listSections } from '$lib/server/sections/service';
+import { parsePalette, parseThemePreference, THEME_COOKIE } from '#lib/server/http/theme.ts';
+import { detectModifierKey } from '#lib/platform.ts';
+import { listSections } from '#lib/server/sections/service.ts';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ locals, url, cookies, request }) => {

@@ -1,4 +1,4 @@
-import { dayKey, dayLabel } from '$lib/format/date';
+import { dayKey, dayLabel } from '#lib/format/date.ts';
 
 export interface DayGroup<T> {
 	key: string;

@@ -1,19 +1,18 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	import { pageTitle } from '$lib/instance';
-	import { modifierLabel } from '$lib/platform';
-	import { formatDateTime } from '$lib/format/date';
-	import { enhance } from '$app/forms';
+	import { t } from '#lib/i18n/index.ts';
+	import { pageTitle } from '#lib/instance.ts';
+	import { modifierLabel } from '#lib/platform.ts';
+	import { formatDateTime } from '#lib/format/date.ts';
+	import { enhance, type SubmitFunction } from '$app/forms';
 	import { goto, invalidate } from '$app/navigation';
-	import type { SubmitFunction } from '@sveltejs/kit';
 	import { untrack } from 'svelte';
-	import PostCard from '$lib/components/feed/PostCard.svelte';
-	import ResourceHero from '$lib/components/resource/ResourceHero.svelte';
-	import Avatar from '$lib/components/ui/Avatar.svelte';
-	import type { AvatarStackItem } from '$lib/components/ui/AvatarStack.svelte';
-	import Icon from '$lib/components/ui/Icon.svelte';
-	import type { ShareCardFormError } from '$lib/types/feed';
-	import Dialog from '$lib/components/ui/Dialog.svelte';
+	import PostCard from '#lib/components/feed/PostCard.svelte';
+	import ResourceHero from '#lib/components/resource/ResourceHero.svelte';
+	import Avatar from '#lib/components/ui/Avatar.svelte';
+	import type { AvatarStackItem } from '#lib/components/ui/AvatarStack.svelte';
+	import Icon from '#lib/components/ui/Icon.svelte';
+	import type { ShareCardFormError } from '#lib/types/feed.ts';
+	import Dialog from '#lib/components/ui/Dialog.svelte';
 	import type { PageData } from './$types';
 
 	const MAX_COMMENT_LENGTH = 2000;
@@ -51,6 +50,7 @@
 	let commentHasInteracted = $state(false);
 	let commentHasBlurred = $state(false);
 	let commentHasSubmitted = $state(Boolean(initialAddError));
+
 	let commentErrorMessage = $state<string | null>(
 		initialAddError
 			? (initialAddError.fieldErrors?.body?.[0] ??
@@ -58,6 +58,7 @@
 					t('comment.invalid'))
 			: null
 	);
+
 	let commentSubmitting = $state(false);
 	let commentFormErrorBanner = $state<string | null>(initialAddError?.errorMessage ?? null);
 	let commentLiveAnnouncement = $state('');
@@ -68,11 +69,13 @@
 	// Edit comment state
 	let editingCommentId = $state<string | null>(initialEditError?.commentId ?? null);
 	let editCommentBody = $state(initialEditError?.values?.body ?? '');
+
 	let editCommentError = $state<string | null>(
 		initialEditError
 			? (initialEditError.fieldErrors?.body?.[0] ?? initialEditError.errorMessage ?? null)
 			: null
 	);
+
 	let editCommentSubmitting = $state(false);
 
 	// Delete comment confirmation <dialog> state
@@ -82,7 +85,6 @@
 	let deleteCommentError = $state<string | null>(
 		initialForm?.formType === 'deleteComment' ? (initialForm.errorMessage ?? null) : null
 	);
-
 	const commentTextareaId = 'resource-new-comment-body';
 	const commentHintId = 'resource-new-comment-hint';
 	const commentErrorId = 'resource-new-comment-error';
@@ -311,7 +313,7 @@
 				commentHasSubmitted = false;
 				commentErrorMessage = null;
 				clearErrorAnnouncement();
-				await goto(result.location, { invalidateAll: true });
+				await goto(result.location, { refreshAll: true });
 				return;
 			}
 
@@ -373,7 +375,7 @@
 
 			if (result.type === 'redirect') {
 				editingCommentId = null;
-				await goto(result.location, { invalidateAll: true });
+				await goto(result.location, { refreshAll: true });
 				return;
 			}
 
@@ -418,7 +420,7 @@
 			if (result.type === 'redirect') {
 				deleteCommentDialogOpen = false;
 				deleteCommentTarget = null;
-				await goto(result.location, { invalidateAll: true });
+				await goto(result.location, { refreshAll: true });
 				return;
 			}
 
@@ -477,6 +479,7 @@
 							(!hydrated && data.editCommentId === comment.id && canEditComment)}
 						{@const isInlineNoJsDelete =
 							!hydrated && data.deleteCommentId === comment.id && canDeleteComment}
+
 						<li class="comment-card" data-comment-id={comment.id}>
 							<div class="comment-meta">
 								<Avatar
@@ -520,8 +523,7 @@
 										onkeydown={handleImeSafeTextareaKeydown}
 										aria-invalid={editCommentError ? 'true' : 'false'}
 										class="textarea comment-textarea"
-										class:is-invalid={Boolean(editCommentError)}
-									></textarea>
+										class:is-invalid={Boolean(editCommentError)}></textarea>
 									{#if editCommentError}
 										<p class="comment-error-msg is-visible" role="alert">{editCommentError}</p>
 									{/if}
@@ -606,9 +608,9 @@
 										<a href={`/resources/${data.resource.id}`} class="btn btn-subtle btn-sm">
 											{t('common.cancel')}
 										</a>
-										<button type="submit" class="btn btn-danger btn-sm"
-											>{t('comment.deleteTitle')}</button
-										>
+										<button type="submit" class="btn btn-danger btn-sm">
+											{t('comment.deleteTitle')}
+										</button>
 									</form>
 								</div>
 							{/if}
@@ -653,8 +655,7 @@
 						onkeydown={handleImeSafeTextareaKeydown}
 						placeholder={t('comment.placeholder')}
 						class="textarea comment-textarea"
-						class:is-invalid={Boolean(commentErrorMessage)}
-					></textarea>
+						class:is-invalid={Boolean(commentErrorMessage)}></textarea>
 					<p
 						id={commentErrorId}
 						class="field-error comment-error-msg"

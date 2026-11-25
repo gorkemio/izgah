@@ -1,6 +1,6 @@
 import { domainToASCII } from 'node:url';
-import { MAX_URL_LENGTH } from '$lib/links/parse-url';
-import { t } from '$lib/i18n';
+import { MAX_URL_LENGTH } from '#lib/links/parse-url.ts';
+import { t } from '#lib/i18n/index.ts';
 
 export type UrlCanonicalizeErrorCode =
 	| 'EMPTY_URL'

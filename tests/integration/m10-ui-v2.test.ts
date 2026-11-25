@@ -95,7 +95,7 @@ async function renderShell(cookies?: Record<string, string>, template = THEME_ON
 			].map(([type, path]) => [
 				type,
 				path,
-				preload ? preload({ type: type as 'font' | 'js', path }) : false
+				preload ? preload({ type, path, filename: path.split('/').pop() ?? '' } as never) : false
 			]);
 			return new Response(transformed, { headers: { 'content-type': 'text/html' } });
 		}

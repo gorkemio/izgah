@@ -1,5 +1,5 @@
-import { db, type Database } from '$lib/server/db/client';
-import { auditLogs } from '$lib/server/db/schema';
+import { db, type Database } from '#lib/server/db/client.ts';
+import { auditLogs } from '#lib/server/db/schema.ts';
 
 export const ADMIN_AUDIT_ACTIONS = [
 	'admin.user_invited',

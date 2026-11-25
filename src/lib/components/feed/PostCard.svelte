@@ -1,25 +1,24 @@
 <script module lang="ts">
-	export type { FeedShareAttribution, FeedShareItem, ShareCardFormError } from '$lib/types/feed';
+	export type { FeedShareAttribution, FeedShareItem, ShareCardFormError } from '#lib/types/feed.ts';
 </script>
 
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	import { formatDate, formatDateTime, formatTime } from '$lib/format/date';
-	import { enhance } from '$app/forms';
+	import { t } from '#lib/i18n/index.ts';
+	import { formatDate, formatDateTime, formatTime } from '#lib/format/date.ts';
+	import { enhance, type SubmitFunction } from '$app/forms';
 	import { goto, invalidate } from '$app/navigation';
-	import type { SubmitFunction } from '@sveltejs/kit';
-	import Avatar from '$lib/components/ui/Avatar.svelte';
-	import Dialog from '$lib/components/ui/Dialog.svelte';
-	import Highlight from '$lib/components/ui/Highlight.svelte';
-	import Icon from '$lib/components/ui/Icon.svelte';
-	import PopoverPanel from '$lib/components/ui/PopoverPanel.svelte';
-	import Tooltip from '$lib/components/ui/Tooltip.svelte';
-	import type { SectionListItem } from '$lib/server/sections/service';
-	import type { ContentType } from '$lib/types/domain';
+	import Avatar from '#lib/components/ui/Avatar.svelte';
+	import Dialog from '#lib/components/ui/Dialog.svelte';
+	import Highlight from '#lib/components/ui/Highlight.svelte';
+	import Icon from '#lib/components/ui/Icon.svelte';
+	import PopoverPanel from '#lib/components/ui/PopoverPanel.svelte';
+	import Tooltip from '#lib/components/ui/Tooltip.svelte';
+	import type { SectionListItem } from '#lib/server/sections/service.ts';
+	import type { ContentType } from '#lib/types/domain.ts';
 	import type {
 		FeedShareItem as PostItem,
 		ShareCardFormError as PostFormError
-	} from '$lib/types/feed';
+	} from '#lib/types/feed.ts';
 	import LinkAttachment from './LinkAttachment.svelte';
 	import PostActions from './PostActions.svelte';
 
@@ -183,7 +182,6 @@
 
 	const editHref = $derived(buildQueryActionHref('edit'));
 	const deleteHref = $derived(buildQueryActionHref('delete'));
-
 	const isInlineEditFallback = $derived(
 		!hydrated &&
 			canManage &&
@@ -196,7 +194,6 @@
 			(activeDeleteShareId === item.id ||
 				(activeFormError?.formType === 'deleteShare' && activeFormError.shareId === item.id))
 	);
-
 	const inlineEditError = $derived(
 		activeFormError?.formType === 'updateShare' && activeFormError.shareId === item.id
 			? activeFormError
@@ -262,7 +259,7 @@
 
 			if (result.type === 'redirect') {
 				editDialogOpen = false;
-				await goto(result.location, { invalidateAll: true });
+				await goto(result.location, { refreshAll: true });
 				return;
 			}
 
@@ -310,7 +307,7 @@
 
 			if (result.type === 'redirect') {
 				deleteDialogOpen = false;
-				await goto(result.location, { invalidateAll: true });
+				await goto(result.location, { refreshAll: true });
 				return;
 			}
 
@@ -346,8 +343,8 @@
 					href="/resources/{item.resource.id}#share-{item.id}"
 					title={formatDateTime(item.createdAt)}
 				>
-					<span class="visually-hidden"
-						>{t('share.sharedAt', { date: formatDate(item.createdAt) })}
+					<span class="visually-hidden">
+						{t('share.sharedAt', { date: formatDate(item.createdAt) })}
 					</span>
 					<time datetime={item.createdAt}>{formatTime(item.createdAt)}</time>
 				</a>
@@ -460,6 +457,7 @@
 
 		{#if !compact}
 			<LinkAttachment {item} titleId={cardTitleId} {priorityImage} {highlightTerms} />
+
 			<PostActions
 				{item}
 				{actionBase}
@@ -490,8 +488,7 @@
 							rows="3"
 							maxlength="1000"
 							value={inlineEditError?.values?.note ?? item.note ?? ''}
-							class="textarea textarea-input"
-						></textarea>
+							class="textarea textarea-input"></textarea>
 					</div>
 				{:else if item.note}
 					<p class="readonly-note">{t('share.readonlyNote', { note: item.note })}</p>
@@ -618,8 +615,7 @@
 									editNote = e.currentTarget.value;
 								}}
 								aria-invalid={Boolean(editFieldErrors.note?.length) || undefined}
-								class="textarea textarea-input"
-							></textarea>
+								class="textarea textarea-input"></textarea>
 							{#if editFieldErrors.note?.length}
 								<p class="field-error">{editFieldErrors.note[0]}</p>
 							{/if}
@@ -729,6 +725,7 @@
 					>
 						{t('common.cancel')}
 					</button>
+
 					<form method="POST" action="{actionBase}?/deleteShare" use:enhance={handleDeleteEnhance}>
 						<input type="hidden" name="shareId" value={item.id} />
 						<input type="hidden" name="returnTo" value={returnTo} />

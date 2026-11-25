@@ -1,11 +1,11 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs/promises';
 import { and, asc, eq, gte, isNull, lt, lte, or, sql } from 'drizzle-orm';
-import { db } from '$lib/server/db/client';
-import { canonicalResources, linkShares, mediaAssets, unfurlJobs } from '$lib/server/db/schema';
-import { env } from '$lib/server/env';
-import { classifyContentType } from '$lib/server/links/classify';
-import { logger } from '$lib/server/logger';
+import { db } from '#lib/server/db/client.ts';
+import { canonicalResources, linkShares, mediaAssets, unfurlJobs } from '#lib/server/db/schema.ts';
+import { env } from '#lib/server/env.ts';
+import { classifyContentType } from '#lib/server/links/classify.ts';
+import { logger } from '#lib/server/logger.ts';
 import {
 	cleanupOrphanMediaAssets,
 	decrementMediaAssetRefInTx,
@@ -15,13 +15,13 @@ import {
 	upsertAndIncrementMediaAssetInTx,
 	type MediaDiskCheckOptions,
 	type StoredThumbnailAsset
-} from '$lib/server/media/storage';
+} from '#lib/server/media/storage.ts';
 import {
 	unfurlTargetUrl,
 	type AdapterOptions,
 	type UnfurlMetadata
-} from '$lib/server/unfurl/adapters';
-import { MAX_IMAGE_BYTES, safeFetchBytes, SafeFetchError } from '$lib/server/unfurl/safe-fetch';
+} from '#lib/server/unfurl/adapters/index.ts';
+import { MAX_IMAGE_BYTES, safeFetchBytes, SafeFetchError } from '#lib/server/unfurl/safe-fetch.ts';
 
 export const UNFURL_LEASE_DURATION_MS = 90_000;
 export const UNFURL_POLL_INTERVAL_MS = 15_000;

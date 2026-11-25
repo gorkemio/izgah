@@ -8,9 +8,9 @@ import {
 	THEME_VALUES,
 	type Palette,
 	type ThemePreference
-} from '$lib/types/appearance';
+} from '#lib/types/appearance.ts';
 
-export { THEME_VALUES, type ThemePreference } from '$lib/types/appearance';
+export { THEME_VALUES, type ThemePreference } from '#lib/types/appearance.ts';
 
 export const THEME_COOKIE = 'izgah_theme';
 
@@ -50,11 +50,11 @@ export function fillAppearancePlaceholders(
 	palette: Palette
 ): string {
 	return html
-		.replace('%izgah.theme%', theme)
-		.replace('%izgah.colorScheme%', colorSchemeFor(theme))
-		.replace('%izgah.lightTheme%', palette.lightTheme)
-		.replace('%izgah.darkTheme%', palette.darkTheme)
-		.replace('%izgah.accent%', palette.accent);
+		.replace('%izgah.theme%', () => theme)
+		.replace('%izgah.colorScheme%', () => colorSchemeFor(theme))
+		.replace('%izgah.lightTheme%', () => palette.lightTheme)
+		.replace('%izgah.darkTheme%', () => palette.darkTheme)
+		.replace('%izgah.accent%', () => palette.accent);
 }
 
 const PRELOADED_FONT_PATTERN =
