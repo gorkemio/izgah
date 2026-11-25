@@ -1,10 +1,11 @@
+import type { Handle, HandleServerError, ServerInit } from '@sveltejs/kit/hooks';
+import type { RequestEvent } from '@sveltejs/kit';
 import crypto from 'node:crypto';
-import type { Handle, HandleServerError, RequestEvent, ServerInit } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
-import { building } from '$app/environment';
-import type { Locale } from '$lib/i18n';
-import { appTimeZone, instanceName, sourceUrl } from '$lib/instance';
-import { verifyApiKey } from '$lib/server/auth/api-keys';
+import { building } from '$app/env';
+import type { Locale } from '#lib/i18n/index.ts';
+import { appTimeZone, instanceName, sourceUrl } from '#lib/instance.ts';
+import { verifyApiKey } from '#lib/server/auth/api-keys.ts';
 import {
 	auth,
 	buildExpiredSessionSetCookieHeaders,
@@ -12,8 +13,8 @@ import {
 	hasSessionCookieInRequest,
 	sanitizeNextPath,
 	svelteKitHandler
-} from '$lib/server/auth/better-auth';
-import { ensureInitialAdminBootstrap } from '$lib/server/auth/bootstrap';
+} from '#lib/server/auth/better-auth.ts';
+import { ensureInitialAdminBootstrap } from '#lib/server/auth/bootstrap.ts';
 import {
 	checkApiReadRateLimit,
 	checkApiWriteRateLimit,
@@ -21,26 +22,26 @@ import {
 	checkLoginRateLimit,
 	checkSearchRateLimit,
 	extractClientIp
-} from '$lib/server/auth/rate-limit';
-import { closeDb, db } from '$lib/server/db/client';
-import { sessions, users, type UserRole } from '$lib/server/db/schema';
-import { env } from '$lib/server/env';
+} from '#lib/server/auth/rate-limit.ts';
+import { closeDb, db } from '#lib/server/db/client.ts';
+import { sessions, users, type UserRole } from '#lib/server/db/schema.ts';
+import { env } from '#lib/server/env.ts';
 import {
 	fillAppearancePlaceholders,
 	parsePalette,
 	parseThemePreference,
 	shouldPreload,
 	THEME_COOKIE
-} from '$lib/server/http/theme';
-import { wireSafeFetchShortUrlResolver } from '$lib/server/links/service';
-import { runWithLocale, resolveRequestLocale } from '$lib/server/i18n';
-import { logger } from '$lib/server/logger';
+} from '#lib/server/http/theme.ts';
+import { wireSafeFetchShortUrlResolver } from '#lib/server/links/service.ts';
+import { runWithLocale, resolveRequestLocale } from '#lib/server/i18n.ts';
+import { logger } from '#lib/server/logger.ts';
 import {
 	DEFAULT_SHUTDOWN_TIMEOUT_MS,
 	startUnfurlWorker,
 	stopUnfurlWorker
-} from '$lib/server/unfurl/worker';
-import { t } from '$lib/i18n';
+} from '#lib/server/unfurl/worker.ts';
+import { t } from '#lib/i18n/index.ts';
 
 const INIT_PROMISE_SYMBOL = Symbol.for('izgah.server.initPromise');
 const SHUTDOWN_HOOKS_SYMBOL = Symbol.for('izgah.server.shutdownHooksRegistered');
@@ -58,10 +59,7 @@ type CookieSessionResolution =
 				role: UserRole;
 				authVersion: number;
 			};
-			session: {
-				id: string;
-				expiresAt: Date;
-			};
+			session: { id: string; expiresAt: Date };
 	  };
 
 export function registerServerShutdownHooks(): void {
@@ -737,7 +735,11 @@ async function handleRequest(
 	return applyStandardResponseHeaders(response, requestId, { pathname });
 }
 
-export const handleError: HandleServerError = ({ error, event, status, message }) => {
+export const handleError: HandleServerError = ({ kind, error, event }) => {
+	// SvelteKit 3 routes every caught error here: app errors from error(...), framework errors such
+	// as 404s, validation errors and unknown (unexpected) errors.
+	const status = kind === 'unknown' ? 500 : error.status;
+	const message = kind === 'unknown' ? 'Internal Error' : error.message;
 	const requestLogger = logger.child({
 		request_id: event.locals?.requestId ?? null,
 		user_id: event.locals?.user?.id ?? null,
@@ -748,14 +750,15 @@ export const handleError: HandleServerError = ({ error, event, status, message }
 	if (status >= 500) {
 		requestLogger.error('Unhandled server error', {
 			status,
-			message,
+			kind,
 			path: event.url.pathname,
 			method: event.request.method,
-			error: error instanceof Error ? error.message : String(error)
+			error: error instanceof Error ? error.message : message
 		});
 	} else {
 		requestLogger.warn('Request error', {
 			status,
+			kind,
 			message,
 			path: event.url.pathname,
 			method: event.request.method

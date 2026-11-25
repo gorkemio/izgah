@@ -1,14 +1,13 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	import { enhance } from '$app/forms';
+	import { t } from '#lib/i18n/index.ts';
+	import { enhance, type SubmitFunction } from '$app/forms';
 	import { goto } from '$app/navigation';
-	import type { SubmitFunction } from '@sveltejs/kit';
-	import { toasts } from '$lib/client/toast.svelte';
-	import AvatarStack, { type AvatarStackItem } from '$lib/components/ui/AvatarStack.svelte';
-	import Icon from '$lib/components/ui/Icon.svelte';
-	import Tooltip from '$lib/components/ui/Tooltip.svelte';
-	import { formatDate } from '$lib/format/date';
-	import type { FeedShareItem } from '$lib/types/feed';
+	import { toasts } from '#lib/client/toast.svelte.ts';
+	import AvatarStack, { type AvatarStackItem } from '#lib/components/ui/AvatarStack.svelte';
+	import Icon from '#lib/components/ui/Icon.svelte';
+	import Tooltip from '#lib/components/ui/Tooltip.svelte';
+	import { formatDate } from '#lib/format/date.ts';
+	import type { FeedShareItem } from '#lib/types/feed.ts';
 
 	interface Props {
 		item: FeedShareItem;
@@ -71,7 +70,7 @@
 			}
 			likeOverride = previous;
 			if (result.type === 'redirect') {
-				await goto(result.location, { invalidateAll: true });
+				await goto(result.location, { refreshAll: true });
 				return;
 			}
 			toasts.push(t('like.failed'), { tone: 'error' });
@@ -119,8 +118,8 @@
 			<Icon name="message" size={15} />
 			<span class="count">{item.resource.commentCount}</span>
 			<span class="visually-hidden">
-				{t('comment.suffix', { count: item.resource.commentCount })}</span
-			>
+				{t('comment.suffix', { count: item.resource.commentCount })}
+			</span>
 		</a>
 
 		<Tooltip text={t('link.copy')}>

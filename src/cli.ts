@@ -8,15 +8,15 @@ import { z } from 'zod';
 const CLI_DISPLAY_NAME_MAX_LENGTH = 120;
 const emailSchema = z.string().trim().email();
 
-let dbClientPromise: Promise<typeof import('$lib/server/db/client')> | null = null;
+let dbClientPromise: Promise<typeof import('#lib/server/db/client.ts')> | null = null;
 
 async function loadServerDeps() {
-	dbClientPromise ??= import('$lib/server/db/client');
+	dbClientPromise ??= import('#lib/server/db/client.ts');
 	const [auditMod, clientMod, schemaMod, tokensMod] = await Promise.all([
-		import('$lib/server/audit'),
+		import('#lib/server/audit.ts'),
 		dbClientPromise,
-		import('$lib/server/db/schema'),
-		import('$lib/server/auth/tokens')
+		import('#lib/server/db/schema.ts'),
+		import('#lib/server/auth/tokens.ts')
 	]);
 
 	return {

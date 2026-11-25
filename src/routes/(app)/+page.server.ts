@@ -1,17 +1,17 @@
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { and, asc, desc, eq, inArray } from 'drizzle-orm';
-import { db } from '$lib/server/db/client';
+import { db } from '#lib/server/db/client.ts';
 import {
 	decodeTimeIdCursor,
 	encodeTimeIdCursor,
 	isBeforeCursor,
 	preciseTimestampText,
 	type TimeIdCursor
-} from '$lib/server/db/cursor';
-import { feedScopeConditions } from '$lib/server/feed/query';
-import { getFeedRailSummary, type FeedRailSummary } from '$lib/server/feed/rail-summary';
-import { logger } from '$lib/server/logger';
-import { todayKey } from '$lib/format/date';
+} from '#lib/server/db/cursor.ts';
+import { feedScopeConditions } from '#lib/server/feed/query.ts';
+import { getFeedRailSummary, type FeedRailSummary } from '#lib/server/feed/rail-summary.ts';
+import { logger } from '#lib/server/logger.ts';
+import { todayKey } from '#lib/format/date.ts';
 import {
 	canonicalResources,
 	contentTypeEnum,
@@ -24,7 +24,7 @@ import {
 	type ProviderMeta,
 	type SourceChannel,
 	type UnfurlStatus
-} from '$lib/server/db/schema';
+} from '#lib/server/db/schema.ts';
 
 export type FeedShareAttribution =
 	| {
@@ -74,21 +74,21 @@ export interface FeedShareItem {
 	}>;
 	attribution: FeedShareAttribution | null;
 }
-import { sanitizeInternalPath } from '$lib/server/http/safe-path';
+import { sanitizeInternalPath } from '#lib/server/http/safe-path.ts';
 import {
 	getViewerLikedResourceIds,
 	InteractionServiceError,
 	toggleResourceLike
-} from '$lib/server/interactions/service';
+} from '#lib/server/interactions/service.ts';
 import {
 	createLinkShare,
 	getResourceShareReferences,
 	LinkServiceError,
 	softDeleteLinkShare,
 	updateLinkShare
-} from '$lib/server/links/service';
+} from '#lib/server/links/service.ts';
 import type { PageServerLoad } from './$types';
-import { t } from '$lib/i18n';
+import { t } from '#lib/i18n/index.ts';
 
 const FEED_PAGE_SIZE = 25;
 

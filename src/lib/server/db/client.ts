@@ -1,7 +1,7 @@
-import { building } from '$app/environment';
+import { building } from '$app/env';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import { env } from '$lib/server/env';
+import { env } from '#lib/server/env.ts';
 import * as schema from './schema';
 
 function resolveDatabaseUrl(): string {

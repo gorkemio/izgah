@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { formatNumber, t } from '$lib/i18n';
-	import { instanceName, pageTitle } from '$lib/instance';
+	import { formatNumber, t } from '#lib/i18n/index.ts';
+	import { instanceName, pageTitle } from '#lib/instance.ts';
 	import { untrack } from 'svelte';
-	import FeedFilterBar from '$lib/components/feed/FeedFilterBar.svelte';
-	import PostCard from '$lib/components/feed/PostCard.svelte';
-	import Icon from '$lib/components/ui/Icon.svelte';
-	import { highlightTerms } from '$lib/search/highlight';
-	import type { ShareCardFormError } from '$lib/types/feed';
-	import type { ContentType } from '$lib/types/domain';
+	import FeedFilterBar from '#lib/components/feed/FeedFilterBar.svelte';
+	import PostCard from '#lib/components/feed/PostCard.svelte';
+	import Icon from '#lib/components/ui/Icon.svelte';
+	import { highlightTerms } from '#lib/search/highlight.ts';
+	import type { ShareCardFormError } from '#lib/types/feed.ts';
+	import type { ContentType } from '#lib/types/domain.ts';
 	import type { PageData } from './$types';
 
 	interface SearchShareFormErrorPayload {
@@ -211,9 +211,9 @@
 						</label>
 					</div>
 					{#if scopeMode === 'section' || !hydrated}
-						<label for="search-page-section" class="visually-hidden"
-							>{t('search.pickSection')}</label
-						>
+						<label for="search-page-section" class="visually-hidden">
+							{t('search.pickSection')}
+						</label>
 						<select
 							id="search-page-section"
 							name="section"
@@ -282,9 +282,9 @@
 		<p class="search-summary" role="status">
 			<strong>{formatNumber(data.totalCount)}</strong>
 			{t('search.resultsFound', { count: data.totalCount })}
-			{#if pageCount > 1}<span class="range"
-					>{t('search.range', { from: firstShown, to: lastShown })}</span
-				>{/if}
+			{#if pageCount > 1}<span class="range">
+					{t('search.range', { from: firstShown, to: lastShown })}
+				</span>{/if}
 			<span class="range">
 				·
 				{activeSectionObj
@@ -320,9 +320,9 @@
 						{t('common.prevPage')}
 					</a>
 				{/if}
-				<span class="page-status"
-					>{t('common.pageOf', { page: currentPage, pages: pageCount })}</span
-				>
+				<span class="page-status">
+					{t('common.pageOf', { page: currentPage, pages: pageCount })}
+				</span>
 				{#if currentPage < pageCount}
 					<a href={pageHref(currentPage + 1)} class="btn btn-subtle btn-sm" rel="next">
 						{t('common.nextPage')}

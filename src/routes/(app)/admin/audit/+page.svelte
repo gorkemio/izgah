@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { cssText, t } from '$lib/i18n';
-	import { pageTitle } from '$lib/instance';
-	import { formatDateTimeWithSeconds } from '$lib/format/date';
+	import { cssText, t } from '#lib/i18n/index.ts';
+	import { pageTitle } from '#lib/instance.ts';
+	import { formatDateTimeWithSeconds } from '#lib/format/date.ts';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();

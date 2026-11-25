@@ -1,10 +1,10 @@
 import { error, type Actions } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
-import { db } from '$lib/server/db/client';
-import { sections } from '$lib/server/db/schema';
+import { db } from '#lib/server/db/client.ts';
+import { sections } from '#lib/server/db/schema.ts';
 import { _feedShareActions, _loadFeedPage } from '../../+page.server';
 import type { PageServerLoad } from './$types';
-import { t } from '$lib/i18n';
+import { t } from '#lib/i18n/index.ts';
 
 export const load: PageServerLoad = async ({ depends, locals, params, url }) => {
 	const [section] = await db

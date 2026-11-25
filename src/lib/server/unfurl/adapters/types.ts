@@ -1,8 +1,8 @@
 import { Parser } from 'htmlparser2';
-import { MAX_URL_LENGTH } from '$lib/links/parse-url';
-import type { ProviderMeta } from '$lib/server/db/schema';
-import { asciiLower } from '$lib/server/links/canonicalize';
-import type { SafeFetchOptions } from '$lib/server/unfurl/safe-fetch';
+import { MAX_URL_LENGTH } from '#lib/links/parse-url.ts';
+import type { ProviderMeta } from '#lib/server/db/schema.ts';
+import { asciiLower } from '#lib/server/links/canonicalize.ts';
+import type { SafeFetchOptions } from '#lib/server/unfurl/safe-fetch.ts';
 
 export const MAX_TITLE_LENGTH = 300;
 export const MAX_DESCRIPTION_LENGTH = 600;

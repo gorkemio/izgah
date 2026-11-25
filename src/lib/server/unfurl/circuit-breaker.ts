@@ -1,4 +1,4 @@
-import { asciiLower } from '$lib/server/links/canonicalize';
+import { asciiLower } from '#lib/server/links/canonicalize.ts';
 
 export const CIRCUIT_BREAKER_FAILURE_THRESHOLD = 5;
 export const CIRCUIT_BREAKER_COOLDOWN_MS = 15 * 60 * 1000;

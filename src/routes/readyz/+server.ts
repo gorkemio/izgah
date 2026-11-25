@@ -2,9 +2,9 @@ import crypto from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { json } from '@sveltejs/kit';
-import { sqlClient } from '$lib/server/db/client';
-import { env } from '$lib/server/env';
-import { logger } from '$lib/server/logger';
+import { sqlClient } from '#lib/server/db/client.ts';
+import { env } from '#lib/server/env.ts';
+import { logger } from '#lib/server/logger.ts';
 import type { RequestHandler } from './$types';
 
 interface JournalEntry {

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	import { pageTitle } from '$lib/instance';
-	import FeedContextRail from '$lib/components/feed/FeedContextRail.svelte';
-	import FeedView from '$lib/components/feed/FeedView.svelte';
-	import type { FeedSnapshot } from '$lib/types/feed';
+	import { t } from '#lib/i18n/index.ts';
+	import { pageTitle } from '#lib/instance.ts';
+	import FeedContextRail from '#lib/components/feed/FeedContextRail.svelte';
+	import FeedView from '#lib/components/feed/FeedView.svelte';
+	import type { FeedSnapshot } from '#lib/types/feed.ts';
 	import type { PageData, Snapshot } from './$types';
 
 	let { data }: { data: PageData } = $props();

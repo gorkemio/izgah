@@ -8,3 +8,6 @@ minimumReleaseAgeExclude:
   - '@vitest/mocker@5.1.2'
   - '@vitest/spy@5.1.2'
   - vitest@5.1.2
+overrides:
+  # drizzle-kit still pulls esbuild 0.18 through @esbuild-kit/core-utils (GHSA-67mh-4wv8-2f99).
+  '@esbuild-kit/core-utils>esbuild': ^0.25.0

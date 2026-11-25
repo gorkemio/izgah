@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	import { pageTitle, sourceUrl } from '$lib/instance';
+	import { t } from '#lib/i18n/index.ts';
+	import { pageTitle, sourceUrl } from '#lib/instance.ts';
 	import { page } from '$app/state';
-	import { formatDateTime } from '$lib/format/date';
+	import { formatDateTime } from '#lib/format/date.ts';
 	import { enhance } from '$app/forms';
-	import Dialog from '$lib/components/ui/Dialog.svelte';
-	import Icon from '$lib/components/ui/Icon.svelte';
+	import Dialog from '#lib/components/ui/Dialog.svelte';
+	import Icon from '#lib/components/ui/Icon.svelte';
 	import type { ActionData, PageData } from './$types';
 
 	interface CommandLikeEvent extends Event {
@@ -277,9 +277,9 @@
 				{t('apiKeys.lead', { max: data.maxKeys })}
 			</p>
 		</div>
-		<span class="badge badge-accent"
-			>{t('apiKeys.activeOf', { count: data.apiKeys.length, max: data.maxKeys })}</span
-		>
+		<span class="badge badge-accent">
+			{t('apiKeys.activeOf', { count: data.apiKeys.length, max: data.maxKeys })}
+		</span>
 	</header>
 
 	<nav aria-label={t('settings.nav')} class="settings-subnav">
@@ -334,9 +334,9 @@
 		<div class="settings-rows">
 			<div class="settings-row">
 				<div class="settings-row-info">
-					<label for="instance-origin" class="settings-row-title"
-						>{t('apiKeys.serverAddress')}</label
-					>
+					<label for="instance-origin" class="settings-row-title">
+						{t('apiKeys.serverAddress')}
+					</label>
 					<p id="instance-origin-hint" class="field-hint">{t('apiKeys.extensionStep')}</p>
 				</div>
 				<div class="settings-row-control extension-control">

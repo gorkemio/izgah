@@ -6,11 +6,11 @@ import { parseCookies, parseSetCookieHeader } from 'better-auth/cookies';
 import { hashPassword, verifyPassword } from 'better-auth/crypto';
 import { svelteKitHandler, toSvelteKitHandler } from 'better-auth/svelte-kit';
 import { and, eq, isNull, sql } from 'drizzle-orm';
-import { db } from '$lib/server/db/client';
-import * as schema from '$lib/server/db/schema';
-import { env } from '$lib/server/env';
-import { sanitizeInternalPath } from '$lib/server/http/safe-path';
-import { t } from '$lib/i18n';
+import { db } from '#lib/server/db/client.ts';
+import * as schema from '#lib/server/db/schema.ts';
+import { env } from '#lib/server/env.ts';
+import { sanitizeInternalPath } from '#lib/server/http/safe-path.ts';
+import { t } from '#lib/i18n/index.ts';
 
 export const PASSWORD_MIN_LENGTH = 10;
 export const PASSWORD_MAX_LENGTH = 128;

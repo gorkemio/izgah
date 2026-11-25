@@ -1,9 +1,12 @@
 import { json } from '@sveltejs/kit';
 import { z } from 'zod';
-import { listUnreadNotifications, markNotificationsRead } from '$lib/server/interactions/service';
-import { logger } from '$lib/server/logger';
+import {
+	listUnreadNotifications,
+	markNotificationsRead
+} from '#lib/server/interactions/service.ts';
+import { logger } from '#lib/server/logger.ts';
 import type { RequestHandler } from './$types';
-import { t } from '$lib/i18n';
+import { t } from '#lib/i18n/index.ts';
 
 /** Built per request so validation messages use the request locale. */
 function markReadBodySchema() {

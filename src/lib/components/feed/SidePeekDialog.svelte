@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
+	import { t } from '#lib/i18n/index.ts';
 	import { preloadData } from '$app/navigation';
-	import { watchImageError } from '$lib/client/image-error';
-	import { toasts } from '$lib/client/toast.svelte';
-	import Avatar from '$lib/components/ui/Avatar.svelte';
-	import AvatarStack, { type AvatarStackItem } from '$lib/components/ui/AvatarStack.svelte';
-	import Icon from '$lib/components/ui/Icon.svelte';
-	import Skeleton from '$lib/components/ui/Skeleton.svelte';
-	import Tooltip from '$lib/components/ui/Tooltip.svelte';
-	import { formatDateTime } from '$lib/format/date';
-	import type { ContentType, ProviderMeta, UnfurlStatus } from '$lib/types/domain';
-	import { contentTypeLabel, type FeedShareItem } from '$lib/types/feed';
+	import { watchImageError } from '#lib/client/image-error.ts';
+	import { toasts } from '#lib/client/toast.svelte.ts';
+	import Avatar from '#lib/components/ui/Avatar.svelte';
+	import AvatarStack, { type AvatarStackItem } from '#lib/components/ui/AvatarStack.svelte';
+	import Icon from '#lib/components/ui/Icon.svelte';
+	import Skeleton from '#lib/components/ui/Skeleton.svelte';
+	import Tooltip from '#lib/components/ui/Tooltip.svelte';
+	import { formatDateTime } from '#lib/format/date.ts';
+	import type { ContentType, ProviderMeta, UnfurlStatus } from '#lib/types/domain.ts';
+	import { contentTypeLabel, type FeedShareItem } from '#lib/types/feed.ts';
 
 	interface PeekShareItem {
 		id: string;
@@ -320,9 +320,9 @@
 			{:else if status === 'error'}
 				<div class="peek-error" role="alert">
 					<p>{errorMessage}</p>
-					<a href="/resources/{resource.id}" class="btn btn-outline btn-sm"
-						>{t('peek.openFullArrow')}</a
-					>
+					<a href="/resources/{resource.id}" class="btn btn-outline btn-sm">
+						{t('peek.openFullArrow')}
+					</a>
 				</div>
 			{:else if status === 'ready' && detail}
 				<section class="peek-section" aria-labelledby="peek-shares-heading">
@@ -374,9 +374,9 @@
 							{t('comment.headingShort', { count: detail.comments.length })}
 						</h3>
 						{#if hasHiddenComments}
-							<a href="/resources/{resource.id}#comments" class="peek-inline-link"
-								>{t('peek.seeAll')}</a
-							>
+							<a href="/resources/{resource.id}#comments" class="peek-inline-link">
+								{t('peek.seeAll')}
+							</a>
 						{/if}
 					</div>
 

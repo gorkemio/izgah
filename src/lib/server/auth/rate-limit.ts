@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 import net from 'node:net';
-import { env } from '$lib/server/env';
+import { env } from '#lib/server/env.ts';
 
 export const RATE_LIMIT_MAX_KEYS = 10_000;
 export const LOGIN_WINDOW_MS = 15 * 60 * 1000;

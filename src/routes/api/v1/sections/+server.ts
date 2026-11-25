@@ -6,8 +6,8 @@ import {
 	getRequestId,
 	handleApiV1Error,
 	requireApiV1User
-} from '$lib/server/api/response';
-import { listSections } from '$lib/server/sections/service';
+} from '#lib/server/api/response.ts';
+import { listSections } from '#lib/server/sections/service.ts';
 
 export const OPTIONS: RequestHandler = async (event) => {
 	return apiPreflight(getRequestId(event));

@@ -28,7 +28,7 @@
 		"test:docker": "docker build -t izgah-core:test . && PLAYWRIGHT_DOCKER_SMOKE=1 playwright test tests/e2e/m8-docker-smoke.spec.ts",
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "tsx src/lib/server/db/migrate.ts",
-		"cli": "node --import 'data:text/javascript,import{registerHooks}from\"node:module\";registerHooks({resolve(s,c,n){return s===\"$app/environment\"?{shortCircuit:true,url:\"data:text/javascript,export const building=false,dev=true,browser=false,version=0;\"}:n(s,c);}})' --import tsx src/cli.ts"
+		"cli": "node --import 'data:text/javascript,import{registerHooks}from\"node:module\";registerHooks({resolve(s,c,n){return s===\"$app/env\"?{shortCircuit:true,url:\"data:text/javascript,export const building=false,dev=true,browser=false,version=0;\"}:n(s,c);}})' --import tsx src/cli.ts"
 	},
 	"dependencies": {
 		"better-auth": "^1.7.28",
@@ -48,6 +48,7 @@
 		"@playwright/test": "^1.50.0",
 		"@sveltejs/adapter-node": "^6.0.6",
 		"@sveltejs/kit": "^3.4.1",
+		"@sveltejs/load-config": "^0.2.2",
 		"@sveltejs/vite-plugin-svelte": "^7.3.2",
 		"@types/node": "^22.0.0",
 		"drizzle-kit": "^0.31.4",
@@ -63,5 +64,9 @@
 		"typescript-eslint": "^8.74.0",
 		"vite": "^8.3.8",
 		"vitest": "^5.1.2"
+	},
+	"imports": {
+		"#lib": "./src/lib/index.js",
+		"#lib/*": "./src/lib/*"
 	}
 }

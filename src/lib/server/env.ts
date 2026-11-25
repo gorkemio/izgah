@@ -1,14 +1,14 @@
 import fs from 'node:fs';
-import { building } from '$app/environment';
+import { building } from '$app/env';
 import { z } from 'zod';
-import { LOCALES } from '$lib/i18n/locales';
+import { LOCALES } from '#lib/i18n/locales.ts';
 import {
 	DEFAULT_INSTANCE_NAME,
 	DEFAULT_SOURCE_URL,
 	DEFAULT_TIME_ZONE,
 	isValidTimeZone,
 	registerServerInstanceConfig
-} from '$lib/instance';
+} from '#lib/instance.ts';
 
 const emptyToUndefined = (value: unknown): unknown => {
 	if (typeof value === 'string' && value.trim() === '') {

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	import { pageTitle } from '$lib/instance';
-	import Icon from '$lib/components/ui/Icon.svelte';
+	import { t } from '#lib/i18n/index.ts';
+	import { pageTitle } from '#lib/instance.ts';
+	import Icon from '#lib/components/ui/Icon.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();

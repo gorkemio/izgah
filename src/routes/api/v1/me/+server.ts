@@ -5,7 +5,7 @@ import {
 	createApiRequestLogger,
 	getRequestId,
 	requireApiV1User
-} from '$lib/server/api/response';
+} from '#lib/server/api/response.ts';
 
 export const OPTIONS: RequestHandler = async (event) => {
 	return apiPreflight(getRequestId(event));

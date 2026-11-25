@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { cssText, t } from '$lib/i18n';
-	import { pageTitle } from '$lib/instance';
-	import { formatDateTime } from '$lib/format/date';
+	import { cssText, t } from '#lib/i18n/index.ts';
+	import { pageTitle } from '#lib/instance.ts';
+	import { formatDateTime } from '#lib/format/date.ts';
 	import { enhance } from '$app/forms';
-	import Icon from '$lib/components/ui/Icon.svelte';
+	import Icon from '#lib/components/ui/Icon.svelte';
 	import type { ActionData, PageData } from './$types';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -142,9 +142,9 @@
 						{t('unassigned.list', { count: data.items.length })}
 					</h2>
 					{#if selectedShareIds.length > 0}
-						<span class="table-summary"
-							>{t('unassigned.selected', { count: selectedShareIds.length })}</span
-						>
+						<span class="table-summary">
+							{t('unassigned.selected', { count: selectedShareIds.length })}
+						</span>
 					{/if}
 				</div>
 
@@ -220,9 +220,9 @@
 					<div class="table-footer">
 						<nav aria-label={t('unassigned.pagination')} class="pagination-row">
 							{#if data.hasActiveCursor}
-								<a href="/admin/unassigned" class="btn btn-outline btn-sm"
-									>{t('common.backToStart')}</a
-								>
+								<a href="/admin/unassigned" class="btn btn-outline btn-sm">
+									{t('common.backToStart')}
+								</a>
 							{/if}
 							{#if data.nextCursor}
 								<a

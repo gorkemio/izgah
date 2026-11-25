@@ -7,8 +7,8 @@
  * the instance's `APP_TIME_ZONE` and the active locale so SSR, hydration and JS-off users all see
  * the same value.
  */
-import { getLocale, INTL_LOCALE, t, type Locale } from '$lib/i18n';
-import { appTimeZone } from '$lib/instance';
+import { getLocale, INTL_LOCALE, t, type Locale } from '#lib/i18n/index.ts';
+import { appTimeZone } from '#lib/instance.ts';
 
 type DateInput = Date | string | number;
 

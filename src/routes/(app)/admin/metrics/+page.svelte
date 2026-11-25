@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { cssText, formatNumber, t } from '$lib/i18n';
-	import { pageTitle } from '$lib/instance';
-	import { formatDateTime } from '$lib/format/date';
+	import { cssText, formatNumber, t } from '#lib/i18n/index.ts';
+	import { pageTitle } from '#lib/instance.ts';
+	import { formatDateTime } from '#lib/format/date.ts';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();

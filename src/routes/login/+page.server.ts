@@ -1,9 +1,9 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { applyResponseSetCookies, auth, sanitizeNextPath } from '$lib/server/auth/better-auth';
-import { checkLoginRateLimit, extractClientIp } from '$lib/server/auth/rate-limit';
-import { setHeadersOnce } from '$lib/server/http/headers';
+import { applyResponseSetCookies, auth, sanitizeNextPath } from '#lib/server/auth/better-auth.ts';
+import { checkLoginRateLimit, extractClientIp } from '#lib/server/auth/rate-limit.ts';
+import { setHeadersOnce } from '#lib/server/http/headers.ts';
 import type { Actions, PageServerLoad } from './$types';
-import { t } from '$lib/i18n';
+import { t } from '#lib/i18n/index.ts';
 
 export const load: PageServerLoad = async ({ locals, url, request, setHeaders }) => {
 	setHeadersOnce({ request, setHeaders }, { 'Cache-Control': 'no-store' });

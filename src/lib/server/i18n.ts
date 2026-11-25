@@ -5,8 +5,8 @@ import {
 	setFallbackLocale,
 	toLocale,
 	type Locale
-} from '$lib/i18n';
-import { env } from '$lib/server/env';
+} from '#lib/i18n/index.ts';
+import { env } from '#lib/server/env.ts';
 
 /**
  * Request-scoped locale (docs/designs/izgah-i18n-oss.md §2): `hooks.server.ts` runs each request

@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
-import { auth, clearSessionCookies } from '$lib/server/auth/better-auth';
-import { db } from '$lib/server/db/client';
-import { sessions } from '$lib/server/db/schema';
+import { auth, clearSessionCookies } from '#lib/server/auth/better-auth.ts';
+import { db } from '#lib/server/db/client.ts';
+import { sessions } from '#lib/server/db/schema.ts';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async (event) => {

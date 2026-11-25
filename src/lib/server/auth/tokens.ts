@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 import type { Cookies } from '@sveltejs/kit';
 import { and, eq, gt, inArray, isNull, ne, sql } from 'drizzle-orm';
-import { db, type Database } from '$lib/server/db/client';
+import { db, type Database } from '#lib/server/db/client.ts';
 import {
 	accounts,
 	apiKeys,
@@ -9,10 +9,10 @@ import {
 	users,
 	type InviteTokenPurpose,
 	type UserRole
-} from '$lib/server/db/schema';
-import { env } from '$lib/server/env';
+} from '#lib/server/db/schema.ts';
+import { env } from '#lib/server/env.ts';
 import { applyResponseSetCookies, auth, hashPassword, validatePasswordLength } from './better-auth';
-import { t } from '$lib/i18n';
+import { t } from '#lib/i18n/index.ts';
 
 export const INVITE_TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
 export const DISPLAY_NAME_MAX_LENGTH = 120;

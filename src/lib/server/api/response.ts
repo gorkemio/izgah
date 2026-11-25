@@ -1,9 +1,9 @@
 import type { RequestEvent } from '@sveltejs/kit';
 import type { ZodError } from 'zod';
-import { UrlCanonicalizeError } from '$lib/server/links/canonicalize';
-import { LinkServiceError } from '$lib/server/links/service';
-import { logger, type Logger } from '$lib/server/logger';
-import { t } from '$lib/i18n';
+import { UrlCanonicalizeError } from '#lib/server/links/canonicalize.ts';
+import { LinkServiceError } from '#lib/server/links/service.ts';
+import { logger, type Logger } from '#lib/server/logger.ts';
+import { t } from '#lib/i18n/index.ts';
 
 export type ApiV1User = NonNullable<App.Locals['user']>;
 

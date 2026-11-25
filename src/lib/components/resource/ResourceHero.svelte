@@ -1,14 +1,13 @@
 <script lang="ts">
-	import { t, formatNumber } from '$lib/i18n';
-	import { watchImageError } from '$lib/client/image-error';
-	import { enhance } from '$app/forms';
+	import { t, formatNumber } from '#lib/i18n/index.ts';
+	import { watchImageError } from '#lib/client/image-error.ts';
+	import { enhance, type SubmitFunction } from '$app/forms';
 	import { goto } from '$app/navigation';
-	import type { SubmitFunction } from '@sveltejs/kit';
-	import AvatarStack, { type AvatarStackItem } from '$lib/components/ui/AvatarStack.svelte';
-	import Icon from '$lib/components/ui/Icon.svelte';
-	import Tooltip from '$lib/components/ui/Tooltip.svelte';
-	import { toasts } from '$lib/client/toast.svelte';
-	import { contentTypeLabel, type FeedShareItem } from '$lib/types/feed';
+	import AvatarStack, { type AvatarStackItem } from '#lib/components/ui/AvatarStack.svelte';
+	import Icon from '#lib/components/ui/Icon.svelte';
+	import Tooltip from '#lib/components/ui/Tooltip.svelte';
+	import { toasts } from '#lib/client/toast.svelte.ts';
+	import { contentTypeLabel, type FeedShareItem } from '#lib/types/feed.ts';
 
 	type HeroResource = Pick<
 		FeedShareItem['resource'],
@@ -110,7 +109,7 @@
 			}
 			likeOverride = previous;
 			if (result.type === 'redirect') {
-				await goto(result.location, { invalidateAll: true });
+				await goto(result.location, { refreshAll: true });
 				return;
 			}
 			toasts.push(t('like.failed'), { tone: 'error' });

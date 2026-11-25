@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	import Dialog from '$lib/components/ui/Dialog.svelte';
-	import type { ShortcutPreference } from '$lib/client/shortcuts.svelte';
+	import { t } from '#lib/i18n/index.ts';
+	import Dialog from '#lib/components/ui/Dialog.svelte';
+	import type { ShortcutPreference } from '#lib/client/shortcuts.svelte.ts';
 
 	interface Props {
 		open?: boolean;

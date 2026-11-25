@@ -5,8 +5,8 @@ import {
 	type ProviderMeta,
 	type SourceChannel,
 	type UnfurlStatus
-} from '$lib/types/domain';
-import { t } from '$lib/i18n';
+} from '#lib/types/domain.ts';
+import { t } from '#lib/i18n/index.ts';
 
 export type FeedShareAttribution =
 	| {

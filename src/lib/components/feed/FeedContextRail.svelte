@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { t, formatNumber } from '$lib/i18n';
-	import Avatar from '$lib/components/ui/Avatar.svelte';
-	import { formatDayKeyShort } from '$lib/format/date';
-	import type { FeedRailSummary } from '$lib/server/feed/rail-summary';
+	import { t, formatNumber } from '#lib/i18n/index.ts';
+	import Avatar from '#lib/components/ui/Avatar.svelte';
+	import { formatDayKeyShort } from '#lib/format/date.ts';
+	import type { FeedRailSummary } from '#lib/server/feed/rail-summary.ts';
 
 	interface Props {
 		summary: FeedRailSummary;
@@ -52,13 +52,13 @@
 							<span class="trend-meta">
 								<span class="trend-domain">{resource.domain}</span>
 								<span aria-hidden="true">·</span>
-								<span class="trend-stat"
-									>{t('common.commentCount', { count: resource.recentCommentCount })}</span
-								>
+								<span class="trend-stat">
+									{t('common.commentCount', { count: resource.recentCommentCount })}
+								</span>
 								<span aria-hidden="true">·</span>
-								<span class="trend-stat"
-									>{t('common.likeCount', { count: resource.likeCount })}</span
-								>
+								<span class="trend-stat">
+									{t('common.likeCount', { count: resource.likeCount })}
+								</span>
 							</span>
 						</a>
 					</li>
@@ -81,8 +81,8 @@
 						<span class="member-name">{member.name}</span>
 						<span class="member-count">
 							{member.shareCount}<span class="visually-hidden">
-								{t('rail.shareSuffix', { count: member.shareCount })}</span
-							>
+								{t('rail.shareSuffix', { count: member.shareCount })}
+							</span>
 						</span>
 					</li>
 				{/each}

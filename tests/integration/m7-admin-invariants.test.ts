@@ -111,6 +111,9 @@ function createMockCookies(initialCookieHeader?: string): Cookies {
 		delete(name) {
 			store.delete(name);
 		},
+		parse: (() => {
+			throw new Error('cookies.parse is not used in tests');
+		}) as never,
 		serialize(name, value) {
 			return `${name}=${encodeURIComponent(value)}`;
 		}

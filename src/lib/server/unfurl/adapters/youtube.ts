@@ -1,6 +1,6 @@
-import { asciiLower, matchesDomain, splitPathSegments } from '$lib/server/links/canonicalize';
-import { isHostCircuitOpen, recordHostStatus } from '$lib/server/unfurl/circuit-breaker';
-import { MAX_TEXT_BYTES, safeFetchText } from '$lib/server/unfurl/safe-fetch';
+import { asciiLower, matchesDomain, splitPathSegments } from '#lib/server/links/canonicalize.ts';
+import { isHostCircuitOpen, recordHostStatus } from '#lib/server/unfurl/circuit-breaker.ts';
+import { MAX_TEXT_BYTES, safeFetchText } from '#lib/server/unfurl/safe-fetch.ts';
 import {
 	emptyUnfurlMetadata,
 	MAX_SITE_NAME_LENGTH,

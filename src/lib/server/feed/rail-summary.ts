@@ -1,7 +1,7 @@
 import { and, asc, desc, eq, exists, gte, isNull, sql } from 'drizzle-orm';
-import { appTimeZone } from '$lib/instance';
-import { db, type Database } from '$lib/server/db/client';
-import { canonicalResources, linkShares, resourceComments, users } from '$lib/server/db/schema';
+import { appTimeZone } from '#lib/instance.ts';
+import { db, type Database } from '#lib/server/db/client.ts';
+import { canonicalResources, linkShares, resourceComments, users } from '#lib/server/db/schema.ts';
 
 export type RailSummaryExecutor = Pick<Database, 'select'>;
 

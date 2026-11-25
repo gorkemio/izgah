@@ -2,9 +2,9 @@ import dns from 'node:dns';
 import net from 'node:net';
 import { domainToASCII } from 'node:url';
 import { Agent, buildConnector, fetch as undiciFetch, type Dispatcher } from 'undici';
-import { MAX_URL_LENGTH } from '$lib/links/parse-url';
-import { asciiLower } from '$lib/server/links/canonicalize';
-import { t } from '$lib/i18n';
+import { MAX_URL_LENGTH } from '#lib/links/parse-url.ts';
+import { asciiLower } from '#lib/server/links/canonicalize.ts';
+import { t } from '#lib/i18n/index.ts';
 
 export const UNFURL_USER_AGENT = 'IzgahUnfurl/1.0';
 export const DEFAULT_MAX_REDIRECTS = 3;

@@ -1,4 +1,4 @@
-import type { ContentType } from '$lib/server/db/schema';
+import type { ContentType } from '#lib/server/db/schema.ts';
 import { asciiLower, matchesDomain, splitPathSegments } from './canonicalize';
 
 const ARTICLE_DOMAINS = ['medium.com', 'substack.com', 'dev.to', 'hashnode.dev'] as const;

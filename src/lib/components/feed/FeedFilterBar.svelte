@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
+	import { t } from '#lib/i18n/index.ts';
 	import SegmentedControl, {
 		type SegmentedOption
-	} from '$lib/components/ui/SegmentedControl.svelte';
-	import type { ContentType } from '$lib/server/db/schema';
+	} from '#lib/components/ui/SegmentedControl.svelte';
+	import type { ContentType } from '#lib/server/db/schema.ts';
 
 	interface Props {
 		basePath: string;

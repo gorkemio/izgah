@@ -4,10 +4,10 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { and, eq, inArray, isNotNull, lte, sql } from 'drizzle-orm';
 import sharp from 'sharp';
-import { db, type Database } from '$lib/server/db/client';
-import { canonicalResources, mediaAssets } from '$lib/server/db/schema';
-import { env } from '$lib/server/env';
-import { logger } from '$lib/server/logger';
+import { db, type Database } from '#lib/server/db/client.ts';
+import { canonicalResources, mediaAssets } from '#lib/server/db/schema.ts';
+import { env } from '#lib/server/env.ts';
+import { logger } from '#lib/server/logger.ts';
 
 // Configure libvips global bounds once on module load per Technical Plan §2.
 sharp.cache(false);

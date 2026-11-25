@@ -1,20 +1,20 @@
 /**
  * Bundles the server-side tools that run outside SvelteKit: build/migrate.js (container start-up
  * migrations) and build/cli.js (create-admin / reset-admin). Runs after `vite build` (see the
- * `build` script) and resolves the two SvelteKit aliases those entry points use.
+ * `build` script) and stubs the SvelteKit `$app/env` module those entry points import. `#lib/*`
+ * resolves through the `imports` field of package.json, which esbuild supports natively.
  */
 import fs from 'node:fs';
-import path from 'node:path';
 import { build } from 'esbuild';
 
 /** @type {import('esbuild').Plugin} */
-const sveltekitAliases = {
-	name: 'izgah-sveltekit-aliases',
+const sveltekitEnvStub = {
+	name: 'izgah-sveltekit-env',
 	setup(builder) {
-		// $app/environment is only available inside SvelteKit; these tools always run as built
-		// production code outside the browser.
-		builder.onResolve({ filter: /^\$app\/environment$/ }, () => ({
-			path: '$app/environment',
+		// $app/env is only available inside SvelteKit; these tools always run as built production
+		// code outside the browser.
+		builder.onResolve({ filter: /^\$app\/env$/ }, () => ({
+			path: '$app/env',
 			namespace: 'sveltekit-env'
 		}));
 		builder.onLoad({ filter: /.*/, namespace: 'sveltekit-env' }, () => ({
@@ -22,12 +22,6 @@ const sveltekitAliases = {
 				'export const building = false; export const dev = false; export const browser = false; export const version = "0";',
 			loader: 'js'
 		}));
-		builder.onResolve({ filter: /^\$lib\// }, (args) =>
-			builder.resolve(path.resolve('src/lib', args.path.slice(5)), {
-				kind: args.kind,
-				resolveDir: process.cwd()
-			})
-		);
 	}
 };
 
@@ -38,7 +32,7 @@ const common = {
 	target: 'node22',
 	format: 'esm',
 	packages: 'external',
-	plugins: [sveltekitAliases]
+	plugins: [sveltekitEnvStub]
 };
 
 await build({

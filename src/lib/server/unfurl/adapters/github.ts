@@ -1,7 +1,7 @@
-import { env } from '$lib/server/env';
-import { asciiLower, splitPathSegments } from '$lib/server/links/canonicalize';
-import { isHostCircuitOpen, recordHostStatus } from '$lib/server/unfurl/circuit-breaker';
-import { MAX_TEXT_BYTES, SafeFetchError, safeFetchText } from '$lib/server/unfurl/safe-fetch';
+import { env } from '#lib/server/env.ts';
+import { asciiLower, splitPathSegments } from '#lib/server/links/canonicalize.ts';
+import { isHostCircuitOpen, recordHostStatus } from '#lib/server/unfurl/circuit-breaker.ts';
+import { MAX_TEXT_BYTES, SafeFetchError, safeFetchText } from '#lib/server/unfurl/safe-fetch.ts';
 import { fetchHtmlMetadata } from './html-meta';
 import {
 	emptyUnfurlMetadata,

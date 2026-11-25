@@ -1,18 +1,18 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	import { contentTypeLabel } from '$lib/types/feed';
+	import { t } from '#lib/i18n/index.ts';
+	import { contentTypeLabel } from '#lib/types/feed.ts';
 	import { tick } from 'svelte';
 	import { deserialize } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import Highlight from '$lib/components/ui/Highlight.svelte';
-	import Icon from '$lib/components/ui/Icon.svelte';
-	import Skeleton from '$lib/components/ui/Skeleton.svelte';
-	import type { IconName } from '$lib/components/ui/icons';
-	import { getThemeState, type ThemeChoice } from '$lib/client/theme.svelte';
-	import { toasts } from '$lib/client/toast.svelte';
-	import { highlightTerms } from '$lib/search/highlight';
-	import type { SearchShareItem } from '$lib/server/search/service';
+	import Highlight from '#lib/components/ui/Highlight.svelte';
+	import Icon from '#lib/components/ui/Icon.svelte';
+	import Skeleton from '#lib/components/ui/Skeleton.svelte';
+	import type { IconName } from '#lib/components/ui/icons.ts';
+	import { getThemeState, type ThemeChoice } from '#lib/client/theme.svelte.ts';
+	import { toasts } from '#lib/client/toast.svelte.ts';
+	import { highlightTerms } from '#lib/search/highlight.ts';
+	import type { SearchShareItem } from '#lib/server/search/service.ts';
 
 	interface SectionItem {
 		id: string;
@@ -842,9 +842,10 @@
 
 		<div class="cmdk-foot">
 			<div class="cmdk-hints" aria-hidden="true">
-				<span class="cmdk-hint"
-					><kbd class="kbd">↑</kbd><kbd class="kbd">↓</kbd> {t('palette.hint.navigate')}</span
-				>
+				<span class="cmdk-hint">
+					<kbd class="kbd">↑</kbd><kbd class="kbd">↓</kbd>
+					{t('palette.hint.navigate')}
+				</span>
 				<span class="cmdk-hint"><kbd class="kbd">↵</kbd> {t('palette.hint.open')}</span>
 				<span class="cmdk-hint"><kbd class="kbd">Esc</kbd> {t('palette.hint.close')}</span>
 			</div>

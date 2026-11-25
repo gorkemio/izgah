@@ -1,9 +1,9 @@
 import { json } from '@sveltejs/kit';
 import { z } from 'zod';
-import { checkDuplicateLink, LinkServiceError } from '$lib/server/links/service';
-import { logger } from '$lib/server/logger';
+import { checkDuplicateLink, LinkServiceError } from '#lib/server/links/service.ts';
+import { logger } from '#lib/server/logger.ts';
 import type { RequestHandler } from './$types';
-import { t } from '$lib/i18n';
+import { t } from '#lib/i18n/index.ts';
 
 const checkQuerySchema = z.object({
 	url: z.string().trim().min(1, 'URL parametresi zorunludur.')

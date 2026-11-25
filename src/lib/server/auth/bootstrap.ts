@@ -1,9 +1,9 @@
 import { and, eq, isNull, sql } from 'drizzle-orm';
-import { recordAuditLog } from '$lib/server/audit';
-import { db } from '$lib/server/db/client';
-import { apiKeys, users } from '$lib/server/db/schema';
-import { env } from '$lib/server/env';
-import { logger, type Logger } from '$lib/server/logger';
+import { recordAuditLog } from '#lib/server/audit.ts';
+import { db } from '#lib/server/db/client.ts';
+import { apiKeys, users } from '#lib/server/db/schema.ts';
+import { env } from '#lib/server/env.ts';
+import { logger, type Logger } from '#lib/server/logger.ts';
 import { createInviteToken } from './tokens';
 
 export const BOOTSTRAP_ADVISORY_LOCK_ID = 74829105;

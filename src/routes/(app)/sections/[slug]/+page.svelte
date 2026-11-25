@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	import { pageTitle } from '$lib/instance';
-	import FeedView from '$lib/components/feed/FeedView.svelte';
-	import Icon from '$lib/components/ui/Icon.svelte';
-	import type { FeedSnapshot } from '$lib/types/feed';
+	import { t } from '#lib/i18n/index.ts';
+	import { pageTitle } from '#lib/instance.ts';
+	import FeedView from '#lib/components/feed/FeedView.svelte';
+	import Icon from '#lib/components/ui/Icon.svelte';
+	import type { FeedSnapshot } from '#lib/types/feed.ts';
 	import type { PageData, Snapshot } from './$types';
 
 	let { data }: { data: PageData } = $props();

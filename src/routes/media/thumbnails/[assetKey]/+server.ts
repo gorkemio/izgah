@@ -1,14 +1,14 @@
 import fs from 'node:fs/promises';
 import { eq } from 'drizzle-orm';
-import { db } from '$lib/server/db/client';
-import { mediaAssets } from '$lib/server/db/schema';
+import { db } from '#lib/server/db/client.ts';
+import { mediaAssets } from '#lib/server/db/schema.ts';
 import {
 	ASSET_KEY_REGEX,
 	InvalidAssetKeyError,
 	resolveMediaAssetPath
-} from '$lib/server/media/storage';
+} from '#lib/server/media/storage.ts';
 import type { RequestHandler } from './$types';
-import { t } from '$lib/i18n';
+import { t } from '#lib/i18n/index.ts';
 
 function mediaJsonError(
 	status: number,

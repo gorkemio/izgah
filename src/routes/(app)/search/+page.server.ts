@@ -3,7 +3,7 @@ import {
 	DEFAULT_SEARCH_LIMIT,
 	MAX_SEARCH_OFFSET,
 	searchResources
-} from '$lib/server/search/service';
+} from '#lib/server/search/service.ts';
 import { _feedShareActions } from '../+page.server';
 import type { PageServerLoad } from './$types';
 

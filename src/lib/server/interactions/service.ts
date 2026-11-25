@@ -1,5 +1,5 @@
 import { and, asc, count, desc, eq, exists, inArray, isNull, ne, or, sql } from 'drizzle-orm';
-import { db, type Database } from '$lib/server/db/client';
+import { db, type Database } from '#lib/server/db/client.ts';
 import {
 	canonicalResources,
 	linkShareSections,
@@ -16,8 +16,8 @@ import {
 	type SourceChannel,
 	type UnfurlStatus,
 	type UserRole
-} from '$lib/server/db/schema';
-import { t } from '$lib/i18n';
+} from '#lib/server/db/schema.ts';
+import { t } from '#lib/i18n/index.ts';
 
 export type DbTransaction = Parameters<Parameters<Database['transaction']>[0]>[0];
 export type DbExecutor = Database | DbTransaction;

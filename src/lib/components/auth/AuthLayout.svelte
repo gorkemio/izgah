@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	import { instanceName } from '$lib/instance';
+	import { t } from '#lib/i18n/index.ts';
+	import { instanceName } from '#lib/instance.ts';
 	import type { Snippet } from 'svelte';
 
 	let { children }: { children: Snippet } = $props();

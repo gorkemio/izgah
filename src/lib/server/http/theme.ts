@@ -8,9 +8,9 @@ import {
 	THEME_VALUES,
 	type Palette,
 	type ThemePreference
-} from '$lib/types/appearance';
+} from '#lib/types/appearance.ts';
 
-export { THEME_VALUES, type ThemePreference } from '$lib/types/appearance';
+export { THEME_VALUES, type ThemePreference } from '#lib/types/appearance.ts';
 
 export const THEME_COOKIE = 'izgah_theme';
 

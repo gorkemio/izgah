@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { t } from '$lib/i18n';
-	import { instanceName } from '$lib/instance';
+	import { t } from '#lib/i18n/index.ts';
+	import { instanceName } from '#lib/instance.ts';
 	import { page } from '$app/state';
-	import ErrorContent from '$lib/components/ErrorContent.svelte';
+	import ErrorContent from '#lib/components/ErrorContent.svelte';
 
 	// Errors outside the app shell (sign-in pages, layout auth failures) land here (F14).
 	const signedOut = $derived(page.status === 401);
