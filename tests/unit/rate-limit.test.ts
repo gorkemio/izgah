@@ -1,12 +1,15 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import {
+	AUTH_TOKEN_IP_MAX_ATTEMPTS,
 	BoundedSlidingWindowStore,
 	checkAuthTokenRateLimit,
 	checkLoginRateLimit,
 	checkPasswordChangeRateLimit,
+	LOGIN_ACCOUNT_MAX_ATTEMPTS,
 	LOGIN_IP_MAX_ATTEMPTS,
 	LOGIN_MAX_ATTEMPTS,
 	normalizeRateLimitIp,
+	PrefixScopedWindowStore,
 	RATE_LIMIT_MAX_KEYS,
 	resetRateLimiters
 } from '../../src/lib/server/auth/rate-limit';
@@ -68,6 +71,64 @@ describe('rate limiter hardening', () => {
 			}
 		}
 		expect(blocked).toBe(true);
+	});
+
+	it('does not let a few hundred client prefixes lock other clients out of sign-in', () => {
+		const t0 = 5_000_000;
+		for (let prefix = 0; prefix < 400; prefix += 1) {
+			for (let i = 0; i < LOGIN_IP_MAX_ATTEMPTS + 5; i += 1) {
+				checkLoginRateLimit(
+					`2001:db8:1:${prefix.toString(16)}::1`,
+					`x${prefix}-${i}@a.test`,
+					undefined,
+					t0 + i
+				);
+			}
+		}
+		// A flooding prefix is still blocked; an unrelated client still gets in.
+		expect(checkLoginRateLimit('2001:db8:1:0::9', 'yeni@a.test', undefined, t0 + 100).allowed).toBe(
+			false
+		);
+		expect(
+			checkLoginRateLimit('198.51.100.7', 'admin@izgah.test', undefined, t0 + 101).allowed
+		).toBe(true);
+	});
+
+	it('does not let a few hundred client prefixes block invite or reset links', () => {
+		const t0 = 6_000_000;
+		for (let prefix = 0; prefix < 400; prefix += 1) {
+			for (let i = 0; i < AUTH_TOKEN_IP_MAX_ATTEMPTS; i += 1) {
+				checkAuthTokenRateLimit(
+					`2001:db8:2:${prefix.toString(16)}::1`,
+					`tok_${prefix}_${i}`,
+					undefined,
+					t0 + i
+				);
+			}
+		}
+		expect(checkAuthTokenRateLimit('198.51.100.8', 'davet', undefined, t0 + 100).allowed).toBe(
+			true
+		);
+	});
+
+	it('keeps the per-account limit across many client addresses', () => {
+		const t0 = 7_000_000;
+		let allowed = 0;
+		for (let i = 0; i < LOGIN_ACCOUNT_MAX_ATTEMPTS + 10; i += 1) {
+			if (checkLoginRateLimit(`203.0.113.${i}`, 'hedef@izgah.test', undefined, t0 + i).allowed) {
+				allowed += 1;
+			}
+		}
+		expect(allowed).toBe(LOGIN_ACCOUNT_MAX_ATTEMPTS);
+	});
+
+	it('fails closed for a prefix-scoped store at capacity without evicting active prefixes', () => {
+		const store = new PrefixScopedWindowStore(2);
+		expect(store.consume('a', 1, null, 1, 60_000, 0).prefix.allowed).toBe(true);
+		expect(store.consume('b', 1, 'x', 1, 60_000, 0).prefix.allowed).toBe(true);
+		expect(store.consume('c', 1, null, 1, 60_000, 0).prefix.allowed).toBe(false);
+		expect(store.consume('a', 1, null, 1, 60_000, 1).prefix.allowed).toBe(false);
+		expect(store.consume('c', 1, null, 1, 60_000, 120_000).prefix.allowed).toBe(true);
 	});
 
 	it('refuses new keys instead of evicting active ones when configured to fail closed', () => {

@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { isLoginWallRedirect } from '../../src/lib/server/unfurl/adapters/html-meta';
+import {
+	extractCharsetFromHtmlBytes,
+	isLoginWallRedirect
+} from '../../src/lib/server/unfurl/adapters/html-meta';
 import { sanitizeMetadataField } from '../../src/lib/server/unfurl/adapters/types';
 
 describe('sanitizeMetadataField', () => {
@@ -26,6 +29,31 @@ describe('sanitizeMetadataField', () => {
 
 	it('truncates by code points', () => {
 		expect(sanitizeMetadataField('ğüşıöç'.repeat(10), 5)).toBe('ğüşıö');
+	});
+
+	it('stays fast on a huge hostile attribute value (no quadratic backtracking)', () => {
+		const hostile = '<a' + ' '.repeat(1_000_000) + 'x';
+		const started = performance.now();
+		sanitizeMetadataField(hostile, 300);
+		expect(performance.now() - started).toBeLessThan(200);
+	});
+
+	it('still detects a tag with attributes after the fix', () => {
+		expect(sanitizeMetadataField('<span class="x">Merhaba</span>', 300)).toBe('Merhaba');
+	});
+});
+
+describe('extractCharsetFromHtmlBytes', () => {
+	it('finds a meta charset early in the document', () => {
+		const html = new TextEncoder().encode('<html><head><meta charset="windows-1254"></head>');
+		expect(extractCharsetFromHtmlBytes(html)).toBe('windows-1254');
+	});
+
+	it('scans only a bounded prefix of a large chunk', () => {
+		const hostile = new TextEncoder().encode('<meta '.repeat(20_000));
+		const started = performance.now();
+		expect(extractCharsetFromHtmlBytes(hostile)).toBeNull();
+		expect(performance.now() - started).toBeLessThan(200);
 	});
 });
 

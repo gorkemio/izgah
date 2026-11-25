@@ -148,7 +148,14 @@ function replaceControlCharsWithSpace(raw: string): string {
  * a closing tag, a tag with attributes, or an element that never appears in prose.
  */
 const HTML_MARKUP_PATTERN =
-	/<\/[a-zA-Z][\w-]*\s*>|<[a-zA-Z][\w-]*\s+[^<>]*=|<(?:script|style|iframe|img|br|hr|svg)\b|<!--/i;
+	/<\/[a-zA-Z][\w-]*\s*>|<[a-zA-Z][\w-]*\s[^<>]*=|<(?:script|style|iframe|img|br|hr|svg)\b|<!--/i;
+
+/**
+ * Remote values can be megabytes long, but only the first `maxLength` code points survive. Scanning
+ * a small multiple of that keeps every regex and the HTML strip linear in a bounded input, so a
+ * hostile page cannot stall the shared event loop (the unfurl worker runs in the web process).
+ */
+const METADATA_SCAN_FACTOR = 8;
 
 export function looksLikeHtmlMarkup(value: string): boolean {
 	return HTML_MARKUP_PATTERN.test(value);
@@ -165,7 +172,9 @@ export function sanitizeMetadataField(
 		return null;
 	}
 
-	let cleaned = replaceControlCharsWithSpace(raw).trim();
+	const scanLimit = maxLength * METADATA_SCAN_FACTOR;
+	const bounded = raw.length > scanLimit ? raw.slice(0, scanLimit) : raw;
+	let cleaned = replaceControlCharsWithSpace(bounded).trim();
 	if (!cleaned) {
 		return null;
 	}

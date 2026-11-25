@@ -52,7 +52,9 @@ export function extractCharsetFromContentType(contentType: string | null): strin
 }
 
 export function extractCharsetFromHtmlBytes(bytes: Uint8Array): string | null {
-	const latin1 = Buffer.from(bytes).toString('latin1');
+	// Callers may pass a whole network chunk (tens of KiB); the <meta> regexes below are only cheap on
+	// a small window, and the charset declaration must appear early in the document anyway.
+	const latin1 = Buffer.from(bytes.subarray(0, CHARSET_PRESCAN_BYTES)).toString('latin1');
 	const metaCharset = /<meta\b[^>]*\bcharset\s*=\s*(?:"([^"]+)"|'([^']+)'|([^\s"'>/]+))/i.exec(
 		latin1
 	);
