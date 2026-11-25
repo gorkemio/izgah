@@ -451,6 +451,11 @@ test.describe('Milestone M8 — Production Docker Smoke & Recovery', () => {
 				'-e',
 				`ORIGIN=${baseUrl}`,
 				'-e',
+				// The assertions below use the Turkish UI, like the cookie-based fixture of the other specs.
+				'DEFAULT_LOCALE=tr',
+				'-e',
+				'INSTANCE_NAME=İzgah',
+				'-e',
 				'ADMIN_BOOTSTRAP_EMAIL=admin@izgah.test',
 				APP_IMAGE
 			]);
@@ -520,7 +525,10 @@ test.describe('Milestone M8 — Production Docker Smoke & Recovery', () => {
 
 			const initialLogs = readContainerLogs(appContainer);
 			expect(initialLogs).toContain('"msg":"Database migrations complete"');
-			expect(initialLogs).toContain('"appliedCount":1');
+			const journal = JSON.parse(fs.readFileSync('drizzle/meta/_journal.json', 'utf8')) as {
+				entries: unknown[];
+			};
+			expect(initialLogs).toContain(`"appliedCount":${journal.entries.length}`);
 
 			// 3. Complete initial admin bootstrap via logged one-time invite URL
 			const setupUrl = parseSetupUrlFromLogs(initialLogs);
