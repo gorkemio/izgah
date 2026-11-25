@@ -1,24 +1,26 @@
 <script lang="ts">
+	import { snapshot } from '$app/navigation';
 	import { t } from '#lib/i18n/index.ts';
 	import { pageTitle } from '#lib/instance.ts';
 	import FeedView from '#lib/components/feed/FeedView.svelte';
 	import Icon from '#lib/components/ui/Icon.svelte';
 	import type { FeedSnapshot } from '#lib/types/feed.ts';
-	import type { PageData, Snapshot } from './$types';
+	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
 	let view = $state<ReturnType<typeof FeedView>>();
 
 	// Back/Forward keeps pages loaded with "Daha fazla yükle" (izgah-ui-v2 §8.6).
-	export const snapshot: Snapshot<FeedSnapshot | null> = {
+	snapshot<FeedSnapshot | null>({
+		id: 'section-feed',
 		capture: () => view?.captureSnapshot() ?? null,
 		restore: (value) => {
 			if (value) {
 				void view?.restoreSnapshot(value);
 			}
 		}
-	};
+	});
 </script>
 
 <svelte:head>
