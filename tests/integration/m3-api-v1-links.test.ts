@@ -413,7 +413,8 @@ describe('M3 link domain services and /api/v1/* contract', () => {
 			exists: false,
 			canonicalUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
 			rawUrl: 'https://youtu.be/dQw4w9WgXcQ?t=45',
-			suggestedContentType: 'video'
+			suggestedContentType: 'video',
+			suggestedSections: []
 		});
 
 		// 2. First share creation (single transaction: canonical_resources + link_shares + link_share_sections + unfurl_jobs)
@@ -475,6 +476,8 @@ describe('M3 link domain services and /api/v1/* contract', () => {
 			canonicalUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
 			rawUrl: 'https://youtube.com/watch?v=dQw4w9WgXcQ&t=99',
 			suggestedContentType: 'video',
+			// The earlier share of the same link was filed under this section (smart capture §3).
+			suggestedSections: [expect.objectContaining({ name: 'Yapay Zeka', source: 'history' })],
 			resource: {
 				id: resourceRows[0].id,
 				title: null,
@@ -620,7 +623,8 @@ describe('M3 link domain services and /api/v1/* contract', () => {
 			exists: false,
 			canonicalUrl: 'https://bit.ly/izgah-default',
 			rawUrl: 'https://bit.ly/izgah-default',
-			suggestedContentType: 'web'
+			suggestedContentType: 'web',
+			suggestedSections: []
 		});
 		expect(fetchSpy).not.toHaveBeenCalled();
 
@@ -637,7 +641,8 @@ describe('M3 link domain services and /api/v1/* contract', () => {
 			exists: false,
 			canonicalUrl: 'https://github.com/sveltejs/kit',
 			rawUrl: 'https://www.github.com/sveltejs/kit.git',
-			suggestedContentType: 'repo'
+			suggestedContentType: 'repo',
+			suggestedSections: []
 		});
 
 		const createdResolved = await dispatchApiV1({
@@ -691,7 +696,8 @@ describe('M3 link domain services and /api/v1/* contract', () => {
 				exists: false,
 				canonicalUrl: 'https://bit.ly/slow-link',
 				rawUrl: 'https://bit.ly/slow-link',
-				suggestedContentType: 'web'
+				suggestedContentType: 'web',
+				suggestedSections: []
 			});
 		} finally {
 			if (realMockTimer !== undefined) {
@@ -937,7 +943,8 @@ describe('M3 link domain services and /api/v1/* contract', () => {
 			exists: false,
 			canonicalUrl: 'https://example.com/ortak-kaynak',
 			rawUrl: 'https://example.com/ortak-kaynak',
-			suggestedContentType: 'web'
+			suggestedContentType: 'web',
+			suggestedSections: []
 		});
 
 		const reshareAfterAllDeleted = await createLinkShare({

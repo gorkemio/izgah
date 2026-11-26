@@ -39,6 +39,18 @@ export default tseslint.config(
 		}
 	},
 	{
+		// Static design prototypes (docs/designs/prototypes) run as plain browser scripts.
+		files: ['docs/designs/prototypes/**/*.js'],
+		languageOptions: {
+			globals: {
+				document: 'readonly',
+				window: 'readonly',
+				URLSearchParams: 'readonly',
+				HTMLSelectElement: 'readonly'
+			}
+		}
+	},
+	{
 		files: ['**/*.svelte', '**/*.svelte.ts', '**/*.svelte.js'],
 		languageOptions: {
 			parserOptions: {

@@ -4,6 +4,8 @@
 *   **Status:** Approved
 *   **Date:** 2026-11-24
 
+> **2026-11-26:** [izgah-ui-v4.md](./izgah-ui-v4.md) proposes replacing this visual language ("Künye"). Until it is approved after the prototype review, this document stays in force.
+
 --------------------------------------------------------------------------------
 
 ## Overview

@@ -1,3 +1,7 @@
+import { eq } from 'drizzle-orm';
+import { db } from '#lib/server/db/client.ts';
+import { resourceEnrichments } from '#lib/server/db/schema.ts';
+import { loadSmartCaptureState } from '#lib/server/smart-capture/settings.ts';
 import { error, fail, redirect } from '@sveltejs/kit';
 import { sanitizeInternalPath } from '#lib/server/http/safe-path.ts';
 import {
@@ -40,6 +44,20 @@ function sanitizeResourceReturnTo(raw: FormDataEntryValue | null, resourceId: st
 	});
 }
 
+/** The AI summary is shown while summaries are enabled (docs/designs/izgah-smart-capture.md §10). */
+async function loadVisibleAiSummary(resourceId: string): Promise<string | null> {
+	const state = await loadSmartCaptureState();
+	if (!state.aiAllowed || !state.settings.summaries) {
+		return null;
+	}
+	const [row] = await db
+		.select({ summary: resourceEnrichments.summary })
+		.from(resourceEnrichments)
+		.where(eq(resourceEnrichments.resourceId, resourceId))
+		.limit(1);
+	return row?.summary ?? null;
+}
+
 export const load: PageServerLoad = async ({ depends, locals, params, url }) => {
 	depends('app:feed');
 
@@ -58,6 +76,7 @@ export const load: PageServerLoad = async ({ depends, locals, params, url }) => 
 
 	return {
 		...discussion,
+		aiSummary: await loadVisibleAiSummary(params.id),
 		editShareId: url.searchParams.get('edit') || null,
 		deleteShareId: url.searchParams.get('delete') || null,
 		editCommentId: url.searchParams.get('editComment') || null,

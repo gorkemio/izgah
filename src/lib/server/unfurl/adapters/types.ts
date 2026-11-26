@@ -15,6 +15,8 @@ export interface UnfurlMetadata {
 	providerMeta: ProviderMeta | null;
 	thumbnailUrl: string | null;
 	ogType: string | null;
+	/** Readable page text (HTML pages only; docs/designs/izgah-smart-capture.md §4). */
+	contentText?: string | null;
 }
 
 export interface AdapterFetchResult {

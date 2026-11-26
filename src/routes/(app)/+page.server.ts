@@ -73,6 +73,8 @@ export interface FeedShareItem {
 		name: string;
 	}>;
 	attribution: FeedShareAttribution | null;
+	/** Section suggestions for the author and admins (docs/designs/izgah-smart-capture.md §10). */
+	suggestions?: FeedShareSuggestion[];
 }
 import { sanitizeInternalPath } from '#lib/server/http/safe-path.ts';
 import {
@@ -88,6 +90,15 @@ import {
 	updateLinkShare
 } from '#lib/server/links/service.ts';
 import type { PageServerLoad } from './$types';
+import type { UserRole } from '#lib/server/db/schema.ts';
+import type { FeedShareSuggestion } from '#lib/types/feed.ts';
+import {
+	acceptSuggestion,
+	dismissSuggestions,
+	listShareSuggestions,
+	SuggestionError,
+	undoAutoSection
+} from '#lib/server/smart-capture/suggestions.ts';
 import { t } from '#lib/i18n/index.ts';
 
 const FEED_PAGE_SIZE = 25;
@@ -146,6 +157,7 @@ export async function _loadFeedPage(options: {
 	url: URL;
 	sectionId?: string;
 	viewerUserId?: string;
+	viewerRole?: UserRole;
 }): Promise<{
 	items: FeedShareItem[];
 	activeType: ContentType | null;
@@ -233,9 +245,19 @@ export async function _loadFeedPage(options: {
 	}
 
 	const uniqueResourceIds = Array.from(new Set(pageRows.map((row) => row.resourceId)));
-	const [likedResourceIds, shareRefMap] = await Promise.all([
+	const [likedResourceIds, shareRefMap, suggestionsByShareId] = await Promise.all([
 		getViewerLikedResourceIds(options.viewerUserId, uniqueResourceIds),
-		getResourceShareReferences(uniqueResourceIds)
+		getResourceShareReferences(uniqueResourceIds),
+		options.viewerUserId && options.viewerRole
+			? listShareSuggestions(
+					pageRows.map((row) => ({
+						id: row.shareId,
+						authorId: row.authorId,
+						sectionCount: sectionsByShareId.get(row.shareId)?.length ?? 0
+					})),
+					{ id: options.viewerUserId, role: options.viewerRole }
+				)
+			: Promise.resolve(new Map<string, FeedShareSuggestion[]>())
 	]);
 
 	const items: FeedShareItem[] = pageRows.map((row) => {
@@ -286,7 +308,8 @@ export async function _loadFeedPage(options: {
 				likedByViewer: likedResourceIds.has(row.resourceId)
 			},
 			sections: sectionsByShareId.get(row.shareId) ?? [],
-			attribution
+			attribution,
+			suggestions: suggestionsByShareId.get(row.shareId)
 		};
 	});
 
@@ -614,8 +637,54 @@ export const _feedShareActions = {
 			}
 			throw error;
 		}
-	}
+	},
+
+	acceptSuggestion: async ({ request, locals }) =>
+		resolveSuggestion(request, locals, 'acceptSuggestion', (actor, shareId, sectionId) =>
+			acceptSuggestion({ actor, shareId, sectionId })
+		),
+
+	dismissSuggestions: async ({ request, locals }) =>
+		resolveSuggestion(request, locals, 'dismissSuggestions', async (actor, shareId) => {
+			await dismissSuggestions({ actor, shareId });
+		}),
+
+	undoAutoSection: async ({ request, locals }) =>
+		resolveSuggestion(request, locals, 'undoAutoSection', (actor, shareId, sectionId) =>
+			undoAutoSection({ actor, shareId, sectionId })
+		)
 } satisfies Actions;
+
+/** Shared body of the suggestion actions (forms first; JS-off posts redirect back). */
+async function resolveSuggestion(
+	request: Request,
+	locals: App.Locals,
+	formType: 'acceptSuggestion' | 'dismissSuggestions' | 'undoAutoSection',
+	run: (actor: { id: string; role: UserRole }, shareId: string, sectionId: string) => Promise<void>
+) {
+	if (!locals.user) {
+		return fail(401, { formType, errorMessage: t('auth.signInForActionAlt') });
+	}
+	const formData = await request.formData();
+	const shareId = String(formData.get('shareId') ?? '').trim();
+	const sectionId = String(formData.get('sectionId') ?? '').trim();
+	const returnTo = sanitizeReturnTo(formData.get('returnTo'), '/');
+	if (!shareId || (formType !== 'dismissSuggestions' && !sectionId)) {
+		return fail(422, { formType, shareId, errorMessage: t('suggest.failed') });
+	}
+	try {
+		await run({ id: locals.user.id, role: locals.user.role }, shareId, sectionId);
+	} catch (error) {
+		if (error instanceof SuggestionError) {
+			return fail(error.status, { formType, shareId, errorMessage: t('suggest.failed') });
+		}
+		throw error;
+	}
+	if (!wantsJsonResponse(request)) {
+		redirect(303, returnTo);
+	}
+	return { success: true, formType, shareId };
+}
 
 /**
  * The right-rail summary is decorative: it is skipped for "load more" pages (whose result only
@@ -640,7 +709,8 @@ export const load: PageServerLoad = async ({ depends, locals, url }) => {
 		_loadFeedPage({
 			depends,
 			url,
-			viewerUserId: locals.user?.id
+			viewerUserId: locals.user?.id,
+			viewerRole: locals.user?.role
 		}),
 		loadRailSummary(url, locals.requestId)
 	]);

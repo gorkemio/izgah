@@ -1,3 +1,11 @@
+import { applyHashtags } from '#lib/server/smart-capture/hashtags.ts';
+import {
+	suggestSectionsForLink,
+	type ComposerSuggestion
+} from '#lib/server/smart-capture/suggestions.ts';
+import { logger } from '#lib/server/logger.ts';
+import { enqueueEnrichmentJob } from '#lib/server/smart-capture/jobs.ts';
+import { notifyEnrichmentWorker } from '#lib/server/smart-capture/worker.ts';
 import { and, asc, count, eq, inArray, isNull } from 'drizzle-orm';
 import { db, type Database } from '#lib/server/db/client.ts';
 import {
@@ -12,7 +20,7 @@ import {
 	type UnfurlStatus,
 	type UserRole
 } from '#lib/server/db/schema.ts';
-import { findExistingSectionIds } from '#lib/server/sections/service.ts';
+import { findExistingSectionIds, listSections } from '#lib/server/sections/service.ts';
 import { createResourceNotificationsInTx } from '#lib/server/interactions/service.ts';
 import { detachResourceThumbnailInTx } from '#lib/server/media/storage.ts';
 import { safeFetchDiscardBody, type SafeFetchOptions } from '#lib/server/unfurl/safe-fetch.ts';
@@ -111,12 +119,14 @@ export type DuplicateCheckResult =
 			canonicalUrl: string;
 			rawUrl: string;
 			suggestedContentType: ContentType;
+			suggestedSections: ComposerSuggestion[];
 	  }
 	| {
 			exists: true;
 			canonicalUrl: string;
 			rawUrl: string;
 			suggestedContentType: ContentType;
+			suggestedSections: ComposerSuggestion[];
 			originalShareDeleted: boolean;
 			resource: {
 				id: string;
@@ -398,6 +408,22 @@ export async function getResourceShareReferences(
 	return result;
 }
 
+/** Section suggestions for the share form; a failure here must never break the duplicate check. */
+async function safeSuggestSections(
+	resourceId: string | null,
+	domain: string,
+	title: string | null
+): Promise<ComposerSuggestion[]> {
+	try {
+		return await suggestSectionsForLink({ resourceId, domain, title });
+	} catch (error) {
+		logger.warn('Section suggestions failed during the duplicate check', {
+			error: error instanceof Error ? error.message : String(error)
+		});
+		return [];
+	}
+}
+
 /**
  * Checks whether an input URL already has active (deleted_at IS NULL) shares.
  */
@@ -424,17 +450,20 @@ export async function checkDuplicateLink(
 			exists: false,
 			canonicalUrl: resolved.canonicalUrl,
 			rawUrl: resolved.rawUrl,
-			suggestedContentType: classifyContentType(resolved.canonicalUrl)
+			suggestedContentType: classifyContentType(resolved.canonicalUrl),
+			suggestedSections: await safeSuggestSections(null, resolved.domain, null)
 		};
 	}
 
+	const suggestedSections = await safeSuggestSections(resource.id, resolved.domain, resource.title);
 	const shareRef = await getResourceShareReference(resource.id);
 	if (shareRef.totalActiveCount === 0 || !shareRef.firstActiveShare) {
 		return {
 			exists: false,
 			canonicalUrl: resolved.canonicalUrl,
 			rawUrl: resolved.rawUrl,
-			suggestedContentType: classifyContentType(resolved.canonicalUrl)
+			suggestedContentType: classifyContentType(resolved.canonicalUrl),
+			suggestedSections
 		};
 	}
 
@@ -443,6 +472,7 @@ export async function checkDuplicateLink(
 		canonicalUrl: resolved.canonicalUrl,
 		rawUrl: resolved.rawUrl,
 		suggestedContentType: resource.contentType,
+		suggestedSections,
 		originalShareDeleted: shareRef.originalShareDeleted,
 		resource: {
 			id: resource.id,
@@ -502,14 +532,18 @@ export async function createLinkShare(
 		throw new LinkServiceError(403, 'FORBIDDEN', t('link.silentAdminOnly'));
 	}
 
-	const uniqueSectionIds = Array.from(new Set(input.sectionIds ?? []));
+	// `#section` hashtags add sections and drop a trailing tag run from the note (smart capture §2).
+	const tagged = input.note?.includes('#')
+		? applyHashtags(input.note, await listSections())
+		: { note: input.note ?? null, sectionIds: [] };
+	const uniqueSectionIds = Array.from(new Set([...(input.sectionIds ?? []), ...tagged.sectionIds]));
 	if (!isFeedVisible && uniqueSectionIds.length === 0) {
 		throw new LinkServiceError(422, 'VALIDATION_ERROR', t('link.silentNeedsSection'), {
 			sectionIds: [t('link.pickSection')]
 		});
 	}
 
-	const normalizedNote = normalizeNote(input.note);
+	const normalizedNote = normalizeNote(tagged.note);
 	const resolved = await resolveAndCanonicalizeUrl(input.url, options);
 
 	const result = await runCreateShareTransaction(async (tx) => {
@@ -646,6 +680,15 @@ export async function createLinkShare(
 			});
 		}
 
+		// A new share of an already-unfurled link gets suggestions without waiting for a new unfurl.
+		if (
+			!shouldRequeueUnfurl &&
+			resource.unfurlStatus !== 'queued' &&
+			resource.unfurlStatus !== 'running'
+		) {
+			await enqueueEnrichmentJob(tx, resource.id);
+		}
+
 		if (shouldRequeueUnfurl) {
 			await tx
 				.insert(unfurlJobs)
@@ -696,6 +739,7 @@ export async function createLinkShare(
 	});
 
 	notifyUnfurlWorker();
+	notifyEnrichmentWorker();
 	return result;
 }
 
@@ -737,7 +781,15 @@ export async function updateLinkShare(input: UpdateLinkShareInput): Promise<Upda
 			throw new LinkServiceError(403, 'FORBIDDEN', t('share.visibilityAdminOnly'));
 		}
 
-		const nextNote = input.note !== undefined ? normalizeNote(input.note) : existing.note;
+		let nextNote = input.note !== undefined ? normalizeNote(input.note) : existing.note;
+		let hashtagSectionIds: string[] = [];
+		if (input.note && isOwner && input.note.includes('#')) {
+			const tagged = applyHashtags(input.note, await listSections(tx));
+			if (tagged.sectionIds.length > 0) {
+				nextNote = normalizeNote(tagged.note);
+				hashtagSectionIds = tagged.sectionIds;
+			}
+		}
 		if (!isOwner && nextNote !== existing.note) {
 			throw new LinkServiceError(403, 'FORBIDDEN', t('share.noteOwnerOnly'));
 		}
@@ -764,6 +816,11 @@ export async function updateLinkShare(input: UpdateLinkShareInput): Promise<Upda
 			nextSectionIds = currentRows.map((row) => row.sectionId);
 		}
 
+		const sectionsChanged = input.sectionIds !== undefined || hashtagSectionIds.length > 0;
+		if (hashtagSectionIds.length > 0) {
+			nextSectionIds = Array.from(new Set([...nextSectionIds, ...hashtagSectionIds]));
+		}
+
 		if (!nextIsFeedVisible && nextSectionIds.length === 0) {
 			throw new LinkServiceError(422, 'VALIDATION_ERROR', t('link.silentNeedsSection'), {
 				sectionIds: [t('link.pickSection')]
@@ -786,7 +843,7 @@ export async function updateLinkShare(input: UpdateLinkShareInput): Promise<Upda
 				isFeedVisible: linkShares.isFeedVisible
 			});
 
-		if (input.sectionIds !== undefined) {
+		if (sectionsChanged) {
 			await tx.delete(linkShareSections).where(eq(linkShareSections.shareId, existing.id));
 			if (nextSectionIds.length > 0) {
 				await tx.insert(linkShareSections).values(

@@ -38,6 +38,19 @@ export const unfurlJobStatusEnum = pgEnum('unfurl_job_status', [
 	'dead'
 ]);
 export const notificationKindEnum = pgEnum('notification_kind', ['like', 'comment', 'reshare']);
+export const enrichmentJobStatusEnum = pgEnum('enrichment_job_status', [
+	'queued',
+	'running',
+	'completed',
+	'dead'
+]);
+export const suggestionSourceEnum = pgEnum('suggestion_source', ['history', 'ai']);
+export const suggestionStatusEnum = pgEnum('suggestion_status', [
+	'pending',
+	'accepted',
+	'dismissed',
+	'auto_applied'
+]);
 
 export type UserRole = (typeof userRoleEnum.enumValues)[number];
 export type InviteTokenPurpose = (typeof inviteTokenPurposeEnum.enumValues)[number];
@@ -46,6 +59,13 @@ export type UnfurlStatus = (typeof unfurlStatusEnum.enumValues)[number];
 export type SourceChannel = (typeof sourceChannelEnum.enumValues)[number];
 export type UnfurlJobStatus = (typeof unfurlJobStatusEnum.enumValues)[number];
 export type NotificationKind = (typeof notificationKindEnum.enumValues)[number];
+export type SuggestionSource = (typeof suggestionSourceEnum.enumValues)[number];
+export type SuggestionStatus = (typeof suggestionStatusEnum.enumValues)[number];
+
+export interface SuggestedSectionRef {
+	sectionId: string;
+	confidence: 'high' | 'medium';
+}
 
 export interface ProviderMeta {
 	stars?: number;
@@ -223,6 +243,13 @@ export const canonicalResources = pgTable(
 		}),
 		likeCount: integer('like_count').notNull().default(0),
 		commentCount: integer('comment_count').notNull().default(0),
+		/** Readable page text kept by the unfurl worker for search (docs/designs/izgah-smart-capture.md §4). */
+		contentText: text('content_text'),
+		/** Hidden search keywords written by AI enrichment (§6). */
+		aiKeywords: text('ai_keywords')
+			.array()
+			.notNull()
+			.default(sql`'{}'::text[]`),
 		searchVector: tsvector('search_vector'),
 		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 		updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
@@ -451,4 +478,102 @@ export const searchLogs = pgTable(
 		index('search_logs_created_at_idx').on(table.createdAt.desc()),
 		index('search_logs_user_created_idx').on(table.userId, table.createdAt.desc())
 	]
+);
+
+/** Instance-wide settings edited by admins (docs/designs/izgah-smart-capture.md §8). */
+export const instanceSettings = pgTable('instance_settings', {
+	key: text('key').primaryKey(),
+	value: jsonb('value')
+		.$type<Record<string, unknown>>()
+		.notNull()
+		.default(sql`'{}'::jsonb`),
+	/** AES-256-GCM payload (src/lib/server/crypto/secret-box.ts); never sent to the browser. */
+	secret: text('secret'),
+	updatedById: text('updated_by_id').references(() => users.id, { onDelete: 'restrict' }),
+	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
+});
+
+export const enrichmentJobs = pgTable(
+	'enrichment_jobs',
+	{
+		id: text('id')
+			.primaryKey()
+			.$defaultFn(() => crypto.randomUUID()),
+		resourceId: text('resource_id')
+			.notNull()
+			.unique()
+			.references(() => canonicalResources.id, { onDelete: 'cascade' }),
+		status: enrichmentJobStatusEnum('status').notNull().default('queued'),
+		attempts: integer('attempts').notNull().default(0),
+		nextRunAt: timestamp('next_run_at', { withTimezone: true }).notNull().defaultNow(),
+		lockedUntil: timestamp('locked_until', { withTimezone: true }),
+		lockToken: text('lock_token'),
+		lastErrorCode: text('last_error_code'),
+		lastErrorMessage: text('last_error_message'),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+		updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
+	},
+	(table) => [
+		check('enrichment_jobs_attempts_nonnegative_chk', sql`${table.attempts} >= 0`),
+		index('enrichment_jobs_queued_next_run_idx')
+			.on(table.status, table.nextRunAt)
+			.where(sql`${table.status} = 'queued'`),
+		index('enrichment_jobs_running_locked_until_idx')
+			.on(table.status, table.lockedUntil)
+			.where(sql`${table.status} = 'running'`)
+	]
+);
+
+export const resourceEnrichments = pgTable('resource_enrichments', {
+	resourceId: text('resource_id')
+		.primaryKey()
+		.references(() => canonicalResources.id, { onDelete: 'cascade' }),
+	summary: text('summary'),
+	language: text('language'),
+	suggestedSections: jsonb('suggested_sections')
+		.$type<SuggestedSectionRef[]>()
+		.notNull()
+		.default(sql`'[]'::jsonb`),
+	provider: text('provider').notNull(),
+	model: text('model').notNull(),
+	promptVersion: integer('prompt_version').notNull(),
+	inputHash: text('input_hash').notNull(),
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
+});
+
+export const shareSectionSuggestions = pgTable(
+	'share_section_suggestions',
+	{
+		shareId: text('share_id')
+			.notNull()
+			.references(() => linkShares.id, { onDelete: 'cascade' }),
+		sectionId: text('section_id')
+			.notNull()
+			.references(() => sections.id, { onDelete: 'cascade' }),
+		source: suggestionSourceEnum('source').notNull(),
+		status: suggestionStatusEnum('status').notNull().default('pending'),
+		resolvedById: text('resolved_by_id').references(() => users.id, { onDelete: 'restrict' }),
+		resolvedAt: timestamp('resolved_at', { withTimezone: true }),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
+	},
+	(table) => [
+		primaryKey({ columns: [table.shareId, table.sectionId] }),
+		index('share_section_suggestions_section_idx').on(table.sectionId)
+	]
+);
+
+export const aiUsageDaily = pgTable(
+	'ai_usage_daily',
+	{
+		day: text('day').notNull(),
+		provider: text('provider').notNull(),
+		model: text('model').notNull(),
+		requests: integer('requests').notNull().default(0),
+		inputTokens: integer('input_tokens').notNull().default(0),
+		outputTokens: integer('output_tokens').notNull().default(0),
+		failures: integer('failures').notNull().default(0),
+		updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
+	},
+	(table) => [primaryKey({ columns: [table.day, table.provider, table.model] })]
 );

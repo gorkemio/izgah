@@ -55,6 +55,16 @@ export interface FeedShareItem {
 		name: string;
 	}>;
 	attribution: FeedShareAttribution | null;
+	/** Section suggestions, present only for the author and admins (smart capture §10). */
+	suggestions?: FeedShareSuggestion[];
+}
+
+export interface FeedShareSuggestion {
+	sectionId: string;
+	name: string;
+	slug: string;
+	source: 'history' | 'ai';
+	status: 'pending' | 'auto_applied';
 }
 
 export interface ShareCardFormError {

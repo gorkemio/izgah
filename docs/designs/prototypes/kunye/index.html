@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="tr" data-font="b" data-mark="2">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="color-scheme" content="light dark" />
+		<title>Akış — İzgah · Künye prototipi</title>
+		<link rel="stylesheet" href="./kunye.css" />
+		<script src="./proto.js" defer></script>
+	</head>
+	<body>
+		<a class="skip" href="#register">İçeriğe geç</a>
+
+		<header class="topbar">
+			<a class="wordmark" href="./index.html" data-proto>iz<span class="gah">gah</span></a>
+			<a href="#">Ara</a>
+		</header>
+
+		<div class="app has-pane">
+			<nav class="index" aria-label="Ana gezinme">
+				<a class="wordmark" href="./index.html" data-proto>iz<span class="gah">gah</span></a>
+
+				<search>
+					<form class="search" action="#">
+						<label class="sr-only" for="q">İzgah içinde ara</label>
+						<input id="q" type="search" placeholder="Ara" />
+						<kbd>⌘K</kbd>
+					</form>
+				</search>
+
+				<ul class="nav">
+					<li>
+						<a href="./index.html" aria-current="page" data-proto>Akış <span class="n">7</span></a>
+					</li>
+					<li>
+						<a href="#">Sonra oku <span class="n">3</span></a>
+					</li>
+					<li>
+						<a href="#">Bildirimler <span class="n">2</span></a>
+					</li>
+				</ul>
+
+				<div>
+					<h2 class="nav-heading">Bölümler</h2>
+					<ul class="nav">
+						<li>
+							<a href="#">Frontend <span class="n">41</span></a>
+						</li>
+						<li>
+							<a href="#">Tasarım <span class="n">28</span></a>
+						</li>
+						<li>
+							<a href="#">YZ araçları <span class="n">17</span></a>
+						</li>
+						<li>
+							<a href="#">Altyapı <span class="n">12</span></a>
+						</li>
+						<li>
+							<a href="#">Uzun okuma <span class="n">9</span></a>
+						</li>
+					</ul>
+				</div>
+
+				<div class="index-foot">
+					<p class="legend">
+						<a href="#">Mavi</a> linkleri henüz açmadın; <span class="was">soluk</span> olanları
+						açtın. Bu iz yalnızca tarayıcında durur.
+					</p>
+					<ul class="nav">
+						<li><a href="./admin-ai.html" data-proto>Yönetim</a></li>
+						<li><a href="#">Ayarlar</a></li>
+					</ul>
+					<p class="me">Elif Kaya</p>
+				</div>
+			</nav>
+
+			<main class="register" id="register">
+				<header class="register-head">
+					<h1 class="page-title">Akış</h1>
+					<a class="btn btn-primary" href="./share.html" data-proto>İz bırak <kbd>N</kbd></a>
+				</header>
+
+				<form class="composer" action="#">
+					<label class="sr-only" for="url">Link</label>
+					<input
+						id="url"
+						class="input"
+						type="url"
+						placeholder="Link yapıştır ya da sohbetten metin bırak"
+					/>
+					<details class="filter">
+						<summary>Süz: Tümü</summary>
+					</details>
+				</form>
+
+				<section aria-labelledby="day-today">
+					<div class="day">
+						<h2 id="day-today">Bugün <span>26 Kasım Perşembe</span></h2>
+						<span class="count">4 iz</span>
+					</div>
+
+					<article class="entry share-card">
+						<p class="who"><time datetime="2026-11-26T18:41">18:41</time>Deniz Yılmaz</p>
+						<div>
+							<p class="note">
+								Yeni modelleri laptopta denedim; uzun PDF özetlemede şaşırtıcı derecede hızlı.
+								Kurulumu da tek satır.
+							</p>
+							<h3 class="title"><a href="https://github.com/ollama/ollama">ollama/ollama</a></h3>
+							<p class="kunye">
+								<span>github.com</span><span>kod</span><span>Go</span><span>154 B yıldız</span
+								><a href="#">YZ araçları</a><a href="./resource.html" data-proto>2 yorum</a
+								><button class="btn-text" type="button" aria-pressed="false">5 beğeni</button
+								><button class="btn-text" type="button">Sonra oku</button
+								><button class="btn-text" type="button" aria-label="Diğer işlemler">···</button>
+							</p>
+						</div>
+					</article>
+
+					<article class="entry share-card is-selected" aria-current="true">
+						<p class="who"><time datetime="2026-11-26T17:02">17:02</time>Elif Kaya</p>
+						<div>
+							<p class="note">
+								Tema medya sorgularımızın yarısını silebiliriz; v4 token'ları zaten böyle kurulu.
+							</p>
+							<h3 class="title">
+								<a class="demo-visited" href="https://web.dev/articles/light-dark"
+									>CSS color-scheme-dependent colors with light-dark()</a
+								>
+							</h3>
+							<p class="kunye">
+								<span>web.dev</span><span>makale</span><a href="#">Frontend</a
+								><a href="./resource.html" data-proto>3 yorum</a
+								><button class="btn-text" type="button" aria-pressed="true">6 beğeni</button
+								><button class="btn-text" type="button">Sonra oku</button
+								><button class="btn-text" type="button" aria-label="Diğer işlemler">···</button>
+							</p>
+						</div>
+					</article>
+
+					<article class="entry share-card">
+						<p class="who"><time datetime="2026-11-26T15:27">15:27</time>Mert Aydın</p>
+						<div>
+							<p class="note">
+								Künye'deki "iz" fikri buna dayanıyor: açtığın linkler soluyor ama bu bilgi başka
+								sitelere sızmıyor.
+							</p>
+							<h3 class="title">
+								<a href="https://developer.chrome.com/blog/visited-links"
+									>Making :visited more private</a
+								>
+							</h3>
+							<p class="kunye">
+								<span>developer.chrome.com</span><span>makale</span><a href="#">Frontend</a
+								><a href="./resource.html" data-proto>1 yorum</a>
+							</p>
+							<p class="suggest">
+								YZ ekledi: <strong>Frontend</strong><span class="sep">—</span
+								><button class="btn-text" type="button">Geri al</button>
+							</p>
+						</div>
+					</article>
+
+					<article class="entry share-card">
+						<p class="who"><time datetime="2026-11-26T11:08">11:08</time>Zeynep Demir</p>
+						<div>
+							<p class="note">
+								Arama dizinine sayfa metnini eklemeden önce Türkçe kök bulmanın nasıl çalıştığını
+								izleyin. 14. dakikadan sonrası bizim durumumuz.
+							</p>
+							<h3 class="title">
+								<a href="#">PostgreSQL'de tam metin arama: Türkçe kök bulma ve unaccent</a>
+							</h3>
+							<p class="kunye">
+								<span>youtube.com</span><span>video</span><a href="#">Altyapı</a
+								><a href="./resource.html" data-proto>Yorum yok</a><span>2 beğeni</span>
+							</p>
+						</div>
+						<span class="thumb" role="img" aria-label="Video kapağı"
+							><span class="len">24:12</span></span
+						>
+					</article>
+				</section>
+
+				<section aria-labelledby="day-yesterday">
+					<div class="day">
+						<h2 id="day-yesterday">Dün <span>25 Kasım Çarşamba</span></h2>
+						<span class="count">3 iz</span>
+					</div>
+
+					<article class="entry share-card">
+						<p class="who"><time datetime="2026-11-25T21:14">21:14</time>Can Öztürk</p>
+						<div>
+							<p class="note">
+								Küçük ekip araçları için Postgres yerine ne zaman SQLite? Okuyun, cuma konuşalım.
+							</p>
+							<h3 class="title">
+								<a href="https://www.sqlite.org/whentouse.html">Appropriate Uses For SQLite</a>
+							</h3>
+							<p class="kunye">
+								<span>sqlite.org</span><span>makale</span><a href="#">Altyapı</a
+								><a href="#">Uzun okuma</a><a href="./resource.html" data-proto>4 yorum</a
+								><span>3 beğeni</span>
+							</p>
+						</div>
+					</article>
+
+					<article class="entry share-card">
+						<p class="who"><time datetime="2026-11-25T16:40">16:40</time>Elif Kaya</p>
+						<div>
+							<p class="note">Tek yazı ailesiyle hiyerarşi kurmanın en iyi anlatımı.</p>
+							<h3 class="title">
+								<a href="https://practicaltypography.com/">Butterick's Practical Typography</a>
+							</h3>
+							<p class="kunye"><span>practicaltypography.com</span><span>web</span></p>
+							<p class="suggest">
+								Bölüm önerisi: <strong>Tasarım</strong>
+								<span class="why">(bu siteden gelenlerin 5/6'sı)</span><span class="sep">—</span
+								><button class="btn-text" type="button">Ekle</button
+								><button class="btn-text" type="button">Yoksay</button>
+							</p>
+						</div>
+					</article>
+
+					<article class="entry share-card">
+						<p class="who"><time datetime="2026-11-25T09:55">09:55</time>Deniz Yılmaz</p>
+						<div>
+							<p class="note">Kart ızgarası yerine akışla düşünmek için.</p>
+							<h3 class="title">
+								<a class="demo-visited" href="https://every-layout.dev/">Every Layout</a>
+							</h3>
+							<p class="kunye">
+								<span>every-layout.dev</span><span>web</span><a href="#">Tasarım</a
+								><a href="#">Frontend</a><span>2 beğeni</span>
+							</p>
+						</div>
+					</article>
+				</section>
+
+				<p class="more"><a class="btn" href="#">Daha eski izler</a></p>
+			</main>
+
+			<aside class="pane" aria-label="Okuma bölmesi">
+				<p class="pane-meta">web.dev · makale · Frontend</p>
+				<h2 class="res-title">
+					<a class="demo-visited" href="https://web.dev/articles/light-dark"
+						>CSS color-scheme-dependent colors with light-dark()</a
+					>
+				</h2>
+				<p class="url">https://web.dev/articles/light-dark</p>
+				<p class="desc">
+					Use light-dark() to declare colours for the light and dark colour schemes in one place.
+				</p>
+				<div class="summary">
+					<span class="label">Özet · YZ</span>
+					<p>
+						light-dark() işlevi, öğenin color-scheme değerine göre iki renkten birini seçer; açık ve
+						koyu tema renkleri tek bildirimde yazılır.
+					</p>
+				</div>
+				<p class="pane-actions">
+					<a class="btn" href="https://web.dev/articles/light-dark">Kaynağa git</a>
+					<button class="btn" type="button" aria-pressed="true">Beğendin · 6</button>
+					<button class="btn" type="button">Sonra oku</button>
+					<button class="btn" type="button">Kopyala</button>
+				</p>
+
+				<h3 class="block-title">Paylaşanlar <span>2</span></h3>
+				<ol class="thread">
+					<li>
+						<p class="by"><strong>Elif Kaya</strong> · <time>bugün 17:02</time> · Frontend</p>
+						<p>Tema medya sorgularımızın yarısını silebiliriz; v4 token'ları zaten böyle kurulu.</p>
+					</li>
+					<li>
+						<p class="by"><strong>Can Öztürk</strong> · <time>12 Kasım</time> · ilk paylaşım</p>
+						<p>Safari desteği oturunca dönelim.</p>
+					</li>
+				</ol>
+
+				<h3 class="block-title">Tartışma <span>3 yorum</span></h3>
+				<ol class="thread">
+					<li>
+						<p class="by"><strong>Mert Aydın</strong> · <time>17:20</time></p>
+						<p>Yüksek kontrast paletini forced-colors ile birlikte test etmek lazım.</p>
+					</li>
+					<li>
+						<p class="by"><strong>Zeynep Demir</strong> · <time>17:41</time></p>
+						<p>Token dosyası 650 satırdan 200'e iner gibi duruyor.</p>
+					</li>
+					<li>
+						<p class="by"><strong>Elif Kaya</strong> · <time>18:02</time></p>
+						<p>Bu hafta v4 token'larında deniyorum, sonucu buraya yazarım.</p>
+					</li>
+				</ol>
+				<form class="comment-form" action="#">
+					<label class="sr-only" for="comment">Yorum</label>
+					<textarea id="comment" class="textarea" rows="3" placeholder="Yorum yaz"></textarea>
+					<button class="btn" type="submit">Gönder</button>
+				</form>
+			</aside>
+		</div>
+
+		<nav class="tabbar" aria-label="Alt gezinme">
+			<a href="./index.html" aria-current="page" data-proto>Akış</a>
+			<a href="#">Bölümler</a>
+			<a class="add" href="./share.html" data-proto>İz bırak</a>
+			<a href="#">Sonra oku</a>
+			<a href="#">Ben</a>
+		</nav>
+
+		<aside class="proto" aria-label="Prototip denetimleri">
+			<strong>Künye prototipi</strong>
+			<label
+				>Tema
+				<select name="theme" data-proto-control>
+					<option value="auto">Sistem</option>
+					<option value="light">Açık</option>
+					<option value="dark">Koyu</option>
+				</select></label
+			>
+			<label
+				>Yazı
+				<select name="font" data-proto-control>
+					<option value="a">A · Ysabeau Office</option>
+					<option value="b">B · Atkinson Hyperlegible Next</option>
+				</select></label
+			>
+			<label
+				>İşaret
+				<select name="mark" data-proto-control>
+					<option value="1">1 · altı çizili</option>
+					<option value="2">2 · iz + gah</option>
+					<option value="3">3 · italik</option>
+				</select></label
+			>
+			<nav>
+				<a href="./index.html" data-proto>Akış</a>
+				<a href="./resource.html" data-proto>Kaynak</a>
+				<a href="./share.html" data-proto>Paylaş</a>
+				<a href="./admin-ai.html" data-proto>/admin/ai</a>
+				<a href="./site.html" data-proto>izgah.com</a>
+			</nav>
+		</aside>
+	</body>
+</html>

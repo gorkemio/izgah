@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en" data-font="b" data-mark="2">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="color-scheme" content="light dark" />
+		<title>Izgah — a shared link library for small teams (Künye prototype)</title>
+		<link rel="stylesheet" href="./kunye.css" />
+		<script src="./proto.js" defer></script>
+	</head>
+	<body>
+		<div class="site">
+			<header class="site-head">
+				<a class="wordmark" href="./site.html" data-proto>iz<span class="gah">gah</span></a>
+				<nav aria-label="Site">
+					<ul>
+						<li><a href="https://github.com/gorkemio/izgah#readme">Docs</a></li>
+						<li><a href="https://github.com/gorkemio/izgah">Source</a></li>
+						<li><a href="#" hreflang="tr" lang="tr">Türkçe</a></li>
+					</ul>
+				</nav>
+			</header>
+
+			<main>
+				<h1 class="statement">Your team keeps finding good links. Izgah keeps them findable.</h1>
+				<p class="lede">
+					A small, self-hosted feed where a team shares the links it finds, each with a note, filed
+					in sections, with one discussion per link. Open source under the AGPL. One container and
+					PostgreSQL.
+				</p>
+
+				<pre
+					class="install"
+					tabindex="0"
+					aria-label="Install commands"
+				><code><span class="c"># on a server with Docker, behind your reverse proxy</span>
+git clone https://github.com/gorkemio/izgah && cd izgah
+export POSTGRES_PASSWORD='…' BETTER_AUTH_SECRET="$(openssl rand -hex 32)" ORIGIN='https://links.example.com'
+docker compose -f docker-compose.prod.yml up -d --build
+docker compose -f docker-compose.prod.yml exec app node build/cli.js create-admin --email you@example.com --name You</code></pre>
+				<p class="after">
+					Open the invite link it prints, set a password, invite your team.
+					<a href="https://github.com/gorkemio/izgah/blob/main/docs/deploy/docker-compose.md"
+						>Step-by-step guide</a
+					>.
+				</p>
+
+				<figure class="specimen" aria-labelledby="specimen-cap">
+					<div class="day">
+						<h2>Thursday <span>26 November</span></h2>
+						<span class="count">3 links</span>
+					</div>
+					<article class="entry">
+						<p class="who"><time>18:41</time>Deniz</p>
+						<div>
+							<p class="note">Tried the new models on a laptop; surprisingly fast on long PDFs.</p>
+							<h3 class="title"><a href="https://github.com/ollama/ollama">ollama/ollama</a></h3>
+							<p class="kunye">
+								<span>github.com</span><span>code</span><span>AI tools</span><span>2 comments</span>
+							</p>
+						</div>
+					</article>
+					<article class="entry">
+						<p class="who"><time>17:02</time>Elif</p>
+						<div>
+							<p class="note">We can delete half of our theme media queries with this.</p>
+							<h3 class="title">
+								<a href="https://web.dev/articles/light-dark"
+									>CSS color-scheme-dependent colors with light-dark()</a
+								>
+							</h3>
+							<p class="kunye">
+								<span>web.dev</span><span>article</span><span>Frontend</span><span>3 comments</span>
+							</p>
+						</div>
+					</article>
+					<article class="entry">
+						<p class="who"><time>15:27</time>Mert</p>
+						<div>
+							<p class="note">Why opened links fade in Izgah, and why that stays private.</p>
+							<h3 class="title">
+								<a href="https://developer.chrome.com/blog/visited-links"
+									>Making :visited more private</a
+								>
+							</h3>
+							<p class="kunye">
+								<span>developer.chrome.com</span><span>article</span><span>Frontend</span>
+							</p>
+						</div>
+					</article>
+					<figcaption id="specimen-cap" class="specimen-cap">
+						This is the app's own stylesheet, not a screenshot. Links you have opened look faded.
+					</figcaption>
+				</figure>
+
+				<h2>What it does</h2>
+				<ul class="annotated">
+					<li>
+						<a href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-core.md"
+							>One link, one conversation</a
+						>
+						<p>
+							Share a link someone already shared and both posts point to the same discussion, with
+							the first sharer credited.
+						</p>
+					</li>
+					<li>
+						<a href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-core.md"
+							>Sections, and links that stay out of the feed</a
+						>
+						<p>
+							Admins file links into sections. Reference links can sit in a section without showing
+							up in the feed.
+						</p>
+					</li>
+					<li>
+						<a href="https://github.com/gorkemio/izgah/blob/main/src/lib/server/search/service.ts"
+							>Search in English and Turkish</a
+						>
+						<p>Titles, notes, page text and URL fragments, with <kbd>⌘K</kbd> from anywhere.</p>
+					</li>
+					<li>
+						<a href="https://github.com/gorkemio/izgah/tree/main/extensions#readme"
+							>Browser extensions</a
+						>
+						<p>
+							Chrome, Firefox and Safari. <kbd>Alt+Shift+I</kbd> shares the current tab; the
+							extension talks only to your server.
+						</p>
+					</li>
+					<li>
+						<a
+							href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-smart-capture.md"
+							>Smart capture</a
+						>
+						<p>
+							Type <code>#section</code> in a note, get suggestions from how your team files things,
+							and, if an admin adds a key, short summaries and AI section suggestions. Off until you
+							turn it on.
+						</p>
+					</li>
+					<li>
+						<a href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-ui-v2.md"
+							>Works without JavaScript</a
+						>
+						<p>Every core flow is a form or a link. Scripts only make it quicker.</p>
+					</li>
+				</ul>
+
+				<h2>Why it exists</h2>
+				<p class="prose">
+					It started as a WhatsApp group. Good links scrolled away within a day, the same video was
+					shared three times with three separate discussions, and nobody could find "that article
+					about…" a month later.
+				</p>
+
+				<h2>What it doesn't do</h2>
+				<p class="prose">
+					Izgah is not a personal bookmark manager. It doesn't archive whole pages, highlight text
+					or keep private folders. If that is what you need,
+					<a href="https://karakeep.app">Karakeep</a> and
+					<a href="https://linkwarden.app">Linkwarden</a> are good self-hosted choices.
+				</p>
+
+				<h2>What runs on your server, and what leaves it</h2>
+				<dl class="facts">
+					<dt>Runs</dt>
+					<dd>One Node.js container, PostgreSQL, and a folder of WebP thumbnails.</dd>
+					<dt>Leaves</dt>
+					<dd>
+						Requests to the pages your team shares, to read titles and preview images; GitHub's API
+						for repository details. If an admin turns on AI: the link's title, description, a text
+						excerpt and your section names, to the provider you chose.
+					</dd>
+					<dt>Never</dt>
+					<dd>
+						Analytics, telemetry or mail to us. There is no "us": izgah.com hosts no instances.
+					</dd>
+				</dl>
+
+				<h2>Roadmap</h2>
+				<p class="prose">
+					Next: importing a chat export, read later, export and RSS, sharing from phones.
+					<a href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-roadmap.md"
+						>The whole roadmap</a
+					>
+					is a document in the repository.
+				</p>
+			</main>
+
+			<footer class="site-foot">
+				<p>Izgah is free software under the GNU AGPL-3.0.</p>
+				<ul>
+					<li><a href="https://github.com/gorkemio/izgah">Source</a></li>
+					<li>
+						<a href="https://github.com/gorkemio/izgah/blob/main/CONTRIBUTING.md">Contributing</a>
+					</li>
+					<li><a href="https://github.com/gorkemio/izgah/blob/main/SECURITY.md">Security</a></li>
+				</ul>
+			</footer>
+		</div>
+
+		<aside class="proto" aria-label="Prototype controls">
+			<strong>Künye prototype</strong>
+			<label
+				>Theme
+				<select name="theme" data-proto-control>
+					<option value="auto">System</option>
+					<option value="light">Light</option>
+					<option value="dark">Dark</option>
+				</select></label
+			>
+			<label
+				>Font
+				<select name="font" data-proto-control>
+					<option value="a">A · Ysabeau Office</option>
+					<option value="b">B · Atkinson Hyperlegible Next</option>
+				</select></label
+			>
+			<label
+				>Mark
+				<select name="mark" data-proto-control>
+					<option value="1">1 · underlined</option>
+					<option value="2">2 · iz + gah</option>
+					<option value="3">3 · italic</option>
+				</select></label
+			>
+			<nav>
+				<a href="./index.html" data-proto>Feed</a>
+				<a href="./resource.html" data-proto>Resource</a>
+				<a href="./share.html" data-proto>Share</a>
+				<a href="./admin-ai.html" data-proto>/admin/ai</a>
+				<a href="./site.html" data-proto>izgah.com</a>
+			</nav>
+		</aside>
+	</body>
+</html>

@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="tr" data-font="b" data-mark="2">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="color-scheme" content="light dark" />
+		<title>Akıllı ekleme — İzgah · Künye prototipi</title>
+		<link rel="stylesheet" href="./kunye.css" />
+		<script src="./proto.js" defer></script>
+	</head>
+	<body>
+		<a class="skip" href="#register">İçeriğe geç</a>
+
+		<header class="topbar">
+			<a class="wordmark" href="./index.html" data-proto>iz<span class="gah">gah</span></a>
+			<a href="./index.html" data-proto>Akış</a>
+		</header>
+
+		<div class="app is-wide">
+			<nav class="index" aria-label="Ana gezinme">
+				<a class="wordmark" href="./index.html" data-proto>iz<span class="gah">gah</span></a>
+				<search>
+					<form class="search" action="#">
+						<label class="sr-only" for="q">İzgah içinde ara</label>
+						<input id="q" type="search" placeholder="Ara" />
+						<kbd>⌘K</kbd>
+					</form>
+				</search>
+				<ul class="nav">
+					<li>
+						<a href="./index.html" data-proto>Akış <span class="n">7</span></a>
+					</li>
+					<li>
+						<a href="#">Sonra oku <span class="n">3</span></a>
+					</li>
+					<li>
+						<a href="#">Bildirimler <span class="n">2</span></a>
+					</li>
+				</ul>
+				<div>
+					<h2 class="nav-heading">Bölümler</h2>
+					<ul class="nav">
+						<li>
+							<a href="#">Frontend <span class="n">41</span></a>
+						</li>
+						<li>
+							<a href="#">Tasarım <span class="n">28</span></a>
+						</li>
+						<li>
+							<a href="#">YZ araçları <span class="n">17</span></a>
+						</li>
+						<li>
+							<a href="#">Altyapı <span class="n">12</span></a>
+						</li>
+						<li>
+							<a href="#">Uzun okuma <span class="n">9</span></a>
+						</li>
+					</ul>
+				</div>
+				<div class="index-foot">
+					<ul class="nav">
+						<li><a href="./admin-ai.html" aria-current="page" data-proto>Yönetim</a></li>
+						<li><a href="#">Ayarlar</a></li>
+					</ul>
+					<p class="me">Elif Kaya</p>
+				</div>
+			</nav>
+
+			<main class="register" id="register">
+				<header class="register-head">
+					<div>
+						<h1 class="page-title">Akıllı ekleme</h1>
+						<p class="page-lead">
+							Bölüm önerileri ve isteğe bağlı yapay zekâ. Hepsi paylaşımdan sonra arka planda
+							çalışır; paylaşmayı yavaşlatmaz.
+						</p>
+					</div>
+				</header>
+
+				<nav class="subnav" aria-label="Yönetim sekmeleri">
+					<a href="#">Üyeler</a>
+					<a href="#">Bölümler</a>
+					<a href="#">Bölümsüz <span class="n">4</span></a>
+					<a href="./admin-ai.html" aria-current="page" data-proto>Akıllı ekleme</a>
+					<a href="#">Sistem</a>
+					<a href="#">Denetim</a>
+				</nav>
+
+				<p class="state">
+					Durum: <strong>açık</strong> — OpenRouter · <code>google/gemini-3.8-flash</code> · bugün
+					<span class="num">14 / 200</span> istek
+				</p>
+
+				<form action="#">
+					<section class="row" aria-labelledby="h-history">
+						<div>
+							<h2 id="h-history">Geçmişe dayalı öneriler</h2>
+							<p>
+								Bölümü olmayan paylaşımlara, ekibin bu siteyi ve benzer başlıkları nereye koyduğuna
+								bakarak bölüm önerir. Sunucudan hiçbir şey çıkmaz.
+							</p>
+						</div>
+						<div>
+							<label class="check"
+								><input type="checkbox" name="historySuggestions" checked /> Öneriler açık</label
+							>
+						</div>
+					</section>
+
+					<section class="row" aria-labelledby="h-provider">
+						<div>
+							<h2 id="h-provider">Sağlayıcı ve anahtar</h2>
+							<p>
+								Anahtar bu sunucuda şifreli saklanır, tarayıcıya hiç gönderilmez. Yerel bir model
+								(Ollama, LM Studio) kullanırsan veri sunucundan çıkmaz.
+							</p>
+						</div>
+						<div>
+							<fieldset>
+								<legend class="sr-only">Sağlayıcı</legend>
+								<div class="choices">
+									<label class="check"
+										><input type="radio" name="provider" value="openrouter" checked />
+										<span>OpenRouter <small>Birçok modele tek anahtarla erişim</small></span></label
+									>
+									<label class="check"
+										><input type="radio" name="provider" value="anthropic" />
+										<span>Anthropic <small>Claude modelleri</small></span></label
+									>
+									<label class="check"
+										><input type="radio" name="provider" value="openai" />
+										<span>OpenAI</span></label
+									>
+									<label class="check"
+										><input type="radio" name="provider" value="gemini" />
+										<span>Google Gemini</span></label
+									>
+									<label class="check"
+										><input type="radio" name="provider" value="custom" />
+										<span
+											>Özel adres
+											<small>OpenAI uyumlu bir sunucu: Ollama, LM Studio, vLLM</small></span
+										></label
+									>
+								</div>
+							</fieldset>
+							<div class="field" style="margin-block-start: 16px">
+								<label class="label" for="key">API anahtarı</label>
+								<input
+									id="key"
+									class="input mono"
+									type="password"
+									autocomplete="off"
+									placeholder="••••3f9a kayıtlı · değiştirmek için yenisini yaz"
+								/>
+								<p class="hint">
+									<button class="btn-text" type="button">Anahtarı kaldır</button>
+								</p>
+							</div>
+							<div class="field">
+								<label class="label" for="model">Model</label>
+								<input
+									id="model"
+									class="input mono"
+									list="models"
+									value="google/gemini-3.8-flash"
+								/>
+								<datalist id="models">
+									<option value="google/gemini-3.8-flash"></option>
+									<option value="anthropic/claude-haiku-5-5"></option>
+									<option value="meta-llama/llama-3.3-70b-instruct"></option>
+								</datalist>
+								<p class="hint">
+									Liste 26 Kasım 11:02'de alındı: yapılandırılmış çıktıyı destekleyen 212 model.
+								</p>
+							</div>
+							<p class="inline-actions">
+								<button class="btn btn-primary" type="submit">Kaydet</button>
+								<button class="btn" type="submit">Bağlantıyı sına</button>
+								<button class="btn" type="submit">Modelleri getir</button>
+							</p>
+						</div>
+					</section>
+
+					<section class="row" aria-labelledby="h-what">
+						<div>
+							<h2 id="h-what">Ne yapsın?</h2>
+							<p>
+								Model üyelerin notlarına dokunmaz ve yeni bölüm açmaz; yalnızca var olan bölümlerden
+								seçer.
+							</p>
+						</div>
+						<div>
+							<fieldset>
+								<legend>Bölüm önerisi</legend>
+								<div class="choices">
+									<label class="check"
+										><input type="radio" name="sectionMode" value="off" />
+										<span>Kapalı</span></label
+									>
+									<label class="check"
+										><input type="radio" name="sectionMode" value="suggest" checked />
+										<span
+											>Öner
+											<small>Paylaşana ve yöneticilere "Ekle · Yoksay" olarak görünür</small></span
+										></label
+									>
+									<label class="check"
+										><input type="radio" name="sectionMode" value="auto" />
+										<span
+											>Otomatik ekle
+											<small
+												>Yalnızca bölümü olmayan paylaşımlara, yalnızca yüksek güvenle; kartta "YZ
+												ekledi · Geri al" görünür</small
+											></span
+										></label
+									>
+								</div>
+							</fieldset>
+							<div class="choices" style="margin-block-start: 16px">
+								<label class="check"
+									><input type="checkbox" name="summaries" checked />
+									<span
+										>Kısa özet <small>Türkçe, bir iki cümle, "Özet · YZ" etiketiyle</small></span
+									></label
+								>
+								<label class="check"
+									><input type="checkbox" name="keywords" checked />
+									<span
+										>Arama anahtar kelimeleri
+										<small>Türkçe ve İngilizce; görünmez, yalnızca aramayı güçlendirir</small></span
+									></label
+								>
+							</div>
+						</div>
+					</section>
+
+					<section class="row" aria-labelledby="h-privacy">
+						<div>
+							<h2 id="h-privacy">Sunucudan ne çıkar?</h2>
+							<p>Her link için tek istek. Seçtiğin sağlayıcıya yalnızca şunlar gider:</p>
+						</div>
+						<div>
+							<ul class="sent">
+								<li>linkin adresi, alan adı ve türü</li>
+								<li>başlık, açıklama ve site adı</li>
+								<li>sayfa metninin ilk 6.000 karakteri</li>
+								<li>bölümlerin adları ve açıklamaları</li>
+							</ul>
+							<p class="never">
+								Hiçbir zaman gitmez: üye adları, e-posta adresleri, yorumlar, beğeniler, başka
+								linkler.
+							</p>
+							<div class="choices" style="margin-block-start: 14px">
+								<label class="check"
+									><input type="checkbox" name="sendExcerpt" checked /> Sayfa metninden kesit
+									gönder</label
+								>
+								<label class="check"
+									><input type="checkbox" name="includeNotes" /> Üyelerin notlarını da gönder</label
+								>
+							</div>
+							<div class="field" style="margin-block-start: 14px">
+								<label class="label" for="excluded">Hariç tutulan alan adları</label>
+								<textarea
+									id="excluded"
+									class="textarea mono"
+									rows="3"
+									placeholder="Her satıra bir alan adı; alt alan adları da dahil"
+								>
+docs.google.com
+notion.so</textarea>
+							</div>
+						</div>
+					</section>
+
+					<section class="row" aria-labelledby="h-limit">
+						<div>
+							<h2 id="h-limit">Günlük sınır</h2>
+							<p>Sınıra gelince işler ertesi güne kalır; paylaşım etkilenmez.</p>
+						</div>
+						<div>
+							<label class="label sr-only" for="limit">Günlük istek sınırı</label>
+							<input
+								id="limit"
+								class="input num"
+								style="inline-size: 8rem"
+								type="number"
+								value="200"
+							/>
+						</div>
+					</section>
+				</form>
+
+				<section class="row" aria-labelledby="h-usage">
+					<div>
+						<h2 id="h-usage">Kullanım</h2>
+						<p>Son yedi gün. Ücreti sağlayıcının panelinden takip et.</p>
+					</div>
+					<div>
+						<table class="data">
+							<thead>
+								<tr>
+									<th scope="col">Gün</th>
+									<th scope="col" class="r">İstek</th>
+									<th scope="col" class="r">Girdi token</th>
+									<th scope="col" class="r">Çıktı token</th>
+									<th scope="col" class="r">Hata</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>26 Kas</td>
+									<td class="r">14</td>
+									<td class="r">31.204</td>
+									<td class="r">2.180</td>
+									<td class="r">0</td>
+								</tr>
+								<tr>
+									<td>25 Kas</td>
+									<td class="r">22</td>
+									<td class="r">49.870</td>
+									<td class="r">3.512</td>
+									<td class="r bad">1</td>
+								</tr>
+								<tr>
+									<td>24 Kas</td>
+									<td class="r">9</td>
+									<td class="r">18.441</td>
+									<td class="r">1.390</td>
+									<td class="r">0</td>
+								</tr>
+								<tr>
+									<td>23 Kas</td>
+									<td class="r">3</td>
+									<td class="r">6.120</td>
+									<td class="r">455</td>
+									<td class="r">0</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<section class="row" aria-labelledby="h-queue">
+					<div>
+						<h2 id="h-queue">Kuyruk</h2>
+						<p>Önizleme bitince her link bir kez sıraya girer.</p>
+					</div>
+					<div>
+						<p class="num">Bekleyen 3 · çalışan 1 · <span class="bad">başarısız 1</span></p>
+						<p class="inline-actions">
+							<button class="btn" type="button">Başarısızları yeniden dene</button>
+							<button class="btn" type="button">Mevcut 418 linki zenginleştir</button>
+						</p>
+					</div>
+				</section>
+
+				<section class="row" aria-labelledby="h-purge">
+					<div>
+						<h2 id="h-purge">YZ verisini sil</h2>
+						<p>
+							Özetleri, anahtar kelimeleri ve YZ önerilerini siler. Kabul edilmiş bölümler yerinde
+							kalır.
+						</p>
+					</div>
+					<div>
+						<button class="btn btn-danger" type="button">YZ verisini sil</button>
+					</div>
+				</section>
+			</main>
+		</div>
+
+		<aside class="proto" aria-label="Prototip denetimleri">
+			<strong>Künye prototipi</strong>
+			<label
+				>Tema
+				<select name="theme" data-proto-control>
+					<option value="auto">Sistem</option>
+					<option value="light">Açık</option>
+					<option value="dark">Koyu</option>
+				</select></label
+			>
+			<label
+				>Yazı
+				<select name="font" data-proto-control>
+					<option value="a">A · Ysabeau Office</option>
+					<option value="b">B · Atkinson Hyperlegible Next</option>
+				</select></label
+			>
+			<label
+				>İşaret
+				<select name="mark" data-proto-control>
+					<option value="1">1 · altı çizili</option>
+					<option value="2">2 · iz + gah</option>
+					<option value="3">3 · italik</option>
+				</select></label
+			>
+			<nav>
+				<a href="./index.html" data-proto>Akış</a>
+				<a href="./resource.html" data-proto>Kaynak</a>
+				<a href="./share.html" data-proto>Paylaş</a>
+				<a href="./admin-ai.html" data-proto>/admin/ai</a>
+				<a href="./site.html" data-proto>izgah.com</a>
+			</nav>
+		</aside>
+	</body>
+</html>

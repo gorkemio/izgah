@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="tr" data-font="b" data-mark="2">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="color-scheme" content="light dark" />
+		<title>İz bırak — İzgah · Künye prototipi</title>
+		<link rel="stylesheet" href="./kunye.css" />
+		<script src="./proto.js" defer></script>
+	</head>
+	<body>
+		<header class="topbar">
+			<a class="wordmark" href="./index.html" data-proto>iz<span class="gah">gah</span></a>
+			<a href="#">Ara</a>
+		</header>
+
+		<div class="app" inert>
+			<nav class="index" aria-label="Ana gezinme">
+				<a class="wordmark" href="./index.html" data-proto>iz<span class="gah">gah</span></a>
+				<search>
+					<form class="search" action="#">
+						<label class="sr-only" for="q">İzgah içinde ara</label>
+						<input id="q" type="search" placeholder="Ara" />
+						<kbd>⌘K</kbd>
+					</form>
+				</search>
+				<ul class="nav">
+					<li>
+						<a href="#" aria-current="page">Akış <span class="n">7</span></a>
+					</li>
+					<li>
+						<a href="#">Sonra oku <span class="n">3</span></a>
+					</li>
+					<li>
+						<a href="#">Bildirimler <span class="n">2</span></a>
+					</li>
+				</ul>
+				<div>
+					<h2 class="nav-heading">Bölümler</h2>
+					<ul class="nav">
+						<li>
+							<a href="#">Frontend <span class="n">41</span></a>
+						</li>
+						<li>
+							<a href="#">Tasarım <span class="n">28</span></a>
+						</li>
+						<li>
+							<a href="#">YZ araçları <span class="n">17</span></a>
+						</li>
+						<li>
+							<a href="#">Altyapı <span class="n">12</span></a>
+						</li>
+						<li>
+							<a href="#">Uzun okuma <span class="n">9</span></a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+			<main class="register">
+				<header class="register-head">
+					<h1 class="page-title">Akış</h1>
+					<span class="btn btn-primary">İz bırak <kbd>N</kbd></span>
+				</header>
+				<div class="day">
+					<h2>Bugün <span>26 Kasım Perşembe</span></h2>
+					<span class="count">4 iz</span>
+				</div>
+				<article class="entry share-card">
+					<p class="who"><time>18:41</time>Deniz Yılmaz</p>
+					<div>
+						<p class="note">
+							Yeni modelleri laptopta denedim; uzun PDF özetlemede şaşırtıcı derecede hızlı.
+						</p>
+						<h3 class="title"><a href="#">ollama/ollama</a></h3>
+						<p class="kunye"><span>github.com</span><span>kod</span><span>YZ araçları</span></p>
+					</div>
+				</article>
+			</main>
+		</div>
+
+		<div class="backdrop"></div>
+		<section class="sheet" role="dialog" aria-modal="true" aria-labelledby="share-title">
+			<header class="sheet-head">
+				<h2 id="share-title">İz bırak</h2>
+				<a class="btn-text" href="./index.html" data-proto>Kapat</a>
+			</header>
+			<form action="#">
+				<div class="field">
+					<label class="label" for="share-url">Link</label>
+					<input
+						id="share-url"
+						class="input mono"
+						type="url"
+						value="https://practicaltypography.com/"
+					/>
+					<p class="status">Bu link daha önce paylaşılmamış.</p>
+				</div>
+
+				<div class="field">
+					<label class="label" for="share-note">Not</label>
+					<textarea id="share-note" class="textarea" rows="3">
+Tek yazı ailesiyle hiyerarşi kurmanın en iyi anlatımı.</textarea>
+					<p class="hint">
+						Ekip neden okumalı? Notun sonuna <code>#tasarım</code> yazarsan bölüm de seçilmiş olur.
+					</p>
+				</div>
+
+				<fieldset>
+					<legend>Bölümler <span class="hint">(isteğe bağlı)</span></legend>
+					<ul class="checks">
+						<li class="is-suggested">
+							<label class="check"
+								><input type="checkbox" name="sectionIds" value="design" />
+								<span
+									>Tasarım <span class="why">— önerilen: bu siteden gelenlerin 5/6'sı</span></span
+								></label
+							>
+						</li>
+						<li>
+							<label class="check"
+								><input type="checkbox" name="sectionIds" value="frontend" /> Frontend</label
+							>
+						</li>
+						<li>
+							<label class="check"
+								><input type="checkbox" name="sectionIds" value="ai" /> YZ araçları</label
+							>
+						</li>
+						<li>
+							<label class="check"
+								><input type="checkbox" name="sectionIds" value="infra" /> Altyapı</label
+							>
+						</li>
+						<li>
+							<label class="check"
+								><input type="checkbox" name="sectionIds" value="long" /> Uzun okuma</label
+							>
+						</li>
+					</ul>
+				</fieldset>
+
+				<div class="field">
+					<label class="check"
+						><input type="checkbox" name="silent" /> Ana akışta yayınlama (yalnızca seçili bölümlere
+						sessiz ekle)</label
+					>
+				</div>
+
+				<footer class="sheet-foot">
+					<label class="hint" for="share-type"
+						>Tür
+						<select id="share-type" class="select" style="inline-size: auto; min-block-size: 32px">
+							<option>Otomatik (web)</option>
+							<option>Makale</option>
+							<option>Video</option>
+							<option>Kod</option>
+							<option>Sosyal</option>
+						</select></label
+					>
+					<span class="buttons">
+						<a class="btn" href="./index.html" data-proto>Vazgeç</a>
+						<button class="btn btn-primary" type="submit">İz bırak</button>
+					</span>
+				</footer>
+			</form>
+		</section>
+
+		<aside class="proto" aria-label="Prototip denetimleri">
+			<strong>Künye prototipi</strong>
+			<label
+				>Tema
+				<select name="theme" data-proto-control>
+					<option value="auto">Sistem</option>
+					<option value="light">Açık</option>
+					<option value="dark">Koyu</option>
+				</select></label
+			>
+			<label
+				>Yazı
+				<select name="font" data-proto-control>
+					<option value="a">A · Ysabeau Office</option>
+					<option value="b">B · Atkinson Hyperlegible Next</option>
+				</select></label
+			>
+			<label
+				>İşaret
+				<select name="mark" data-proto-control>
+					<option value="1">1 · altı çizili</option>
+					<option value="2">2 · iz + gah</option>
+					<option value="3">3 · italik</option>
+				</select></label
+			>
+			<nav>
+				<a href="./index.html" data-proto>Akış</a>
+				<a href="./resource.html" data-proto>Kaynak</a>
+				<a href="./share.html" data-proto>Paylaş</a>
+				<a href="./admin-ai.html" data-proto>/admin/ai</a>
+				<a href="./site.html" data-proto>izgah.com</a>
+			</nav>
+		</aside>
+	</body>
+</html>

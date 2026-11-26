@@ -956,4 +956,24 @@
 			box-shadow: none;
 		}
 	}
+
+	/* Labelled machine summary (docs/designs/izgah-smart-capture.md §10). */
+	.ai-summary {
+		margin-block: var(--space-3) 0;
+		padding-block: var(--space-2);
+		border-block: 1px solid var(--color-line);
+	}
+
+	.ai-summary-label {
+		display: block;
+		font: var(--text-hint);
+		color: var(--color-text-muted);
+	}
+
+	.ai-summary p {
+		margin: var(--space-1) 0 0;
+		font: var(--text-body);
+		font-style: italic;
+		color: var(--color-text-secondary);
+	}
 }
