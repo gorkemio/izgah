@@ -11,6 +11,7 @@
 - **Akış** — içerik türüne duyarlı kartlar (video, repo, sosyal, makale, web), beğeniler, yorumlar ve "yeni paylaşım" bildirimleriyle ters kronolojik bağlantı akışı.
 - **Bölümler** — yöneticilerin yönettiği konular. Bir bağlantı birden fazla bölümde olabilir; yöneticiler akışa düşürmeden "sessiz" kaynak ekleyebilir.
 - **Arama** — başlık, açıklama, not ve URL parçalarında Türkçe ve İngilizce tam metin arama ve `⌘K` / `Ctrl+K` komut paleti.
+- **Akıllı ekleme** — Notta `#bölüm` yazmak linki o bölüme koyar; bölümler ekibin geçmişine göre önerilir; yöneticiler isteğe bağlı olarak OpenRouter, Anthropic, OpenAI, Gemini ya da yerel OpenAI uyumlu bir modeli bağlayıp kısa özet, arama anahtar kelimesi ve bölüm önerisi alabilir. Yapılandırılana kadar kapalıdır; sayfa metni de aranabilir.
 - **Bağlantı önizlemeleri** — SSRF korumalı süreç içi işçi başlık, açıklama ve kapak görsellerini çeker; küçültülmüş WebP görselleri yerelde saklar.
 - **Tarayıcı eklentileri** — Chrome, Firefox ve Safari eklentileri açık sekmeyi kişisel API anahtarıyla paylaşır.
 - **JavaScript olmadan çalışır** — paylaşım, gezinme, arama, detay, tema ve yönetim önce düz form ve bağlantıdır; JavaScript yalnızca iyileştirir.
@@ -74,26 +75,28 @@ INSTANCE_NAME=İzgah
 
 ### Ortam değişkenleri
 
-| Ad                      | Zorunlu       | Varsayılan         | Açıklama                                                                                     |
-| :---------------------- | :------------ | :----------------- | :------------------------------------------------------------------------------------------- |
-| `DATABASE_URL`          | evet          | —                  | PostgreSQL bağlantı URI'si.                                                                  |
-| `BETTER_AUTH_SECRET`    | evet          | —                  | Oturum imzalama anahtarı (en az 32 karakter).                                                |
-| `ORIGIN`                | üretimde evet | —                  | Örneğinizin herkese açık HTTPS kökü; CSRF ve davet bağlantıları için kullanılır.             |
-| `DEFAULT_LOCALE`        | hayır         | `en`               | Dil seçmemiş üyeler için arayüz dili (`en` veya `tr`).                                       |
-| `APP_TIME_ZONE`         | hayır         | `UTC`              | Tarihler ve "bugün" sınırı için IANA saat dilimi (ör. `Europe/Istanbul`).                    |
-| `INSTANCE_NAME`         | hayır         | `Izgah`            | Kenar çubuğu, giriş ekranı ve sekme başlıklarında görünen ad.                                |
-| `SOURCE_URL`            | hayır         | bu depo            | Ayarlar'daki kaynak kodu bağlantısı (AGPL-3.0 §13). Değiştirdiyseniz kendi fork'unuzu verin. |
-| `ADMIN_BOOTSTRAP_EMAIL` | hayır         | —                  | Aktif yönetici yokken açılışta bu adres için tek kullanımlık kurulum bağlantısı loglanır.    |
-| `GITHUB_TOKEN`          | hayır         | —                  | Repo önizlemelerinde GitHub API sınırını yükselten salt okunur jeton.                        |
-| `DATABASE_POOL_MAX`     | hayır         | `12`               | PostgreSQL bağlantı havuzu boyutu.                                                           |
-| `HOST` / `PORT`         | hayır         | `0.0.0.0` / `3000` | HTTP dinleme adresi.                                                                         |
-| `ADDRESS_HEADER`        | hayır         | `x-forwarded-for`  | Vekil arkasında gerçek istemci IP'sini taşıyan başlık.                                       |
-| `XFF_DEPTH`             | hayır         | `1`                | Uygulamanın önündeki güvenilir vekil sayısı.                                                 |
-| `MEDIA_STORAGE_DIR`     | hayır         | `/data/thumbnails` | WebP kapak görselleri için kalıcı dizin.                                                     |
-| `MEDIA_MIN_FREE_BYTES`  | hayır         | `536870912`        | Bu kadar boş alanın altında görsel yazımı durur.                                             |
-| `MEDIA_MIN_FREE_RATIO`  | hayır         | `0.15`             | Bu boş alan oranının altında görsel yazımı durur.                                            |
-| `UNFURL_CONCURRENCY`    | hayır         | `3`                | Eşzamanlı önizleme işi sayısı.                                                               |
-| `LOG_LEVEL`             | hayır         | `info`             | JSON log düzeyi (`debug`, `info`, `warn`, `error`).                                          |
+| Ad                      | Zorunlu       | Varsayılan         | Açıklama                                                                                                   |
+| :---------------------- | :------------ | :----------------- | :--------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`          | evet          | —                  | PostgreSQL bağlantı URI'si.                                                                                |
+| `BETTER_AUTH_SECRET`    | evet          | —                  | Oturum imzalama anahtarı (en az 32 karakter).                                                              |
+| `ORIGIN`                | üretimde evet | —                  | Örneğinizin herkese açık HTTPS kökü; CSRF ve davet bağlantıları için kullanılır.                           |
+| `DEFAULT_LOCALE`        | hayır         | `en`               | Dil seçmemiş üyeler için arayüz dili (`en` veya `tr`).                                                     |
+| `APP_TIME_ZONE`         | hayır         | `UTC`              | Tarihler ve "bugün" sınırı için IANA saat dilimi (ör. `Europe/Istanbul`).                                  |
+| `INSTANCE_NAME`         | hayır         | `Izgah`            | Kenar çubuğu, giriş ekranı ve sekme başlıklarında görünen ad.                                              |
+| `SOURCE_URL`            | hayır         | bu depo            | Ayarlar'daki kaynak kodu bağlantısı (AGPL-3.0 §13). Değiştirdiyseniz kendi fork'unuzu verin.               |
+| `ADMIN_BOOTSTRAP_EMAIL` | hayır         | —                  | Aktif yönetici yokken açılışta bu adres için tek kullanımlık kurulum bağlantısı loglanır.                  |
+| `GITHUB_TOKEN`          | hayır         | —                  | Repo önizlemelerinde GitHub API sınırını yükselten salt okunur jeton.                                      |
+| `DATABASE_POOL_MAX`     | hayır         | `12`               | PostgreSQL bağlantı havuzu boyutu.                                                                         |
+| `HOST` / `PORT`         | hayır         | `0.0.0.0` / `3000` | HTTP dinleme adresi.                                                                                       |
+| `ADDRESS_HEADER`        | hayır         | `x-forwarded-for`  | Vekil arkasında gerçek istemci IP'sini taşıyan başlık.                                                     |
+| `XFF_DEPTH`             | hayır         | `1`                | Uygulamanın önündeki güvenilir vekil sayısı.                                                               |
+| `MEDIA_STORAGE_DIR`     | hayır         | `/data/thumbnails` | WebP kapak görselleri için kalıcı dizin.                                                                   |
+| `MEDIA_MIN_FREE_BYTES`  | hayır         | `536870912`        | Bu kadar boş alanın altında görsel yazımı durur.                                                           |
+| `MEDIA_MIN_FREE_RATIO`  | hayır         | `0.15`             | Bu boş alan oranının altında görsel yazımı durur.                                                          |
+| `UNFURL_CONCURRENCY`    | hayır         | `3`                | Eşzamanlı önizleme işi sayısı.                                                                             |
+| `LOG_LEVEL`             | hayır         | `info`             | JSON log düzeyi (`debug`, `info`, `warn`, `error`).                                                        |
+| `AI_FEATURES`           | hayır         | `on`               | `off`, isteğe bağlı yapay zekâ ayarlarını (Yönetim → Akıllı ekleme) gizler ve tüm YZ çağrılarını durdurur. |
+| `AI_CONCURRENCY`        | hayır         | `1`                | Paralel zenginleştirme işi sayısı (1–4).                                                                   |
 
 ### Yönetici kurtarma
 

@@ -27,7 +27,8 @@ export const load: PageServerLoad = async ({ depends, locals, params, url }) => 
 		depends,
 		url,
 		sectionId: section.id,
-		viewerUserId: locals.user?.id
+		viewerUserId: locals.user?.id,
+		viewerRole: locals.user?.role
 	});
 
 	return {

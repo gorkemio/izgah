@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="tr" data-font="a" data-mark="1">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="color-scheme" content="light dark" />
+		<title>Appropriate Uses For SQLite — İzgah · Künye prototipi</title>
+		<link rel="stylesheet" href="./kunye.css" />
+		<script src="./proto.js" defer></script>
+	</head>
+	<body>
+		<a class="skip" href="#register">İçeriğe geç</a>
+
+		<header class="topbar">
+			<a class="wordmark" href="./index.html" data-proto>iz<span class="gah">gah</span></a>
+			<a href="./index.html" data-proto>Akış</a>
+		</header>
+
+		<div class="app">
+			<nav class="index" aria-label="Ana gezinme">
+				<a class="wordmark" href="./index.html" data-proto>iz<span class="gah">gah</span></a>
+				<search>
+					<form class="search" action="#">
+						<label class="sr-only" for="q">İzgah içinde ara</label>
+						<input id="q" type="search" placeholder="Ara" />
+						<kbd>⌘K</kbd>
+					</form>
+				</search>
+				<ul class="nav">
+					<li>
+						<a href="./index.html" data-proto>Akış <span class="n">7</span></a>
+					</li>
+					<li>
+						<a href="#">Sonra oku <span class="n">3</span></a>
+					</li>
+					<li>
+						<a href="#">Bildirimler <span class="n">2</span></a>
+					</li>
+				</ul>
+				<div>
+					<h2 class="nav-heading">Bölümler</h2>
+					<ul class="nav">
+						<li>
+							<a href="#">Frontend <span class="n">41</span></a>
+						</li>
+						<li>
+							<a href="#">Tasarım <span class="n">28</span></a>
+						</li>
+						<li>
+							<a href="#">YZ araçları <span class="n">17</span></a>
+						</li>
+						<li>
+							<a href="#" aria-current="page">Altyapı <span class="n">12</span></a>
+						</li>
+						<li>
+							<a href="#">Uzun okuma <span class="n">9</span></a>
+						</li>
+					</ul>
+				</div>
+				<div class="index-foot">
+					<ul class="nav">
+						<li><a href="./admin-ai.html" data-proto>Yönetim</a></li>
+						<li><a href="#">Ayarlar</a></li>
+					</ul>
+					<p class="me">Elif Kaya</p>
+				</div>
+			</nav>
+
+			<main class="register resource" id="register">
+				<p class="res-meta">
+					<a href="./index.html" data-proto>Akış</a> · sqlite.org · makale · Altyapı · Uzun okuma
+				</p>
+				<h1 class="res-title">
+					<a href="https://www.sqlite.org/whentouse.html">Appropriate Uses For SQLite</a>
+				</h1>
+				<p class="url">https://www.sqlite.org/whentouse.html</p>
+				<p class="desc">
+					SQLite is not directly comparable to client/server SQL database engines; it competes with
+					fopen().
+				</p>
+				<div class="summary">
+					<span class="label">Özet · YZ</span>
+					<p>
+						SQLite'ın hangi durumlarda istemci-sunucu veritabanlarının yerine geçebileceğini, hangi
+						durumlarda geçemeyeceğini anlatan resmi rehber.
+					</p>
+				</div>
+				<p class="pane-actions">
+					<a class="btn btn-primary" href="https://www.sqlite.org/whentouse.html">Kaynağa git</a>
+					<button class="btn" type="button">Beğen · 3</button>
+					<button class="btn" type="button" aria-pressed="true">Sonra okunacak</button>
+					<button class="btn" type="button">Kopyala</button>
+				</p>
+
+				<h2 class="block-title">Paylaşanlar <span>1</span></h2>
+				<ol class="thread">
+					<li>
+						<p class="by">
+							<strong>Can Öztürk</strong> · <time>dün 21:14</time> · Altyapı, Uzun okuma
+						</p>
+						<p>Küçük ekip araçları için Postgres yerine ne zaman SQLite? Okuyun, cuma konuşalım.</p>
+					</li>
+				</ol>
+
+				<h2 class="block-title">Tartışma <span>4 yorum</span></h2>
+				<ol class="thread">
+					<li>
+						<p class="by"><strong>Deniz Yılmaz</strong> · <time>dün 21:40</time></p>
+						<p>
+							"Many concurrent writers" bölümü bizi bağlıyor: önizleme işçisi ile paylaşımlar aynı
+							anda yazıyor.
+						</p>
+					</li>
+					<li>
+						<p class="by"><strong>Mert Aydın</strong> · <time>dün 22:05</time></p>
+						<p>WAL kipiyle tek yazar sorun olmaz ama FOR UPDATE SKIP LOCKED'u kaybederiz.</p>
+					</li>
+					<li>
+						<p class="by"><strong>Can Öztürk</strong> · <time>bugün 08:30</time></p>
+						<p>
+							Katılıyorum, Izgah için Postgres kalmalı. Ama kişisel araçlar için çok iyi bir ölçüt.
+						</p>
+					</li>
+					<li>
+						<p class="by"><strong>Elif Kaya</strong> · <time>bugün 09:12</time></p>
+						<p>Cuma toplantısına not düştüm.</p>
+					</li>
+				</ol>
+				<form class="comment-form" action="#">
+					<label class="sr-only" for="comment">Yorum</label>
+					<textarea id="comment" class="textarea" rows="3" placeholder="Yorum yaz"></textarea>
+					<button class="btn" type="submit">Gönder</button>
+				</form>
+			</main>
+		</div>
+
+		<nav class="tabbar" aria-label="Alt gezinme">
+			<a href="./index.html" data-proto>Akış</a>
+			<a href="#">Bölümler</a>
+			<a class="add" href="./share.html" data-proto>İz bırak</a>
+			<a href="#">Sonra oku</a>
+			<a href="#">Ben</a>
+		</nav>
+
+		<aside class="proto" aria-label="Prototip denetimleri">
+			<strong>Künye prototipi</strong>
+			<label
+				>Tema
+				<select name="theme" data-proto-control>
+					<option value="auto">Sistem</option>
+					<option value="light">Açık</option>
+					<option value="dark">Koyu</option>
+				</select></label
+			>
+			<label
+				>Yazı
+				<select name="font" data-proto-control>
+					<option value="a">A · Ysabeau Office</option>
+					<option value="b">B · Atkinson Hyperlegible Next</option>
+				</select></label
+			>
+			<label
+				>İşaret
+				<select name="mark" data-proto-control>
+					<option value="1">1 · altı çizili</option>
+					<option value="2">2 · iz + gah</option>
+					<option value="3">3 · italik</option>
+				</select></label
+			>
+			<nav>
+				<a href="./index.html" data-proto>Akış</a>
+				<a href="./resource.html" data-proto>Kaynak</a>
+				<a href="./share.html" data-proto>Paylaş</a>
+				<a href="./admin-ai.html" data-proto>/admin/ai</a>
+				<a href="./site.html" data-proto>izgah.com</a>
+			</nav>
+		</aside>
+	</body>
+</html>

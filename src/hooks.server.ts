@@ -42,6 +42,7 @@ import {
 	startUnfurlWorker,
 	stopUnfurlWorker
 } from '#lib/server/unfurl/worker.ts';
+import { startEnrichmentWorker, stopEnrichmentWorker } from '#lib/server/smart-capture/worker.ts';
 import { t } from '#lib/i18n/index.ts';
 
 const INIT_PROMISE_SYMBOL = Symbol.for('izgah.server.initPromise');
@@ -89,9 +90,12 @@ export function registerServerShutdownHooks(): void {
 
 		shutdownPromise = (async () => {
 			try {
-				await stopUnfurlWorker({ timeoutMs: DEFAULT_SHUTDOWN_TIMEOUT_MS });
+				await Promise.all([
+					stopUnfurlWorker({ timeoutMs: DEFAULT_SHUTDOWN_TIMEOUT_MS }),
+					stopEnrichmentWorker(DEFAULT_SHUTDOWN_TIMEOUT_MS)
+				]);
 			} catch (error) {
-				logger.error('Failed to stop unfurl worker cleanly during shutdown', {
+				logger.error('Failed to stop background workers cleanly during shutdown', {
 					error: error instanceof Error ? error.message : String(error)
 				});
 			}
@@ -143,6 +147,7 @@ export const init: ServerInit = async () => {
 		await ensureInitialAdminBootstrap();
 		wireSafeFetchShortUrlResolver();
 		startUnfurlWorker();
+		startEnrichmentWorker();
 		registerServerShutdownHooks();
 	};
 

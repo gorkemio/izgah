@@ -30,11 +30,14 @@
 	let {
 		resource,
 		originalShareDeleted = false,
-		sharers = []
+		sharers = [],
+		aiSummary = null
 	}: {
 		resource: HeroResource;
 		originalShareDeleted?: boolean;
 		sharers?: ReadonlyArray<AvatarStackItem>;
+		/** Labelled machine summary (docs/designs/izgah-smart-capture.md §10). */
+		aiSummary?: string | null;
 	} = $props();
 
 	let imgFailed = $state(false);
@@ -181,6 +184,13 @@
 
 		{#if resource.description}
 			<p class="resource-description">{resource.description}</p>
+		{/if}
+
+		{#if aiSummary}
+			<div class="ai-summary">
+				<span class="ai-summary-label">{t('resource.aiSummary')}</span>
+				<p>{aiSummary}</p>
+			</div>
 		{/if}
 
 		{#if meta.length > 0}

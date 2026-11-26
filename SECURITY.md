@@ -19,3 +19,5 @@ You can expect an acknowledgement within a few days. Once a fix is released we w
 ## Scope notes for self-hosters
 
 Izgah is designed to run behind a reverse proxy that terminates HTTPS. Keep `ORIGIN` set to your public HTTPS address, bind the app port to localhost (as `docker-compose.prod.yml` does), and keep `ADDRESS_HEADER` / `XFF_DEPTH` in line with your proxy setup so per-IP rate limits cannot be bypassed.
+
+Optional AI enrichment ([smart capture](./docs/designs/izgah-smart-capture.md)) is off until an admin configures it. The provider API key is stored encrypted with a key derived from `BETTER_AUTH_SECRET` and is never sent to browsers; page text sent to the model is treated as untrusted input (no tools, a strict output schema, suggest-only by default). Set `AI_FEATURES=off` to disable it for the whole instance.

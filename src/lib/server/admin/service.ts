@@ -32,8 +32,11 @@ import {
 } from '#lib/server/db/schema.ts';
 import { logger } from '#lib/server/logger.ts';
 import { findExistingSectionIds } from '#lib/server/sections/service.ts';
+import { slugifySectionName } from '#lib/server/sections/slug.ts';
 import { notifyUnfurlWorker } from '#lib/server/unfurl/worker.ts';
 import { t } from '#lib/i18n/index.ts';
+
+export { slugifySectionName };
 
 export {
 	ADMIN_AUDIT_ACTIONS,
@@ -59,6 +62,12 @@ export function auditActionLabels(): Record<string, string> {
 		'admin.unassigned_shares_assigned': t('audit.unassignedAssigned'),
 		'admin.unfurl_job_retried': t('audit.jobRetried'),
 		'admin.unfurl_jobs_retried_all': t('audit.jobsRetriedAll'),
+		'admin.ai_settings_updated': t('audit.aiSettingsUpdated'),
+		'admin.ai_key_updated': t('audit.aiKeyUpdated'),
+		'admin.ai_key_removed': t('audit.aiKeyRemoved'),
+		'admin.ai_backfill_started': t('audit.aiBackfillStarted'),
+		'admin.ai_data_purged': t('audit.aiDataPurged'),
+		'admin.ai_jobs_retried': t('audit.aiJobsRetried'),
 		'admin.bootstrap': t('audit.bootstrap'),
 		'cli.create_admin': t('audit.cliCreateAdmin'),
 		'cli.reset_admin': t('audit.cliResetAdmin'),
@@ -321,34 +330,6 @@ function extractPgErrorCode(err: unknown): { code?: string; constraint?: string 
 
 export function decodeCursor(raw: string | null | undefined): TimeIdCursor | null {
 	return decodeTimeIdCursor(raw);
-}
-
-export function slugifySectionName(input: string): string {
-	const transliterated = input
-		.trim()
-		.replace(/Ç/g, 'c')
-		.replace(/ç/g, 'c')
-		.replace(/Ğ/g, 'g')
-		.replace(/ğ/g, 'g')
-		.replace(/İ/g, 'i')
-		.replace(/I/g, 'i')
-		.replace(/ı/g, 'i')
-		.replace(/Ö/g, 'o')
-		.replace(/ö/g, 'o')
-		.replace(/Ş/g, 's')
-		.replace(/ş/g, 's')
-		.replace(/Ü/g, 'u')
-		.replace(/ü/g, 'u')
-		.normalize('NFKD')
-		.replace(/[\u0300-\u036f]/g, '')
-		.toLowerCase();
-
-	return transliterated
-		.replace(/[^a-z0-9]+/g, '-')
-		.replace(/^-+|-+$/g, '')
-		.replace(/-{2,}/g, '-')
-		.slice(0, 64)
-		.replace(/-+$/g, '');
 }
 
 async function assertAdminActor(tx: DbOrTx, actorUserId: string): Promise<LockedUserRow> {

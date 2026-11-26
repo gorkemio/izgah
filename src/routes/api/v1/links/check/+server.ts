@@ -64,7 +64,8 @@ export const GET: RequestHandler = async (event) => {
 					exists: false,
 					canonicalUrl: result.canonicalUrl,
 					rawUrl: result.rawUrl,
-					suggestedContentType: result.suggestedContentType
+					suggestedContentType: result.suggestedContentType,
+					suggestedSections: result.suggestedSections
 				},
 				requestId
 			);
@@ -76,6 +77,7 @@ export const GET: RequestHandler = async (event) => {
 				canonicalUrl: result.canonicalUrl,
 				rawUrl: result.rawUrl,
 				suggestedContentType: result.suggestedContentType,
+				suggestedSections: result.suggestedSections,
 				resource: result.resource,
 				sharesSummary: result.sharesSummary
 			},

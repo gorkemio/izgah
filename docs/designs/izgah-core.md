@@ -51,6 +51,8 @@ Ekip üyeleri bugün yararlı bağlantıları ağırlıklı olarak masaüstü Wh
 *   **Yapay Zeka Destekli Özetleme veya Otomatik Bölümleme:** Harici dil modeli çağrısı yapılmaz; içerik türü URL yapısından kural tabanlı belirlenir ve yazar ya da admin tarafından değiştirilebilir.
 *   **Mobil Paylaşım Menüsü (`iOS/Android Share Sheet`):** Yerel mobil uygulama veya işletim sistemi paylaşım hedefi kapsam dışıdır; mobil tarayıcıdan standart duyarlı web arayüzü kullanılır.
 
+*(Note, 2026-11-26: [izgah-roadmap.md](./izgah-roadmap.md) revisits the AI, read-later, mobile share, SMTP and OAuth non-goals above. AI enrichment and section suggestions are specified in [izgah-smart-capture.md](./izgah-smart-capture.md); freeform tags stay out of scope.)*
+
 ## Open Questions
 
 Açık mimari veya kapsam sorusu bulunmamaktadır. Kimlik doğrulama modeli, eklenti API anahtarı sınırı, sunucu taraflı önizleme kapsamı ve ortak etkileşim katmanı taslak öncesinde karara bağlanmıştır.

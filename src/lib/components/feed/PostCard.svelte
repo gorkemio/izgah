@@ -21,6 +21,7 @@
 	} from '#lib/types/feed.ts';
 	import LinkAttachment from './LinkAttachment.svelte';
 	import PostActions from './PostActions.svelte';
+	import ShareSuggestions from './ShareSuggestions.svelte';
 
 	interface Props {
 		item: PostItem;
@@ -457,6 +458,15 @@
 
 		{#if !compact}
 			<LinkAttachment {item} titleId={cardTitleId} {priorityImage} {highlightTerms} />
+
+			{#if item.suggestions?.length}
+				<ShareSuggestions
+					shareId={item.id}
+					suggestions={item.suggestions}
+					{actionBase}
+					{returnTo}
+				/>
+			{/if}
 
 			<PostActions
 				{item}

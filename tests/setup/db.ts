@@ -57,6 +57,11 @@ export async function migrateTestDb(): Promise<RunMigrationsResult> {
 export async function resetTestDb(): Promise<void> {
 	await testSql`
 		TRUNCATE TABLE
+			public.ai_usage_daily,
+			public.share_section_suggestions,
+			public.resource_enrichments,
+			public.enrichment_jobs,
+			public.instance_settings,
 			public.notifications,
 			public.resource_comments,
 			public.resource_likes,

@@ -452,6 +452,7 @@
 			resource={data.resource}
 			originalShareDeleted={data.originalShareDeleted}
 			sharers={resourceSharers}
+			aiSummary={data.aiSummary}
 		/>
 
 		<section

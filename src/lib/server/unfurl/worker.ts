@@ -1,4 +1,6 @@
 import crypto from 'node:crypto';
+import { enqueueEnrichmentJob } from '#lib/server/smart-capture/jobs.ts';
+import { notifyEnrichmentWorker } from '#lib/server/smart-capture/worker.ts';
 import fs from 'node:fs/promises';
 import { and, asc, eq, gte, isNull, lt, lte, or, sql } from 'drizzle-orm';
 import { db } from '#lib/server/db/client.ts';
@@ -325,12 +327,17 @@ export async function completeClaimedJobInTx(params: {
 				description: params.metadata.description ?? resource.description,
 				siteName: params.metadata.siteName ?? resource.siteName,
 				providerMeta: params.metadata.providerMeta ?? resource.providerMeta,
+				...(params.metadata.contentText ? { contentText: params.metadata.contentText } : {}),
 				thumbnailAssetKey: nextThumbnailAssetKey,
 				contentType: nextContentType,
 				unfurlStatus: 'ready',
 				updatedAt: now
 			})
 			.where(eq(canonicalResources.id, resource.id));
+
+		if (activeShare) {
+			await enqueueEnrichmentJob(tx, resource.id, now);
+		}
 
 		return { applied: true, fencedOut: false };
 	});
@@ -383,6 +390,9 @@ export async function failClaimedJobInTx(params: {
 					updatedAt: now
 				})
 				.where(eq(canonicalResources.id, params.resourceId));
+
+			// History suggestions still work from the domain alone.
+			await enqueueEnrichmentJob(tx, params.resourceId, now);
 
 			return { fencedOut: false, nextStatus: 'dead' };
 		}
@@ -548,6 +558,10 @@ export async function executeClaimedJob(
 			await unlinkIfUnreferencedMediaAsset(storedAsset);
 		}
 
+		if (!committed.fencedOut) {
+			notifyEnrichmentWorker();
+		}
+
 		if (committed.fencedOut) {
 			logger.warn('Unfurl completion ignored due to stale lock_token', {
 				job_id: job.id,
@@ -579,6 +593,9 @@ export async function executeClaimedJob(
 
 		if (failed.fencedOut) {
 			return { status: 'fenced_out' };
+		}
+		if (failed.nextStatus === 'dead') {
+			notifyEnrichmentWorker();
 		}
 		return { status: failed.nextStatus === 'dead' ? 'dead' : 'requeued' };
 	}

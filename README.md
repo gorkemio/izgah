@@ -11,6 +11,7 @@
 - **Feed** — a reverse-chronological stream of shared links with content-aware cards (video, repo, social, article, web), likes, comments and "new posts" updates.
 - **Sections** — admin-managed topics. A link can live in several sections, and admins can add "silent" links to sections without posting them to the feed.
 - **Search** — full-text search across titles, descriptions, notes and URL parts, in English and Turkish, plus a `⌘K` / `Ctrl+K` command palette.
+- **Smart capture** — `#section` in a note files the link; sections are suggested from your team's history; admins can optionally connect OpenRouter, Anthropic, OpenAI, Gemini or a local OpenAI-compatible model for short summaries, search keywords and section suggestions. Off until configured; page text is searchable.
 - **Link previews** — an in-process unfurl worker fetches titles, descriptions and cover images (with SSRF protection) and stores resized WebP thumbnails locally.
 - **Browser extensions** — Chrome, Firefox and Safari extensions share the current tab with a personal API key.
 - **Works without JavaScript** — every core flow (sharing, navigation, search, details, themes, admin) is a plain form or link first; JavaScript only enhances it.
@@ -85,6 +86,8 @@ Step-by-step guides:
 | `MEDIA_MIN_FREE_RATIO`  | no                 | `0.15`             | Stop writing thumbnails below this free-space ratio.                                                     |
 | `UNFURL_CONCURRENCY`    | no                 | `3`                | Parallel link-preview jobs.                                                                              |
 | `LOG_LEVEL`             | no                 | `info`             | JSON log level (`debug`, `info`, `warn`, `error`).                                                       |
+| `AI_FEATURES`           | no                 | `on`               | `off` hides the optional AI settings (Admin → Smart capture) and stops all AI calls.                     |
+| `AI_CONCURRENCY`        | no                 | `1`                | Parallel enrichment jobs (1–4).                                                                          |
 
 ### Admin recovery
 

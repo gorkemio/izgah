@@ -69,6 +69,9 @@ const baseEnvSchema = z.object({
 		emptyToUndefined,
 		z.enum(['debug', 'info', 'warn', 'error']).default('info')
 	),
+	// docs/designs/izgah-smart-capture.md §12: `off` hides AI settings and stops all AI calls.
+	AI_FEATURES: z.preprocess(emptyToUndefined, z.enum(['on', 'off']).default('on')),
+	AI_CONCURRENCY: z.preprocess(emptyToUndefined, z.coerce.number().int().min(1).max(4).default(1)),
 	DEFAULT_LOCALE: z.preprocess(emptyToUndefined, z.enum(LOCALES).default('en')),
 	APP_TIME_ZONE: z.preprocess(
 		emptyToUndefined,
@@ -145,6 +148,8 @@ const buildPlaceholderEnv: Env = {
 	GITHUB_TOKEN: undefined,
 	UNFURL_CONCURRENCY: 3,
 	LOG_LEVEL: 'info',
+	AI_FEATURES: 'on',
+	AI_CONCURRENCY: 1,
 	DEFAULT_LOCALE: 'en',
 	APP_TIME_ZONE: DEFAULT_TIME_ZONE,
 	INSTANCE_NAME: DEFAULT_INSTANCE_NAME,

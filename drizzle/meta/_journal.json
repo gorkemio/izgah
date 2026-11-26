@@ -15,6 +15,13 @@
 			"when": 1795632000000,
 			"tag": "0001_english_search",
 			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "7",
+			"when": 1795655640250,
+			"tag": "0002_smart_capture",
+			"breakpoints": true
 		}
 	]
 }

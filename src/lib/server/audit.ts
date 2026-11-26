@@ -14,7 +14,13 @@ export const ADMIN_AUDIT_ACTIONS = [
 	'admin.section_silent_shares_resolved',
 	'admin.unassigned_shares_assigned',
 	'admin.unfurl_job_retried',
-	'admin.unfurl_jobs_retried_all'
+	'admin.unfurl_jobs_retried_all',
+	'admin.ai_settings_updated',
+	'admin.ai_key_updated',
+	'admin.ai_key_removed',
+	'admin.ai_backfill_started',
+	'admin.ai_data_purged',
+	'admin.ai_jobs_retried'
 ] as const;
 
 export const KNOWN_SYSTEM_AUDIT_ACTIONS = [

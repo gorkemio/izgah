@@ -132,6 +132,16 @@
 						>
 							{busy ? t('unassigned.assigning') : t('unassigned.assign')}
 						</button>
+						{#if Object.keys(data.suggestions).length > 0}
+							<button
+								type="submit"
+								class="btn btn-outline"
+								formaction="?/acceptAll"
+								disabled={busy}
+							>
+								{t('suggest.acceptAll')}
+							</button>
+						{/if}
 					</div>
 				{/if}
 			</section>
@@ -198,6 +208,25 @@
 											</a>
 											{#if item.note}
 												<p class="share-note">{item.note}</p>
+											{/if}
+											<input type="hidden" name="pageShareIds" value={item.id} />
+											{#if data.suggestions[item.id]?.length}
+												<p class="share-suggestions">
+													<span>{t('suggest.label')}</span>
+													{#each data.suggestions[item.id] as suggestion (suggestion.sectionId)}
+														<button
+															type="submit"
+															class="suggestion-add"
+															formaction="?/acceptOne"
+															name="suggestion"
+															value="{item.id}:{suggestion.sectionId}"
+															disabled={busy}
+															aria-label={t('suggest.addAria', { section: suggestion.name })}
+														>
+															+ {suggestion.name}
+														</button>
+													{/each}
+												</p>
 											{/if}
 										</div>
 									</th>
@@ -561,5 +590,25 @@
 		.table-wrapper:focus-visible {
 			outline-color: CanvasText;
 		}
+	}
+	.share-suggestions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-1) var(--space-2);
+		margin: var(--space-1) 0 0;
+		font: var(--text-hint);
+		color: var(--color-text-muted);
+	}
+
+	.suggestion-add {
+		padding: 0;
+		font: inherit;
+		font-weight: 600;
+		color: var(--color-accent-text);
+		background: none;
+		border: 0;
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
+		cursor: pointer;
 	}
 </style>

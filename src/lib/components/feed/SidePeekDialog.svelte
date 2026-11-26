@@ -56,6 +56,7 @@
 			likedByViewer: boolean;
 		};
 		originalShareDeleted: boolean;
+		aiSummary?: string | null;
 		shares: PeekShareItem[];
 		comments: PeekCommentItem[];
 	}
@@ -276,6 +277,13 @@
 
 				{#if resource.description}
 					<p class="peek-desc">{resource.description}</p>
+				{/if}
+
+				{#if detail?.aiSummary}
+					<div class="ai-summary">
+						<span class="ai-summary-label">{t('resource.aiSummary')}</span>
+						<p>{detail.aiSummary}</p>
+					</div>
 				{/if}
 
 				<div class="peek-cta-row">

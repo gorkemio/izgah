@@ -1,4 +1,5 @@
 import { Parser } from 'htmlparser2';
+import { MAX_BODY_HTML_BYTES, ReadableTextCollector } from '#lib/server/unfurl/extract-text.ts';
 import { asciiLower } from '#lib/server/links/canonicalize.ts';
 import { isHostCircuitOpen, recordHostStatus } from '#lib/server/unfurl/circuit-breaker.ts';
 import { MAX_TEXT_BYTES, safeFetchStream } from '#lib/server/unfurl/safe-fetch.ts';
@@ -215,11 +216,14 @@ export async function fetchHtmlMetadata(
 	let ogSiteName: string | null = null;
 	let ogType: string | null = null;
 	let headFinished = false;
+	let bytesRead = 0;
+	const bodyText = new ReadableTextCollector();
 
 	const parser = new Parser(
 		{
 			onopentag(name, attribs) {
 				if (headFinished) {
+					bodyText.openTag(name);
 					return;
 				}
 				if (name === 'body') {
@@ -275,11 +279,17 @@ export async function fetchHtmlMetadata(
 				}
 			},
 			ontext(text) {
-				if (!headFinished && inTitleTag && docTitle.length < 1024) {
+				if (headFinished) {
+					bodyText.text(text);
+				} else if (inTitleTag && docTitle.length < 1024) {
 					docTitle += text;
 				}
 			},
 			onclosetag(name) {
+				if (headFinished) {
+					bodyText.closeTag(name);
+					return;
+				}
 				if (name === 'title') {
 					inTitleTag = false;
 				} else if (name === 'head') {
@@ -316,6 +326,7 @@ export async function fetchHtmlMetadata(
 
 	try {
 		await stream.readChunks((chunk) => {
+			bytesRead += chunk.byteLength;
 			if (!decoder) {
 				prescanChunks.push(chunk);
 				prescanBytes += chunk.byteLength;
@@ -330,7 +341,8 @@ export async function fetchHtmlMetadata(
 				feedBytesToParser(chunk, false);
 			}
 
-			return !headFinished;
+			// Keep reading the body for page text, within a byte budget.
+			return !headFinished || (bytesRead < MAX_BODY_HTML_BYTES && !bodyText.isFull());
 		});
 
 		if (!decoder) {
@@ -370,7 +382,8 @@ export async function fetchHtmlMetadata(
 			siteName,
 			providerMeta: null,
 			thumbnailUrl,
-			ogType: normalizedOgType ? asciiLower(normalizedOgType) : null
+			ogType: normalizedOgType ? asciiLower(normalizedOgType) : null,
+			contentText: bodyText.result()
 		},
 		shortCircuited: false
 	};

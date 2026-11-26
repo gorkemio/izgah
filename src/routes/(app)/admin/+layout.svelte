@@ -19,6 +19,11 @@
 			label: t('admin.tab.jobs'),
 			badge: data.deadJobsCount > 0 ? data.deadJobsCount : null
 		},
+		{
+			href: '/admin/ai',
+			label: t('admin.tab.ai'),
+			badge: data.aiAttentionCount > 0 ? data.aiAttentionCount : null
+		},
 		{ href: '/admin/audit', label: t('admin.tab.audit'), badge: null },
 		{ href: '/admin/metrics', label: t('admin.tab.metrics'), badge: null }
 	]);

@@ -21,6 +21,7 @@
 		canonicalUrl: string;
 		rawUrl: string;
 		suggestedContentType: ContentType;
+		suggestedSections?: Array<{ id: string; name: string; source: 'history' | 'ai' }>;
 		originalShareDeleted?: boolean;
 		resource?: {
 			id: string;
@@ -123,6 +124,16 @@
 		fieldErrors = initialValues.fieldErrors ?? {};
 		hasClientFeedback = false;
 	});
+
+	// Suggested sections come first, marked, never pre-checked (smart capture §10).
+	const suggestedSectionIds = $derived(
+		new Set((duplicateResult?.suggestedSections ?? []).map((suggestion) => suggestion.id))
+	);
+	const orderedSections = $derived(
+		[...sections].sort(
+			(a, b) => Number(suggestedSectionIds.has(b.id)) - Number(suggestedSectionIds.has(a.id))
+		)
+	);
 
 	const displayedErrorMessage = $derived(
 		hasClientFeedback ? errorMessage : (errorMessage ?? initialValues?.errorMessage ?? null)
@@ -522,6 +533,9 @@
 					aria-invalid={Boolean(displayedFieldErrors.note?.length) || undefined}
 					aria-describedby={displayedFieldErrors.note?.length ? `${noteInputId}-err` : undefined}
 					class="textarea textarea-input"></textarea>
+				{#if sections.length > 0}
+					<p class="field-hint">{t('composer.hashtagHint')}</p>
+				{/if}
 				{#if displayedFieldErrors.note?.length}
 					<p id="{noteInputId}-err" class="field-error">{displayedFieldErrors.note[0]}</p>
 				{/if}
@@ -538,7 +552,7 @@
 					<p class="field-hint">{t('share.noSections')}</p>
 				{:else}
 					<div class="sections-grid">
-						{#each sections as section (section.id)}
+						{#each orderedSections as section (section.id)}
 							<label class="checkbox-row">
 								<input
 									type="checkbox"
@@ -552,6 +566,9 @@
 									onchange={(e) => toggleSection(section.id, e.currentTarget.checked)}
 								/>
 								<span>{section.name}</span>
+								{#if suggestedSectionIds.has(section.id)}
+									<span class="suggested-tag">{t('suggest.suggested')}</span>
+								{/if}
 							</label>
 						{/each}
 					</div>
@@ -876,5 +893,9 @@
 		.checkbox-row {
 			min-block-size: 44px;
 		}
+	}
+	.suggested-tag {
+		font: var(--text-hint);
+		color: var(--color-accent-text);
 	}
 </style>
