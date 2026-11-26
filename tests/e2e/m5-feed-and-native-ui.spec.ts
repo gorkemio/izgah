@@ -232,11 +232,11 @@ test.describe('Milestone M5 — Web Feed, Sections & Native Platform UI', () => 
 		});
 
 		await page.goto(`/auth/accept-invite?token=${encodeURIComponent(rawToken)}`);
-		await expect(page.getByRole('heading', { name: 'İzgah Davetini Kabul Et' })).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'İzgah davetini kabul et' })).toBeVisible();
 
-		await page.getByLabel('Ad Soyad').fill('Zeynep Kaya');
-		await page.getByLabel('Yeni Parola').fill('CokGucluParola123!');
-		await page.getByRole('button', { name: 'Daveti Kabul Et ve Giriş Yap' }).click();
+		await page.getByLabel('Ad soyad').fill('Zeynep Kaya');
+		await page.getByLabel('Yeni parola').fill('CokGucluParola123!');
+		await page.getByRole('button', { name: 'Daveti kabul et ve giriş yap' }).click();
 
 		await page.waitForURL('**/');
 		await expect(page.getByRole('heading', { name: 'Ana Akış' })).toBeVisible();
@@ -246,22 +246,22 @@ test.describe('Milestone M5 — Web Feed, Sections & Native Platform UI', () => 
 		await page.getByRole('button', { name: 'Hesap menüsü' }).click();
 		await page.getByRole('link', { name: 'Ayarlar', exact: true }).click();
 		await page.waitForURL('**/settings');
-		await page.getByRole('link', { name: 'API Anahtarları' }).click();
+		await page.getByRole('link', { name: 'API anahtarları' }).click();
 		await page.waitForURL('**/settings/api-keys');
 		await expect(page.getByRole('button', { name: 'Link Paylaş' })).toBeVisible();
 
-		await expect(page.getByRole('heading', { name: 'Kişisel API Anahtarları' })).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Kişisel API anahtarları' })).toBeVisible();
 
-		await page.getByLabel('Anahtar Adı').fill('Masaüstü Firefox Eklentisi');
-		await page.getByRole('button', { name: 'Yeni API Anahtarı Üret' }).click();
+		await page.getByLabel('Anahtar adı').fill('Masaüstü Firefox Eklentisi');
+		await page.getByRole('button', { name: 'Yeni API anahtarı üret' }).click();
 
-		await expect(page.getByText('Yeni API Anahtarınız Oluşturuldu:')).toBeVisible();
+		await expect(page.getByText('Yeni API anahtarınız oluşturuldu:')).toBeVisible();
 		const createdRawKey = await page.locator('#new-api-key-value').textContent();
 		expect(createdRawKey?.trim()).toMatch(/^izk_/);
 
 		// Cancel revoke with Esc and confirm safe "Vazgeç" autofocus
-		await page.getByRole('button', { name: 'İptal Et' }).first().click();
-		const revokeDialog = page.getByRole('dialog', { name: 'API Anahtarını İptal Et' });
+		await page.getByRole('button', { name: 'İptal et' }).first().click();
+		const revokeDialog = page.getByRole('dialog', { name: 'API anahtarını iptal et' });
 		await expect(revokeDialog).toBeVisible();
 		await expect(revokeDialog.getByRole('button', { name: 'Vazgeç' })).toBeFocused();
 
@@ -272,9 +272,9 @@ test.describe('Milestone M5 — Web Feed, Sections & Native Platform UI', () => 
 		).toBeVisible();
 
 		// Confirm revoke
-		await page.getByRole('button', { name: 'İptal Et' }).first().click();
+		await page.getByRole('button', { name: 'İptal et' }).first().click();
 		await expect(revokeDialog).toBeVisible();
-		await revokeDialog.getByRole('button', { name: 'Anahtarı İptal Et' }).click();
+		await revokeDialog.getByRole('button', { name: 'Anahtarı iptal et' }).click();
 
 		await expect(revokeDialog).toBeHidden();
 		await expect(page.getByText('Seçilen API anahtarı iptal edildi.')).toBeVisible();
@@ -467,7 +467,7 @@ test.describe('Milestone M5 — Web Feed, Sections & Native Platform UI', () => 
 		await adminOriginalCard.locator('..').getByRole('button', { name: 'Sil' }).click();
 		const deleteDialog = page.locator('dialog[open]');
 		await expect(deleteDialog.getByRole('button', { name: 'Vazgeç' })).toBeFocused();
-		await deleteDialog.getByRole('button', { name: 'Paylaşımı Sil' }).click();
+		await deleteDialog.getByRole('button', { name: 'Paylaşımı sil' }).click();
 		await expect(deleteDialog).toBeHidden();
 
 		await gotoHydrated(page, '/');
@@ -750,7 +750,7 @@ test.describe('Milestone M5 — Web Feed, Sections & Native Platform UI', () => 
 			await page.waitForURL((url) => url.searchParams.has('edit'));
 
 			await page.locator('.inline-card-panel textarea[name="note"]').fill('JS olmadan güncel not');
-			await page.getByRole('button', { name: 'Değişiklikleri Kaydet' }).click();
+			await page.getByRole('button', { name: 'Değişiklikleri kaydet' }).click();
 
 			await page.waitForURL((url) => url.pathname === '/' && !url.searchParams.has('edit'));
 			await expect(
@@ -768,7 +768,7 @@ test.describe('Milestone M5 — Web Feed, Sections & Native Platform UI', () => 
 
 			await page
 				.locator('.inline-card-panel')
-				.getByRole('button', { name: 'Paylaşımı Sil' })
+				.getByRole('button', { name: 'Paylaşımı sil' })
 				.click();
 			await page.waitForURL((url) => url.pathname === '/' && !url.searchParams.has('delete'));
 			await expect(page.locator('article.share-card')).toHaveCount(0);

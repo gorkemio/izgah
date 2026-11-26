@@ -100,7 +100,7 @@ test.describe('English UI and language switching', () => {
 
 		await page.getByRole('radio', { name: 'Türkçe' }).check();
 		await expect(page.locator('html')).toHaveAttribute('lang', 'tr');
-		await expect(page.locator('#main-content h1')).toHaveText('Hesap Ayarları');
+		await expect(page.locator('#main-content h1')).toHaveText('Hesap ayarları');
 		await expect(page.locator('html[data-hydrated]')).toHaveCount(1);
 
 		await page.getByRole('radio', { name: 'English' }).check();

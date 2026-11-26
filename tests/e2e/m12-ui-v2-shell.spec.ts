@@ -421,9 +421,9 @@ test.describe('UI v2 shell — rail, bottom tab bar, /sections and theme cookie'
 		const memberRow = page.getByRole('row').filter({ hasText: 'ayrilan@izgah.test' });
 		await memberRow.getByRole('link', { name: /Pasifleştir/ }).click();
 		await expect(page).toHaveURL(new RegExp(`disable=${member.id}`));
-		const confirm = page.getByRole('region', { name: 'Üyeyi Pasifleştir' });
+		const confirm = page.getByRole('region', { name: 'Üyeyi pasifleştir' });
 		await expect(confirm).toContainText('Ayrılan Üye');
-		await confirm.getByRole('button', { name: 'Evet, Pasifleştir' }).click();
+		await confirm.getByRole('button', { name: 'Evet, pasifleştir' }).click();
 		await expect(page.getByRole('row').filter({ hasText: 'ayrilan@izgah.test' })).toContainText(
 			'Pasif'
 		);
@@ -431,9 +431,9 @@ test.describe('UI v2 shell — rail, bottom tab bar, /sections and theme cookie'
 		await page.goto('/admin/sections');
 		const sectionRow = page.getByRole('row').filter({ hasText: 'Geçici Bölüm' });
 		await sectionRow.getByRole('link', { name: /Düzenle/ }).click();
-		const editPanel = page.getByRole('region', { name: /Bölümü Düzenle/ });
-		await editPanel.getByLabel('Bölüm Adı').fill('Kalıcı Bölüm');
-		await editPanel.getByRole('button', { name: 'Değişiklikleri Kaydet' }).click();
+		const editPanel = page.getByRole('region', { name: /Bölümü düzenle/ });
+		await editPanel.getByLabel('Bölüm adı').fill('Kalıcı Bölüm');
+		await editPanel.getByRole('button', { name: 'Değişiklikleri kaydet' }).click();
 		await expect(page.getByRole('row').filter({ hasText: 'Kalıcı Bölüm' })).toHaveCount(1);
 
 		await page.goto('/admin/sections');
@@ -443,8 +443,8 @@ test.describe('UI v2 shell — rail, bottom tab bar, /sections and theme cookie'
 			.getByRole('link', { name: /Sil/ })
 			.click();
 		await page
-			.getByRole('region', { name: /Bölümü Sil/ })
-			.getByRole('button', { name: 'Evet, Bölümü Sil' })
+			.getByRole('region', { name: /Bölümü sil/ })
+			.getByRole('button', { name: 'Evet, bölümü sil' })
 			.click();
 		await expect(page.getByRole('row').filter({ hasText: 'Kalıcı Bölüm' })).toHaveCount(0);
 		await context.close();

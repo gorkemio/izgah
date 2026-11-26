@@ -158,6 +158,9 @@
 			formNode.removeEventListener('invalid', handleInvalid, true);
 		};
 	});
+
+	// An instance named after the software would read "İzgah, Izgah ile çalışır" (izgah-ui-v4 §10).
+	const runsOnItself = instanceName().replace(/^İ/, 'I').toLowerCase() === 'izgah';
 </script>
 
 <svelte:head>
@@ -467,7 +470,11 @@
 		<div class="settings-rows">
 			<div class="settings-row">
 				<div class="settings-row-info">
-					<p class="settings-row-title">{t('settings.software', { name: instanceName() })}</p>
+					<p class="settings-row-title">
+						{runsOnItself
+							? t('settings.softwareSelf')
+							: t('settings.software', { name: instanceName() })}
+					</p>
 					<p class="field-hint">{t('settings.softwareHint')}</p>
 				</div>
 				<div class="settings-row-control">
