@@ -9,7 +9,6 @@
 	import { untrack } from 'svelte';
 	import { toasts } from '#lib/client/toast.svelte.ts';
 	import Dialog from '#lib/components/ui/Dialog.svelte';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import { extractFirstUrlFromText } from '#lib/links/parse-url.ts';
 	import type { SectionListItem } from '#lib/server/sections/service.ts';
 	import { getComposerController } from '#lib/share/composer-controller.svelte.ts';
@@ -393,11 +392,11 @@
 		{#if onCancelClick}
 			<button
 				type="button"
-				class="btn btn-ghost btn-icon btn-sm"
+				class="btn btn-ghost btn-sm"
 				aria-label={t('composer.close')}
 				onclick={onCancelClick}
 			>
-				<Icon name="close" size={16} />
+				{t('common.close')}
 			</button>
 		{/if}
 	</header>

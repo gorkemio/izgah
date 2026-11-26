@@ -3,7 +3,6 @@
 	import { t } from '#lib/i18n/index.ts';
 	import { pageTitle } from '#lib/instance.ts';
 	import FeedView from '#lib/components/feed/FeedView.svelte';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import type { FeedSnapshot } from '#lib/types/feed.ts';
 	import type { PageData } from './$types';
 
@@ -31,7 +30,6 @@
 <div class="section-feed-page">
 	<nav aria-label={t('section.location')} class="section-breadcrumb">
 		<a href="/sections" class="back-link">
-			<Icon name="arrowLeft" size={15} />
 			<span>{t('nav.allSections')}</span>
 		</a>
 	</nav>

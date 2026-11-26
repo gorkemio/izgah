@@ -8,7 +8,6 @@
 	import { untrack } from 'svelte';
 	import PostCard from '#lib/components/feed/PostCard.svelte';
 	import ResourceHero from '#lib/components/resource/ResourceHero.svelte';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import type { ShareCardFormError } from '#lib/types/feed.ts';
 	import Dialog from '#lib/components/ui/Dialog.svelte';
 	import type { PageData } from './$types';
@@ -426,7 +425,6 @@
 <div class="resource-detail-page">
 	<nav aria-label={t('topbar.location')} class="breadcrumb-nav">
 		<a href="/" class="back-link">
-			<Icon name="arrowLeft" size={15} />
 			<span>{t('error.backToFeed')}</span>
 		</a>
 	</nav>
@@ -609,7 +607,6 @@
 
 				{#if commentFormErrorBanner}
 					<div class="panel-error" role="alert">
-						<Icon name="alert" size={16} />
 						<span>{commentFormErrorBanner}</span>
 					</div>
 				{/if}
@@ -694,7 +691,6 @@
 					{#each resourceSections as section, index (section.id)}
 						<li>
 							<a href="/sections/{section.slug}" class="tag" class:tag-accent={index === 0}>
-								<Icon name="hash" size={12} />
 								<span>{section.name}</span>
 							</a>
 						</li>
@@ -715,7 +711,6 @@
 				<h3 id="delete-comment-dialog-title" class="dialog-title">{t('comment.deleteTitle')}</h3>
 				{#if deleteCommentError}
 					<div class="panel-error" role="alert">
-						<Icon name="alert" size={16} />
 						<span>{deleteCommentError}</span>
 					</div>
 				{/if}

@@ -6,9 +6,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import Highlight from '#lib/components/ui/Highlight.svelte';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import Skeleton from '#lib/components/ui/Skeleton.svelte';
-	import type { IconName } from '#lib/components/ui/icons.ts';
 	import { getThemeState, type ThemeChoice } from '#lib/client/theme.svelte.ts';
 	import { toasts } from '#lib/client/toast.svelte.ts';
 	import { highlightTerms } from '#lib/search/highlight.ts';
@@ -67,12 +65,6 @@
 		return foldTurkish(haystack).includes(foldedQuery);
 	}
 
-	function domainInitials(domain: string): string {
-		const clean = domain.replace(/^www\./i, '');
-		const letters = clean.replace(/[^a-zA-Z0-9]/g, '').slice(0, 2);
-		return (letters || 'LN').toUpperCase();
-	}
-
 	async function switchTheme(choice: ThemeChoice): Promise<void> {
 		themeState?.apply(choice);
 		const body = new FormData();
@@ -101,9 +93,6 @@
 		title: string;
 		subtitle?: string;
 		badge?: string;
-		domainBadge?: string;
-		icon?: IconName;
-		accentIcon?: boolean;
 		shortcut?: string;
 		run: () => void;
 	}
@@ -119,7 +108,6 @@
 			group: 'sections',
 			title: section.name,
 			subtitle: t('palette.sectionSubtitle'),
-			icon: 'hash',
 			run: () => {
 				closePalette();
 				void goto(`/sections/${section.slug}`);
@@ -138,8 +126,6 @@
 				group: 'actions',
 				title: t('palette.action.compose'),
 				subtitle: t('palette.action.composeSub'),
-				icon: 'plus',
-				accentIcon: true,
 				shortcut: 'n',
 				keywords: 'yeni baglanti paylas link ekle new share add',
 				run: () => {
@@ -152,7 +138,6 @@
 				group: 'actions',
 				title: t('palette.action.settings'),
 				subtitle: t('palette.action.settingsSub'),
-				icon: 'settings',
 				keywords:
 					'ayarlar gorunum tema palet vurgu parola hesap dil settings appearance theme language password account',
 				run: () => {
@@ -165,7 +150,6 @@
 				group: 'actions',
 				title: t('palette.action.apiKeys'),
 				subtitle: t('palette.action.apiKeysSub'),
-				icon: 'key',
 				keywords: 'api anahtar eklenti token key extension',
 				run: () => {
 					closePalette();
@@ -180,7 +164,6 @@
 				group: 'actions',
 				title: t('palette.action.admin'),
 				subtitle: t('palette.action.adminSub'),
-				icon: 'shield',
 				keywords: 'yonetim admin uyeler davetler olcumler denetim members invites metrics audit',
 				run: () => {
 					closePalette();
@@ -195,7 +178,6 @@
 				group: 'actions',
 				title: t('palette.action.dark'),
 				subtitle: t('palette.action.darkSub'),
-				icon: 'moon',
 				keywords: 'koyu karanlik gece tema dark mod night theme mode',
 				run: () => {
 					closePalette();
@@ -209,7 +191,6 @@
 				group: 'actions',
 				title: t('palette.action.light'),
 				subtitle: t('palette.action.lightSub'),
-				icon: 'sun',
 				keywords: 'acik gunduz tema light mod day theme mode',
 				run: () => {
 					closePalette();
@@ -223,7 +204,6 @@
 				group: 'actions',
 				title: t('palette.action.system'),
 				subtitle: t('palette.action.systemSub'),
-				icon: 'monitor',
 				keywords: 'sistem otomatik tema mod system auto theme mode',
 				run: () => {
 					closePalette();
@@ -237,7 +217,6 @@
 			group: 'actions',
 			title: t('palette.action.help'),
 			subtitle: t('palette.action.helpSub'),
-			icon: 'keyboard',
 			shortcut: '?',
 			keywords: 'klavye kisayol yardim keyboard shortcuts help',
 			run: () => {
@@ -253,8 +232,6 @@
 				group: item.group,
 				title: item.title,
 				subtitle: item.subtitle,
-				icon: item.icon,
-				accentIcon: item.accentIcon,
 				shortcut: item.shortcut,
 				run: item.run
 			}));
@@ -275,7 +252,6 @@
 				group: 'links',
 				title: item.resource.title || item.resource.domain,
 				subtitle: subParts.filter(Boolean).join(' · '),
-				domainBadge: domainInitials(item.resource.domain),
 				badge: contentTypeLabel(item.resource.contentType),
 				run: () => {
 					closePalette();
@@ -300,7 +276,6 @@
 			id: 'search-all',
 			group: 'search',
 			title: label,
-			icon: 'search',
 			run: () => {
 				const target = `/search?q=${encodeURIComponent(trimmedQuery)}`;
 				closePalette();
@@ -580,9 +555,6 @@
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div class="cmdk-shell" onkeydown={handleKeydown}>
 		<div class="cmdk-input-row">
-			<span class="cmdk-search-icon" aria-hidden="true">
-				<Icon name="search" size={16} />
-			</span>
 			<input
 				bind:this={inputEl}
 				class="cmdk-input"
@@ -606,7 +578,7 @@
 					onclick={clearQuery}
 					aria-label={t('palette.clear')}
 				>
-					<Icon name="close" size={14} />
+					{t('palette.clearShort')}
 				</button>
 			{/if}
 			<button
@@ -661,7 +633,6 @@
 				</div>
 			{:else if fetchError && (scope === 'all' || scope === 'links')}
 				<div class="cmdk-error" role="status">
-					<Icon name="alert" size={15} />
 					<span>{t('palette.linkSearchFailed')}</span>
 					{#if trimmedQuery.length > 0}
 						<a
@@ -692,7 +663,6 @@
 							}}
 							onclick={entry.run}
 						>
-							<span class="domain-badge" aria-hidden="true">{entry.domainBadge}</span>
 							<span class="cmdk-item-main">
 								<span class="cmdk-item-title">
 									<Highlight text={entry.title} {terms} />
@@ -731,9 +701,6 @@
 							}}
 							onclick={entry.run}
 						>
-							<span class="cmdk-item-icon" aria-hidden="true">
-								<Icon name={entry.icon ?? 'hash'} size={15} />
-							</span>
 							<span class="cmdk-item-main">
 								<span class="cmdk-item-title">
 									<Highlight text={entry.title} {terms} />
@@ -764,9 +731,6 @@
 							}}
 							onclick={entry.run}
 						>
-							<span class="cmdk-item-icon" class:is-accent={entry.accentIcon} aria-hidden="true">
-								<Icon name={entry.icon ?? 'command'} size={15} />
-							</span>
 							<span class="cmdk-item-main">
 								<span class="cmdk-item-title">
 									<Highlight text={entry.title} {terms} />
@@ -798,9 +762,6 @@
 						}}
 						onclick={searchAllEntry.run}
 					>
-						<span class="cmdk-item-icon is-accent" aria-hidden="true">
-							<Icon name="search" size={15} />
-						</span>
 						<span class="cmdk-item-main">
 							<span class="cmdk-item-title">{searchAllEntry.title}</span>
 						</span>
@@ -886,12 +847,6 @@
 		border-block-end: 1px solid var(--color-line);
 	}
 
-	.cmdk-search-icon {
-		display: inline-flex;
-		color: var(--color-text-muted);
-		flex: none;
-	}
-
 	.cmdk-input {
 		flex: 1 1 auto;
 		min-inline-size: 0;
@@ -928,6 +883,13 @@
 		border-radius: var(--radius-xs);
 		color: var(--color-text-muted);
 		cursor: pointer;
+	}
+
+	.cmdk-clear-btn {
+		font: var(--text-hint);
+		text-decoration: underline;
+		text-decoration-color: var(--color-line-strong);
+		text-underline-offset: 0.2em;
 	}
 
 	.cmdk-clear-btn:hover {
@@ -1022,38 +984,6 @@
 	.cmdk-item.is-selected {
 		background: var(--color-surface-2);
 		border-color: var(--color-line);
-	}
-
-	.cmdk-item-icon {
-		display: inline-grid;
-		place-items: center;
-		inline-size: 28px;
-		block-size: 28px;
-		border-radius: var(--radius-sm);
-		background: var(--color-surface-2);
-		border: 1px solid var(--color-line);
-		color: var(--color-text-secondary);
-		flex: none;
-	}
-
-	.cmdk-item-icon.is-accent {
-		background: var(--color-accent-soft);
-		border-color: var(--color-accent-border);
-		color: var(--color-accent-text);
-	}
-
-	.domain-badge {
-		display: inline-grid;
-		place-items: center;
-		inline-size: 28px;
-		block-size: 28px;
-		border-radius: var(--radius-sm);
-		background: var(--color-surface-2);
-		border: 1px solid var(--color-line);
-		font: var(--text-micro);
-		font-weight: 600;
-		color: var(--color-text-secondary);
-		flex: none;
 	}
 
 	.cmdk-item-main {

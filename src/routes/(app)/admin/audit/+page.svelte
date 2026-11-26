@@ -165,7 +165,6 @@
 		background: var(--color-surface-1);
 		border: 1px solid var(--color-line);
 		border-radius: var(--radius-md);
-		box-shadow: var(--shadow-sm);
 		padding: var(--space-4) var(--space-5);
 		display: flex;
 		flex-direction: column;

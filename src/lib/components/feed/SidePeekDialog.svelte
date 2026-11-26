@@ -452,11 +452,6 @@
 	dialog.side-peek-dialog[open] {
 		display: grid;
 		grid-template-rows: auto minmax(0, 1fr);
-		opacity: 1;
-		translate: 0 0;
-		transition:
-			opacity var(--dur-panel) var(--ease),
-			translate var(--dur-panel) var(--ease);
 	}
 
 	dialog.side-peek-dialog:modal {
@@ -467,30 +462,6 @@
 		background: var(--color-backdrop);
 		overflow: hidden;
 		overscroll-behavior: contain;
-	}
-
-	dialog.side-peek-dialog[open]::backdrop {
-		opacity: 1;
-		transition: opacity var(--dur-panel) var(--ease);
-	}
-
-	@starting-style {
-		dialog.side-peek-dialog[open] {
-			opacity: 0;
-			translate: 16px 0;
-		}
-
-		dialog.side-peek-dialog[open]::backdrop {
-			opacity: 0;
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		dialog.side-peek-dialog[open],
-		dialog.side-peek-dialog[open]::backdrop {
-			transition-duration: 0ms;
-			translate: 0 0;
-		}
 	}
 
 	.peek-header {

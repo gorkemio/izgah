@@ -11,7 +11,6 @@
 		type ShareComposerInitialState
 	} from '#lib/components/feed/ShareComposerDialog.svelte';
 	import SidePeekDialog from '#lib/components/feed/SidePeekDialog.svelte';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import { FeedState } from '#lib/feed/feed-state.svelte.ts';
 	import { groupByDay } from '#lib/feed/group-by-day.ts';
 	import { dayKey, dayLabel, formatTime } from '#lib/format/date.ts';
@@ -540,7 +539,6 @@
 		</nav>
 		{#if loadMoreFailed}
 			<p class="banner banner-error load-more-error" role="alert">
-				<Icon name="alert" size={16} />
 				<span>{t('feed.loadMoreFailed')}</span>
 			</p>
 		{/if}

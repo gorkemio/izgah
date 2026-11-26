@@ -382,12 +382,7 @@
 			transition:
 				background-color var(--dur-fast) var(--ease),
 				color var(--dur-fast) var(--ease),
-				opacity var(--dur-fast) var(--ease),
-				scale 90ms var(--ease);
-		}
-
-		:global(.notification-bell-trigger:active) {
-			scale: 0.98;
+				opacity var(--dur-fast) var(--ease);
 		}
 	}
 

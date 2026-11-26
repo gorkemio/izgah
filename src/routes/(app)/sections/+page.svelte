@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { t } from '#lib/i18n/index.ts';
 	import { pageTitle } from '#lib/instance.ts';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -19,7 +18,6 @@
 		</div>
 		{#if data.user.role === 'admin' && data.sections.length > 0}
 			<a class="btn btn-subtle btn-sm" href="/admin/sections">
-				<Icon name="sliders" size={14} />
 				<span>{t('sections.manage')}</span>
 			</a>
 		{/if}
@@ -44,15 +42,9 @@
 			{#each data.sections as section (section.id)}
 				<li class="section-card">
 					<div class="section-card-head">
-						<span class="section-icon-badge" aria-hidden="true">
-							<Icon name="hash" size={16} />
-						</span>
 						<a class="section-link" href="/sections/{section.slug}">
 							<span class="section-name">{section.name}</span>
 						</a>
-						<span class="section-chevron" aria-hidden="true">
-							<Icon name="chevronRight" size={16} />
-						</span>
 					</div>
 					{#if section.description}
 						<p class="section-desc">{section.description}</p>
@@ -120,7 +112,6 @@
 		background: var(--color-surface-1);
 		border: 1px solid var(--color-line);
 		border-radius: var(--radius-lg);
-		box-shadow: var(--shadow-sm);
 		transition:
 			background-color var(--dur-fast) var(--ease),
 			border-color var(--dur-fast) var(--ease);
@@ -144,18 +135,6 @@
 		align-items: center;
 		gap: var(--space-3);
 		min-inline-size: 0;
-	}
-
-	.section-icon-badge {
-		display: inline-grid;
-		place-items: center;
-		inline-size: 32px;
-		block-size: 32px;
-		flex: none;
-		border-radius: var(--radius-sm);
-		background: var(--color-accent-soft);
-		color: var(--color-accent-text);
-		border: 1px solid var(--color-accent-border);
 	}
 
 	/* Strict serif boundary: section card titles use --font-sans weight 600. */
@@ -185,17 +164,6 @@
 		box-shadow: none;
 	}
 
-	.section-chevron {
-		margin-inline-start: auto;
-		flex: none;
-		color: var(--color-text-muted);
-		transition: color var(--dur-fast) var(--ease);
-	}
-
-	.section-card:hover .section-chevron {
-		color: var(--color-text);
-	}
-
 	.section-desc {
 		padding-inline-start: calc(32px + var(--space-3));
 		font: var(--text-hint);
@@ -215,10 +183,6 @@
 	@media (forced-colors: active) {
 		.section-card {
 			box-shadow: none;
-		}
-
-		.section-icon-badge {
-			border-color: CanvasText;
 		}
 
 		.section-card:has(.section-link:focus-visible) {

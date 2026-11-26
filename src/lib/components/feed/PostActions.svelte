@@ -226,18 +226,8 @@
 	@media (prefers-reduced-motion: no-preference) {
 		.action {
 			transition:
-				background-color var(--dur-fast) var(--ease),
-				border-color var(--dur-fast) var(--ease),
 				color var(--dur-fast) var(--ease),
-				scale 90ms var(--ease);
-		}
-
-		.action:active:not(:disabled) {
-			scale: 0.98;
-		}
-
-		.action[aria-pressed='true'] :global(svg) {
-			animation: like-pop 280ms ease-out;
+				text-decoration-color var(--dur-fast) var(--ease);
 		}
 	}
 

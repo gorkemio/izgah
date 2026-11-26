@@ -1,14 +1,9 @@
 <script lang="ts">
 	import { t } from '#lib/i18n/index.ts';
 	import { toasts, type Toast } from '#lib/client/toast.svelte.ts';
-	import Icon from './Icon.svelte';
 
 	const statusToasts = $derived(toasts.items.filter((item) => item.tone !== 'error'));
 	const errorToasts = $derived(toasts.items.filter((item) => item.tone === 'error'));
-
-	function iconFor(tone: Toast['tone']): 'alert' | 'check' {
-		return tone === 'error' ? 'alert' : 'check';
-	}
 </script>
 
 {#snippet toastItem(toast: Toast)}
@@ -28,9 +23,6 @@
 			toasts.resume(toast.id, 'focus');
 		}}
 	>
-		<span class="toast-icon" aria-hidden="true">
-			<Icon name={iconFor(toast.tone)} size={16} />
-		</span>
 		<span class="toast-message">{toast.message}</span>
 		{#if toast.action}
 			<a href={toast.action.href} class="toast-action">{toast.action.label}</a>
@@ -41,7 +33,7 @@
 			aria-label={t('toast.close')}
 			onclick={() => toasts.dismiss(toast.id)}
 		>
-			<Icon name="close" size={14} />
+			{t('common.close')}
 		</button>
 	</div>
 {/snippet}
@@ -97,30 +89,15 @@
 		box-shadow: var(--shadow-lg);
 	}
 
-	.toast-icon {
-		display: inline-flex;
-		align-items: center;
-		color: var(--color-text-secondary);
-		flex: none;
-	}
-
 	.toast.is-success {
 		border-color: var(--color-ok-border);
 		background: var(--color-surface-1);
-	}
-
-	.toast.is-success .toast-icon {
-		color: var(--color-ok-text);
 	}
 
 	.toast.is-error {
 		background: var(--color-danger-soft);
 		color: var(--color-danger);
 		border-color: var(--color-danger-border);
-	}
-
-	.toast.is-error .toast-icon {
-		color: var(--color-danger);
 	}
 
 	.toast-message {
@@ -139,57 +116,33 @@
 		color: var(--color-danger);
 	}
 
+	/* Close as a word (izgah-ui-v4 §1): the visible label sits inside the accessible name. */
 	.toast-close {
-		display: inline-grid;
-		place-items: center;
-		min-inline-size: 28px;
+		flex: none;
 		min-block-size: 28px;
-		padding: 0;
-		color: var(--color-text-muted);
+		padding: 0 var(--space-1);
+		font: var(--text-hint);
+		color: var(--color-text-secondary);
 		background: transparent;
 		border: 0;
-		border-radius: var(--radius-xs);
+		text-decoration: underline;
+		text-decoration-color: var(--color-line-strong);
+		text-underline-offset: 0.2em;
 		cursor: pointer;
-		flex: none;
-		transition:
-			background-color var(--dur-fast) var(--ease),
-			color var(--dur-fast) var(--ease);
 	}
 
 	.toast-close:hover {
-		background: var(--color-surface-2);
 		color: var(--color-text);
+		text-decoration-color: currentColor;
 	}
 
 	.toast.is-error .toast-close {
 		color: var(--color-danger);
-	}
-
-	.toast.is-error .toast-close:hover {
-		background: var(--color-danger);
-		color: var(--color-on-danger);
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.toast {
-			animation: izgah-toast-enter var(--dur-base) var(--ease);
-		}
-	}
-
-	@keyframes izgah-toast-enter {
-		from {
-			opacity: 0;
-			translate: 0 6px;
-		}
-		to {
-			opacity: 1;
-			translate: 0 0;
-		}
+		text-decoration-color: currentColor;
 	}
 
 	@media (pointer: coarse) {
 		.toast-close {
-			min-inline-size: 44px;
 			min-block-size: 44px;
 		}
 	}

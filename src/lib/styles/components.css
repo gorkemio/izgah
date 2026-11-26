@@ -58,21 +58,6 @@
 		opacity: 0.9;
 	}
 
-	@media (prefers-reduced-motion: no-preference) {
-		.btn {
-			transition:
-				background-color var(--dur-fast) var(--ease),
-				border-color var(--dur-fast) var(--ease),
-				color var(--dur-fast) var(--ease),
-				opacity var(--dur-fast) var(--ease),
-				scale 90ms var(--ease);
-		}
-
-		.btn:active:not(:disabled, [aria-disabled='true']) {
-			scale: 0.98;
-		}
-	}
-
 	.btn[aria-disabled='true'],
 	.btn:disabled {
 		color: var(--color-text-muted);
@@ -435,120 +420,11 @@
 		box-decoration-break: clone;
 	}
 
-	/* Segmented control base classes (also used by SegmentedControl.svelte) */
-	/* Künye: segmented choices are text tabs; the current one is bold and underlined (izgah-ui-v4 §7). */
-	.segmented {
-		display: inline-flex;
-		align-items: baseline;
-		gap: 0 var(--space-4);
-		max-inline-size: 100%;
-		overflow-x: auto;
-	}
-
-	.seg-item {
-		display: inline-flex;
-		align-items: baseline;
-		gap: 6px;
-		min-block-size: 28px;
-		padding: 4px 0;
-		font: var(--text-ui);
-		font-weight: 400;
-		font-size: 0.9375rem;
-		color: var(--color-text-secondary);
-		background: transparent;
-		border: 0;
-		text-decoration: none;
-		white-space: nowrap;
-		cursor: pointer;
-	}
-
-	/* The radio covers its label: invisible, but still the click and focus target. */
-	.seg-item:has(> input) {
-		position: relative;
-	}
-
-	.seg-item > input {
-		position: absolute;
-		inset: 0;
-		inline-size: 100%;
-		block-size: 100%;
-		margin: 0;
-		opacity: 0;
-		cursor: pointer;
-	}
-
-	.seg-item:hover:not(.is-active, :disabled, [aria-disabled='true']) {
-		color: var(--color-text);
-		text-decoration: underline;
-		text-underline-offset: 0.35em;
-	}
-
-	.seg-item.is-active,
-	.seg-item[aria-current='page'],
-	.seg-item[aria-pressed='true'],
-	.seg-item:has(input:checked) {
-		color: var(--color-text);
-		font-weight: 600;
-		text-decoration: underline;
-		text-decoration-thickness: 2px;
-		text-underline-offset: 0.35em;
-	}
-
-	.seg-item:has(input:focus-visible) {
-		outline: 2px solid transparent;
-		outline-offset: 2px;
-		box-shadow:
-			0 0 0 2px var(--color-bg),
-			0 0 0 4px var(--color-accent);
-	}
-
-	.seg-item:has(input:disabled),
-	.seg-item:disabled,
-	.seg-item[aria-disabled='true'] {
-		color: var(--color-text-muted);
-		opacity: 0.55;
-		cursor: not-allowed;
-	}
-
-	@media (pointer: coarse) {
-		.seg-item {
-			min-block-size: 38px;
-		}
-	}
-
-	/* Skeleton (§7.2 & §8: gentle opacity pulse, zero gradients, static under reduce/contrast) */
-	@keyframes izgah-skeleton-pulse {
-		0%,
-		100% {
-			opacity: 0.55;
-		}
-		50% {
-			opacity: 0.85;
-		}
-	}
-
+	/* Skeleton: a still placeholder; Künye moves only colour and the list → detail View Transition. */
 	.skeleton {
 		display: block;
 		background: var(--color-surface-2);
 		border-radius: var(--radius-xs);
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.skeleton {
-			animation: izgah-skeleton-pulse 1400ms ease-in-out infinite;
-		}
-	}
-
-	:is([data-light-theme='contrast'], [data-dark-theme='contrast']) .skeleton {
-		animation: none;
-		opacity: 1;
-	}
-
-	@media (prefers-contrast: more), (forced-colors: active) {
-		.skeleton {
-			animation: none;
-			opacity: 1;
-		}
 	}
 
 	.skeleton-line {
@@ -628,25 +504,12 @@
 		box-shadow: var(--shadow-lg);
 	}
 
-	dialog.izgah-dialog[open] {
-		opacity: 1;
-		scale: 1;
-		transition:
-			opacity var(--dur-base) var(--ease),
-			scale var(--dur-base) var(--ease);
-	}
-
 	dialog.izgah-dialog:modal {
 		overscroll-behavior: contain;
 	}
 
 	dialog.izgah-dialog::backdrop {
 		background: var(--color-backdrop);
-	}
-
-	dialog.izgah-dialog[open]::backdrop {
-		opacity: 1;
-		transition: opacity var(--dur-base) var(--ease);
 	}
 
 	/* Popover panels + feature-gated CSS Anchor Positioning (WebKit fix preserved) */
@@ -659,43 +522,6 @@
 		box-shadow: var(--shadow-lg);
 		min-inline-size: 10.5rem;
 		max-inline-size: calc(100dvw - 1rem);
-	}
-
-	.popover-panel[popover]:popover-open {
-		opacity: 1;
-		transition: opacity var(--dur-fast) var(--ease);
-	}
-
-	@keyframes izgah-popover-enter {
-		from {
-			opacity: 0;
-		}
-	}
-
-	@starting-style {
-		dialog.izgah-dialog[open] {
-			opacity: 0;
-			scale: 0.98;
-		}
-
-		dialog.izgah-dialog[open]::backdrop {
-			opacity: 0;
-		}
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.popover-panel[popover]:popover-open {
-			animation: izgah-popover-enter var(--dur-fast) var(--ease);
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		dialog.izgah-dialog[open],
-		dialog.izgah-dialog[open]::backdrop,
-		.popover-panel[popover]:popover-open {
-			transition-duration: 0ms;
-			animation: none;
-		}
 	}
 
 	@supports (position-area: block-end) {
@@ -869,25 +695,6 @@
 			background: Highlight;
 			color: HighlightText;
 			border-color: Highlight;
-		}
-
-		.segmented {
-			border-color: CanvasText;
-		}
-
-		.seg-item.is-active,
-		.seg-item[aria-current='page'],
-		.seg-item[aria-pressed='true'],
-		.seg-item:has(input:checked) {
-			background: Highlight;
-			color: HighlightText;
-			border-color: Highlight;
-			box-shadow: none;
-		}
-
-		.seg-item:has(input:focus-visible) {
-			outline: 2px solid CanvasText;
-			box-shadow: none;
 		}
 
 		.kbd {

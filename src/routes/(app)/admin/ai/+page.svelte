@@ -2,7 +2,6 @@
 	import { formatNumber, t } from '#lib/i18n/index.ts';
 	import { pageTitle } from '#lib/instance.ts';
 	import { enhance, type SubmitFunction } from '$app/forms';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import type { ActionData, PageData } from './$types';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -81,7 +80,6 @@
 	{/if}
 	{#if form?.error}
 		<div class="banner banner-error" role="alert">
-			<Icon name="alert" size={16} />
 			<span>{form.error}</span>
 		</div>
 	{/if}

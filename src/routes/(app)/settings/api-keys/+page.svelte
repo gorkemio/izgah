@@ -5,7 +5,6 @@
 	import { formatDateTime } from '#lib/format/date.ts';
 	import { enhance } from '$app/forms';
 	import Dialog from '#lib/components/ui/Dialog.svelte';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import type { ActionData, PageData } from './$types';
 
 	interface CommandLikeEvent extends Event {
@@ -290,7 +289,6 @@
 	{#if form?.createdKey}
 		<section class="secret-box" aria-labelledby="new-key-heading">
 			<div class="secret-head">
-				<Icon name="key" size={18} />
 				<h2 id="new-key-heading">{t('apiKeys.created', { name: form.createdKey.name })}</h2>
 			</div>
 			<p class="secret-warning">
@@ -306,7 +304,6 @@
 						command="--copy"
 						commandfor="new-api-key-value"
 					>
-						<Icon name="copy" size={14} />
 						<span>{t('apiKeys.copy')}</span>
 					</button>
 					<span class="tip" class:visible={copyTipVisible} role="status">{copyStatusText}</span>
@@ -317,14 +314,12 @@
 
 	{#if form?.revokedKeyId}
 		<div class="banner banner-success" role="status">
-			<Icon name="check" size={16} />
 			<span>{t('apiKeys.revoked')}</span>
 		</div>
 	{/if}
 
 	{#if form?.revokeError}
 		<div class="banner banner-error" role="alert">
-			<Icon name="alert" size={16} />
 			<span>{form.revokeError}</span>
 		</div>
 	{/if}
@@ -355,7 +350,6 @@
 						rel="noopener noreferrer"
 						target="_blank"
 					>
-						<Icon name="external" size={14} />
 						<span>{t('apiKeys.extensionGuide')}</span>
 					</a>
 				</div>
@@ -378,14 +372,12 @@
 				<div class="settings-row-control create-column">
 					{#if form?.createError}
 						<div class="banner banner-error" role="alert">
-							<Icon name="alert" size={16} />
 							<span>{form.createError}</span>
 						</div>
 					{/if}
 
 					{#if atKeyLimit}
 						<p class="banner banner-warn">
-							<Icon name="alert" size={16} />
 							<span>
 								{t('apiKeys.limitReached', { max: data.maxKeys })}
 							</span>
@@ -432,7 +424,6 @@
 								class="field-error error-msg"
 								data-message={t('apiKey.nameEmpty')}
 							>
-								<Icon name="alert" size={15} />
 								<span>{t('apiKey.nameEmpty')}</span>
 							</p>
 						</div>
@@ -713,7 +704,6 @@
 		background: var(--color-accent-soft);
 		border: 1px solid var(--color-accent-border);
 		border-radius: var(--radius-lg);
-		box-shadow: var(--shadow-sm);
 	}
 
 	@media (min-width: 640px) {
