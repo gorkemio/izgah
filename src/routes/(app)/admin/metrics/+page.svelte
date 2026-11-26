@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { cssText, formatNumber, t } from '#lib/i18n/index.ts';
 	import { pageTitle } from '#lib/instance.ts';
-	import { formatDateTime } from '#lib/format/date.ts';
+	import { formatWhen } from '#lib/format/date.ts';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -10,7 +10,7 @@
 		return formatNumber(ratio, { style: 'percent', maximumFractionDigits: 1 });
 	}
 
-	const formatDate = formatDateTime;
+	const formatDate = formatWhen;
 </script>
 
 <svelte:head>

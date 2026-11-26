@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { cssText, t } from '#lib/i18n/index.ts';
 	import { pageTitle } from '#lib/instance.ts';
-	import { formatDateTime } from '#lib/format/date.ts';
+	import { formatWhen } from '#lib/format/date.ts';
 	import { enhance } from '$app/forms';
 	import type { ActionData, PageData } from './$types';
 
@@ -40,7 +40,7 @@
 		}
 	}
 
-	const formatDate = formatDateTime;
+	const formatDate = formatWhen;
 </script>
 
 <svelte:head>

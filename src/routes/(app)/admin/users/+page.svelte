@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { cssText, t } from '#lib/i18n/index.ts';
 	import { pageTitle } from '#lib/instance.ts';
-	import { formatDateTime } from '#lib/format/date.ts';
+	import { formatWhen } from '#lib/format/date.ts';
 	import { onMount } from 'svelte';
 	import { enhance } from '$app/forms';
 	import type { AdminUserItem } from '#lib/server/admin/service.ts';
@@ -200,7 +200,7 @@
 		if (!iso) {
 			return '—';
 		}
-		return formatDateTime(iso);
+		return formatWhen(iso);
 	}
 
 	function getUserStatusLabel(user: AdminUserItem): string {

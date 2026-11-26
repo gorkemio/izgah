@@ -5,7 +5,7 @@
 	import { watchImageError } from '#lib/client/image-error.ts';
 	import { toasts } from '#lib/client/toast.svelte.ts';
 	import Skeleton from '#lib/components/ui/Skeleton.svelte';
-	import { formatDateTime } from '#lib/format/date.ts';
+	import { formatWhen } from '#lib/format/date.ts';
 	import type { ContentType, ProviderMeta, UnfurlStatus } from '#lib/types/domain.ts';
 	import { resourceFacts } from '#lib/format/kunye.ts';
 	import type { FeedShareItem } from '#lib/types/feed.ts';
@@ -361,7 +361,7 @@
 								<div class="peek-row-head">
 									<strong class="peek-author">{share.author.name}</strong>
 									<time class="peek-time" datetime={share.createdAt}>
-										{formatDateTime(share.createdAt)}
+										{formatWhen(share.createdAt)}
 									</time>
 								</div>
 								{#if share.note}
@@ -400,7 +400,7 @@
 									<div class="peek-row-head">
 										<strong class="peek-author">{comment.author.name}</strong>
 										<time class="peek-time" datetime={comment.createdAt}>
-											{formatDateTime(comment.createdAt)}
+											{formatWhen(comment.createdAt)}
 										</time>
 									</div>
 									<p class="peek-note">{comment.body}</p>
