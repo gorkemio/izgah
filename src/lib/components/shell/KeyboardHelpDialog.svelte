@@ -114,13 +114,13 @@
 		justify-content: space-between;
 		gap: var(--space-3);
 		padding-block-end: var(--space-3);
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 	}
 
 	.help-head h2 {
-		font: var(--text-section);
+		font: var(--k-text-section);
 		font-size: 1.0625rem;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.single-key-block {
@@ -133,8 +133,8 @@
 		align-items: center;
 		gap: var(--space-2);
 		min-block-size: 40px;
-		font: var(--text-ui);
-		color: var(--color-text);
+		font: var(--k-text-ui);
+		color: var(--k-color-text);
 		cursor: pointer;
 	}
 
@@ -146,18 +146,18 @@
 	.keys {
 		inline-size: 100%;
 		border-collapse: collapse;
-		font: var(--text-ui);
-		color: var(--color-text);
+		font: var(--k-text-ui);
+		color: var(--k-color-text);
 	}
 
 	.keys.is-off {
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.keys td {
 		padding: var(--space-2) var(--space-1);
 		vertical-align: middle;
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 	}
 
 	.keys tbody tr:last-child td {
@@ -176,7 +176,7 @@
 
 	.sep {
 		padding-inline: var(--space-1);
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	@media (pointer: coarse) {

@@ -209,12 +209,12 @@
 	}
 
 	.page-lead time {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
 	}
 
 	.table-card {
-		border-block-start: 1px solid var(--color-text);
+		border-block-start: 1px solid var(--k-color-text);
 		overflow: hidden;
 	}
 
@@ -225,12 +225,12 @@
 		justify-content: space-between;
 		gap: var(--space-2) var(--space-3);
 		padding: var(--space-3) var(--space-4);
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 	}
 
 	.table-toolbar h2 {
 		margin: 0;
-		font: var(--text-section);
+		font: var(--k-text-section);
 		letter-spacing: -0.01em;
 	}
 
@@ -245,7 +245,7 @@
 	}
 
 	.table-wrapper:focus-visible {
-		outline: 2px solid var(--color-accent);
+		outline: 2px solid var(--k-color-accent);
 		outline-offset: -2px;
 		box-shadow: none;
 	}
@@ -262,7 +262,7 @@
 	.responsive-sections-stats-table th,
 	.responsive-sections-stats-table td {
 		padding: 11px var(--space-4);
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 		text-align: start;
 		vertical-align: middle;
 	}
@@ -276,10 +276,10 @@
 
 	.responsive-metrics-table thead th,
 	.responsive-sections-stats-table thead th {
-		background: var(--color-surface-2);
-		font: var(--text-micro);
+		background: var(--k-color-surface-2);
+		font: var(--k-text-micro);
 		font-weight: 600;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 		position: sticky;
 		inset-block-start: 0;
 		z-index: 1;
@@ -294,14 +294,14 @@
 
 	.responsive-metrics-table tbody tr:hover,
 	.responsive-sections-stats-table tbody tr:hover {
-		background: var(--color-surface-2);
+		background: var(--k-color-surface-2);
 	}
 
 	.responsive-metrics-table tbody th,
 	.responsive-sections-stats-table tbody th {
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 600;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.responsive-metrics-table th.num-col,
@@ -315,25 +315,25 @@
 
 	.responsive-metrics-table tbody td.num-col,
 	.responsive-sections-stats-table tbody td.num-col {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.slug-code {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-secondary);
+		color: var(--k-color-text-secondary);
 	}
 
 	.empty-state {
 		margin: 0;
 		padding: var(--space-5) var(--space-4);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-sm);
-		background: var(--color-surface-2);
-		font: var(--text-ui);
-		color: var(--color-text-muted);
+		border: 1px solid var(--k-color-line);
+		border-radius: var(--k-radius-sm);
+		background: var(--k-color-surface-2);
+		font: var(--k-text-ui);
+		color: var(--k-color-text-muted);
 	}
 
 	@container (width < 640px) {
@@ -356,7 +356,7 @@
 
 		.responsive-metrics-table tr,
 		.responsive-sections-stats-table tr {
-			border-block-end: 2px solid var(--color-line);
+			border-block-end: 2px solid var(--k-color-line);
 			padding: var(--space-2) 0;
 		}
 
@@ -383,8 +383,8 @@
 
 		.responsive-metrics-table td::before,
 		.responsive-sections-stats-table td::before {
-			font: var(--text-micro);
-			color: var(--color-text-muted);
+			font: var(--k-text-micro);
+			color: var(--k-color-text-muted);
 		}
 
 		.responsive-metrics-table td:nth-child(2)::before,

@@ -81,23 +81,23 @@
 		gap: var(--space-2);
 		max-inline-size: min(28rem, calc(100dvw - 2 * var(--gutter)));
 		padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
-		font: var(--text-ui);
-		color: var(--color-text);
-		background: var(--color-surface-1);
-		border: 1px solid var(--color-line-strong);
-		border-radius: var(--radius-md);
-		box-shadow: var(--shadow-lg);
+		font: var(--k-text-ui);
+		color: var(--k-color-text);
+		background: var(--k-color-surface-1);
+		border: 1px solid var(--k-color-line-strong);
+		border-radius: var(--k-radius-md);
+		box-shadow: var(--k-shadow-lg);
 	}
 
 	.toast.is-success {
-		border-color: var(--color-ok-border);
-		background: var(--color-surface-1);
+		border-color: var(--k-color-ok-border);
+		background: var(--k-color-surface-1);
 	}
 
 	.toast.is-error {
-		background: var(--color-danger-soft);
-		color: var(--color-danger);
-		border-color: var(--color-danger-border);
+		background: var(--k-color-danger-soft);
+		color: var(--k-color-danger);
+		border-color: var(--k-color-danger-border);
 	}
 
 	.toast-message {
@@ -106,14 +106,14 @@
 	}
 
 	.toast-action {
-		color: var(--color-accent-text);
+		color: var(--k-color-accent-text);
 		font-weight: 600;
 		white-space: nowrap;
 		text-decoration-color: currentColor;
 	}
 
 	.toast.is-error .toast-action {
-		color: var(--color-danger);
+		color: var(--k-color-danger);
 	}
 
 	/* Close as a word (izgah-ui-v4 §1): the visible label sits inside the accessible name. */
@@ -121,23 +121,23 @@
 		flex: none;
 		min-block-size: 28px;
 		padding: 0 var(--space-1);
-		font: var(--text-hint);
-		color: var(--color-text-secondary);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-secondary);
 		background: transparent;
 		border: 0;
 		text-decoration: underline;
-		text-decoration-color: var(--color-line-strong);
+		text-decoration-color: var(--k-color-line-strong);
 		text-underline-offset: 0.2em;
 		cursor: pointer;
 	}
 
 	.toast-close:hover {
-		color: var(--color-text);
+		color: var(--k-color-text);
 		text-decoration-color: currentColor;
 	}
 
 	.toast.is-error .toast-close {
-		color: var(--color-danger);
+		color: var(--k-color-danger);
 		text-decoration-color: currentColor;
 	}
 

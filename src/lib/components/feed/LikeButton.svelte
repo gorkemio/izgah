@@ -92,7 +92,7 @@
 
 	.is-liked {
 		font-weight: 600;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.kunye-action:disabled {

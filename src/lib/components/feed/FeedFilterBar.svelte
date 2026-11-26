@@ -77,7 +77,7 @@
 <style>
 	.feed-filter {
 		margin-block-end: var(--space-4);
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 	}
 
 	summary {
@@ -86,7 +86,7 @@
 		min-block-size: 32px;
 		padding-block: 4px;
 		font-size: 0.9375rem;
-		color: var(--color-text-secondary);
+		color: var(--k-color-text-secondary);
 		cursor: pointer;
 		list-style: none;
 	}
@@ -98,7 +98,7 @@
 	summary::after {
 		content: ' ▾';
 		margin-inline-start: 0.3em;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.feed-filter[open] > summary::after {
@@ -106,12 +106,12 @@
 	}
 
 	summary:hover {
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.feed-filter-active {
 		font-weight: 600;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	nav ul {
@@ -121,24 +121,24 @@
 		margin: var(--space-1) 0 0;
 		padding: var(--space-2) 0;
 		list-style: none;
-		border-block: 1px solid var(--color-line);
+		border-block: 1px solid var(--k-color-line);
 	}
 
 	nav a {
 		font-size: 0.9375rem;
-		color: var(--color-text-secondary);
+		color: var(--k-color-text-secondary);
 		text-decoration: none;
 	}
 
 	nav a:hover {
-		color: var(--color-text);
+		color: var(--k-color-text);
 		text-decoration: underline;
 		text-underline-offset: 0.35em;
 	}
 
 	nav a[aria-current='page'] {
 		font-weight: 600;
-		color: var(--color-text);
+		color: var(--k-color-text);
 		text-decoration: underline;
 		text-decoration-thickness: 2px;
 		text-underline-offset: 0.35em;
@@ -150,17 +150,17 @@
 		align-items: baseline;
 		gap: var(--space-3);
 		margin: var(--space-2) 0 0;
-		font: var(--text-hint);
-		color: var(--color-text-muted);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-muted);
 	}
 
 	.filter-status strong {
 		font-weight: 600;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.filter-clear-link {
-		color: var(--color-link);
+		color: var(--k-color-link);
 	}
 
 	@media (pointer: coarse) {

@@ -132,14 +132,14 @@
 		gap: var(--space-2);
 		min-block-size: 38px;
 		padding: 0 var(--space-4);
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 600;
 		font-variant-numeric: tabular-nums;
 		color: var(--btn-primary-fg);
 		background: var(--btn-primary-bg);
 		border: 1px solid var(--btn-primary-bg);
-		border-radius: var(--radius-pill);
-		box-shadow: var(--shadow-lg);
+		border-radius: var(--k-radius-pill);
+		box-shadow: var(--k-shadow-lg);
 		cursor: pointer;
 		transition:
 			background-color var(--dur-fast) var(--ease),
@@ -148,8 +148,8 @@
 	}
 
 	.new-posts-pill:hover:not(:disabled) {
-		background: color-mix(in oklab, var(--btn-primary-bg) 88%, var(--color-text));
-		border-color: color-mix(in oklab, var(--btn-primary-bg) 88%, var(--color-text));
+		background: color-mix(in oklab, var(--btn-primary-bg) 88%, var(--k-color-text));
+		border-color: color-mix(in oklab, var(--btn-primary-bg) 88%, var(--k-color-text));
 	}
 
 	.new-posts-pill:disabled {

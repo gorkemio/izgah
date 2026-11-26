@@ -5,9 +5,9 @@
  * boxes, no shadows except dialogs and popovers, corner radius at most 3px, one type family.
  *
  * Two layers:
- *   1. Palette slots (--light-*, --dark-*) live in palette.css, generated from tokens/kunye.json
+ *   1. Palette slots (--light-*, --dark-*) live in palette.css, generated from tokens/izgah.json
  *      (`pnpm tokens`), the same source as the extensions and izgah.com.
- *   2. This file resolves them with light-dark() into the semantic layer (--color-*), so data-theme
+ *   2. This file resolves them with light-dark() into the semantic layer (--k-color-*), so data-theme
  *      only switches color-scheme. The mapping is mirrored on .theme-preview so subtrees can render
  *      either scheme. It also holds type, spacing, radii, shell sizes and motion.
  */
@@ -16,72 +16,72 @@
 	   light-dark() live on subtrees. */
 	:root,
 	.theme-preview {
-		--color-bg: light-dark(var(--light-bg), var(--dark-bg));
-		--color-surface-1: light-dark(var(--light-surface-1), var(--dark-surface-1));
-		--color-surface-2: light-dark(var(--light-surface-2), var(--dark-surface-2));
-		--color-surface-3: light-dark(var(--light-surface-3), var(--dark-surface-3));
-		--color-text: light-dark(var(--light-text), var(--dark-text));
-		--color-text-secondary: light-dark(var(--light-text-secondary), var(--dark-text-secondary));
-		--color-text-muted: light-dark(var(--light-text-muted), var(--dark-text-muted));
-		--color-line: light-dark(var(--light-line), var(--dark-line));
-		--color-line-strong: light-dark(var(--light-line-strong), var(--dark-line-strong));
+		--k-color-bg: light-dark(var(--light-bg), var(--dark-bg));
+		--k-color-surface-1: light-dark(var(--light-surface-1), var(--dark-surface-1));
+		--k-color-surface-2: light-dark(var(--light-surface-2), var(--dark-surface-2));
+		--k-color-surface-3: light-dark(var(--light-surface-3), var(--dark-surface-3));
+		--k-color-text: light-dark(var(--light-text), var(--dark-text));
+		--k-color-text-secondary: light-dark(var(--light-text-secondary), var(--dark-text-secondary));
+		--k-color-text-muted: light-dark(var(--light-text-muted), var(--dark-text-muted));
+		--k-color-line: light-dark(var(--light-line), var(--dark-line));
+		--k-color-line-strong: light-dark(var(--light-line-strong), var(--dark-line-strong));
 
-		--color-accent: light-dark(var(--accent-light), var(--accent-dark));
-		--color-on-accent: light-dark(var(--on-accent-light), var(--on-accent-dark));
-		--color-accent-soft: light-dark(var(--accent-soft-light), var(--accent-soft-dark));
-		--color-accent-text: light-dark(var(--accent-text-light), var(--accent-text-dark));
-		--color-accent-border: light-dark(var(--accent-border-light), var(--accent-border-dark));
+		--k-color-accent: light-dark(var(--accent-light), var(--accent-dark));
+		--k-color-on-accent: light-dark(var(--on-accent-light), var(--on-accent-dark));
+		--k-color-accent-soft: light-dark(var(--accent-soft-light), var(--accent-soft-dark));
+		--k-color-accent-text: light-dark(var(--accent-text-light), var(--accent-text-dark));
+		--k-color-accent-border: light-dark(var(--accent-border-light), var(--accent-border-dark));
 
 		/* Links look like links; opened links fade (§1, principle 2). */
-		--color-link: light-dark(var(--light-link), var(--dark-link));
-		--color-visited: light-dark(var(--light-visited), var(--dark-visited));
+		--k-color-link: light-dark(var(--light-link), var(--dark-link));
+		--k-color-visited: light-dark(var(--light-visited), var(--dark-visited));
 
-		--color-danger: light-dark(var(--light-danger), var(--dark-danger));
-		--color-on-danger: light-dark(var(--light-on-danger), var(--dark-on-danger));
-		--color-danger-soft: light-dark(var(--light-danger-soft), var(--dark-danger-soft));
-		--color-danger-border: light-dark(var(--light-danger-border), var(--dark-danger-border));
+		--k-color-danger: light-dark(var(--light-danger), var(--dark-danger));
+		--k-color-on-danger: light-dark(var(--light-on-danger), var(--dark-on-danger));
+		--k-color-danger-soft: light-dark(var(--light-danger-soft), var(--dark-danger-soft));
+		--k-color-danger-border: light-dark(var(--light-danger-border), var(--dark-danger-border));
 
-		--color-ok-soft: light-dark(var(--light-ok-soft), var(--dark-ok-soft));
-		--color-ok-text: light-dark(var(--light-ok-text), var(--dark-ok-text));
-		--color-ok-border: light-dark(var(--light-ok-border), var(--dark-ok-border));
+		--k-color-ok-soft: light-dark(var(--light-ok-soft), var(--dark-ok-soft));
+		--k-color-ok-text: light-dark(var(--light-ok-text), var(--dark-ok-text));
+		--k-color-ok-border: light-dark(var(--light-ok-border), var(--dark-ok-border));
 
-		--color-warn-soft: light-dark(var(--light-warn-soft), var(--dark-warn-soft));
-		--color-warn-text: light-dark(var(--light-warn-text), var(--dark-warn-text));
-		--color-warn-border: light-dark(var(--light-warn-border), var(--dark-warn-border));
+		--k-color-warn-soft: light-dark(var(--light-warn-soft), var(--dark-warn-soft));
+		--k-color-warn-text: light-dark(var(--light-warn-text), var(--dark-warn-text));
+		--k-color-warn-border: light-dark(var(--light-warn-border), var(--dark-warn-border));
 
-		--color-focus-inner: light-dark(var(--light-focus-inner), var(--dark-focus-inner));
-		--color-focus-outer: var(--color-link);
-		--color-highlight-bg: light-dark(var(--light-highlight-bg), var(--dark-highlight-bg));
-		--color-highlight-fg: light-dark(var(--light-highlight-fg), var(--dark-highlight-fg));
-		--color-backdrop: light-dark(var(--light-backdrop), var(--dark-backdrop));
+		--k-color-focus-inner: light-dark(var(--light-focus-inner), var(--dark-focus-inner));
+		--k-color-focus-outer: var(--k-color-link);
+		--k-color-highlight-bg: light-dark(var(--light-highlight-bg), var(--dark-highlight-bg));
+		--k-color-highlight-fg: light-dark(var(--light-highlight-fg), var(--dark-highlight-fg));
+		--k-color-backdrop: light-dark(var(--light-backdrop), var(--dark-backdrop));
 
 		/* Depth: only dialogs and popovers cast a shadow (light-dark() accepts only <color>). */
-		--shadow-lg: var(--light-shadow-lg);
+		--k-shadow-lg: var(--light-shadow-lg);
 
 		/* Component layer: rules, not boxes; primary actions are ink. */
-		--card-bg: var(--color-bg);
-		--btn-primary-bg: var(--color-text);
-		--btn-primary-fg: var(--color-bg);
-		--rail-bg: var(--color-bg);
-		--rail-border: var(--color-line);
-		--input-bg: var(--color-bg);
+		--card-bg: var(--k-color-bg);
+		--btn-primary-bg: var(--k-color-text);
+		--btn-primary-fg: var(--k-color-bg);
+		--rail-bg: var(--k-color-bg);
+		--rail-border: var(--k-color-line);
+		--input-bg: var(--k-color-bg);
 	}
 
 	.theme-preview.is-light {
-		--shadow-lg: var(--light-shadow-lg);
+		--k-shadow-lg: var(--light-shadow-lg);
 	}
 
 	@media (prefers-color-scheme: dark) {
 		:root:not([data-theme='light']),
 		:root:not([data-theme='light']) .theme-preview:not(.is-light) {
-			--shadow-lg: var(--dark-shadow-lg);
+			--k-shadow-lg: var(--dark-shadow-lg);
 		}
 	}
 
 	:root[data-theme='dark'],
 	:root[data-theme='dark'] .theme-preview:not(.is-light),
 	.theme-preview.is-dark {
-		--shadow-lg: var(--dark-shadow-lg);
+		--k-shadow-lg: var(--dark-shadow-lg);
 	}
 
 	/* Typography, spacing, radii, shell dimensions and motion (§2, §3). */
@@ -95,15 +95,15 @@
 		--font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
 		/* Weights 400 / 500 / 600 only (§2). */
-		--text-display: 600 1.375rem / 1.25 var(--font-sans);
-		--text-day: 600 1rem / 1.3 var(--font-sans);
-		--text-title: 500 1rem / 1.4 var(--font-sans);
-		--text-section: 600 1rem / 1.35 var(--font-sans);
-		--text-body: 400 1rem / 1.5 var(--font-sans);
-		--text-ui: 500 0.875rem / 1.3 var(--font-sans);
-		--text-hint: 400 0.875rem / 1.45 var(--font-sans);
-		--text-meta: 400 0.8125rem / 1.3 var(--font-sans);
-		--text-micro: 500 0.8125rem / 1.2 var(--font-sans);
+		--k-text-display: 600 1.375rem / 1.25 var(--font-sans);
+		--k-text-day: 600 1rem / 1.3 var(--font-sans);
+		--k-text-title: 500 1rem / 1.4 var(--font-sans);
+		--k-text-section: 600 1rem / 1.35 var(--font-sans);
+		--k-text-body: 400 1rem / 1.5 var(--font-sans);
+		--k-text-ui: 500 0.875rem / 1.3 var(--font-sans);
+		--k-text-hint: 400 0.875rem / 1.45 var(--font-sans);
+		--k-text-meta: 400 0.8125rem / 1.3 var(--font-sans);
+		--k-text-micro: 500 0.8125rem / 1.2 var(--font-sans);
 
 		--space-1: 4px;
 		--space-2: 8px;
@@ -115,11 +115,11 @@
 		--gutter: 16px;
 
 		/* Corner radius at most 3px (§ principle 3). */
-		--radius-xs: 2px;
-		--radius-sm: 3px;
-		--radius-md: 3px;
-		--radius-lg: 3px;
-		--radius-pill: 3px;
+		--k-radius-xs: 2px;
+		--k-radius-sm: 3px;
+		--k-radius-md: 3px;
+		--k-radius-lg: 3px;
+		--k-radius-pill: 3px;
 
 		/* Shell dimensions (§3). The entry gutter is shared with izgah.com. */
 		--rail-w: 224px;
@@ -169,7 +169,7 @@
 		.theme-preview {
 			--light-shadow-lg: none;
 			--dark-shadow-lg: none;
-			--shadow-lg: none;
+			--k-shadow-lg: none;
 		}
 	}
 
@@ -179,6 +179,159 @@
 			--dur-fast: 0ms;
 			--dur-base: 0ms;
 			--dur-panel: 0ms;
+		}
+	}
+
+	/*
+	 * UI v5 "Fener" semantic layer (docs/designs/izgah-ui-v5.md §2). The names follow shadcn-svelte
+	 * plus Izgah's brand, status, surface and avatar roles; theme.css maps them to Tailwind utilities.
+	 * Re-declared on [data-v5-theme] and [data-scheme] subtrees so the theme lab can render several
+	 * themes and schemes side by side.
+	 */
+	:root,
+	[data-v5-theme],
+	[data-scheme] {
+		--success: light-dark(var(--v5-light-success), var(--v5-dark-success));
+		--success-foreground: light-dark(
+			var(--v5-light-success-foreground),
+			var(--v5-dark-success-foreground)
+		);
+		--success-soft: light-dark(var(--v5-light-success-soft), var(--v5-dark-success-soft));
+		--warning: light-dark(var(--v5-light-warning), var(--v5-dark-warning));
+		--warning-foreground: light-dark(
+			var(--v5-light-warning-foreground),
+			var(--v5-dark-warning-foreground)
+		);
+		--warning-soft: light-dark(var(--v5-light-warning-soft), var(--v5-dark-warning-soft));
+		--info: light-dark(var(--v5-light-info), var(--v5-dark-info));
+		--info-foreground: light-dark(var(--v5-light-info-foreground), var(--v5-dark-info-foreground));
+		--info-soft: light-dark(var(--v5-light-info-soft), var(--v5-dark-info-soft));
+		--avatar-1: light-dark(var(--v5-light-avatar-1), var(--v5-dark-avatar-1));
+		--avatar-2: light-dark(var(--v5-light-avatar-2), var(--v5-dark-avatar-2));
+		--avatar-3: light-dark(var(--v5-light-avatar-3), var(--v5-dark-avatar-3));
+		--avatar-4: light-dark(var(--v5-light-avatar-4), var(--v5-dark-avatar-4));
+		--avatar-5: light-dark(var(--v5-light-avatar-5), var(--v5-dark-avatar-5));
+		--avatar-6: light-dark(var(--v5-light-avatar-6), var(--v5-dark-avatar-6));
+		--avatar-7: light-dark(var(--v5-light-avatar-7), var(--v5-dark-avatar-7));
+		--avatar-8: light-dark(var(--v5-light-avatar-8), var(--v5-dark-avatar-8));
+		--avatar-foreground: light-dark(
+			var(--v5-light-avatar-foreground),
+			var(--v5-dark-avatar-foreground)
+		);
+		--background: light-dark(var(--v5-light-background), var(--v5-dark-background));
+		--foreground: light-dark(var(--v5-light-foreground), var(--v5-dark-foreground));
+		--card: light-dark(var(--v5-light-card), var(--v5-dark-card));
+		--card-foreground: light-dark(var(--v5-light-card-foreground), var(--v5-dark-card-foreground));
+		--popover: light-dark(var(--v5-light-popover), var(--v5-dark-popover));
+		--popover-foreground: light-dark(
+			var(--v5-light-popover-foreground),
+			var(--v5-dark-popover-foreground)
+		);
+		--primary: light-dark(var(--v5-light-primary), var(--v5-dark-primary));
+		--primary-foreground: light-dark(
+			var(--v5-light-primary-foreground),
+			var(--v5-dark-primary-foreground)
+		);
+		--secondary: light-dark(var(--v5-light-secondary), var(--v5-dark-secondary));
+		--secondary-foreground: light-dark(
+			var(--v5-light-secondary-foreground),
+			var(--v5-dark-secondary-foreground)
+		);
+		--muted: light-dark(var(--v5-light-muted), var(--v5-dark-muted));
+		--muted-foreground: light-dark(
+			var(--v5-light-muted-foreground),
+			var(--v5-dark-muted-foreground)
+		);
+		--accent: light-dark(var(--v5-light-accent), var(--v5-dark-accent));
+		--accent-foreground: light-dark(
+			var(--v5-light-accent-foreground),
+			var(--v5-dark-accent-foreground)
+		);
+		--destructive: light-dark(var(--v5-light-destructive), var(--v5-dark-destructive));
+		--destructive-foreground: light-dark(
+			var(--v5-light-destructive-foreground),
+			var(--v5-dark-destructive-foreground)
+		);
+		--border: light-dark(var(--v5-light-border), var(--v5-dark-border));
+		--input: light-dark(var(--v5-light-input), var(--v5-dark-input));
+		--ring: light-dark(var(--v5-light-ring), var(--v5-dark-ring));
+		--sidebar: light-dark(var(--v5-light-sidebar), var(--v5-dark-sidebar));
+		--sidebar-foreground: light-dark(
+			var(--v5-light-sidebar-foreground),
+			var(--v5-dark-sidebar-foreground)
+		);
+		--sidebar-primary: light-dark(var(--v5-light-sidebar-primary), var(--v5-dark-sidebar-primary));
+		--sidebar-primary-foreground: light-dark(
+			var(--v5-light-sidebar-primary-foreground),
+			var(--v5-dark-sidebar-primary-foreground)
+		);
+		--sidebar-accent: light-dark(var(--v5-light-sidebar-accent), var(--v5-dark-sidebar-accent));
+		--sidebar-accent-foreground: light-dark(
+			var(--v5-light-sidebar-accent-foreground),
+			var(--v5-dark-sidebar-accent-foreground)
+		);
+		--sidebar-border: light-dark(var(--v5-light-sidebar-border), var(--v5-dark-sidebar-border));
+		--sidebar-ring: light-dark(var(--v5-light-sidebar-ring), var(--v5-dark-sidebar-ring));
+		--brand-1: light-dark(var(--v5-light-brand-1), var(--v5-dark-brand-1));
+		--brand-2: light-dark(var(--v5-light-brand-2), var(--v5-dark-brand-2));
+		--brand-3: light-dark(var(--v5-light-brand-3), var(--v5-dark-brand-3));
+		--brand-foreground: light-dark(
+			var(--v5-light-brand-foreground),
+			var(--v5-dark-brand-foreground)
+		);
+		--glow: light-dark(var(--v5-light-glow), var(--v5-dark-glow));
+		--link: light-dark(var(--v5-light-link), var(--v5-dark-link));
+		--visited: light-dark(var(--v5-light-visited), var(--v5-dark-visited));
+		--highlight: light-dark(var(--v5-light-highlight), var(--v5-dark-highlight));
+		--highlight-foreground: light-dark(
+			var(--v5-light-highlight-foreground),
+			var(--v5-dark-highlight-foreground)
+		);
+		--surface-raised: light-dark(var(--v5-light-surface-raised), var(--v5-dark-surface-raised));
+		--overlay: light-dark(var(--v5-light-overlay), var(--v5-dark-overlay));
+		--glass: light-dark(var(--v5-light-glass), var(--v5-dark-glass));
+		--glass-border: light-dark(var(--v5-light-glass-border), var(--v5-dark-glass-border));
+		--backdrop: light-dark(var(--v5-light-backdrop), var(--v5-dark-backdrop));
+
+		/* Elevation (§3.4); light-dark() accepts only colours, so shadows switch below. */
+		--elevation-sm: var(--v5-light-shadow-sm);
+		--elevation-md: var(--v5-light-shadow-md);
+		--elevation-lg: var(--v5-light-shadow-lg);
+		--elevation-xl: var(--v5-light-shadow-xl);
+	}
+
+	[data-scheme='light'] {
+		color-scheme: light;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		:root:not([data-theme='light']),
+		:root:not([data-theme='light']) [data-v5-theme]:not([data-scheme='light']) {
+			--elevation-sm: var(--v5-dark-shadow-sm);
+			--elevation-md: var(--v5-dark-shadow-md);
+			--elevation-lg: var(--v5-dark-shadow-lg);
+			--elevation-xl: var(--v5-dark-shadow-xl);
+		}
+	}
+
+	:root[data-theme='dark'],
+	:root[data-theme='dark'] [data-v5-theme]:not([data-scheme='light']),
+	[data-scheme='dark'] {
+		color-scheme: dark;
+		--elevation-sm: var(--v5-dark-shadow-sm);
+		--elevation-md: var(--v5-dark-shadow-md);
+		--elevation-lg: var(--v5-dark-shadow-lg);
+		--elevation-xl: var(--v5-dark-shadow-xl);
+	}
+
+	@media (prefers-contrast: more), (forced-colors: active) {
+		:root,
+		[data-v5-theme],
+		[data-scheme] {
+			--elevation-sm: none;
+			--elevation-md: none;
+			--elevation-lg: none;
+			--elevation-xl: none;
 		}
 	}
 }

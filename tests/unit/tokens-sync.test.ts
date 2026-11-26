@@ -17,7 +17,7 @@ function topLevelRoot(css: string): Record<string, string> {
 	);
 }
 
-describe('Künye tokens come from one source (tokens/kunye.json)', () => {
+describe('Künye tokens come from one source (tokens/izgah.json)', () => {
 	it.each(Object.entries(OUTPUTS))('%s palette (%s) matches a fresh render', (key, file) => {
 		const onDisk = fs.readFileSync(path.resolve(file), 'utf8');
 		expect(onDisk, `${file} is out of date: run \`pnpm tokens\``).toBe(
@@ -30,6 +30,7 @@ describe('Künye tokens come from one source (tokens/kunye.json)', () => {
 		for (const key of ['extension', 'site'] as const) {
 			const root = topLevelRoot(rendered[key]);
 			for (const role of ['bg', 'text', 'text-secondary', 'text-muted', 'line', 'link', 'danger']) {
+				// The extension and the site keep the unprefixed semantic names (no Tailwind there).
 				expect(root[`--color-${role}`], `${key} --color-${role}`).toBe(light[role]);
 			}
 			expect(root['--color-accent']).toBe(light.link);

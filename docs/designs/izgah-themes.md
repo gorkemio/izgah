@@ -1,7 +1,7 @@
 # Izgah Themes — Dim, High Contrast and Accent Colour
 
 *   **Author:** Gorkem Inanc Ozdemir
-*   **Status:** Mechanism Active — accent colours and the Dim palette were removed in [izgah-ui-v4.md](./izgah-ui-v4.md) §8
+*   **Status:** Mechanism Active — accent colours and the Dim palette were removed in [izgah-ui-v4.md](./izgah-ui-v4.md) §8; [izgah-ui-v5.md](./izgah-ui-v5.md) §2 and §7 keep the mechanism and add an effect level cookie
 *   **Date:** 2026-11-22
 
 > **UI v4 note (2026-11-26):** Künye removed the accent colours and the Dim palette ([izgah-ui-v4.md](./izgah-ui-v4.md) §8); old `izgah_accent` and `dim` cookie values fall back to the default through the allow-list. The colours of the four remaining palettes (light and dark × standard and high contrast) are generated from `tokens/kunye.json` with `pnpm tokens` (v4 §11). §1 and §2 below are a historical record.

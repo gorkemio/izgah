@@ -1,7 +1,7 @@
 /**
  * Künye colour tokens from one source (docs/designs/izgah-ui-v4.md §1, §11).
  *
- * tokens/kunye.json → three generated stylesheets, committed so izgah.com keeps no build step and
+ * tokens/izgah.json → three generated stylesheets, committed so izgah.com keeps no build step and
  * the extension package stays self-contained:
  *
  *   src/lib/styles/palette.css        web app: palette slots resolved by light-dark() in tokens.css
@@ -19,16 +19,47 @@ export type Scheme = 'light' | 'dark';
 export type PaletteName = 'default' | 'contrast';
 export type Palette = Record<string, string>;
 
+/** UI v5 "Fener" palettes (docs/designs/izgah-ui-v5.md §2): theme candidates plus shared roles. */
+export interface V5Tokens {
+	default: string;
+	themes: Record<string, Record<Scheme, Palette>>;
+	shared: Record<Scheme, Palette>;
+	avatars: Palette;
+	contrast: Record<Scheme, Palette>;
+	shadows: Record<Scheme, Palette>;
+}
+
 export interface KunyeTokens {
 	palettes: Record<Scheme, Record<PaletteName, Palette>>;
 	accent: Record<Scheme, Palette>;
+	v5: V5Tokens;
+}
+
+export const V5_SHADOWS = ['shadow-sm', 'shadow-md', 'shadow-lg', 'shadow-xl'] as const;
+
+/** Every role of one v5 theme and scheme: shared status roles, avatars, the theme, its shadows. */
+export function v5Palette(tokens: KunyeTokens, theme: string, scheme: Scheme): Palette {
+	const { v5 } = tokens;
+	return {
+		...v5.shared[scheme],
+		...v5.avatars,
+		...v5.themes[theme][scheme],
+		...v5.shadows[scheme]
+	};
+}
+
+/** The high contrast palette of a scheme; it never casts shadows. */
+export function v5ContrastPalette(tokens: KunyeTokens, scheme: Scheme): Palette {
+	const none = Object.fromEntries(V5_SHADOWS.map((role) => [role, 'none']));
+	return { ...tokens.v5.contrast[scheme], ...none };
 }
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-export const SOURCE = 'tokens/kunye.json';
+export const SOURCE = 'tokens/izgah.json';
 
 export const OUTPUTS = {
 	app: 'src/lib/styles/palette.css',
+	lab: 'src/lib/styles/palette-lab.css',
 	extension: 'extensions/src/styles/palette.css',
 	site: 'site/palette.css'
 } as const;
@@ -81,8 +112,58 @@ export function renderAppPalette(tokens: KunyeTokens): string {
 		);
 	}
 	blocks.push(rule([':root', '.theme-preview'], accent, '\t'));
+
+	// UI v5: --v5-light-* and --v5-dark-* slots, mapped with light-dark() in tokens.css. The default
+	// theme applies to :root; [data-v5-theme] lets the theme lab render the other candidates.
+	const v5Slots = (palette: (scheme: Scheme) => Palette) => v5SchemeSlots(palette, inner);
+	const theme = tokens.v5.default;
+	blocks.push(
+		rule(
+			[':root', `[data-v5-theme='${theme}']`],
+			v5Slots((scheme) => v5Palette(tokens, theme, scheme)),
+			'\t'
+		)
+	);
+	for (const scheme of ['light', 'dark'] as const) {
+		blocks.push(
+			rule(
+				[`[data-${scheme}-theme='contrast']`],
+				declarations(`v5-${scheme}-`, v5ContrastPalette(tokens, scheme), inner),
+				'\t'
+			)
+		);
+	}
 	return [
 		HEADER('Künye palettes for the web app: light and dark, standard and high contrast.'),
+		'@layer tokens {',
+		blocks.join('\n\n'),
+		'}',
+		''
+	].join('\n');
+}
+
+function v5SchemeSlots(palette: (scheme: Scheme) => Palette, indent: string): string[] {
+	return (['light', 'dark'] as const).flatMap((scheme) =>
+		declarations(`v5-${scheme}-`, palette(scheme), indent)
+	);
+}
+
+/**
+ * Theme lab (izgah-ui-v5.md §15, M1): the candidate themes that are not the default, scoped to
+ * [data-v5-theme] subtrees. Only the development-only lab page imports this file.
+ */
+export function renderLabPalette(tokens: KunyeTokens): string {
+	const blocks = Object.keys(tokens.v5.themes)
+		.filter((theme) => theme !== tokens.v5.default)
+		.map((theme) =>
+			rule(
+				[`[data-v5-theme='${theme}']`],
+				v5SchemeSlots((scheme) => v5Palette(tokens, theme, scheme), '\t\t'),
+				'\t'
+			)
+		);
+	return [
+		HEADER('UI v5 theme lab candidates (development only).'),
 		'@layer tokens {',
 		blocks.join('\n\n'),
 		'}',
@@ -158,6 +239,7 @@ export function renderStandalonePalette(
 export function renderAll(tokens: KunyeTokens): Record<keyof typeof OUTPUTS, string> {
 	return {
 		app: renderAppPalette(tokens),
+		lab: renderLabPalette(tokens),
 		extension: renderStandalonePalette(
 			tokens,
 			'Künye palettes for the browser extensions: they follow the system theme and contrast.'

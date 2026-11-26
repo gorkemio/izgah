@@ -37,8 +37,8 @@
 		font-weight: 600;
 		line-height: 1;
 		letter-spacing: -0.02em;
-		color: var(--color-text);
-		border-radius: var(--radius-xs);
+		color: var(--k-color-text);
+		border-radius: var(--k-radius-xs);
 		text-decoration: none;
 	}
 
@@ -46,13 +46,13 @@
 		display: inline-block;
 		inline-size: 7px;
 		block-size: 7px;
-		border-radius: var(--radius-pill);
-		background: var(--color-accent);
+		border-radius: var(--k-radius-pill);
+		background: var(--k-color-accent);
 		flex: none;
 	}
 
 	.brand:hover {
-		color: var(--color-text);
+		color: var(--k-color-text);
 		text-decoration: none;
 	}
 

@@ -73,7 +73,7 @@
 	}
 
 	.admin-subnav {
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 	}
 
 	.admin-subnav-list {
@@ -106,10 +106,10 @@
 		gap: 6px;
 		min-block-size: 38px;
 		padding: var(--space-2) var(--space-3);
-		border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-		color: var(--color-text-muted);
+		border-radius: var(--k-radius-sm) var(--k-radius-sm) 0 0;
+		color: var(--k-color-text-muted);
 		text-decoration: none;
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		white-space: nowrap;
 		transition:
 			background-color var(--dur-fast) var(--ease),
@@ -117,14 +117,14 @@
 	}
 
 	.admin-subnav-link:not([aria-current='page']):hover {
-		color: var(--color-text);
-		background: var(--color-surface-2);
+		color: var(--k-color-text);
+		background: var(--k-color-surface-2);
 		text-decoration: none;
 	}
 
 	.admin-subnav-link[aria-current='page'],
 	.admin-subnav-link[aria-current='page']:hover {
-		color: var(--color-text);
+		color: var(--k-color-text);
 		font-weight: 600;
 		text-decoration: none;
 	}
@@ -132,9 +132,9 @@
 	/* Border-based underline survives forced-colors mode (WCAG 1.4.1). */
 
 	.subnav-badge {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	@media (pointer: coarse) {

@@ -1,0 +1,5 @@
+{
+	"//": "Plain tsc cannot read named exports from .svelte modules, which the shadcn-svelte index files in src/lib/components/ui re-export. svelte-check type-checks those files; tsc covers everything else.",
+	"extends": "./tsconfig.json",
+	"exclude": ["src/lib/components/ui/**"]
+}

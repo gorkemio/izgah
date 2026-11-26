@@ -893,7 +893,7 @@
 		padding: var(--space-4) 0 0;
 		background: none;
 		border: 0;
-		border-block-start: 1px solid var(--color-text);
+		border-block-start: 1px solid var(--k-color-text);
 		border-radius: 0;
 	}
 
@@ -901,7 +901,7 @@
 	.table-toolbar h2,
 	.dialog-header h2 {
 		margin: 0;
-		font: var(--text-section);
+		font: var(--k-text-section);
 		letter-spacing: -0.01em;
 		font-variant-numeric: tabular-nums;
 	}
@@ -924,7 +924,7 @@
 	}
 
 	.table-card {
-		border-block-start: 1px solid var(--color-text);
+		border-block-start: 1px solid var(--k-color-text);
 		overflow: hidden;
 	}
 
@@ -935,7 +935,7 @@
 		justify-content: space-between;
 		gap: var(--space-2) var(--space-3);
 		padding: var(--space-3) var(--space-4);
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 	}
 
 	.empty-wrap {
@@ -949,7 +949,7 @@
 	}
 
 	.table-wrapper:focus-visible {
-		outline: 2px solid var(--color-accent);
+		outline: 2px solid var(--k-color-accent);
 		outline-offset: -2px;
 		box-shadow: none;
 	}
@@ -963,7 +963,7 @@
 	.responsive-sections-table th,
 	.responsive-sections-table td {
 		padding: 11px var(--space-4);
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 		text-align: start;
 		vertical-align: middle;
 	}
@@ -974,10 +974,10 @@
 	}
 
 	.responsive-sections-table thead th {
-		background: var(--color-surface-2);
-		font: var(--text-micro);
+		background: var(--k-color-surface-2);
+		font: var(--k-text-micro);
 		font-weight: 600;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 		position: sticky;
 		inset-block-start: 0;
 		z-index: 1;
@@ -990,7 +990,7 @@
 	}
 
 	.responsive-sections-table tbody tr:hover {
-		background: var(--color-surface-2);
+		background: var(--k-color-surface-2);
 	}
 
 	.section-name-stack {
@@ -1000,20 +1000,20 @@
 	}
 
 	.section-title {
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 600;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.section-desc {
-		font: var(--text-hint);
-		color: var(--color-text-muted);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-muted);
 	}
 
 	.slug-code {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-secondary);
+		color: var(--k-color-text-secondary);
 		white-space: nowrap;
 	}
 
@@ -1028,7 +1028,7 @@
 	}
 
 	.shares-cell {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
 		white-space: nowrap;
 	}
@@ -1039,9 +1039,9 @@
 
 	.silent-badge {
 		margin-inline-start: var(--space-2);
-		font: var(--text-hint);
+		font: var(--k-text-hint);
 		font-style: italic;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.sort-controls {
@@ -1062,11 +1062,11 @@
 	.empty-state {
 		margin: 0;
 		padding: var(--space-5) var(--space-4);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-sm);
-		background: var(--color-surface-2);
-		font: var(--text-ui);
-		color: var(--color-text-muted);
+		border: 1px solid var(--k-color-line);
+		border-radius: var(--k-radius-sm);
+		background: var(--k-color-surface-2);
+		font: var(--k-text-ui);
+		color: var(--k-color-text-muted);
 	}
 
 	@container (width < 640px) {
@@ -1083,7 +1083,7 @@
 		}
 
 		.responsive-sections-table tr {
-			border-block-end: 2px solid var(--color-line);
+			border-block-end: 2px solid var(--k-color-line);
 			padding: var(--space-2) 0;
 		}
 
@@ -1106,8 +1106,8 @@
 		}
 
 		.responsive-sections-table td::before {
-			font: var(--text-micro);
-			color: var(--color-text-muted);
+			font: var(--k-text-micro);
+			color: var(--k-color-text-muted);
 		}
 
 		.responsive-sections-table td:nth-child(2)::before {
@@ -1149,16 +1149,16 @@
 
 	.dialog-desc {
 		margin: 0;
-		font: var(--text-body);
-		color: var(--color-text-secondary);
+		font: var(--k-text-body);
+		color: var(--k-color-text-secondary);
 	}
 
 	.conflict-box {
 		padding: var(--space-4);
-		border-radius: var(--radius-md);
-		background: var(--color-warn-soft);
-		border: 1px solid var(--color-warn-border);
-		color: var(--color-warn-text);
+		border-radius: var(--k-radius-md);
+		background: var(--k-color-warn-soft);
+		border: 1px solid var(--k-color-warn-border);
+		color: var(--k-color-warn-text);
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-3);
@@ -1166,12 +1166,12 @@
 
 	.conflict-box p {
 		margin: 0;
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		line-height: 1.5;
 	}
 
 	.conflict-box :global(.field > label) {
-		color: var(--color-warn-text);
+		color: var(--k-color-warn-text);
 	}
 
 	.resolve-form {

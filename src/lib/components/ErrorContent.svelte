@@ -97,30 +97,30 @@
 		gap: var(--space-4);
 		max-inline-size: var(--read-w);
 		padding: var(--space-5) 0 0;
-		border-block-start: 1px solid var(--color-text);
+		border-block-start: 1px solid var(--k-color-text);
 	}
 
 	.error-code {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.error-code.is-server-error {
-		background: var(--color-danger-soft);
-		color: var(--color-danger);
-		border-color: var(--color-danger-border);
+		background: var(--k-color-danger-soft);
+		color: var(--k-color-danger);
+		border-color: var(--k-color-danger-border);
 	}
 
 	h1 {
-		font: var(--text-display);
+		font: var(--k-text-display);
 		letter-spacing: -0.02em;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.error-message {
-		font: var(--text-body);
-		color: var(--color-text-secondary);
+		font: var(--k-text-body);
+		color: var(--k-color-text-secondary);
 		max-inline-size: 52ch;
 	}
 
@@ -129,8 +129,8 @@
 		flex-wrap: wrap;
 		align-items: center;
 		gap: var(--space-2);
-		font: var(--text-hint);
-		color: var(--color-text-secondary);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-secondary);
 	}
 
 	.request-id-label {
@@ -141,18 +141,18 @@
 	}
 
 	.request-id-row code {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		padding: 2px 7px;
-		color: var(--color-text);
-		background: var(--color-surface-1);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-xs);
+		color: var(--k-color-text);
+		background: var(--k-color-surface-1);
+		border: 1px solid var(--k-color-line);
+		border-radius: var(--k-radius-xs);
 		overflow-wrap: anywhere;
 	}
 
 	.copy-status {
-		font: var(--text-meta);
-		color: var(--color-text-muted);
+		font: var(--k-text-meta);
+		color: var(--k-color-text-muted);
 	}
 
 	.error-actions {

@@ -69,8 +69,8 @@
 			padding-block: 6px calc(6px + env(safe-area-inset-bottom, 0px));
 			padding-inline: calc(6px + env(safe-area-inset-left, 0px))
 				calc(6px + env(safe-area-inset-right, 0px));
-			background: var(--color-bg);
-			border-block-start: 1px solid var(--color-line);
+			background: var(--k-color-bg);
+			border-block-start: 1px solid var(--k-color-line);
 		}
 
 		/* Keep the bar from sitting on top of the virtual keyboard while typing, and keep it away
@@ -98,11 +98,11 @@
 		font-size: 0.8125rem;
 		font-weight: 400;
 		line-height: 1.15;
-		color: var(--color-text-secondary);
+		color: var(--k-color-text-secondary);
 		text-decoration: none;
 		background: transparent;
 		border: 0;
-		border-radius: var(--radius-sm);
+		border-radius: var(--k-radius-sm);
 		cursor: pointer;
 		transition:
 			background-color var(--dur-fast) var(--ease),
@@ -111,8 +111,8 @@
 	}
 
 	.tab:not([aria-current='page'], .tab-compose):hover {
-		background: var(--color-surface-2);
-		color: var(--color-text);
+		background: var(--k-color-surface-2);
+		color: var(--k-color-text);
 		text-decoration: none;
 	}
 
@@ -122,7 +122,7 @@
 
 	/* Künye: words only; the current tab is bold and underlined, "Add a link" is bold ink. */
 	.tab[aria-current='page'] {
-		color: var(--color-text);
+		color: var(--k-color-text);
 		font-weight: 600;
 		text-decoration: underline;
 		text-decoration-thickness: 2px;
@@ -130,12 +130,12 @@
 	}
 
 	.tab-compose {
-		color: var(--color-text);
+		color: var(--k-color-text);
 		font-weight: 600;
 	}
 
 	.tab-compose:hover {
-		background: var(--color-surface-2);
+		background: var(--k-color-surface-2);
 	}
 
 	@media (prefers-reduced-motion: no-preference) {

@@ -570,15 +570,15 @@
 	}
 
 	.feed-head h1 {
-		font: var(--text-display);
+		font: var(--k-text-display);
 		letter-spacing: -0.01em;
 	}
 
 	.feed-desc {
 		margin-block-start: var(--space-1);
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 400;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	/* Day divider (izgah-ui-v4.md §4): an ink rule, the date on the left, the count on the right. */
@@ -592,25 +592,25 @@
 		justify-content: space-between;
 		gap: var(--space-4);
 		padding-block-end: 6px;
-		border-block-end: 1px solid var(--color-text);
+		border-block-end: 1px solid var(--k-color-text);
 	}
 
 	.day-group .day-heading {
 		margin: 0;
-		font: var(--text-day);
+		font: var(--k-text-day);
 		border: 0;
 	}
 
 	.day-date {
 		margin-inline-start: var(--space-2);
 		font-weight: 400;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.day-count {
-		font: var(--text-hint);
+		font: var(--k-text-hint);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.feed-view .feed-list {
@@ -622,7 +622,7 @@
 	}
 
 	.empty-feed p {
-		color: var(--color-text-secondary);
+		color: var(--k-color-text-secondary);
 	}
 
 	.pagination-bar {
@@ -641,9 +641,9 @@
 	}
 
 	.load-more.is-loading {
-		color: var(--color-text-muted);
-		background: var(--color-surface-2);
-		border-color: var(--color-line-strong);
+		color: var(--k-color-text-muted);
+		background: var(--k-color-surface-2);
+		border-color: var(--k-color-line-strong);
 		cursor: progress;
 	}
 
@@ -654,14 +654,14 @@
 
 	.is-first-seen {
 		position: relative;
-		border-block-start: 2px solid var(--color-link);
+		border-block-start: 2px solid var(--k-color-link);
 	}
 
 	.last-seen-label {
 		margin: 0;
 		padding-block: 4px;
-		font: var(--text-hint);
-		color: var(--color-link);
+		font: var(--k-text-hint);
+		color: var(--k-color-link);
 	}
 
 	@media (forced-colors: active) {

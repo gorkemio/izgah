@@ -14,7 +14,7 @@ interface CssRule {
 	decls: Record<string, string>;
 }
 
-// The palette slots are generated from tokens/kunye.json (scripts/tokens/build.ts); tokens.css maps
+// The palette slots are generated from tokens/izgah.json (scripts/tokens/build.ts); tokens.css maps
 // them into the semantic layer. Read both, palette first, as app.css imports them.
 const rawCss = ['src/lib/styles/palette.css', 'src/lib/styles/tokens.css']
 	.map((file) => fs.readFileSync(path.resolve(file), 'utf8'))
@@ -153,31 +153,31 @@ function resolveSemanticTokens(
 
 	const link = slot('link');
 	return {
-		'--color-bg': slot('bg'),
-		'--color-surface-1': slot('surface-1'),
-		'--color-surface-2': slot('surface-2'),
-		'--color-surface-3': slot('surface-3'),
-		'--color-text': slot('text'),
-		'--color-text-secondary': slot('text-secondary'),
-		'--color-text-muted': slot('text-muted'),
-		'--color-line': slot('line'),
-		'--color-line-strong': slot('line-strong'),
-		'--color-danger': slot('danger'),
-		'--color-on-danger': slot('on-danger'),
-		'--color-ok-soft': slot('ok-soft'),
-		'--color-ok-text': slot('ok-text'),
-		'--color-warn-soft': slot('warn-soft'),
-		'--color-warn-text': slot('warn-text'),
-		'--color-link': link,
-		'--color-visited': slot('visited'),
-		'--color-accent': link,
-		'--color-on-accent': rootSlot('on-accent'),
-		'--color-accent-soft': rootSlot('accent-soft'),
-		'--color-accent-text': link,
-		'--color-focus-inner': slot('focus-inner'),
-		'--color-focus-outer': link,
-		'--color-highlight-bg': slot('highlight-bg'),
-		'--color-highlight-fg': slot('highlight-fg')
+		'--k-color-bg': slot('bg'),
+		'--k-color-surface-1': slot('surface-1'),
+		'--k-color-surface-2': slot('surface-2'),
+		'--k-color-surface-3': slot('surface-3'),
+		'--k-color-text': slot('text'),
+		'--k-color-text-secondary': slot('text-secondary'),
+		'--k-color-text-muted': slot('text-muted'),
+		'--k-color-line': slot('line'),
+		'--k-color-line-strong': slot('line-strong'),
+		'--k-color-danger': slot('danger'),
+		'--k-color-on-danger': slot('on-danger'),
+		'--k-color-ok-soft': slot('ok-soft'),
+		'--k-color-ok-text': slot('ok-text'),
+		'--k-color-warn-soft': slot('warn-soft'),
+		'--k-color-warn-text': slot('warn-text'),
+		'--k-color-link': link,
+		'--k-color-visited': slot('visited'),
+		'--k-color-accent': link,
+		'--k-color-on-accent': rootSlot('on-accent'),
+		'--k-color-accent-soft': rootSlot('accent-soft'),
+		'--k-color-accent-text': link,
+		'--k-color-focus-inner': slot('focus-inner'),
+		'--k-color-focus-outer': link,
+		'--k-color-highlight-bg': slot('highlight-bg'),
+		'--k-color-highlight-fg': slot('highlight-fg')
 	};
 }
 
@@ -188,32 +188,32 @@ const darkPalettes = Object.fromEntries(
 	DARK_THEME_VALUES.map((name) => [name, resolveBlock(`[data-dark-theme='${name}']`)])
 ) as Record<DarkTheme, Record<string, string>>;
 
-const surfaces = ['--color-bg', '--color-surface-1', '--color-surface-2'] as const;
+const surfaces = ['--k-color-bg', '--k-color-surface-1', '--k-color-surface-2'] as const;
 
 const aaTextPairs: Array<[string, string]> = [
 	...surfaces.flatMap((surface): Array<[string, string]> => [
-		['--color-text', surface],
-		['--color-text-secondary', surface],
-		['--color-text-muted', surface],
-		['--color-danger', surface],
-		['--color-link', surface],
-		['--color-visited', surface]
+		['--k-color-text', surface],
+		['--k-color-text-secondary', surface],
+		['--k-color-text-muted', surface],
+		['--k-color-danger', surface],
+		['--k-color-link', surface],
+		['--k-color-visited', surface]
 	]),
 	// Primary buttons are ink with paper text (izgah-ui-v4.md §1).
-	['--color-bg', '--color-text'],
-	['--color-on-danger', '--color-danger'],
-	['--color-on-accent', '--color-accent'],
-	['--color-accent-text', '--color-accent-soft'],
-	['--color-highlight-fg', '--color-highlight-bg'],
-	['--color-highlight-fg', '--color-bg'],
-	['--color-ok-text', '--color-ok-soft'],
-	['--color-warn-text', '--color-warn-soft']
+	['--k-color-bg', '--k-color-text'],
+	['--k-color-on-danger', '--k-color-danger'],
+	['--k-color-on-accent', '--k-color-accent'],
+	['--k-color-accent-text', '--k-color-accent-soft'],
+	['--k-color-highlight-fg', '--k-color-highlight-bg'],
+	['--k-color-highlight-fg', '--k-color-bg'],
+	['--k-color-ok-text', '--k-color-ok-soft'],
+	['--k-color-warn-text', '--k-color-warn-soft']
 ];
 
 const aaUiPairs: Array<[string, string]> = surfaces.flatMap((surface): Array<[string, string]> => [
-	['--color-line-strong', surface],
-	['--color-focus-inner', surface],
-	['--color-focus-outer', surface]
+	['--k-color-line-strong', surface],
+	['--k-color-focus-inner', surface],
+	['--k-color-focus-outer', surface]
 ]);
 
 const combinations = [
@@ -235,16 +235,16 @@ describe('Künye token contrast (docs/designs/izgah-ui-v4.md §1)', () => {
 		expect(resolvedRoot['--dark-bg']).toBe('#0f0f10');
 		expect(resolvedRoot['--light-link']).toBe('#1f3fd0');
 		expect(resolvedRoot['--dark-link']).toBe('#9db7ff');
-		expect(resolvedRoot['--shadow-sm']).toBeUndefined();
+		expect(resolvedRoot['--k-shadow-sm']).toBeUndefined();
 	});
 
 	it('keeps every corner radius at 3px or less', () => {
 		for (const name of [
-			'--radius-xs',
-			'--radius-sm',
-			'--radius-md',
-			'--radius-lg',
-			'--radius-pill'
+			'--k-radius-xs',
+			'--k-radius-sm',
+			'--k-radius-md',
+			'--k-radius-lg',
+			'--k-radius-pill'
 		]) {
 			const value = rootDecls[name];
 			expect(value, name).toMatch(/^\d+px$/);
@@ -267,11 +267,11 @@ describe('Künye token contrast (docs/designs/izgah-ui-v4.md §1)', () => {
 		({ scheme, slots, tokens }) => {
 			for (const surface of surfaces) {
 				for (const fg of [
-					'--color-text',
-					'--color-text-secondary',
-					'--color-text-muted',
-					'--color-danger',
-					'--color-link'
+					'--k-color-text',
+					'--k-color-text-secondary',
+					'--k-color-text-muted',
+					'--k-color-danger',
+					'--k-color-link'
 				]) {
 					expect(
 						contrast(tokens[fg], tokens[surface]),
@@ -280,9 +280,11 @@ describe('Künye token contrast (docs/designs/izgah-ui-v4.md §1)', () => {
 				}
 			}
 			expect(
-				contrast(tokens['--color-on-danger'], tokens['--color-danger'])
+				contrast(tokens['--k-color-on-danger'], tokens['--k-color-danger'])
 			).toBeGreaterThanOrEqual(7);
-			expect(contrast(tokens['--color-line'], tokens['--color-bg'])).toBeGreaterThanOrEqual(4.5);
+			expect(contrast(tokens['--k-color-line'], tokens['--k-color-bg'])).toBeGreaterThanOrEqual(
+				4.5
+			);
 
 			expect(slots[`--${scheme}-shadow-lg`]).toBe('none');
 		}
@@ -295,7 +297,7 @@ describe('Künye token contrast (docs/designs/izgah-ui-v4.md §1)', () => {
 				rule.media?.includes('forced-colors: active')
 		);
 		expect(contrastMedia).toBeDefined();
-		for (const key of ['--light-shadow-lg', '--dark-shadow-lg', '--shadow-lg']) {
+		for (const key of ['--light-shadow-lg', '--dark-shadow-lg', '--k-shadow-lg']) {
 			expect(contrastMedia!.decls[key], key).toBe('none');
 		}
 	});

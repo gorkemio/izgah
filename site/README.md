@@ -6,7 +6,7 @@ Preview locally with any static server, e.g. `npx -y serve site`.
 
 GitHub Pages lets browsers cache every file for 10 minutes, so a new page can meet an old stylesheet right after a deploy. Both pages link `palette.css?v=<version>`, `styles.css?v=<version>` and `specimen.js?v=<version>`: when you change any of them, set the same new version in `index.html` and `tr/index.html` so browsers fetch the matching files at once.
 
-`palette.css` is generated from `tokens/kunye.json`, the colour source shared with the app and the extensions: edit the JSON and run `pnpm tokens` at the repository root, never the CSS.
+`palette.css` is generated from `tokens/izgah.json`, the colour source shared with the app and the extensions: edit the JSON and run `pnpm tokens` at the repository root, never the CSS.
 
 ## Domain setup (once)
 

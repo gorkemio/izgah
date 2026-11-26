@@ -656,7 +656,7 @@
 		margin-block-end: var(--space-2);
 		padding-block: var(--space-3);
 		background: transparent;
-		border-block: 1px solid var(--color-line);
+		border-block: 1px solid var(--k-color-line);
 	}
 
 	.is-feed .composer-header {
@@ -670,7 +670,7 @@
 	}
 
 	.is-feed .url-input {
-		border-color: var(--color-line);
+		border-color: var(--k-color-line);
 		background: var(--input-bg);
 		min-inline-size: 0;
 		text-overflow: ellipsis;
@@ -683,7 +683,7 @@
 	.is-feed:focus-within .url-input,
 	.is-feed:has(input[name='url']:not(:placeholder-shown)) .url-input,
 	.is-feed.has-error .url-input {
-		border-color: var(--color-line-strong);
+		border-color: var(--k-color-line-strong);
 		background: var(--input-bg);
 	}
 
@@ -736,19 +736,19 @@
 
 	.composer-title {
 		margin: 0;
-		font: var(--text-section);
+		font: var(--k-text-section);
 		font-size: 1.125rem;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.composer-error {
 		padding: var(--space-3) var(--space-4);
 		margin-block-end: var(--space-4);
-		border: 1px solid var(--color-danger-border);
-		background: var(--color-danger-soft);
-		color: var(--color-danger);
-		border-radius: var(--radius-sm);
-		font: var(--text-ui);
+		border: 1px solid var(--k-color-danger-border);
+		background: var(--k-color-danger-soft);
+		color: var(--k-color-danger);
+		border-radius: var(--k-radius-sm);
+		font: var(--k-text-ui);
 	}
 
 	.composer-form {
@@ -769,20 +769,20 @@
 
 	.duplicate-banner {
 		padding: var(--space-3) var(--space-4);
-		border: 1px solid var(--color-warn-border);
-		background: var(--color-warn-soft);
-		color: var(--color-text);
-		border-radius: var(--radius-md);
+		border: 1px solid var(--k-color-warn-border);
+		background: var(--k-color-warn-soft);
+		color: var(--k-color-text);
+		border-radius: var(--k-radius-md);
 		display: grid;
 		gap: var(--space-1);
-		font: var(--text-hint);
+		font: var(--k-text-hint);
 	}
 
 	.duplicate-heading {
 		margin: 0;
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 600;
-		color: var(--color-warn-text);
+		color: var(--k-color-warn-text);
 	}
 
 	.duplicate-detail,
@@ -817,18 +817,18 @@
 		align-items: center;
 		gap: var(--space-2);
 		min-block-size: 34px;
-		font: var(--text-ui);
-		color: var(--color-text);
+		font: var(--k-text-ui);
+		color: var(--k-color-text);
 		cursor: pointer;
 	}
 
 	.sections-grid .checkbox-row {
 		padding: 0;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.sections-grid .checkbox-row:hover {
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.sections-grid .checkbox-row:has(input:checked) {
@@ -843,7 +843,7 @@
 
 	.silent-checkbox {
 		padding: var(--space-2) 0 0;
-		border-block-start: 1px solid var(--color-line);
+		border-block-start: 1px solid var(--k-color-line);
 	}
 
 	.composer-actions {
@@ -867,7 +867,7 @@
 		}
 	}
 	.suggested-tag {
-		font: var(--text-hint);
-		color: var(--color-accent-text);
+		font: var(--k-text-hint);
+		color: var(--k-color-accent-text);
 	}
 </style>

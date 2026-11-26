@@ -783,13 +783,13 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 6px;
-		font: var(--text-ui);
-		color: var(--color-text-muted);
+		font: var(--k-text-ui);
+		color: var(--k-color-text-muted);
 		text-decoration: none;
 	}
 
 	.back-link:hover {
-		color: var(--color-text);
+		color: var(--k-color-text);
 		text-decoration: none;
 	}
 
@@ -806,19 +806,19 @@
 		justify-content: space-between;
 		gap: var(--space-2);
 		padding-block-end: 6px;
-		border-block-end: 1px solid var(--color-text);
+		border-block-end: 1px solid var(--k-color-text);
 	}
 
 	.card-heading {
-		font: var(--text-section);
+		font: var(--k-text-section);
 		letter-spacing: -0.01em;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.card-count {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	/* Share history: a plain list; each entry is a compact register row. */
@@ -852,11 +852,11 @@
 
 	.empty-comments {
 		padding: var(--space-4);
-		font: var(--text-hint);
-		color: var(--color-text-muted);
-		background: var(--color-surface-2);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-sm);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-muted);
+		background: var(--k-color-surface-2);
+		border: 1px solid var(--k-color-line);
+		border-radius: var(--k-radius-sm);
 	}
 
 	.comment-list {
@@ -870,7 +870,7 @@
 		display: grid;
 		gap: var(--space-2);
 		padding-block: var(--space-4);
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 	}
 
 	.comment-card:first-child {
@@ -884,8 +884,8 @@
 
 	.comment-card:target {
 		padding-inline: var(--space-3);
-		background: var(--color-surface-2);
-		border-radius: var(--radius-sm);
+		background: var(--k-color-surface-2);
+		border-radius: var(--k-radius-sm);
 	}
 
 	.comment-meta {
@@ -896,21 +896,21 @@
 	}
 
 	.comment-author {
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 600;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.comment-date,
 	.edited-tag {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.comment-body {
-		font: var(--text-body);
-		color: var(--color-text);
+		font: var(--k-text-body);
+		color: var(--k-color-text);
 		white-space: pre-wrap;
 		overflow-wrap: anywhere;
 	}
@@ -939,12 +939,12 @@
 		align-items: center;
 		min-block-size: 30px;
 		padding: 0 var(--space-2);
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-size: 0.8125rem;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 		background: transparent;
 		border: 0;
-		border-radius: var(--radius-sm);
+		border-radius: var(--k-radius-sm);
 		text-decoration: none;
 		cursor: pointer;
 		transition:
@@ -953,14 +953,14 @@
 	}
 
 	.comment-action-btn:hover {
-		color: var(--color-text);
-		background: var(--color-surface-2);
+		color: var(--k-color-text);
+		background: var(--k-color-surface-2);
 		text-decoration: none;
 	}
 
 	.comment-action-btn.is-danger:hover {
-		color: var(--color-danger);
-		background: var(--color-danger-soft);
+		color: var(--k-color-danger);
+		background: var(--k-color-danger-soft);
 	}
 
 	.comment-composer-form,
@@ -972,16 +972,16 @@
 
 	.inline-delete-panel {
 		padding: var(--space-3);
-		background: var(--color-danger-soft);
-		border: 1px solid var(--color-danger-border);
-		border-radius: var(--radius-sm);
-		font: var(--text-ui);
-		color: var(--color-text);
+		background: var(--k-color-danger-soft);
+		border: 1px solid var(--k-color-danger-border);
+		border-radius: var(--k-radius-sm);
+		font: var(--k-text-ui);
+		color: var(--k-color-text);
 	}
 
 	.comment-composer-form {
 		padding-block-start: var(--space-4);
-		border-block-start: 1px solid var(--color-line);
+		border-block-start: 1px solid var(--k-color-line);
 	}
 
 	.composer-hint {
@@ -992,13 +992,13 @@
 	}
 
 	.char-counter {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.comment-textarea.is-invalid {
-		border-color: var(--color-danger);
+		border-color: var(--k-color-danger);
 	}
 
 	.comment-error-msg {
@@ -1014,11 +1014,11 @@
 		align-items: center;
 		gap: var(--space-2);
 		padding: var(--space-3);
-		font: var(--text-ui);
-		color: var(--color-danger);
-		background: var(--color-danger-soft);
-		border: 1px solid var(--color-danger-border);
-		border-radius: var(--radius-sm);
+		font: var(--k-text-ui);
+		color: var(--k-color-danger);
+		background: var(--k-color-danger-soft);
+		border: 1px solid var(--k-color-danger-border);
+		border-radius: var(--k-radius-sm);
 	}
 
 	@media (pointer: coarse) {
@@ -1028,14 +1028,14 @@
 	}
 
 	.dialog-title {
-		font: var(--text-section);
+		font: var(--k-text-section);
 		font-size: 1.125rem;
 		margin-block-end: var(--space-3);
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.dialog-confirm-text {
-		color: var(--color-text-secondary);
+		color: var(--k-color-text-secondary);
 		margin-block-end: var(--space-4);
 	}
 
@@ -1053,9 +1053,9 @@
 			padding: var(--space-3);
 			margin-inline: calc(-1 * var(--space-4));
 			margin-block-end: calc(-1 * var(--space-4));
-			background: var(--color-surface-1);
-			border-block-start: 1px solid var(--color-line);
-			border-radius: 0 0 var(--radius-md) var(--radius-md);
+			background: var(--k-color-surface-1);
+			border-block-start: 1px solid var(--k-color-line);
+			border-radius: 0 0 var(--k-radius-md) var(--k-radius-md);
 		}
 
 		/* Collapsed to one line while empty and unfocused, so it never covers the thread. It stays

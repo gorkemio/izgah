@@ -716,7 +716,7 @@
 		padding: var(--space-4) 0 0;
 		background: none;
 		border: 0;
-		border-block-start: 1px solid var(--color-text);
+		border-block-start: 1px solid var(--k-color-text);
 		border-radius: 0;
 	}
 
@@ -730,19 +730,19 @@
 	.table-toolbar h2,
 	.dialog-header h2 {
 		margin: 0;
-		font: var(--text-section);
+		font: var(--k-text-section);
 		letter-spacing: -0.01em;
 		font-variant-numeric: tabular-nums;
 	}
 
 	.panel-desc {
 		margin: 0;
-		font: var(--text-hint);
-		color: var(--color-text-muted);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-muted);
 	}
 
 	.mono-inline {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
 	}
 
@@ -759,7 +759,7 @@
 	}
 
 	.copy-field-group label {
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 600;
 	}
 
@@ -767,10 +767,10 @@
 		inline-size: 100%;
 		min-block-size: 38px;
 		padding: var(--space-2) var(--space-3);
-		border: 1px solid var(--color-line-strong);
-		border-radius: var(--radius-sm);
-		background: var(--color-surface-2);
-		color: var(--color-text);
+		border: 1px solid var(--k-color-line-strong);
+		border-radius: var(--k-radius-sm);
+		background: var(--k-color-surface-2);
+		color: var(--k-color-text);
 		flex: 1 1 16rem;
 		font-family: var(--font-mono);
 		font-size: 0.8125rem;
@@ -784,10 +784,10 @@
 	}
 
 	.role-fieldset legend {
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 600;
 		padding: 0 var(--space-1);
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.radio-group {
@@ -801,7 +801,7 @@
 		align-items: center;
 		gap: var(--space-2);
 		min-block-size: 36px;
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		cursor: pointer;
 	}
 
@@ -816,7 +816,7 @@
 	}
 
 	.table-card {
-		border-block-start: 1px solid var(--color-text);
+		border-block-start: 1px solid var(--k-color-text);
 		overflow: hidden;
 	}
 
@@ -827,13 +827,13 @@
 		justify-content: space-between;
 		gap: var(--space-2) var(--space-3);
 		padding: var(--space-3) var(--space-4);
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 	}
 
 	.table-summary {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.table-wrapper {
@@ -844,7 +844,7 @@
 	}
 
 	.table-wrapper:focus-visible {
-		outline: 2px solid var(--color-accent);
+		outline: 2px solid var(--k-color-accent);
 		outline-offset: -2px;
 		box-shadow: none;
 	}
@@ -858,7 +858,7 @@
 	.responsive-users-table th,
 	.responsive-users-table td {
 		padding: 11px var(--space-3);
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 		text-align: start;
 		vertical-align: middle;
 	}
@@ -869,10 +869,10 @@
 	}
 
 	.responsive-users-table thead th {
-		background: var(--color-surface-2);
-		font: var(--text-micro);
+		background: var(--k-color-surface-2);
+		font: var(--k-text-micro);
 		font-weight: 600;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 		position: sticky;
 		inset-block-start: 0;
 		z-index: 1;
@@ -885,16 +885,16 @@
 	}
 
 	.responsive-users-table tbody tr:hover {
-		background: var(--color-surface-2);
+		background: var(--k-color-surface-2);
 	}
 
 	.responsive-users-table tbody tr.is-disabled {
-		background: var(--color-surface-2);
-		color: var(--color-text-muted);
+		background: var(--k-color-surface-2);
+		color: var(--k-color-text-muted);
 	}
 
 	.user-cell {
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		min-inline-size: 12rem;
 	}
 
@@ -912,18 +912,18 @@
 	}
 
 	.user-name {
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 600;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.is-disabled .user-name {
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.user-email {
-		font: var(--text-meta);
-		color: var(--color-text-muted);
+		font: var(--k-text-meta);
+		color: var(--k-color-text-muted);
 		word-break: normal;
 		white-space: nowrap;
 	}
@@ -936,13 +936,13 @@
 	}
 
 	.responsive-users-table tbody td.num-col {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.responsive-users-table tbody tr.is-disabled td.num-col {
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.responsive-users-table th.actions-col {
@@ -950,9 +950,9 @@
 	}
 
 	.date-cell {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 		white-space: nowrap;
 	}
 
@@ -966,12 +966,12 @@
 	.role-select {
 		min-block-size: 30px;
 		padding: 0 var(--space-5) 0 var(--space-2);
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-size: 0.8125rem;
-		color: var(--color-text);
-		background: var(--color-surface-2);
-		border: 1px solid var(--color-line-strong);
-		border-radius: var(--radius-sm);
+		color: var(--k-color-text);
+		background: var(--k-color-surface-2);
+		border: 1px solid var(--k-color-line-strong);
+		border-radius: var(--k-radius-sm);
 		cursor: pointer;
 		transition:
 			border-color var(--dur-fast) var(--ease),
@@ -979,12 +979,12 @@
 	}
 
 	.role-select:hover {
-		border-color: var(--color-text-secondary);
+		border-color: var(--k-color-text-secondary);
 	}
 
 	.passive-role {
-		font: var(--text-ui);
-		color: var(--color-text-muted);
+		font: var(--k-text-ui);
+		color: var(--k-color-text-muted);
 	}
 
 	.row-actions {
@@ -996,9 +996,9 @@
 	}
 
 	.disabled-meta {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 		white-space: nowrap;
 	}
 
@@ -1023,7 +1023,7 @@
 		}
 
 		.responsive-users-table tr {
-			border-block-end: 2px solid var(--color-line);
+			border-block-end: 2px solid var(--k-color-line);
 			padding: var(--space-2) 0;
 		}
 
@@ -1045,8 +1045,8 @@
 		}
 
 		.responsive-users-table td::before {
-			font: var(--text-micro);
-			color: var(--color-text-muted);
+			font: var(--k-text-micro);
+			color: var(--k-color-text-muted);
 		}
 
 		.responsive-users-table td:nth-child(2)::before {
@@ -1101,8 +1101,8 @@
 
 	.dialog-desc {
 		margin: 0;
-		font: var(--text-body);
-		color: var(--color-text-secondary);
+		font: var(--k-text-body);
+		color: var(--k-color-text-secondary);
 	}
 
 	.copy-field-group {
@@ -1128,11 +1128,11 @@
 	.copy-bubble {
 		opacity: 0;
 		transition: opacity var(--dur-base) var(--ease);
-		font: var(--text-micro);
-		color: var(--color-ok-text);
-		background: var(--color-ok-soft);
-		border: 1px solid var(--color-ok-border);
-		border-radius: var(--radius-pill);
+		font: var(--k-text-micro);
+		color: var(--k-color-ok-text);
+		background: var(--k-color-ok-soft);
+		border: 1px solid var(--k-color-ok-border);
+		border-radius: var(--k-radius-pill);
 		padding: 2px 10px;
 		pointer-events: none;
 	}
@@ -1143,8 +1143,8 @@
 
 	.hint {
 		margin: 0;
-		font: var(--text-hint);
-		color: var(--color-text-muted);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-muted);
 	}
 
 	.dialog-footer {

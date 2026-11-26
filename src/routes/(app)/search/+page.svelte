@@ -343,15 +343,15 @@
 	}
 
 	.page-header h1 {
-		font: var(--text-display);
+		font: var(--k-text-display);
 		letter-spacing: -0.02em;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.page-subtitle {
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 400;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.search-panel {
@@ -382,7 +382,7 @@
 		position: absolute;
 		inset-inline-start: 12px;
 		display: inline-flex;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 		pointer-events: none;
 	}
 
@@ -426,12 +426,12 @@
 		inline-size: auto;
 		min-block-size: 36px;
 		padding-block: 0;
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 	}
 
 	.search-filters-row {
 		padding-block-start: var(--space-2);
-		border-block-start: 1px solid var(--color-line);
+		border-block-start: 1px solid var(--k-color-line);
 	}
 
 	@media (pointer: coarse) {
@@ -441,14 +441,14 @@
 		}
 	}
 
-	/* Strict serif boundary: empty-state h2 stays --font-sans (--text-section). */
+	/* Strict serif boundary: empty-state h2 stays --font-sans (--k-text-section). */
 	.empty-heading {
-		font: var(--text-section);
-		color: var(--color-text);
+		font: var(--k-text-section);
+		color: var(--k-color-text);
 	}
 
 	.empty-desc {
-		color: var(--color-text-secondary);
+		color: var(--k-color-text-secondary);
 	}
 
 	.tips {
@@ -456,38 +456,38 @@
 		gap: var(--space-2);
 		margin: 0;
 		padding-inline-start: var(--space-5);
-		font: var(--text-hint);
-		color: var(--color-text-secondary);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-secondary);
 	}
 
 	.tips code {
 		padding: 1px 6px;
 		font-family: var(--font-mono);
 		font-size: 0.875em;
-		color: var(--color-text);
-		background: var(--color-surface-2);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-xs);
+		color: var(--k-color-text);
+		background: var(--k-color-surface-2);
+		border: 1px solid var(--k-color-line);
+		border-radius: var(--k-radius-xs);
 	}
 
 	.kbd-hint-line {
 		display: inline-flex;
 		align-items: center;
 		gap: 6px;
-		font: var(--text-hint);
-		color: var(--color-text-muted);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-muted);
 	}
 
 	.search-summary {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 		padding-block-end: var(--space-3);
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 	}
 
 	.search-summary strong {
-		color: var(--color-text);
+		color: var(--k-color-text);
 		font-weight: 600;
 	}
 
@@ -501,13 +501,13 @@
 		align-items: center;
 		gap: var(--space-3);
 		padding-block: var(--space-4);
-		border-block-start: 1px solid var(--color-line);
+		border-block-start: 1px solid var(--k-color-line);
 	}
 
 	.page-status {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	@media (forced-colors: active) {
