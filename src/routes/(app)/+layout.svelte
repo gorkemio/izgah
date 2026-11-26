@@ -10,7 +10,6 @@
 	import CommandPalette from '#lib/components/shell/CommandPalette.svelte';
 	import KeyboardHelpDialog from '#lib/components/shell/KeyboardHelpDialog.svelte';
 	import SiteHeader from '#lib/components/shell/SiteHeader.svelte';
-	import TopContextBar from '#lib/components/shell/TopContextBar.svelte';
 	import Toaster from '#lib/components/ui/Toaster.svelte';
 	import {
 		ComposerController,
@@ -115,12 +114,6 @@
 	function openHelp(): void {
 		helpHasPosts = listPosts().length > 0;
 		helpOpen = true;
-	}
-
-	function openCommandPalette(): void {
-		if (!overlayOpen()) {
-			cmdkOpen = true;
-		}
 	}
 
 	function overlayOpen(): boolean {
@@ -471,13 +464,6 @@
 	/>
 
 	<div class="app-content-wrap">
-		<TopContextBar
-			{activeSection}
-			{hydrated}
-			onOpenCommandPalette={openCommandPalette}
-			onOpenHelp={openHelp}
-		/>
-
 		<main id="main-content" class="app-main">
 			{@render children()}
 		</main>
@@ -532,7 +518,6 @@
 		z-index: 70;
 		display: grid;
 		place-items: center;
-		/* Serif is reserved for page/day/resource titles and the wordmark (ui-v3 §2.2). */
 		font: var(--text-section);
 		color: var(--color-text);
 		background: color-mix(in oklab, var(--color-bg) 92%, transparent);
@@ -566,12 +551,6 @@
 		flex: 1 1 auto;
 		min-inline-size: 0;
 		padding: var(--space-5) var(--gutter) var(--space-7);
-	}
-
-	@media (min-width: 768px) and (max-width: 1023px) {
-		.app-shell {
-			grid-template-columns: var(--icon-rail-w) minmax(0, 1fr);
-		}
 	}
 
 	@media (max-width: 767px) {

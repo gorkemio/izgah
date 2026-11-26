@@ -8,7 +8,6 @@
 	import { goto, invalidate } from '$app/navigation';
 	import { untrack } from 'svelte';
 	import { toasts } from '#lib/client/toast.svelte.ts';
-	import Avatar from '#lib/components/ui/Avatar.svelte';
 	import Dialog from '#lib/components/ui/Dialog.svelte';
 	import Icon from '#lib/components/ui/Icon.svelte';
 	import { extractFirstUrlFromText } from '#lib/links/parse-url.ts';
@@ -60,8 +59,6 @@
 		prefill?: { url: string; note: string | null; seq: number } | null;
 		sections: SectionListItem[];
 		isAdmin: boolean;
-		/** Optional viewer name so the feed composer displays the viewer's avatar. */
-		currentUserName?: string;
 		actionUrl: string;
 		returnTo: string;
 		navigateHomeOnSuccess?: boolean;
@@ -75,7 +72,6 @@
 		prefill = null,
 		sections,
 		isAdmin,
-		currentUserName,
 		actionUrl,
 		returnTo,
 		navigateHomeOnSuccess = false,
@@ -425,9 +421,6 @@
 				{t('composer.urlLabel')}
 			</label>
 			<div class="composer-url-row">
-				{#if variant === 'feed' && currentUserName}
-					<Avatar name={currentUserName} self size={30} />
-				{/if}
 				<!-- svelte-ignore a11y_autofocus -->
 				<input
 					bind:this={urlInputEl}
@@ -659,18 +652,12 @@
 <style>
 	/* Feed variant: collapsed to the URL row until focused, filled or showing an error. Pure CSS,
 	   so it also works without JS (izgah-ui-v2 §8.1). */
+	/* Künye: the composer is a ruled strip, not a card (izgah-ui-v4.md §3). */
 	.inline-composer-card.is-feed {
-		margin-block-end: var(--space-5);
-		padding: 13px 14px;
-		background: var(--card-bg);
-		border: 1px solid var(--card-border);
-		border-radius: var(--radius-lg);
-		box-shadow: var(--card-shadow);
-		transition: border-color var(--dur-fast) var(--ease);
-	}
-
-	.inline-composer-card.is-feed:focus-within {
-		border-color: var(--color-line-strong);
+		margin-block-end: var(--space-2);
+		padding-block: var(--space-3);
+		background: transparent;
+		border-block: 1px solid var(--color-line);
 	}
 
 	.is-feed .composer-header {
@@ -684,8 +671,8 @@
 	}
 
 	.is-feed .url-input {
-		border-color: transparent;
-		background: var(--color-surface-2);
+		border-color: var(--color-line);
+		background: var(--input-bg);
 		min-inline-size: 0;
 		text-overflow: ellipsis;
 	}

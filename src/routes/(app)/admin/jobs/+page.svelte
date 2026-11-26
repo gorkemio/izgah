@@ -173,10 +173,7 @@
 	}
 
 	.table-card {
-		background: var(--color-surface-1);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-md);
-		box-shadow: var(--shadow-sm);
+		border-block-start: 1px solid var(--color-text);
 		overflow: hidden;
 	}
 
@@ -236,8 +233,6 @@
 		background: var(--color-surface-2);
 		font: var(--text-micro);
 		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.04em;
 		color: var(--color-text-muted);
 		position: sticky;
 		inset-block-start: 0;
@@ -374,8 +369,6 @@
 
 		.responsive-jobs-table td::before {
 			font: var(--text-micro);
-			text-transform: uppercase;
-			letter-spacing: 0.04em;
 			color: var(--color-text-muted);
 		}
 

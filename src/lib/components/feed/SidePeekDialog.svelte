@@ -3,8 +3,6 @@
 	import { preloadData } from '$app/navigation';
 	import { watchImageError } from '#lib/client/image-error.ts';
 	import { toasts } from '#lib/client/toast.svelte.ts';
-	import Avatar from '#lib/components/ui/Avatar.svelte';
-	import AvatarStack, { type AvatarStackItem } from '#lib/components/ui/AvatarStack.svelte';
 	import Icon from '#lib/components/ui/Icon.svelte';
 	import Skeleton from '#lib/components/ui/Skeleton.svelte';
 	import Tooltip from '#lib/components/ui/Tooltip.svelte';
@@ -63,11 +61,10 @@
 
 	interface Props {
 		item: FeedShareItem | null;
-		currentUserId: string;
 		onClose: () => void;
 	}
 
-	let { item, currentUserId, onClose }: Props = $props();
+	let { item, onClose }: Props = $props();
 
 	let dialogEl = $state<HTMLDialogElement | null>(null);
 	let coverImgEl = $state<HTMLImageElement | null>(null);
@@ -86,21 +83,6 @@
 	const showThumbnail = $derived(Boolean(resource?.thumbnailAssetKey && !imgFailed));
 	const recentComments = $derived(detail ? detail.comments.slice(-5) : []);
 	const hasHiddenComments = $derived(detail ? detail.comments.length > 5 : false);
-	const sharerAvatars = $derived.by((): AvatarStackItem[] => {
-		if (!detail) {
-			return [];
-		}
-		const seen = new Set<string>();
-		const list: AvatarStackItem[] = [];
-		for (const share of detail.shares) {
-			if (seen.has(share.author.id)) {
-				continue;
-			}
-			seen.add(share.author.id);
-			list.push({ name: share.author.name, self: share.author.id === currentUserId });
-		}
-		return list;
-	});
 
 	$effect(() => {
 		const img = coverImgEl;
@@ -338,9 +320,6 @@
 						<h3 id="peek-shares-heading" class="peek-section-title">
 							{t('resource.shareHistoryCount', { count: detail.shares.length })}
 						</h3>
-						{#if sharerAvatars.length > 0}
-							<AvatarStack items={sharerAvatars} max={4} size={22} />
-						{/if}
 					</div>
 
 					{#if detail.originalShareDeleted}
@@ -351,11 +330,6 @@
 						{#each detail.shares as share (share.id)}
 							<li class="peek-timeline-item">
 								<div class="peek-row-head">
-									<Avatar
-										name={share.author.name}
-										self={share.author.id === currentUserId}
-										size={24}
-									/>
 									<strong class="peek-author">{share.author.name}</strong>
 									<time class="peek-time" datetime={share.createdAt}>
 										{formatDateTime(share.createdAt)}
@@ -395,11 +369,6 @@
 							{#each recentComments as comment (comment.id)}
 								<li class="peek-comment-item">
 									<div class="peek-row-head">
-										<Avatar
-											name={comment.author.name}
-											self={comment.author.id === currentUserId}
-											size={24}
-										/>
 										<strong class="peek-author">{comment.author.name}</strong>
 										<time class="peek-time" datetime={comment.createdAt}>
 											{formatDateTime(comment.createdAt)}

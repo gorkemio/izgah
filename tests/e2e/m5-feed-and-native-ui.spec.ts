@@ -370,15 +370,13 @@ test.describe('Milestone M5 — Web Feed, Sections & Native Platform UI', () => 
 		// The mobile tab bar hides while a text field has focus; leave the composer first.
 		await urlField.blur();
 
-		// 360px mobile layout: single column card, no horizontal overflow, collapsed nav popover
+		// 360px mobile layout: the thumbnail stays small on the right (izgah-ui-v4 §3), no overflow
 		await page.setViewportSize({ width: 360, height: 740 });
 		await expect
 			.poll(() =>
-				attachment.evaluate(
-					(el) => getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length
-				)
+				attachment.evaluate((el) => getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/))
 			)
-			.toBe(1);
+			.toEqual([expect.any(String), '88px']);
 
 		const overflow = await page.evaluate(() => ({
 			scrollWidth: document.documentElement.scrollWidth,
@@ -739,7 +737,7 @@ test.describe('Milestone M5 — Web Feed, Sections & Native Platform UI', () => 
 			await page.locator('input[name="url"]').fill('https://ornek.dev/js-kapali');
 			await page.locator('textarea[name="note"]').fill('JS olmadan ilk not');
 			await page.getByLabel(section.name).check();
-			await page.getByRole('button', { name: 'Paylaş', exact: true }).click();
+			await page.getByRole('button', { name: 'İz bırak', exact: true }).click();
 
 			await page.waitForURL((url) => url.pathname === '/' && !url.searchParams.has('compose'));
 			const card = page.locator('article.share-card').first();

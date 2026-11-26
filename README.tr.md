@@ -15,7 +15,7 @@
 - **Bağlantı önizlemeleri** — SSRF korumalı süreç içi işçi başlık, açıklama ve kapak görsellerini çeker; küçültülmüş WebP görselleri yerelde saklar.
 - **Tarayıcı eklentileri** — Chrome, Firefox ve Safari eklentileri açık sekmeyi kişisel API anahtarıyla paylaşır.
 - **JavaScript olmadan çalışır** — paylaşım, gezinme, arama, detay, tema ve yönetim önce düz form ve bağlantıdır; JavaScript yalnızca iyileştirir.
-- **Erişilebilir temalar** — açık, koyu, loş ve yüksek kontrast paletler ile dört vurgu rengi; hepsi WCAG 2.2 AA (yüksek kontrastta AAA).
+- **Erişilebilir temalar** — açık ve koyu, her biri standart ve yüksek kontrast paletle; hepsi WCAG 2.2 AA (yüksek kontrastta AAA). Açtığınız linkler tarayıcının kendi `:visited` bilgisiyle solar; sunucu hiçbir şey kaydetmez.
 - **İngilizce ve Türkçe arayüz** — her üye dilini seçer; her örneğin kendi varsayılan dili vardır.
 - **Küçük ayak izi** — tek Node.js konteyneri ve PostgreSQL. Harici e-posta, kuyruk veya önbellek servisi yok.
 
@@ -126,4 +126,4 @@ Eklentiler [`extensions/`](./extensions) altındadır. Üyeler eklentiyi kurar, 
 
 ## Lisans
 
-İzgah, [GNU Affero Genel Kamu Lisansı v3.0](./LICENSE) ile lisanslanmış özgür bir yazılımdır. Değiştirilmiş bir sürümü ağ üzerinden başkalarına sunarsanız kaynak kodunu da sunmanız gerekir. Paketlenen yazı tipleri (Geist, Newsreader, JetBrains Mono) SIL Open Font License, ikonlar Lucide (ISC) lisanslıdır. Bkz. [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).
+İzgah, [GNU Affero Genel Kamu Lisansı v3.0](./LICENSE) ile lisanslanmış özgür bir yazılımdır. Değiştirilmiş bir sürümü ağ üzerinden başkalarına sunarsanız kaynak kodunu da sunmanız gerekir. Paketlenen yazı tipi (Atkinson Hyperlegible Next) SIL Open Font License, ikonlar Lucide (ISC) lisanslıdır. Bkz. [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).

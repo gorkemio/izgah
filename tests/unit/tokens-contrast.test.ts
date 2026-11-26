@@ -2,10 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
-	ACCENT_VALUES,
 	DARK_THEME_VALUES,
 	LIGHT_THEME_VALUES,
-	type Accent,
 	type DarkTheme,
 	type LightTheme
 } from '../../src/lib/types/appearance';
@@ -137,24 +135,20 @@ function contrast(a: string, b: string): number {
 	return (hi + 0.05) / (lo + 0.05);
 }
 
-/** Resolves semantic tokens for one scheme, palette and dual-polarity accent. */
+/** Resolves semantic tokens for one scheme and palette; the accent is the palette's link blue. */
 function resolveSemanticTokens(
 	scheme: 'light' | 'dark',
-	paletteSlots: Record<string, string>,
-	accentSlots: Record<string, string>
+	paletteSlots: Record<string, string>
 ): Record<string, string> {
 	const slot = (name: string) => {
 		const value = paletteSlots[`--${scheme}-${name}`];
 		expect(value, `--${scheme}-${name}`).toBeDefined();
 		return value;
 	};
-	const accentSlot = (name: string) => {
-		const value = accentSlots[`--${name}-${scheme}`];
-		expect(value, `--${name}-${scheme}`).toBeDefined();
-		return value;
-	};
+	const rootSlot = (name: string) =>
+		resolveVar(`var(--${name}-${scheme})`, rootDecls).toLowerCase();
 
-	const accent = accentSlot('accent');
+	const link = slot('link');
 	return {
 		'--color-bg': slot('bg'),
 		'--color-surface-1': slot('surface-1'),
@@ -171,12 +165,14 @@ function resolveSemanticTokens(
 		'--color-ok-text': slot('ok-text'),
 		'--color-warn-soft': slot('warn-soft'),
 		'--color-warn-text': slot('warn-text'),
-		'--color-accent': accent,
-		'--color-on-accent': accentSlot('on-accent'),
-		'--color-accent-soft': accentSlot('accent-soft'),
-		'--color-accent-text': accentSlot('accent-text'),
+		'--color-link': link,
+		'--color-visited': slot('visited'),
+		'--color-accent': link,
+		'--color-on-accent': rootSlot('on-accent'),
+		'--color-accent-soft': rootSlot('accent-soft'),
+		'--color-accent-text': link,
 		'--color-focus-inner': slot('focus-inner'),
-		'--color-focus-outer': accent,
+		'--color-focus-outer': link,
 		'--color-highlight-bg': slot('highlight-bg'),
 		'--color-highlight-fg': slot('highlight-fg')
 	};
@@ -188,9 +184,6 @@ const lightPalettes = Object.fromEntries(
 const darkPalettes = Object.fromEntries(
 	DARK_THEME_VALUES.map((name) => [name, resolveBlock(`[data-dark-theme='${name}']`)])
 ) as Record<DarkTheme, Record<string, string>>;
-const accents = Object.fromEntries(
-	ACCENT_VALUES.map((name) => [name, resolveBlock(`[data-accent='${name}']`)])
-) as Record<Accent, Record<string, string>>;
 
 const surfaces = ['--color-bg', '--color-surface-1', '--color-surface-2'] as const;
 
@@ -200,8 +193,11 @@ const aaTextPairs: Array<[string, string]> = [
 		['--color-text-secondary', surface],
 		['--color-text-muted', surface],
 		['--color-danger', surface],
-		['--color-accent', surface]
+		['--color-link', surface],
+		['--color-visited', surface]
 	]),
+	// Primary buttons are ink with paper text (izgah-ui-v4.md §1).
+	['--color-bg', '--color-text'],
 	['--color-on-danger', '--color-danger'],
 	['--color-on-accent', '--color-accent'],
 	['--color-accent-text', '--color-accent-soft'],
@@ -220,29 +216,40 @@ const aaUiPairs: Array<[string, string]> = surfaces.flatMap((surface): Array<[st
 const combinations = [
 	...LIGHT_THEME_VALUES.map((name) => ['light', name, lightPalettes[name]] as const),
 	...DARK_THEME_VALUES.map((name) => ['dark', name, darkPalettes[name]] as const)
-].flatMap(([scheme, name, slots]) =>
-	ACCENT_VALUES.map((accent) => ({
-		label: `${scheme}/${name}/${accent}`,
-		scheme,
-		name,
-		slots,
-		tokens: resolveSemanticTokens(scheme, slots, accents[accent])
-	}))
-);
+].map(([scheme, name, slots]) => ({
+	label: `${scheme}/${name}`,
+	scheme,
+	name,
+	slots,
+	tokens: resolveSemanticTokens(scheme, slots)
+}));
 
-describe('İzgah Stüdyo v3 token contrast (docs/designs/izgah-ui-v3.md §1)', () => {
-	it('covers all 5 palettes x 4 dual-polarity accents (20 combinations) and :root defaults', () => {
-		expect(combinations).toHaveLength(20);
+describe('Künye token contrast (docs/designs/izgah-ui-v4.md §1)', () => {
+	it('covers 2 light and 2 dark palettes with ink-and-paper defaults and one accent', () => {
+		expect(combinations).toHaveLength(4);
 		const resolvedRoot = resolveBlock(':root');
-		expect(resolvedRoot['--light-bg']).toBe('#fafaf8');
-		expect(resolvedRoot['--dark-bg']).toBe('#0d0e10');
-		expect(resolvedRoot['--accent-light']).toBe('#0f766e');
-		expect(resolvedRoot['--accent-dark']).toBe('#2dd4bf');
+		expect(resolvedRoot['--light-bg']).toBe('#ffffff');
+		expect(resolvedRoot['--dark-bg']).toBe('#0f0f10');
+		expect(resolvedRoot['--light-link']).toBe('#1f3fd0');
+		expect(resolvedRoot['--dark-link']).toBe('#9db7ff');
+		expect(resolvedRoot['--light-shadow-sm']).toBe('none');
+		expect(resolvedRoot['--dark-shadow-sm']).toBe('none');
 		expect(resolvedRoot['--surface-sheen']).toBe('none');
 		expect(resolvedRoot['--glow-primary']).toBe('0 0 0 0 transparent');
-		expect(resolvedRoot['--glow-primary-hover']).toBe('0 0 0 0 transparent');
-		expect(resolvedRoot['--glow-nav']).toBe('0 0 0 0 transparent');
-		expect(resolvedRoot['--glow-focus']).toBe('0 0 0 0 transparent');
+	});
+
+	it('keeps every corner radius at 3px or less', () => {
+		for (const name of [
+			'--radius-xs',
+			'--radius-sm',
+			'--radius-md',
+			'--radius-lg',
+			'--radius-pill'
+		]) {
+			const value = rootDecls[name];
+			expect(value, name).toMatch(/^\d+px$/);
+			expect(Number.parseInt(value, 10), name).toBeLessThanOrEqual(3);
+		}
 	});
 
 	for (const { label, tokens } of combinations) {
@@ -256,15 +263,21 @@ describe('İzgah Stüdyo v3 token contrast (docs/designs/izgah-ui-v3.md §1)', (
 	}
 
 	it.each(combinations.filter(({ name }) => name === 'contrast'))(
-		'$label: reaches AAA (>= 7:1) text/danger, >= 4.5:1 hairlines, and zero shadows/specular/glows',
+		'$label: reaches AAA (>= 7:1) text/danger/link, >= 4.5:1 rules, and zero shadows',
 		({ scheme, slots, tokens }) => {
 			for (const surface of surfaces) {
-				expect(contrast(tokens['--color-text'], tokens[surface])).toBeGreaterThanOrEqual(7);
-				expect(contrast(tokens['--color-text-secondary'], tokens[surface])).toBeGreaterThanOrEqual(
-					7
-				);
-				expect(contrast(tokens['--color-text-muted'], tokens[surface])).toBeGreaterThanOrEqual(7);
-				expect(contrast(tokens['--color-danger'], tokens[surface])).toBeGreaterThanOrEqual(7);
+				for (const fg of [
+					'--color-text',
+					'--color-text-secondary',
+					'--color-text-muted',
+					'--color-danger',
+					'--color-link'
+				]) {
+					expect(
+						contrast(tokens[fg], tokens[surface]),
+						`${fg} on ${surface}`
+					).toBeGreaterThanOrEqual(7);
+				}
 			}
 			expect(
 				contrast(tokens['--color-on-danger'], tokens['--color-danger'])
@@ -278,33 +291,15 @@ describe('İzgah Stüdyo v3 token contrast (docs/designs/izgah-ui-v3.md §1)', (
 		}
 	);
 
-	it('zeroes shadows, specular highlights and glows under prefers-contrast: more and forced-colors: active', () => {
+	it('removes dialog and popover shadows under prefers-contrast: more and forced-colors: active', () => {
 		const contrastMedia = parsedRules.find(
 			(rule) =>
 				rule.media?.includes('prefers-contrast: more') &&
 				rule.media?.includes('forced-colors: active')
 		);
 		expect(contrastMedia).toBeDefined();
-		const decls = contrastMedia!.decls;
-		for (const key of [
-			'--light-shadow-xs',
-			'--light-shadow-sm',
-			'--light-shadow-lg',
-			'--light-specular-top',
-			'--dark-shadow-xs',
-			'--dark-shadow-sm',
-			'--dark-shadow-lg',
-			'--dark-specular-top',
-			'--shadow-xs',
-			'--shadow-sm',
-			'--shadow-lg',
-			'--specular-top',
-			'--card-shadow'
-		]) {
-			expect(decls[key], key).toBe('none');
-		}
-		for (const key of ['--glow-primary', '--glow-primary-hover', '--glow-nav', '--glow-focus']) {
-			expect(decls[key], key).toBe('0 0 0 0 transparent');
+		for (const key of ['--light-shadow-lg', '--dark-shadow-lg', '--shadow-lg', '--shadow-dialog']) {
+			expect(contrastMedia!.decls[key], key).toBe('none');
 		}
 	});
 });

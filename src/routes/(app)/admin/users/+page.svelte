@@ -5,7 +5,6 @@
 	import { onMount } from 'svelte';
 	import { enhance } from '$app/forms';
 	import type { AdminUserItem } from '#lib/server/admin/service.ts';
-	import Avatar from '#lib/components/ui/Avatar.svelte';
 	import Dialog from '#lib/components/ui/Dialog.svelte';
 	import Icon from '#lib/components/ui/Icon.svelte';
 	import type { ActionData, PageData } from './$types';
@@ -443,7 +442,6 @@
 						<tr class:is-disabled={!user.isActive}>
 							<th scope="row" class="user-cell">
 								<div class="member-cell">
-									<Avatar name={user.name} self={user.id === data.currentAdminId} size={30} />
 									<div class="member-meta">
 										<span class="user-name">{user.name}</span>
 										<span class="user-email">{user.email}</span>
@@ -822,10 +820,7 @@
 	}
 
 	.table-card {
-		background: var(--color-surface-1);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-md);
-		box-shadow: var(--shadow-sm);
+		border-block-start: 1px solid var(--color-text);
 		overflow: hidden;
 	}
 
@@ -881,8 +876,6 @@
 		background: var(--color-surface-2);
 		font: var(--text-micro);
 		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.04em;
 		color: var(--color-text-muted);
 		position: sticky;
 		inset-block-start: 0;
@@ -1057,8 +1050,6 @@
 
 		.responsive-users-table td::before {
 			font: var(--text-micro);
-			text-transform: uppercase;
-			letter-spacing: 0.04em;
 			color: var(--color-text-muted);
 		}
 

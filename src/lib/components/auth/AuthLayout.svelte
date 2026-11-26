@@ -4,15 +4,25 @@
 	import type { Snippet } from 'svelte';
 
 	let { children }: { children: Snippet } = $props();
+
+	// Wordmark (docs/designs/izgah-ui-v4.md §5): "iz" in ink, the rest in tertiary ink.
+	const name = instanceName();
+	const wordmark =
+		name.toLocaleLowerCase('tr').startsWith('iz') && name.length > 2
+			? { head: name.slice(0, 2), tail: name.slice(2) }
+			: null;
 </script>
 
-<!-- Editorial-precision split layout (izgah-ui-v3 §9, Direction D):
-     warm dark graphite colophon panel + surface-1 form card.
-     On viewports < 768px the colophon collapses into a compact top strip. -->
+<!-- Künye split layout (izgah-ui-v4.md): the same paper on both sides, a rule between them.
+     On viewports < 768px the left column collapses into a compact top strip. -->
 <div class="auth-layout">
 	<aside class="auth-aside" aria-label={t('auth.aboutLabel', { name: instanceName() })}>
 		<div class="aside-top">
-			<p class="wordmark">{instanceName()}<span class="wordmark-dot" aria-hidden="true"></span></p>
+			<p class="wordmark">
+				{#if wordmark}<span>{wordmark.head}</span><span class="wordmark-tail">
+						{wordmark.tail}
+					</span>{:else}{name}{/if}
+			</p>
 			<span class="aside-kicker">{t('auth.kicker')}</span>
 		</div>
 
@@ -20,13 +30,14 @@
 			<p class="tagline">{t('auth.tagline')}</p>
 
 			<div class="studio-preview" aria-hidden="true">
-				<div class="preview-head">
-					<span class="preview-avatar">ZD</span>
-					<strong class="preview-author">Zeynep Demir</strong>
-					<span class="preview-meta">· 18:52 · Frontend</span>
+				<p class="preview-head">
+					<span class="preview-meta">18:52</span>
+					<span class="preview-author">Zeynep Demir</span>
+				</p>
+				<div class="preview-body">
+					<p class="preview-title">{t('auth.previewTitle')}</p>
+					<p class="preview-foot">{t('auth.previewFoot')}</p>
 				</div>
-				<p class="preview-title">{t('auth.previewTitle')}</p>
-				<p class="preview-foot">{t('auth.previewFoot')}</p>
 			</div>
 		</div>
 
@@ -47,163 +58,108 @@
 		color: var(--color-text);
 	}
 
-	/* Warm dark graphite colophon panel (izgah-ui-v3 §9). */
 	.auth-aside {
-		/* Always-dark panel: reads the graphite primitives directly (one of the few allowed places). */
-		--aside-bg: var(--p-graphite-900);
-		--aside-card-bg: var(--p-graphite-850);
-		--aside-border: var(--p-graphite-650);
-		--aside-card-border: var(--p-graphite-650);
-		--aside-text: var(--p-graphite-50);
-		--aside-text-secondary: var(--p-graphite-300);
-		--aside-text-muted: var(--p-graphite-400);
-		--aside-pattern: radial-gradient(
-			color-mix(in oklab, var(--accent-dark) 11%, transparent) 1px,
-			transparent 1px
-		);
-
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		gap: var(--space-6);
 		padding: clamp(2rem, 3.5vw, 3rem) clamp(2rem, 4vw, 3.25rem);
-		background-color: var(--aside-bg);
-		background-image: var(--aside-pattern);
-		background-size: 24px 24px;
-		color: var(--aside-text);
-		border-inline-end: 1px solid var(--aside-border);
-	}
-
-	:global([data-light-theme='contrast']) .auth-aside,
-	:global([data-dark-theme='contrast']) .auth-aside {
-		--aside-pattern: none;
-		--aside-border: var(--p-graphite-450);
-		--aside-card-border: var(--p-graphite-450);
+		border-inline-end: 1px solid var(--color-line);
 	}
 
 	.aside-top {
 		display: flex;
-		align-items: center;
+		align-items: baseline;
 		justify-content: space-between;
 		gap: var(--space-3);
 	}
 
 	.wordmark {
-		display: inline-flex;
-		align-items: center;
-		gap: 7px;
-		font-family: var(--font-display);
+		margin: 0;
 		font-size: 1.625rem;
-		font-weight: 600;
+		font-weight: 650;
 		line-height: 1;
-		letter-spacing: -0.02em;
-		color: var(--aside-text);
+		letter-spacing: -0.015em;
+		color: var(--color-text);
 	}
 
-	.wordmark-dot {
-		display: inline-block;
-		inline-size: 8px;
-		block-size: 8px;
-		border-radius: var(--radius-pill);
-		background: var(--accent-dark);
-		flex: none;
+	.wordmark-tail {
+		font-weight: 400;
+		color: var(--color-text-muted);
 	}
 
 	.aside-kicker {
-		font: var(--text-meta);
-		color: var(--aside-text-muted);
+		font: var(--text-hint);
+		color: var(--color-text-muted);
 	}
 
 	.aside-body {
 		display: grid;
-		gap: var(--space-5);
+		gap: var(--space-6);
 	}
 
 	.tagline {
-		max-inline-size: 14ch;
-		font-family: var(--font-display);
-		font-size: clamp(1.875rem, 1.3rem + 1.6vw, 2.375rem);
-		font-weight: 600;
-		line-height: 1.14;
+		max-inline-size: 16ch;
+		margin: 0;
+		font-size: clamp(1.875rem, 1.3rem + 1.6vw, 2.5rem);
+		font-weight: 650;
+		line-height: 1.1;
 		letter-spacing: -0.02em;
-		color: var(--aside-text);
+		color: var(--color-text);
 		text-wrap: balance;
 	}
 
-	/* Static miniature Studio link-card preview (purely decorative, aria-hidden). */
+	/* A static register entry (decorative, aria-hidden): rules, not a floating card. */
 	.studio-preview {
 		display: grid;
-		gap: var(--space-3);
-		max-inline-size: 27.5rem;
-		padding: 1.25rem 1.375rem;
-		background: var(--aside-card-bg);
-		border: 1px solid var(--aside-card-border);
-		border-radius: var(--radius-lg);
-		box-shadow:
-			inset 0 1px 0 rgb(255 255 255 / 0.06),
-			0 22px 54px rgb(0 0 0 / 0.48);
-	}
-
-	:global([data-light-theme='contrast']) .studio-preview,
-	:global([data-dark-theme='contrast']) .studio-preview {
-		box-shadow: none;
+		grid-template-columns: 96px minmax(0, 1fr);
+		gap: var(--space-4);
+		max-inline-size: 30rem;
+		padding-block: var(--space-3);
+		border-block: 1px solid var(--color-line);
 	}
 
 	.preview-head {
-		display: flex;
-		align-items: center;
-		gap: var(--space-2);
-		flex-wrap: wrap;
-		font-size: 0.78125rem;
-		color: var(--aside-text-secondary);
-	}
-
-	.preview-avatar {
-		display: inline-grid;
-		place-items: center;
-		inline-size: 24px;
-		block-size: 24px;
-		border-radius: var(--radius-pill);
-		background: var(--accent-soft-dark);
-		color: var(--accent-text-dark);
-		border: 1px solid var(--accent-border-dark);
-		font-family: var(--font-sans);
-		font-size: 0.75rem;
-		font-weight: 600;
-		line-height: 1;
-		flex: none;
-	}
-
-	.preview-author {
-		font-weight: 600;
-		color: var(--aside-text);
+		display: grid;
+		gap: 2px;
+		margin: 0;
 	}
 
 	.preview-meta {
 		font: var(--text-meta);
-		color: var(--aside-text-muted);
+		font-variant-numeric: tabular-nums;
+		color: var(--color-text-muted);
+	}
+
+	.preview-author {
+		font: var(--text-ui);
+		color: var(--color-text-secondary);
+	}
+
+	.preview-body {
+		display: grid;
+		gap: 3px;
 	}
 
 	.preview-title {
-		font-family: var(--font-display);
-		font-size: 1.25rem;
-		font-weight: 600;
-		line-height: 1.28;
-		letter-spacing: -0.01em;
-		color: var(--aside-text);
+		margin: 0;
+		font: var(--text-title);
+		color: var(--color-link);
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
 	}
 
 	.preview-foot {
-		font: var(--text-meta);
-		color: var(--accent-text-dark);
+		margin: 0;
+		font: var(--text-hint);
+		color: var(--color-text-muted);
 	}
 
 	.aside-foot {
 		font: var(--text-hint);
-		color: var(--aside-text-muted);
+		color: var(--color-text-muted);
 	}
 
-	/* Right column & form card */
 	.auth-main {
 		display: grid;
 		place-items: center;
@@ -220,11 +176,9 @@
 	.auth-main :global(.auth-card) {
 		display: grid;
 		gap: var(--space-4);
-		padding: var(--space-6);
-		background: var(--color-surface-1);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-lg);
-		box-shadow: var(--shadow-sm);
+		padding: 0;
+		background: none;
+		border: 0;
 	}
 
 	@media (max-width: 767px) {
@@ -239,7 +193,7 @@
 			padding: var(--space-3) var(--gutter);
 			gap: var(--space-3);
 			border-inline-end: 0;
-			border-block-end: 1px solid var(--aside-border);
+			border-block-end: 1px solid var(--color-line);
 		}
 
 		.aside-top {
@@ -261,7 +215,7 @@
 		}
 
 		.auth-main :global(.auth-card) {
-			padding: var(--space-5);
+			padding: 0;
 		}
 	}
 
@@ -505,11 +459,6 @@
 	@media (forced-colors: active) {
 		.auth-aside {
 			border-color: CanvasText;
-		}
-
-		.wordmark-dot {
-			background: Highlight;
-			border: 1px solid CanvasText;
 		}
 
 		.studio-preview {

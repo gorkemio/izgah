@@ -809,10 +809,7 @@
 
 	/* Studio table-card for active API keys. */
 	.table-card {
-		background: var(--color-surface-1);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-md);
-		box-shadow: var(--shadow-sm);
+		border-block-start: 1px solid var(--color-text);
 		overflow: hidden;
 	}
 

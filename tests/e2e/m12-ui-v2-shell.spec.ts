@@ -271,7 +271,7 @@ test.describe('UI v2 shell — rail, bottom tab bar, /sections and theme cookie'
 		await expect(session.getByRole('button', { name: 'Çıkış yap' })).toBeVisible();
 	});
 
-	test('/settings Görünüm: palette and accent apply without reload and persist (izgah-themes §5)', async ({
+	test('/settings Görünüm: palettes apply without reload and persist (izgah-themes §5, izgah-ui-v4 §1)', async ({
 		page,
 		context
 	}) => {
@@ -281,40 +281,37 @@ test.describe('UI v2 shell — rail, bottom tab bar, /sections and theme cookie'
 		await expect(page.locator('html[data-hydrated]')).toHaveCount(1);
 		const html = page.locator('html');
 		await expect(html).toHaveAttribute('data-dark-theme', 'default');
-		await expect(html).toHaveAttribute('data-accent', 'teal');
+		await expect(html).not.toHaveAttribute('data-accent', /.*/);
 
 		const appearance = page.getByRole('region', { name: 'Görünüm' });
 		await appearance
 			.getByRole('group', { name: 'Koyu tema' })
-			.getByRole('radio', { name: 'Loş' })
-			.check();
-		await appearance
-			.getByRole('group', { name: 'Vurgu rengi' })
-			.getByRole('radio', { name: 'Erik' })
+			.getByRole('radio', { name: 'Yüksek kontrast' })
 			.check();
 		await appearance
 			.getByRole('group', { name: 'Açık tema' })
 			.getByRole('radio', { name: 'Yüksek kontrast' })
 			.check();
-		await expect(html).toHaveAttribute('data-dark-theme', 'dim');
-		await expect(html).toHaveAttribute('data-accent', 'plum');
+		await expect(html).toHaveAttribute('data-dark-theme', 'contrast');
 		await expect(html).toHaveAttribute('data-light-theme', 'contrast');
 		await expect
 			.poll(async () =>
 				Object.fromEntries(
 					(await context.cookies())
-						.filter((c) => c.name.startsWith('izgah_theme_') || c.name === 'izgah_accent')
+						.filter((c) => c.name.startsWith('izgah_theme_'))
 						.map((c) => [c.name, c.value])
 				)
 			)
-			.toEqual({ izgah_theme_light: 'contrast', izgah_theme_dark: 'dim', izgah_accent: 'plum' });
+			.toEqual({ izgah_theme_light: 'contrast', izgah_theme_dark: 'contrast' });
 		// The mode picker is untouched by palette changes.
 		await expect(html).toHaveAttribute('data-theme', 'system');
 
 		const response = await page.reload();
-		expect(await response?.text()).toContain('data-dark-theme="dim"');
+		expect(await response?.text()).toContain('data-dark-theme="contrast"');
 		await expect(
-			appearance.getByRole('group', { name: 'Vurgu rengi' }).getByRole('radio', { name: 'Erik' })
+			appearance
+				.getByRole('group', { name: 'Koyu tema' })
+				.getByRole('radio', { name: 'Yüksek kontrast' })
 		).toBeChecked();
 	});
 
@@ -332,14 +329,9 @@ test.describe('UI v2 shell — rail, bottom tab bar, /sections and theme cookie'
 			.getByRole('group', { name: 'Koyu tema' })
 			.getByRole('radio', { name: 'Yüksek kontrast' })
 			.check();
-		await form
-			.getByRole('group', { name: 'Vurgu rengi' })
-			.getByRole('radio', { name: 'Kobalt' })
-			.check();
 		await form.getByRole('button', { name: 'Uygula' }).click();
 		await expect(page).toHaveURL(/\/settings$/);
 		await expect(page.locator('html')).toHaveAttribute('data-dark-theme', 'contrast');
-		await expect(page.locator('html')).toHaveAttribute('data-accent', 'cobalt');
 		await context.close();
 	});
 

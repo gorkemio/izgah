@@ -1,7 +1,7 @@
 # Izgah UI v4 — "Künye"
 
 *   **Author:** Gorkem Inanc Ozdemir
-*   **Status:** Proposed. Implementation (roadmap R3) starts after the prototype review in §9.
+*   **Status:** Approved (2026-11-26, after the prototype review in §9). Implementation is roadmap R3.
 *   **Date:** 2026-11-26
 
 --------------------------------------------------------------------------------
@@ -121,6 +121,22 @@ The accent colours (`teal`, `cobalt`, `terracotta`, `plum`) and the `dim` palett
 `docs/designs/prototypes/kunye/` holds static pages with realistic data: the feed with a reading pane (light and dark), a resource page, the share form with suggestions, `/admin/ai`, mobile, and izgah.com, with a font switch. The maintainer reviews them; the chosen font and any changes are recorded here before R3 starts.
 
 *   2026-11-26 — Font: Atkinson Hyperlegible Next (§2). Wordmark: "iz" + "gah" (§5). R3 can start.
+
+## 10. Implementation notes (R3, first pass)
+
+Done:
+
+*   Tokens, the single font, the four palettes (light and dark × standard and high contrast) and the removals in §8, in the app, the extensions and izgah.com. `tests/unit/tokens-contrast.test.ts` checks every palette, link and visited colour, and the 3px radius ceiling.
+*   The index rail with the wordmark, a text-only bottom tab bar, the register entry (gutter, note, künye line, ruled day headings with counts), flat resource, settings and admin pages, and the auth layout.
+*   izgah.com is rebuilt from the prototype: a live HTML specimen instead of screenshots, in English and Turkish.
+
+Kept from v3 for now, to keep the change reviewable:
+
+*   `PostCard` and `LinkAttachment` keep their names and test hooks (`ui-v2.md` §12) and are restyled as the register entry; there is no separate `RegisterEntry` component.
+*   `SidePeekDialog` stays a dialog at every width; the docked reading pane at ≥ 1280 px is not built yet.
+*   The content-type filter is still a row of text tabs, not the "Filter" disclosure.
+*   The notification bell and the card's "more" menu keep their icons; the extension's PNG icons keep the v3 artwork.
+*   `rail-summary.ts` stays for the "Most discussed" sort.
 
 ## Alternatives considered
 

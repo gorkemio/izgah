@@ -7,12 +7,10 @@
 	import { formatDate, formatDateTime, formatTime } from '#lib/format/date.ts';
 	import { enhance, type SubmitFunction } from '$app/forms';
 	import { goto, invalidate } from '$app/navigation';
-	import Avatar from '#lib/components/ui/Avatar.svelte';
 	import Dialog from '#lib/components/ui/Dialog.svelte';
 	import Highlight from '#lib/components/ui/Highlight.svelte';
 	import Icon from '#lib/components/ui/Icon.svelte';
 	import PopoverPanel from '#lib/components/ui/PopoverPanel.svelte';
-	import Tooltip from '#lib/components/ui/Tooltip.svelte';
 	import type { SectionListItem } from '#lib/server/sections/service.ts';
 	import type { ContentType } from '#lib/types/domain.ts';
 	import type {
@@ -336,52 +334,32 @@
 		data-resource-id={item.resource.id}
 	>
 		<header class="post-head">
-			<Avatar name={item.author.name} self={item.author.id === currentUserId} size={30} />
-			<div class="post-head-text">
-				<strong id={authorId} class="post-author">{item.author.name}</strong>
-				<a
-					class="post-time"
-					href="/resources/{item.resource.id}#share-{item.id}"
-					title={formatDateTime(item.createdAt)}
-				>
-					<span class="visually-hidden">
-						{t('share.sharedAt', { date: formatDate(item.createdAt) })}
-					</span>
-					<time datetime={item.createdAt}>{formatTime(item.createdAt)}</time>
-				</a>
-				{#each item.sections as section (section.id)}
-					<a href="/sections/{section.slug}" class="tag section-chip">{section.name}</a>
-				{/each}
-				{#if !item.isFeedVisible}
-					<span class="badge badge-silent">{t('share.silent')}</span>
-				{/if}
-				{#if item.resource.unfurlStatus === 'queued' || item.resource.unfurlStatus === 'running'}
-					<span class="badge status-pending badge-pending">{t('share.previewPending')}</span>
-				{/if}
-				{#if unseen}
-					<span class="unseen-pill">
-						<span class="unseen-mark" aria-hidden="true"></span>
-						<span>{t('share.new')}</span>
-					</span>
-				{/if}
-			</div>
-
+			<a
+				class="post-time"
+				href="/resources/{item.resource.id}#share-{item.id}"
+				title={formatDateTime(item.createdAt)}
+			>
+				<span class="visually-hidden">
+					{t('share.sharedAt', { date: formatDate(item.createdAt) })}
+				</span>
+				<time datetime={item.createdAt}>{formatTime(item.createdAt)}</time>
+			</a>
+			<strong id={authorId} class="post-author">{item.author.name}</strong>
+			{#if unseen}
+				<span class="unseen-pill">{t('share.new')}</span>
+			{/if}
 			{#if (!compact && onPreview) || canManage}
 				<div class="post-head-tools">
 					{#if !compact && onPreview}
-						<Tooltip text={t('share.peekTooltip')}>
-							{#snippet children()}
-								<a
-									href="/resources/{item.resource.id}"
-									class="tag preview-trigger"
-									aria-label={t('share.peekLabel', { title: cardLabel })}
-									onclick={handlePreviewClick}
-								>
-									<Icon name="panelRight" size={13} />
-									<span>{t('share.peek')}</span>
-								</a>
-							{/snippet}
-						</Tooltip>
+						<!-- A plain word without a hover hint (ui-v4 §1: words instead of icons). -->
+						<a
+							href="/resources/{item.resource.id}"
+							class="tag preview-trigger"
+							aria-label={t('share.peekLabel', { title: cardLabel })}
+							onclick={handlePreviewClick}
+						>
+							<span>{t('share.peek')}</span>
+						</a>
 					{/if}
 
 					{#if canManage}
@@ -430,52 +408,70 @@
 			{/if}
 		</header>
 
-		{#if item.note}
-			<div class="post-note-wrap">
-				<p
-					bind:this={noteEl}
-					id={noteId}
-					class="post-note card-note"
-					class:is-expanded={noteExpanded}
-				>
-					<Highlight text={item.note} terms={highlightTerms} />
-				</p>
-				{#if noteOverflows || noteExpanded}
-					<button
-						type="button"
-						class="note-toggle"
-						aria-expanded={noteExpanded}
-						aria-controls={noteId}
-						onclick={() => {
-							noteExpanded = !noteExpanded;
-						}}
+		<div class="post-body">
+			{#if item.note}
+				<div class="post-note-wrap">
+					<p
+						bind:this={noteEl}
+						id={noteId}
+						class="post-note card-note"
+						class:is-expanded={noteExpanded}
 					>
-						{noteExpanded ? t('share.showLess') : t('share.showMore')}
-					</button>
-				{/if}
-			</div>
-		{/if}
-
-		{#if !compact}
-			<LinkAttachment {item} titleId={cardTitleId} {priorityImage} {highlightTerms} />
-
-			{#if item.suggestions?.length}
-				<ShareSuggestions
-					shareId={item.id}
-					suggestions={item.suggestions}
-					{actionBase}
-					{returnTo}
-				/>
+						<Highlight text={item.note} terms={highlightTerms} />
+					</p>
+					{#if noteOverflows || noteExpanded}
+						<button
+							type="button"
+							class="note-toggle"
+							aria-expanded={noteExpanded}
+							aria-controls={noteId}
+							onclick={() => {
+								noteExpanded = !noteExpanded;
+							}}
+						>
+							{noteExpanded ? t('share.showLess') : t('share.showMore')}
+						</button>
+					{/if}
+				</div>
 			{/if}
 
-			<PostActions
-				{item}
-				{actionBase}
-				{returnTo}
-				{currentUserId}
-				onOpenDiscussion={markCardForViewTransition}
-			/>
-		{/if}
+			{#if compact && item.sections.length > 0}
+				<p class="post-tags">
+					{#each item.sections as section (section.id)}
+						<a href="/sections/{section.slug}" class="section-chip">{section.name}</a>
+					{/each}
+				</p>
+			{/if}
+
+			{#if !compact}
+				<LinkAttachment {item} titleId={cardTitleId} {priorityImage} {highlightTerms} />
+
+				{#if item.sections.length > 0 || !item.isFeedVisible || item.resource.unfurlStatus === 'queued' || item.resource.unfurlStatus === 'running'}
+					<p class="post-tags">
+						{#each item.sections as section (section.id)}
+							<a href="/sections/{section.slug}" class="section-chip">{section.name}</a>
+						{/each}
+						{#if !item.isFeedVisible}
+							<span class="badge-silent">{t('share.silent')}</span>
+						{/if}
+						{#if item.resource.unfurlStatus === 'queued' || item.resource.unfurlStatus === 'running'}
+							<span class="badge-pending">{t('share.previewPending')}</span>
+						{/if}
+					</p>
+				{/if}
+
+				{#if item.suggestions?.length}
+					<ShareSuggestions
+						shareId={item.id}
+						suggestions={item.suggestions}
+						{actionBase}
+						{returnTo}
+					/>
+				{/if}
+
+				<PostActions {item} {actionBase} {returnTo} onOpenDiscussion={markCardForViewTransition} />
+			{/if}
+		</div>
 	</article>
 
 	{#if isInlineEditFallback}
@@ -750,67 +746,47 @@
 </div>
 
 <style>
+	/*
+	 * Register entry (docs/designs/izgah-ui-v4.md §4): time and name in a left gutter; note, link,
+	 * künye and actions in one column; rules between entries, no card box.
+	 */
 	.share-card {
 		position: relative;
 		display: grid;
-		gap: var(--space-3);
-		padding: 18px 20px;
-		background: var(--card-bg);
-		border: 1px solid var(--card-border);
-		border-radius: var(--radius-lg);
-		box-shadow: var(--card-shadow);
+		grid-template-columns: 104px minmax(0, 1fr);
+		column-gap: var(--space-4);
+		margin-inline: -10px;
+		padding: 14px 10px 12px;
+		background: transparent;
+		border-block-end: 1px solid var(--color-line);
 		outline: none;
-		transition: border-color var(--dur-fast) var(--ease);
+		transition: background-color var(--dur-fast) var(--ease);
 	}
 
 	.share-card.is-compact {
-		padding: 12px 14px;
-		border-radius: var(--radius-md);
-		box-shadow: none;
-	}
-
-	.share-card:hover {
-		border-color: var(--color-line-strong);
+		grid-template-columns: 88px minmax(0, 1fr);
+		padding-block: 10px;
 	}
 
 	.share-card:focus-visible {
 		outline: 2px solid transparent;
-		outline-offset: 2px;
-		border-color: var(--color-accent);
-		box-shadow:
-			0 0 0 2px var(--color-bg),
-			0 0 0 4px var(--color-accent);
+		background: var(--color-surface-2);
+		box-shadow: inset 0 0 0 2px var(--color-focus-outer);
 	}
 
 	.post-head {
 		display: flex;
-		align-items: center;
-		gap: 10px;
-	}
-
-	.post-head-text {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 7px var(--space-2);
-		flex: 1;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 2px;
 		min-inline-size: 0;
+		padding-block-start: 2px;
 	}
 
-	@container share-card (max-width: 440px) {
-		.share-card {
-			padding: 14px 16px;
-		}
-
-		.post-head {
-			align-items: flex-start;
-		}
-	}
-
-	.post-author {
-		font: var(--text-ui);
-		font-weight: 600;
-		color: var(--color-text);
+	.post-body {
+		display: grid;
+		gap: var(--space-1);
+		min-inline-size: 0;
 	}
 
 	.post-time {
@@ -826,47 +802,72 @@
 		text-decoration: underline;
 	}
 
-	.section-chip {
-		position: relative;
-		z-index: 2;
-	}
-
-	.unseen-pill {
-		display: inline-flex;
-		align-items: center;
-		gap: 5px;
-		padding: 1px 7px;
-		border-radius: var(--radius-xs);
+	.post-author {
+		max-inline-size: 100%;
+		overflow: hidden;
 		font: var(--text-ui);
-		font-size: 0.75rem;
-		font-weight: 600;
-		background: var(--color-highlight-bg);
-		color: var(--color-highlight-fg);
+		font-weight: 500;
+		color: var(--color-text-secondary);
+		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
 
-	.unseen-pill .unseen-mark {
-		inline-size: 6px;
-		block-size: 6px;
-		background: currentColor;
+	.unseen-pill {
+		padding: 0 4px;
+		font: var(--text-micro);
+		color: var(--color-highlight-fg);
+		background: var(--color-highlight-bg);
+		border-radius: var(--radius-xs);
+	}
+
+	.post-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0 var(--space-3);
+		margin: 0;
+		font: var(--text-hint);
+		color: var(--color-text-muted);
+	}
+
+	.section-chip {
+		position: relative;
+		z-index: 2;
+		color: var(--color-text-secondary);
+		text-decoration-color: var(--color-line-strong);
+	}
+
+	.badge-silent,
+	.badge-pending {
+		color: var(--color-text-muted);
+		font-style: italic;
 	}
 
 	.post-head-tools {
-		display: inline-flex;
+		display: flex;
 		align-items: center;
-		gap: 6px;
-		margin-inline-start: auto;
-		flex: none;
+		gap: var(--space-2);
+		margin-block-start: var(--space-1);
+		opacity: 0;
+		transition: opacity var(--dur-fast) var(--ease);
+	}
+
+	.share-card:hover .post-head-tools,
+	.share-card:focus-within .post-head-tools {
+		opacity: 1;
+	}
+
+	@media (hover: none) {
+		.post-head-tools {
+			opacity: 1;
+		}
 	}
 
 	.preview-trigger {
 		position: relative;
 		z-index: 2;
-		font-size: 0.75rem;
-		min-block-size: 26px;
-		padding: 0 9px;
-		background: var(--color-surface-2);
+		font: var(--text-hint);
 		color: var(--color-text-secondary);
+		text-decoration-color: var(--color-line-strong);
 	}
 
 	@media (max-width: 1023px) {
@@ -883,7 +884,7 @@
 
 	:global(.card-menu-trigger) {
 		min-inline-size: 28px !important;
-		min-block-size: 28px !important;
+		min-block-size: 24px !important;
 		padding: 0 !important;
 		border-color: transparent !important;
 		color: var(--color-text-muted) !important;
@@ -902,7 +903,7 @@
 
 	.card-menu-list {
 		display: grid;
-		gap: 2px;
+		gap: 1px;
 	}
 
 	.card-menu-item {
@@ -912,6 +913,7 @@
 		min-block-size: 34px;
 		padding: 0 var(--space-3);
 		font: var(--text-ui);
+		font-weight: 400;
 		color: var(--color-text);
 		text-align: start;
 		text-decoration: none;
@@ -919,14 +921,10 @@
 		border: 0;
 		border-radius: var(--radius-sm);
 		cursor: pointer;
-		transition:
-			background-color var(--dur-fast) var(--ease),
-			color var(--dur-fast) var(--ease);
 	}
 
 	.card-menu-item:hover {
 		background: var(--color-surface-2);
-		color: var(--color-text);
 		text-decoration: none;
 	}
 
@@ -935,11 +933,8 @@
 		color: var(--color-danger);
 	}
 
-	.card-menu-item.is-danger:hover {
-		background: var(--color-danger-soft);
-	}
-
 	.post-note {
+		margin: 0;
 		font: var(--text-body);
 		color: var(--color-text);
 		white-space: pre-line;
@@ -958,15 +953,37 @@
 	}
 
 	.note-toggle {
-		margin-block-start: var(--space-1);
+		justify-self: start;
 		padding: 0;
-		font: var(--text-ui);
-		color: var(--color-accent-text);
+		font: var(--text-hint);
+		color: var(--color-text-secondary);
 		text-decoration: underline;
 		text-underline-offset: 0.2em;
 		background: transparent;
 		border: 0;
 		cursor: pointer;
+	}
+
+	/* Single column below 600px: the gutter becomes one line above the note. */
+	@media (max-width: 599px) {
+		.share-card,
+		.share-card.is-compact {
+			grid-template-columns: minmax(0, 1fr);
+			margin-inline: calc(-1 * var(--gutter));
+			padding-inline: var(--gutter);
+		}
+
+		.post-head {
+			flex-direction: row;
+			flex-wrap: wrap;
+			align-items: baseline;
+			gap: var(--space-2);
+			margin-block-end: var(--space-1);
+		}
+
+		.post-head-tools {
+			margin: 0 0 0 auto;
+		}
 	}
 
 	/* Inline JS-off panels & Edit/Delete dialogs */

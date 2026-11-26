@@ -2,12 +2,10 @@
 
 Izgah bundles the following third-party assets. Their licenses apply to those files only.
 
-| Component                                                                                                | Where               | License                   |
-| :------------------------------------------------------------------------------------------------------- | :------------------ | :------------------------ |
-| [Geist](https://github.com/vercel/geist-font) (via `@fontsource-variable/geist`)                         | web app, extensions | SIL Open Font License 1.1 |
-| [Newsreader](https://github.com/productiontype/Newsreader) (via `@fontsource-variable/newsreader`)       | web app, extensions | SIL Open Font License 1.1 |
-| [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) (via `@fontsource-variable/jetbrains-mono`) | web app             | SIL Open Font License 1.1 |
-| [Lucide](https://lucide.dev) icon paths (copied into `src/lib/components/ui/icons.ts`)                   | web app, extensions | ISC License               |
+| Component                                                                                                                                       | Where                     | License                   |
+| :---------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------ | :------------------------ |
+| [Atkinson Hyperlegible Next](https://github.com/googlefonts/atkinson-hyperlegible-next) (via `@fontsource-variable/atkinson-hyperlegible-next`) | web app, extensions, site | SIL Open Font License 1.1 |
+| [Lucide](https://lucide.dev) icon paths (copied into `src/lib/components/ui/icons.ts`)                                                          | web app, extensions       | ISC License               |
 
 The full text of the SIL Open Font License is in [`extensions/public/OFL.txt`](./extensions/public/OFL.txt).
 

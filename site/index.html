@@ -4,10 +4,10 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="color-scheme" content="light dark" />
-		<title>Izgah — your team's shared link library</title>
+		<title>Izgah — a shared link library for small teams</title>
 		<meta
 			name="description"
-			content="Izgah is an open-source, self-hosted place where a small team shares, discusses and searches the useful links it finds on the web."
+			content="Izgah is an open-source, self-hosted feed where a small team shares the links it finds, each with a note, filed in sections, with one discussion per link."
 		/>
 		<link rel="canonical" href="https://izgah.com/" />
 		<link rel="alternate" hreflang="en" href="https://izgah.com/" />
@@ -16,213 +16,218 @@
 		<link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
 		<link
 			rel="preload"
-			href="./assets/fonts/newsreader-latin-opsz-normal.woff2"
+			href="./assets/fonts/atkinson-hyperlegible-next-latin-wght-normal.woff2"
 			as="font"
 			type="font/woff2"
 			crossorigin
 		/>
 		<link rel="stylesheet" href="./styles.css" />
-		<meta property="og:title" content="Izgah — your team's shared link library" />
+		<meta property="og:title" content="Izgah — a shared link library for small teams" />
 		<meta
 			property="og:description"
-			content="Open-source and self-hosted: share, discuss and search the links your team finds."
+			content="Open source and self-hosted: share, discuss and find again the links your team finds."
 		/>
-		<meta property="og:image" content="https://izgah.com/assets/feed-light.png" />
+		<meta property="og:image" content="https://izgah.com/assets/og.png" />
 		<meta property="og:url" content="https://izgah.com/" />
 		<meta name="twitter:card" content="summary_large_image" />
 	</head>
 	<body>
 		<a class="skip-link" href="#main">Skip to content</a>
-		<header class="site-header">
-			<div class="wrap">
-				<a class="brand" href="./">Izgah</a>
-				<nav class="site-nav" aria-label="Site">
+		<div class="site">
+			<header class="site-head">
+				<a class="wordmark" href="./" aria-label="Izgah, home">iz<span class="gah">gah</span></a>
+				<nav aria-label="Site">
 					<ul>
-						<li class="optional"><a href="#features">Features</a></li>
-						<li class="optional"><a href="#self-host">Self-host</a></li>
-						<li><a href="https://github.com/gorkemio/izgah">GitHub</a></li>
-						<li><a class="lang" href="./tr/" hreflang="tr" lang="tr">Türkçe</a></li>
+						<li><a href="https://github.com/gorkemio/izgah#readme">Docs</a></li>
+						<li><a href="https://github.com/gorkemio/izgah">Source</a></li>
+						<li><a href="./tr/" hreflang="tr" lang="tr">Türkçe</a></li>
 					</ul>
 				</nav>
-			</div>
-		</header>
+			</header>
 
-		<main id="main">
-			<section class="hero wrap">
-				<p class="kicker">Open source · self-hosted · AGPL-3.0</p>
-				<h1>Your team's shared link library</h1>
-				<p class="lead">
-					Stop losing good links in chat. Izgah gives a small team one calm place to share the
-					videos, repositories, posts and articles it finds — then discuss them and find them again
-					in seconds.
+			<main id="main">
+				<h1 class="statement">Your team keeps finding good links. Izgah keeps them findable.</h1>
+				<p class="lede">
+					A small, self-hosted feed where a team shares the links it finds, each with a note, filed
+					in sections, with one discussion per link. Open source under the AGPL. One container and
+					PostgreSQL.
 				</p>
-				<div class="actions">
-					<a class="btn btn-primary" href="#self-host">Run it on your server</a>
-					<a class="btn btn-outline" href="https://github.com/gorkemio/izgah">View on GitHub</a>
-				</div>
-				<p class="note">
-					izgah.com only describes the project — every team runs its own instance on its own domain.
-				</p>
-			</section>
 
-			<figure class="shot">
-				<picture>
-					<source srcset="./assets/feed-dark.png" media="(prefers-color-scheme: dark)" />
-					<img
-						src="./assets/feed-light.png"
-						width="1440"
-						height="900"
-						alt="The Izgah feed: shared links with notes, section tags, likes and comments, and a summary of today's activity on the right."
-						fetchpriority="high"
-					/>
-				</picture>
-				<figcaption>The feed, with today's summary and the most discussed links.</figcaption>
-			</figure>
-
-			<section class="section" id="features" aria-labelledby="features-heading">
-				<div class="wrap">
-					<h2 id="features-heading">Built for a team, not for an algorithm</h2>
-					<p class="intro">
-						Izgah is deliberately small: one feed, a handful of sections, and search that actually
-						finds things. Everything works without JavaScript, and nothing leaves your server.
-					</p>
-					<ul class="features" role="list">
-						<li class="feature">
-							<h3>Content-aware feed</h3>
-							<p>
-								Videos, repositories, social posts and articles get cards that fit them, with
-								previews fetched and cached on your server.
-							</p>
-						</li>
-						<li class="feature">
-							<h3>Sections</h3>
-							<p>
-								Admins curate topics. A link can live in several sections, or sit quietly in a
-								section without hitting the feed.
-							</p>
-						</li>
-						<li class="feature">
-							<h3>Search that finds it</h3>
-							<p>
-								Full-text search over titles, notes and URL fragments in English and Turkish, plus a
-								<kbd>⌘K</kbd> command palette.
-							</p>
-						</li>
-						<li class="feature">
-							<h3>Browser extensions</h3>
-							<p>
-								Share the current tab from Chrome, Firefox or Safari with
-								<kbd>Alt+Shift+I</kbd> or the right-click menu.
-							</p>
-						</li>
-						<li class="feature">
-							<h3>Discuss in place</h3>
-							<p>
-								Likes, comments and notifications live next to each link, and duplicate shares point
-								back to the first one.
-							</p>
-						</li>
-						<li class="feature">
-							<h3>Accessible by default</h3>
-							<p>
-								Light, dark, dim and high-contrast themes that meet WCAG 2.2 AA, full keyboard
-								support, and English or Turkish UI.
-							</p>
-						</li>
-					</ul>
-				</div>
-			</section>
-
-			<figure class="shot">
-				<picture>
-					<img
-						src="./assets/palette-light.png"
-						width="1440"
-						height="900"
-						alt="The command palette open over the feed, showing a matching repository for the query “svelte” and a shortcut to full search."
-						loading="lazy"
-					/>
-				</picture>
-				<figcaption>Press <kbd>⌘K</kbd> to jump to any link, section or action.</figcaption>
-			</figure>
-
-			<section class="section" id="self-host" aria-labelledby="self-host-heading">
-				<div class="wrap">
-					<h2 id="self-host-heading">Run it on your own server</h2>
-					<p class="intro">
-						One Docker container and PostgreSQL. No external e-mail, queue or cache service —
-						invites are links your admin shares.
-					</p>
-					<div class="split">
-						<pre
-							tabindex="0"
-							aria-label="Install commands"
-						><code>git clone https://github.com/gorkemio/izgah.git
-cd izgah
-export POSTGRES_PASSWORD='…' \
-       BETTER_AUTH_SECRET="$(openssl rand -hex 32)" \
-       ORIGIN='https://links.example.com'
+				<pre
+					class="install"
+					tabindex="0"
+					aria-label="Install commands"
+				><code><span class="c"># on a server with Docker, behind your reverse proxy</span>
+git clone https://github.com/gorkemio/izgah && cd izgah
+export POSTGRES_PASSWORD='…' BETTER_AUTH_SECRET="$(openssl rand -hex 32)" ORIGIN='https://links.example.com'
 docker compose -f docker-compose.prod.yml up -d --build
-docker compose -f docker-compose.prod.yml exec app \
-  node build/cli.js create-admin --email you@example.com --name "You"</code></pre>
-						<ol class="steps">
-							<li>
-								<strong>Point a domain</strong> at your server and put Caddy, Traefik or Nginx in
-								front for HTTPS.
-							</li>
-							<li>
-								<strong>Start the stack</strong> with the compose file; migrations run
-								automatically.
-							</li>
-							<li>
-								<strong>Open the invite link</strong> the CLI prints, set your password and invite
-								your team.
-							</li>
-							<li>
-								<strong>Pick your defaults</strong> with <code>DEFAULT_LOCALE</code>,
-								<code>APP_TIME_ZONE</code> and <code>INSTANCE_NAME</code>.
-							</li>
-						</ol>
+docker compose -f docker-compose.prod.yml exec app node build/cli.js create-admin --email you@example.com --name You</code></pre>
+				<p class="after">
+					Open the invite link it prints, set a password, invite your team. Step-by-step guides for
+					<a href="https://github.com/gorkemio/izgah/blob/main/docs/deploy/docker-compose.md"
+						>Docker Compose and Caddy</a
+					>
+					and
+					<a href="https://github.com/gorkemio/izgah/blob/main/docs/deploy/dokploy.md">Dokploy</a>.
+				</p>
+
+				<figure class="specimen" aria-labelledby="specimen-cap">
+					<div class="day">
+						<h2>Thursday <span>26 November</span></h2>
+						<span class="count">3 links</span>
 					</div>
-					<p class="callout">
-						Step-by-step guides for
-						<a href="https://github.com/gorkemio/izgah/blob/main/docs/deploy/docker-compose.md"
-							>Docker Compose + Caddy</a
+					<article class="entry">
+						<p class="who"><time datetime="2026-11-26T18:41">18:41</time>Deniz</p>
+						<div>
+							<p class="note">Tried the new models on a laptop; surprisingly fast on long PDFs.</p>
+							<h3 class="title"><a href="https://github.com/ollama/ollama">ollama/ollama</a></h3>
+							<p class="kunye">
+								<span>github.com</span><span>code</span><span>AI tools</span><span>2 comments</span>
+							</p>
+						</div>
+					</article>
+					<article class="entry">
+						<p class="who"><time datetime="2026-11-26T17:02">17:02</time>Elif</p>
+						<div>
+							<p class="note">We can delete half of our theme media queries with this.</p>
+							<h3 class="title">
+								<a href="https://web.dev/articles/light-dark"
+									>CSS color-scheme-dependent colors with light-dark()</a
+								>
+							</h3>
+							<p class="kunye">
+								<span>web.dev</span><span>article</span><span>Frontend</span><span>3 comments</span>
+							</p>
+						</div>
+					</article>
+					<article class="entry">
+						<p class="who"><time datetime="2026-11-26T15:27">15:27</time>Mert</p>
+						<div>
+							<p class="note">Why opened links fade in Izgah, and why that stays private.</p>
+							<h3 class="title">
+								<a href="https://developer.chrome.com/blog/visited-links"
+									>Making :visited more private</a
+								>
+							</h3>
+							<p class="kunye">
+								<span>developer.chrome.com</span><span>article</span><span>Frontend</span>
+							</p>
+						</div>
+					</article>
+					<figcaption id="specimen-cap" class="specimen-cap">
+						Set in the app's own type and colours, not a screenshot. Links you have opened look
+						faded, here as in the app.
+					</figcaption>
+				</figure>
+
+				<h2>What it does</h2>
+				<ul class="annotated">
+					<li>
+						<a href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-core.md"
+							>One link, one conversation</a
 						>
-						and
-						<a href="https://github.com/gorkemio/izgah/blob/main/docs/deploy/dokploy.md">Dokploy</a>
-						live in the repository.
-					</p>
-				</div>
-			</section>
-
-			<section class="section" aria-labelledby="extensions-heading">
-				<div class="wrap">
-					<h2 id="extensions-heading">One extension for every instance</h2>
-					<p class="intro">
-						Install the Izgah extension, open its options and enter your team's address and a
-						personal API key from <em>Settings → API keys</em>. The extension asks for no access to
-						other sites and sends links only to the server you chose.
+						<p>
+							Share a link someone already shared and both posts point to the same discussion, with
+							the first sharer credited.
+						</p>
+					</li>
+					<li>
+						<a href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-core.md"
+							>Sections, and links that stay out of the feed</a
+						>
+						<p>
+							Admins file links into sections. Reference links can sit in a section without showing
+							up in the feed.
+						</p>
+					</li>
+					<li>
+						<a href="https://github.com/gorkemio/izgah/blob/main/src/lib/server/search/service.ts"
+							>Search in English and Turkish</a
+						>
+						<p>Titles, notes, page text and URL fragments, with <kbd>⌘K</kbd> from anywhere.</p>
+					</li>
+					<li>
 						<a href="https://github.com/gorkemio/izgah/tree/main/extensions#readme"
-							>How the extensions work</a
-						>.
-					</p>
-				</div>
-			</section>
-		</main>
+							>Browser extensions</a
+						>
+						<p>
+							Chrome, Firefox and Safari. <kbd>Alt+Shift+I</kbd> shares the current tab; the
+							extension talks only to your server.
+						</p>
+					</li>
+					<li>
+						<a
+							href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-smart-capture.md"
+							>Smart capture</a
+						>
+						<p>
+							Type <code>#section</code> in a note, get suggestions from how your team files things,
+							and, if an admin adds a key, short summaries and AI section suggestions. Off until you
+							turn it on.
+						</p>
+					</li>
+					<li>
+						<a href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-ui-v2.md"
+							>Works without JavaScript</a
+						>
+						<p>
+							Every core flow is a form or a link. Scripts only make it quicker. Light, dark and
+							high-contrast themes meet WCAG 2.2 AA.
+						</p>
+					</li>
+				</ul>
 
-		<footer class="site-footer">
-			<div class="wrap">
+				<h2>Why it exists</h2>
+				<p class="prose">
+					It started as a WhatsApp group. Good links scrolled away within a day, the same video was
+					shared three times with three separate discussions, and nobody could find "that article
+					about…" a month later.
+				</p>
+
+				<h2>What it doesn't do</h2>
+				<p class="prose">
+					Izgah is not a personal bookmark manager. It doesn't archive whole pages, highlight text
+					or keep private folders. If that is what you need,
+					<a href="https://karakeep.app">Karakeep</a> and
+					<a href="https://linkwarden.app">Linkwarden</a> are good self-hosted choices.
+				</p>
+
+				<h2>What runs on your server, and what leaves it</h2>
+				<dl class="facts">
+					<dt>Runs</dt>
+					<dd>One Node.js container, PostgreSQL, and a folder of WebP thumbnails.</dd>
+					<dt>Leaves</dt>
+					<dd>
+						Requests to the pages your team shares, to read titles and preview images; GitHub's API
+						for repository details. If an admin turns on AI: the link's title, description, a text
+						excerpt and your section names, to the provider you chose.
+					</dd>
+					<dt>Never</dt>
+					<dd>
+						Analytics, telemetry or mail to us. There is no "us": izgah.com hosts no instances.
+					</dd>
+				</dl>
+
+				<h2>Roadmap</h2>
+				<p class="prose">
+					Next: importing a chat export, read later, export and RSS, sharing from phones.
+					<a href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-roadmap.md"
+						>The whole roadmap</a
+					>
+					is a document in the repository.
+				</p>
+			</main>
+
+			<footer class="site-foot">
 				<p>Izgah is free software under the GNU AGPL-3.0.</p>
 				<ul>
-					<li><a href="https://github.com/gorkemio/izgah">Source code</a></li>
+					<li><a href="https://github.com/gorkemio/izgah">Source</a></li>
 					<li>
 						<a href="https://github.com/gorkemio/izgah/blob/main/CONTRIBUTING.md">Contributing</a>
 					</li>
 					<li><a href="https://github.com/gorkemio/izgah/blob/main/SECURITY.md">Security</a></li>
-					<li><a href="./tr/" hreflang="tr" lang="tr">Türkçe</a></li>
 				</ul>
-			</div>
-		</footer>
+			</footer>
+		</div>
 	</body>
 </html>

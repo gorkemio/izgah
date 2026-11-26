@@ -2,7 +2,6 @@
 	import { snapshot } from '$app/navigation';
 	import { t } from '#lib/i18n/index.ts';
 	import { pageTitle } from '#lib/instance.ts';
-	import FeedContextRail from '#lib/components/feed/FeedContextRail.svelte';
 	import FeedView from '#lib/components/feed/FeedView.svelte';
 	import type { FeedSnapshot } from '#lib/types/feed.ts';
 	import type { PageData } from './$types';
@@ -27,7 +26,7 @@
 	<title>{pageTitle(t('page.feed'))}</title>
 </svelte:head>
 
-<div class="feed-workspace" class:has-rail={Boolean(data.railSummary)}>
+<div class="feed-workspace">
 	<FeedView
 		bind:this={view}
 		{data}
@@ -40,14 +39,6 @@
 		emptyAll={t('feed.emptyAll')}
 		paginationLabel={t('feed.pagination')}
 	/>
-
-	{#if data.railSummary}
-		<FeedContextRail
-			summary={data.railSummary}
-			currentUserId={data.user.id}
-			todayKey={data.todayKey}
-		/>
-	{/if}
 </div>
 
 <style>
@@ -56,12 +47,5 @@
 		grid-template-columns: minmax(0, var(--read-w));
 		justify-content: center;
 		align-items: start;
-	}
-
-	@media (min-width: 1280px) {
-		.feed-workspace.has-rail {
-			grid-template-columns: minmax(0, var(--read-w)) var(--context-rail-w);
-			gap: 28px;
-		}
 	}
 </style>

@@ -5,7 +5,6 @@
 	import { page } from '$app/state';
 	import PaletteForm from '#lib/components/shell/PaletteForm.svelte';
 	import ThemeForm from '#lib/components/shell/ThemeForm.svelte';
-	import Avatar from '#lib/components/ui/Avatar.svelte';
 	import Icon from '#lib/components/ui/Icon.svelte';
 	import { getShortcutPreference } from '#lib/client/shortcuts.svelte.ts';
 	import type { ThemeChoice } from '#lib/client/theme.svelte.ts';
@@ -188,7 +187,6 @@
 					<span class="field-hint">{t('settings.nameHint')}</span>
 				</dt>
 				<dd class="settings-row-control profile-identity">
-					<Avatar name={data.user.name} self size={28} />
 					<span class="profile-value">{data.user.name}</span>
 				</dd>
 			</div>
