@@ -9,7 +9,7 @@
 	import PostCard from '#lib/components/feed/PostCard.svelte';
 	import ResourceHero from '#lib/components/resource/ResourceHero.svelte';
 	import type { ShareCardFormError } from '#lib/types/feed.ts';
-	import Dialog from '#lib/components/ui/Dialog.svelte';
+	import Dialog from '#lib/components/legacy/Dialog.svelte';
 	import type { PageData } from './$types';
 
 	const MAX_COMMENT_LENGTH = 2000;

@@ -1,6 +1,6 @@
 import { render } from 'svelte/server';
 import { describe, expect, it } from 'vitest';
-import Skeleton from '../../src/lib/components/ui/Skeleton.svelte';
+import Skeleton from '../../src/lib/components/legacy/Skeleton.svelte';
 import { highlightTerms, splitHighlights } from '../../src/lib/search/highlight';
 
 describe('UI primitives & helpers', () => {

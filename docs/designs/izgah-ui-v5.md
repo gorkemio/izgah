@@ -8,7 +8,7 @@
 
 ## Overview
 
-A *fener* is a lantern or a lighthouse. v5 gives Izgah a bold, luminous interface: colour, depth, icons, faces, site icons and motion. It is built on Tailwind CSS v4, shadcn-svelte and Bits UI, with themes and interactions adapted from the 21st.dev catalogue.
+A *fener* is a lantern or a lighthouse. v5 gives Izgah a premium, elegant interface: a calm neutral base in dark and light, one warm accent, solid surfaces with hairline borders, icons, faces, site icons and considered motion. It is built on Tailwind CSS v4, shadcn-svelte and Bits UI, with themes and interactions adapted from the 21st.dev catalogue.
 
 v5 keeps what works underneath: server rendering and SvelteKit form actions, the single token source and its generated palettes, the theme cookies, the enforced CSP, self-hosted fonts, English and Turkish parity, the accessibility targets and the stable E2E hooks.
 
@@ -28,7 +28,7 @@ Screen-by-screen feedback from the team is collected during the review of this d
 
 | Topic | Decision |
 | :--- | :--- |
-| Visual direction | Bold, in the style of the 21st.dev catalogue: colour, glass, glow and expressive motion, with an effect level setting (§7). |
+| Visual direction | Premium and elegant, without decorative gradients (§3.0), in dark and light; an effect level setting (§7). The 21st.dev-styled and the gradient-led labs were rejected as generic (§16). |
 | JavaScript | Required. Pages still render on the server and every change still goes through a SvelteKit form action, but the separate no-JavaScript fallbacks are removed (§8). |
 | Toolkit | Tailwind CSS v4, shadcn-svelte components copied into the repository on top of Bits UI, `@lucide/svelte` icons and Svelte's own motion APIs (§1). |
 | 21st.dev | A source of themes and interactions, rewritten in Svelte; never imported as React (§9). |
@@ -40,14 +40,14 @@ Screen-by-screen feedback from the team is collected during the review of this d
 
 1.  **Make it feel alive.** The team opens Izgah every day; colour, depth and motion are part of the product, not decoration to minimise.
 2.  **Content stays on top.** Effects frame notes, titles and images and never compete with them. Text never sits directly on a gradient, glow or image without a solid layer underneath.
-3.  **One brand gradient, used for meaning:** primary actions, the active item, focus, the signature trail (§3.7) and moments of celebration. Not every surface.
+3.  **Colour for meaning, not decoration:** one accent for the active item, the selected entry, focus, counts, likes and the mark. No decorative gradients.
 4.  **Depth with restraint.** Five elevation levels; glass only on persistent chrome, on at most four surfaces.
 5.  **Recognise before reading.** Avatars, site icons, content-type glyphs, thumbnails, and controls with an icon and a label. An icon is never the only carrier of meaning.
 6.  **Motion explains change.** Every animation answers "what just happened?": added, removed, moved, liked, loading, done.
 7.  **Effects are adjustable.** "Full" and "Reduced" levels; reduced applies by itself under reduced motion, reduced transparency, high contrast and forced colours.
 8.  **The server is the source of truth.** Server rendering, form actions and server validation stay; the client adds optimistic feedback on top.
 9.  **Accessible by default.** WCAG 2.2 AA (text at 7:1 in the high contrast palettes), full keyboard use, visible focus, stable E2E hooks and accessible names.
-10. **Own the look.** The 21st.dev catalogue supplies parts, not an identity. The brand gradient and the trail motif keep Izgah recognisable.
+10. **Own the look.** The 21st.dev catalogue supplies parts, not an identity. The warm Lantern accent, Geist and the trail line keep Izgah recognisable.
 
 ## 1. Toolkit
 
@@ -136,32 +136,46 @@ Only the default theme ships in `src/lib/styles/palette.css`; the other candidat
 
 ## 3. Visual language
 
+### 3.0 What "premium" means here
+
+The first theme lab (three 21st.dev community themes with saturated gradients, glow on every control and lifted cards) read as generic, generated UI. The direction below comes from measuring Linear, Raycast, Vercel, Mercury and Stripe in the browser on 2026-11-27:
+
+| Observed in the references | Rule for Izgah |
+| :--- | :--- |
+| Near-black (`#08090a`, `#07080a`) or off-white (`#fafafa`) pages; surfaces lifted with 2–8 % white, not new hues | One neutral system for every theme; only the accent changes |
+| Borders as 6–12 % alpha of the foreground, often 0.5–1 px; shadows that are mostly a 1 px ring plus a short drop | `hairline` borders and ring-plus-drop elevation (§3.4) |
+| One accent, slightly desaturated (indigo, warm amber) and used sparingly | Accent only for the active item, focus, likes, links, counts and the mark |
+| Depth from surfaces a few steps apart, not from colour | Solid `background`, `card` and `popover` steps; no decorative gradients (images are the only gradients on screen) |
+| Primary buttons in solid ink (white on dark, black on light) with a lit top edge | `bg-ink` + `tactile` for primary actions; the accent fill is secondary |
+| Neo-grotesque type at weights 400–590 with negative tracking on large sizes (−0.022 em to −0.06 em) | Medium weights and tight tracking for display sizes (§3.2) |
+
+Not used, because they read as generated: decorative gradients of any kind (backgrounds, borders, text, buttons), glow, shimmer, cards that jump on hover, uppercase micro-labels, emoji as icons.
+
 ### 3.1 Colour
 
-*   **Dark first.** The default dark palette is the reference design; light is an equal, not an afterthought.
-*   **Neutrals.** Deep, slightly cool near-black surfaces in dark (in OKLCH roughly L 0.14 for the page, 0.18 for cards, 0.21 for popovers); bright neutral white with faintly tinted cards in light.
-*   **Brand.** A three-stop gradient. Lab candidates, with final values recorded in §16 after M1:
-    *   **Aurora:** violet → fuchsia → amber.
-    *   **Lagoon:** cyan → blue → violet.
-    *   **Ember:** orange → rose → violet.
-*   `primary` is the middle stop, used wherever a flat colour is needed (focus ring, small badges, selected states).
-*   Link titles in the feed use `foreground` with an underline on hover; the `:visited` reading trace stays as the `visited` colour on titles.
+*   **Dark first.** The default dark palette is the reference design; light is an equal.
+*   **Neutrals (shared).** Dark: page `#09090b`, cards `#111114`, popovers `#16161a`, text `#f4f4f5` / `#9b9ca3`, hairlines `rgb(255 255 255 / 0.07)`. Light: page `#fbfbfc`, cards white, text `#17171a` / `#5f6168`, hairlines `rgb(0 0 0 / 0.07)`.
+*   **Accent (per theme).** Lab candidates, with the choice recorded in §16:
+    *   **Lantern:** warm amber `#f2b867` (dark) / `#9a5a0e` (light). The *fener* itself: a warm light in the dark.
+    *   **Indigo night:** `#8e94f8`; the quiet register of Linear and Mercury.
+    *   **Jade:** `#55d0a6`.
+*   **Where colour goes:** the active rail indicator (a 2 px accent line), the focus `halo`, the selected entry's accent border, liked hearts, unread counts, links and the mark. Everything else is neutral. The `brand-*` roles stay in the tokens for izgah.com and illustrations but are not used in the app.
+*   Link titles in the feed use `foreground`; the `:visited` reading trace stays as the `visited` colour.
 
 ### 3.2 Typography
 
-*   **Body:** Atkinson Hyperlegible Next, kept with the plain-zero build (`scripts/fonts/`) unless the lab chooses otherwise.
-*   **Display:** one characterful face for page titles, the wordmark, empty states and izgah.com. The lab compares (a) an expressive grotesque such as Bricolage Grotesque over Atkinson, and (b) one neo-grotesque family for everything, the familiar look of the 21st.dev catalogue. Every candidate must be OFL licensed, available on Fontsource as a variable font, and include latin-ext (Turkish ğ, ş, ı, İ).
-*   The v4 list of excluded "model default" fonts no longer applies.
+*   **Geist** (OFL, self-hosted from Fontsource, latin and latin-ext for Turkish ğ, ş, ı, İ) for body and display, chosen in the theme lab over Inter and Instrument Serif + Inter (§16). The normal latin and latin-ext files are preloaded; italics load on demand.
+*   Weights 400 (body), 500 (UI and names), 560 (display); no 700.
+*   Tracking: −0.006 em on body text, −0.01 em on titles, −0.03 em to −0.04 em on display sizes.
 
 | Token | Size / line height | Weight | Use |
 | :--- | :--- | :--- | :--- |
-| `display` | 2rem / 1.1 | 700 | Empty states, auth pages, izgah.com |
-| `title` | 1.5rem / 1.2 | 650 | Page `h1` |
-| `section` | 1.125rem / 1.3 | 600 | Card and section headings |
-| `body` | 1rem / 1.55 | 400 | Notes, comments, descriptions |
-| `small` | 0.875rem / 1.45 | 400–500 | Controls, facts line, hints |
-| `meta` | 0.8125rem / 1.3 | 400, tabular | Times and counts |
-| `micro` | 0.75rem / 1.2 | 600 | Badges and chips |
+| `display` | 2.5rem / 1.05 | 560 | Empty states, auth pages, izgah.com |
+| `title` | 1.75rem / 1 | 560 | Page `h1` |
+| `section` | 1.125rem / 1.3 | 560 | Card and dialog headings |
+| `body` | 0.9375rem / 1.55 | 400 | Notes, comments, descriptions |
+| `small` | 0.8125rem / 1.45 | 400–500 | Controls, facts line, hints |
+| `meta` | 0.75rem / 1.3 | 400, tabular | Times and counts |
 
 ### 3.3 Shape
 
@@ -183,11 +197,11 @@ Only the default theme ships in `src/lib/styles/palette.css`; the other candidat
 | 3 | `popover` or glass | `lg` | Menus, popovers, hover cards, the command palette |
 | 4 | `popover` | `xl` over `backdrop` | Dialogs and sheets |
 
-Dark mode adds a 1 px inner highlight to raised surfaces instead of relying on shadows. High contrast drops shadows and uses 2 px borders.
+Every shadow is a 1 px ring (light alpha in dark, black alpha in light) plus a short, soft drop. High contrast drops shadows and uses 2 px borders.
 
 ### 3.5 Glass
 
-*   Glass (`glass` fill, `backdrop-filter: blur(16px) saturate(140%)`, `glass-border`) appears on at most four persistent surfaces: the rail, the mobile top bar and tab bar, sticky page headers and the command palette.
+*   Glass (`glass` fill, `backdrop-filter: blur(20px) saturate(150%)`, `glass-border`) appears on at most four persistent surfaces: the rail, the mobile top bar and tab bar, sticky page headers and the command palette.
 *   Where `backdrop-filter` is unsupported, or effects are reduced, these surfaces use the opaque `surface-raised`.
 
 ### 3.6 Faces, icons and images
@@ -199,7 +213,7 @@ Dark mode adds a 1 px inner highlight to raised surfaces instead of relying on s
 
 ### 3.7 The signature trail
 
-*   *İz* means trace. A thin animated gradient line is the one motif used everywhere: the active rail item's indicator, the day timeline that joins entries, the composer's focus sweep, the progress bar during navigation and the underline of the wordmark.
+*   *İz* means trace. A thin solid accent line is the one recurring motif: the active rail item's indicator and the progress bar during navigation.
 *   It is the only element allowed to animate continuously, and only while something is happening (navigation, upload, a pending preview).
 
 ## 4. Layout and shell
@@ -211,7 +225,7 @@ Dark mode adds a 1 px inner highlight to raised surfaces instead of relying on s
 | 768–1023 px | Icon rail and feed |
 | < 768 px | Glass top bar (wordmark, search, notifications) · feed · glass bottom tab bar with a sliding indicator; the composer opens as a drawer |
 
-*   **Rail:** wordmark, search trigger (`⌘K`), "Add a link" (the gradient primary button), Feed, Notifications with a count, sections with a colour dot and their link count, All sections, Admin; the member's avatar menu at the bottom (profile, appearance, effect level, shortcuts, sign out).
+*   **Rail:** wordmark, search trigger (`⌘K`), "Add a link" (the solid ink primary button), Feed, Notifications with a count, sections with a colour dot and their link count, All sections, Admin; the member's avatar menu at the bottom (profile, appearance, effect level, shortcuts, sign out).
 *   **Command palette (`⌘K`):** shadcn-svelte Command on the existing `GET /api/internal/search/quick` contract, grouped into links (with site icons), sections, actions and recent searches.
 *   **Notifications:** a popover (a sheet on mobile) with avatars, grouped by day, with "Mark all as read".
 *   **Toasts:** svelte-sonner at the bottom right (above the tab bar on mobile), with an action button where one helps ("Undo", "Open").
@@ -231,10 +245,10 @@ Ran the new models on a laptop — surprisingly fast for long PDFs.
 [♥ 5]   [💬 2]   [↗ Open]   [⧉ Copy]
 ```
 
-*   One card per share at elevation 1; on hover it rises to level 2 with a gradient hairline.
+*   One card per share at elevation 1; on hover its hairline darkens; it does not move.
 *   The note stays the most readable text. The link card holds the site icon, the facts line (the künye order from [`src/lib/format/kunye.ts`](../../src/lib/format/kunye.ts)), the title, a two-line description and the thumbnail.
 *   Actions: like, comment, open and copy. The menu holds preview, edit and delete (author and admins) and section changes.
-*   Entries newer than the last visit carry a small gradient dot; the last-visit divider is a labelled piece of the trail.
+*   Entries newer than the last visit carry a small accent dot; the last-visit divider is a labelled piece of the trail.
 *   The root keeps `article.share-card` and `id="share-{id}"`.
 
 ### 5.2 Day timeline
@@ -243,7 +257,7 @@ A sticky glass day header with the date and the number of links; a faint vertica
 
 ### 5.3 Composer
 
-*   Collapsed at the top of the feed as a large field ("Paste a link or drop a chat message…") that expands in place with a gradient focus ring. `n` or "Add a link" opens it as a dialog anywhere (a drawer on mobile); `?compose=1` stays as a deep link that opens it.
+*   Collapsed at the top of the feed as a large field ("Paste a link or drop a chat message…") that expands in place with the accent focus halo. `n` or "Add a link" opens it as a dialog anywhere (a drawer on mobile); `?compose=1` stays as a deep link that opens it.
 *   Fields: the URL (with a live site icon and the duplicate check), the note (with the `#section` hint), sections as a searchable multi-select combobox with chips, the content type as a toggle group with glyphs, and "Only add to sections" as a switch.
 *   A duplicate shows the existing share as an inline card; smart-capture suggestions appear as chips with Add and Dismiss.
 
@@ -253,7 +267,7 @@ A toggle group of content-type chips with a sliding indicator, and "Most discuss
 
 ### 5.5 Loading and empty states
 
-Shimmering skeletons with the shape of a feed entry. Empty states use a large glyph in a gradient ring, one sentence and one action; no illustrations.
+Pulsing placeholders with the shape of a feed entry. Empty states use a large glyph on a muted tile, one sentence and one action; no illustrations.
 
 ### 5.6 Reading pane and resource page
 
@@ -290,10 +304,10 @@ An aurora background with the wordmark and a glass card that holds the form; red
 
 | Moment | Motion | Duration | Reduced effects |
 | :--- | :--- | :--- | :--- |
-| Like | The heart springs, a small burst in brand colours, the count rolls | 300–450 ms | Colour change and count update only |
-| Own new share | Slides in from the composer (`in:fly`); other entries move with `animate:flip`; a short glow fades | 250 ms | Appears in place |
+| Like | The heart springs and fills with the accent, the count rolls | 300–450 ms | Colour change and count update only |
+| Own new share | Slides in from the composer (`in:fly`); other entries move with `animate:flip`; its border briefly takes the accent | 250 ms | Appears in place |
 | New shares from others | The "N new links" pill drops in; on click the new entries are highlighted | 200 ms | The pill without motion |
-| Pending preview | The title placeholder shimmers; the finished card cross-fades in | 200 ms | No shimmer, instant swap |
+| Pending preview | The title placeholder pulses; the finished card cross-fades in | 200 ms | No pulse, instant swap |
 | Link hover card | Bits UI LinkPreview with thumbnail, title, description and facts; opens after 400 ms of hover or on focus | 150 ms | No animation |
 | Delete | The card collapses; a toast offers Undo (§10.3) | 200 ms | Removed in place |
 | `j` / `k` selection | The selection highlight slides between entries | 150 ms | Jumps |
@@ -308,7 +322,7 @@ An aurora background with the wordmark and a glass card that holds the form; red
 
 *   `<html data-effects="full | reduced">` is set by the server from the `izgah_effects` cookie (default `full`), with the same placeholder mechanism as the theme ([`src/app.html`](../../src/app.html), [`src/hooks.server.ts`](../../src/hooks.server.ts)) and the allow-list in [`src/lib/types/appearance.ts`](../../src/lib/types/appearance.ts). It is changed in Settings → Appearance and in the avatar menu.
 *   Reduced effects apply automatically under `prefers-reduced-motion: reduce`, `prefers-reduced-transparency: reduce` (where supported), `prefers-contrast: more` and `forced-colors: active`, whatever the cookie says.
-*   In reduced mode: no glass (opaque surfaces), no glow, no particles, no continuous animation; durations are 0 ms, except fades of at most 100 ms where a change would otherwise go unnoticed.
+*   In reduced mode: no glass (opaque surfaces), no continuous animation; durations are 0 ms, except fades of at most 100 ms where a change would otherwise go unnoticed.
 *   Performance rules: only `transform` and `opacity` animate; no `backdrop-filter` on list items; at most four glass surfaces; no WebGL in the app; `content-visibility: auto` stays on long lists; thumbnails, avatars and site icons have fixed dimensions.
 *   Budgets: JavaScript for the feed route grows by at most 60 KB gzip over the baseline measured in M1; total CSS stays under 60 KB gzip.
 
@@ -345,7 +359,7 @@ Seen in the catalogue; licences are checked when a component is adopted.
 | :--- | :--- |
 | `link-preview` | Link hover card |
 | `animated-tabs`, `expandable-tabs` | Type filter, settings tabs, mobile tab bar |
-| `text-shimmer`, `dot-loader` | Pending previews and loading states |
+| `dot-loader` | Loading states (rewritten without gradients) |
 | `toolbar` | Entry action bar |
 | `sidebar`, `sidebar-news` | The rail and its notice card (for example "Install the extension") |
 | `spotlight-card`, `shine-border` | Section cards and the focused composer |
@@ -383,7 +397,7 @@ Integration tests follow the patterns of `tests/integration/m4-unfurl-worker-and
 
 ## 11. Browser extensions
 
-*   The popup and options pages get the v5 tokens (from the generated palette), rounded controls, the gradient primary button and CSS-only motion. They stay plain TypeScript; Bits UI is not used there.
+*   The popup and options pages get the v5 tokens (from the generated palette), rounded controls, the solid ink primary button and CSS-only motion. They stay plain TypeScript; Bits UI is not used there.
 *   The store budget stays: zip at most 150 KB, JavaScript and CSS at most 30 KB gzip, enforced by `extensions/scripts/verify-manifests.mjs`. The display font is not bundled. The popup follows the system theme and contrast, as today.
 *   Done when `pnpm lint`, `pnpm check`, `pnpm test` and `pnpm test:e2e` pass in `extensions/`.
 
@@ -438,7 +452,10 @@ Work happens on the `feat/ui-v5` branch; `main` receives v5 in one step after M1
 *   **2026-11-27 (M1 compatibility check):** Tailwind CSS 4.3.5, shadcn-svelte 1.8.2 (CLI) and Bits UI 2.22 work with SvelteKit 3.4, Vite 8 and the `#lib` alias; `pnpm check`, `pnpm test`, `pnpm test:e2e` and `pnpm test:docker` (CSP) pass. adapter-node bundles `devDependencies`, so the UI libraries stay there. Plain `tsc` cannot read named exports from `.svelte` modules, so `tsconfig.tsc.json` leaves `src/lib/components/ui/` to svelte-check. `runed` (a Bits UI dependency) declares an optional peer of Kit 2; watched in M2.
 *   **Baseline before v5 (production build, gzip):** feed route JavaScript 117.2 KB and CSS 16.3 KB; all client JavaScript 176.0 KB and CSS 33.8 KB. The §7 budgets are measured against these numbers.
 *   **Theme lab candidates:** starting points from the 21st.dev community themes "Violet Dusk" (Aurora), "Cyber Cyan" (Lagoon) and "Sunset Horizon" (Ember), all by serafimcloud, extended with the brand gradient, glass and glow roles and run through §2.3.
-*   **Pending (M1 theme lab):** the brand gradient, the neutrals, the display font and the body font.
+*   **2026-11-27 (maintainer feedback on the first lab):** the 21st.dev-based candidates read as generated ("AI slop"); the maintainer asked for a premium, elegant look that still uses gradients. After measuring Linear, Raycast, Vercel, Mercury and Stripe, the themes were replaced by one neutral system with three accents (Lantern, Indigo night, Jade), hairline borders, ring-plus-drop shadows, ink primary buttons and gradients used as tonal depth, one lantern light and a mesh field (§3.0, §3.1). Font candidates became Geist, Inter and Instrument Serif + Inter; Bricolage Grotesque was dropped.
+*   **2026-11-27 (M1 groundwork):** the shadcn-svelte first set is in `src/lib/components/ui/`, the Künye wrappers moved to `src/lib/components/legacy/`, motion presets live in `src/lib/motion/`, the `izgah_effects` cookie and the Settings switch work, `/admin` redirects to `/admin/users`, a `<noscript>` banner explains the JavaScript requirement, `pnpm seed:demo` writes realistic local data, and the theme lab runs at `/dev/theme-lab` (development only). Lucide no longer ships brand icons, so content types use generic glyphs (§3.6).
+*   **2026-11-27 (M1 theme lab, maintainer):** **Lantern** (warm amber `#f2b867` dark / `#9a5a0e` light, amber → apricot → rose) on the shared neutral system, set in **Geist** for both body and display. Indigo night and Jade stay in the lab file only. Geist replaces Atkinson Hyperlegible Next in the app at once (the extension and izgah.com follow in M9 and M10); the plain-zero Atkinson build is no longer needed by the app and goes in M11.
+*   **2026-11-27 (maintainer, after the second lab):** gradients still read as generated; keep the new direction but with minimal or no gradients, in dark and light. The `lantern`, `mesh`, `sheen`, `bg-brand`, `text-brand`, `ring-brand` and `shimmer` utilities were removed; the primary button is solid ink, the selected entry has a solid accent border, loading uses a solid accent bar and pulsing placeholders.
 
 ## 17. Open questions
 
@@ -468,7 +485,7 @@ Work happens on the `feat/ui-v5` branch; `main` receives v5 in one step after M1
 | :--- | :--- |
 | v4 shipped a day earlier; a second large change follows within days | This document records the reasons; `main` receives v5 in one step |
 | Bold effects tire or slow down a tool used every day | The effect level setting, the performance and readability rules, and continuous motion only for the trail |
-| The common 21st.dev look makes Izgah resemble other apps | One brand gradient and the trail motif; a deliberate choice in the theme lab |
+| The common 21st.dev look makes Izgah resemble other apps | No decorative gradients, the Lantern accent and Geist; a deliberate choice in the theme lab |
 | Requiring JavaScript reduces resilience on poor connections | Server rendering stays, forms post to the same actions, and a `<noscript>` banner explains the requirement |
 | Tailwind or shadcn-svelte do not fit SvelteKit 3, Vite 8 or the `#lib` alias | The compatibility check is the first step of M1; the work stops there and goes back to the maintainer if it fails |
 | Preflight changes how unmigrated screens look | Before and after screenshots in M1, and the E2E suite |

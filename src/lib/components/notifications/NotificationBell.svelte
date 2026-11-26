@@ -2,7 +2,7 @@
 	import { t } from '#lib/i18n/index.ts';
 	import { formatWhen } from '#lib/format/date.ts';
 	import { startVisibilityPoller } from '#lib/client/visibility-poller.ts';
-	import PopoverPanel from '#lib/components/ui/PopoverPanel.svelte';
+	import PopoverPanel from '#lib/components/legacy/PopoverPanel.svelte';
 	import type { NotificationFeedItem } from '#lib/server/interactions/service.ts';
 
 	const POLL_INTERVAL_MS = 60_000;

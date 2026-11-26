@@ -3,11 +3,12 @@
 	import { instanceName, pageTitle, sourceUrl } from '#lib/instance.ts';
 	import { enhance } from '$app/forms';
 	import { page } from '$app/state';
+	import EffectsForm from '#lib/components/shell/EffectsForm.svelte';
 	import PaletteForm from '#lib/components/shell/PaletteForm.svelte';
 	import ThemeForm from '#lib/components/shell/ThemeForm.svelte';
 	import { getShortcutPreference } from '#lib/client/shortcuts.svelte.ts';
 	import type { ThemeChoice } from '#lib/client/theme.svelte.ts';
-	import { DEFAULT_PALETTE, type Palette } from '#lib/types/appearance.ts';
+	import { DEFAULT_PALETTE, type EffectLevel, type Palette } from '#lib/types/appearance.ts';
 	import type { ActionData, PageData } from './$types';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -16,6 +17,7 @@
 	const currentLocale = getLocale();
 	// The layout loads the theme cookie for every app page.
 	const themeChoice = $derived((page.data as { theme?: ThemeChoice }).theme ?? 'system');
+	const effectLevel = $derived((page.data as { effects?: EffectLevel }).effects ?? 'full');
 	const palette = $derived((page.data as { palette?: Palette }).palette ?? DEFAULT_PALETTE);
 
 	let formEl = $state<HTMLFormElement | null>(null);
@@ -227,6 +229,16 @@
 				</div>
 				<div class="settings-row-control">
 					<ThemeForm theme={themeChoice} variant="list" legend={t('settings.modeLegend')} />
+				</div>
+			</div>
+
+			<div class="settings-row">
+				<div class="settings-row-info">
+					<p class="settings-row-title">{t('settings.effects')}</p>
+					<p class="field-hint">{t('settings.effectsHint')}</p>
+				</div>
+				<div class="settings-row-control">
+					<EffectsForm effects={effectLevel} />
 				</div>
 			</div>
 

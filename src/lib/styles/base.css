@@ -239,6 +239,21 @@
 		}
 	}
 
+	/* The "Reduced" effect level (izgah-ui-v5.md §7) behaves like reduced motion. */
+	:root[data-effects='reduced'] *,
+	:root[data-effects='reduced'] *::before,
+	:root[data-effects='reduced'] *::after {
+		transition-duration: 0ms !important;
+		animation-duration: 0ms !important;
+		animation-iteration-count: 1 !important;
+	}
+
+	:root[data-effects='reduced']::view-transition-group(*),
+	:root[data-effects='reduced']::view-transition-old(*),
+	:root[data-effects='reduced']::view-transition-new(*) {
+		animation: none !important;
+	}
+
 	@media (forced-colors: active) {
 		:focus-visible {
 			outline: 2px solid CanvasText;
@@ -251,5 +266,18 @@
 			color: HighlightText;
 			border-color: HighlightText;
 		}
+	}
+}
+
+/* JavaScript is required (izgah-ui-v5.md §8); this banner only renders when it is off. */
+@layer base {
+	.noscript-banner {
+		margin: 0;
+		padding: var(--space-3) var(--space-4);
+		background: var(--warning-soft);
+		color: var(--foreground);
+		border-block-end: 1px solid var(--warning);
+		font: var(--k-text-ui);
+		text-align: center;
 	}
 }

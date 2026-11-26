@@ -4,7 +4,7 @@
 	import { page } from '$app/state';
 	import { formatWhen } from '#lib/format/date.ts';
 	import { enhance } from '$app/forms';
-	import Dialog from '#lib/components/ui/Dialog.svelte';
+	import Dialog from '#lib/components/legacy/Dialog.svelte';
 	import type { ActionData, PageData } from './$types';
 
 	interface CommandLikeEvent extends Event {

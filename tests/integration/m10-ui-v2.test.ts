@@ -85,13 +85,10 @@ async function renderShell(cookies?: Record<string, string>, template = THEME_ON
 				})) ?? '';
 			const preload = options?.preload;
 			preloadDecisions = [
-				['font', '/_app/immutable/assets/atkinson-hyperlegible-next-latin-wght-normal.abc.woff2'],
-				[
-					'font',
-					'/_app/immutable/assets/atkinson-hyperlegible-next-latin-ext-wght-normal.abc.woff2'
-				],
-				['font', '/_app/immutable/assets/atkinson-hyperlegible-next-latin-wght-italic.abc.woff2'],
 				['font', '/_app/immutable/assets/geist-latin-wght-normal.abc.woff2'],
+				['font', '/_app/immutable/assets/geist-latin-ext-wght-normal.abc.woff2'],
+				['font', '/_app/immutable/assets/geist-latin-wght-italic.abc.woff2'],
+				['font', '/_app/immutable/assets/atkinson-hyperlegible-next-latin-wght-normal.abc.woff2'],
 				['font', '/_app/immutable/assets/newsreader-latin-opsz-normal.abc.woff2'],
 				['font', '/_app/immutable/assets/jetbrains-mono-latin-wght-normal.abc.woff2'],
 				['js', '/_app/immutable/entry/start.js']
@@ -120,7 +117,7 @@ describe('UI v3 theme cookie and font preload (docs/designs/izgah-ui-v3.md §2, 
 		);
 	});
 
-	it('preloads only the Atkinson Hyperlegible Next normal latin and latin-ext fonts', async () => {
+	it('preloads only the Geist normal latin and latin-ext fonts', async () => {
 		const { preloadDecisions } = await renderShell();
 		expect(preloadDecisions.map(([, , decision]) => decision)).toEqual([
 			true,

@@ -7,7 +7,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import Highlight from '#lib/components/ui/Highlight.svelte';
-	import Skeleton from '#lib/components/ui/Skeleton.svelte';
+	import Skeleton from '#lib/components/legacy/Skeleton.svelte';
 	import { getThemeState, type ThemeChoice } from '#lib/client/theme.svelte.ts';
 	import { toasts } from '#lib/client/toast.svelte.ts';
 	import { highlightTerms } from '#lib/search/highlight.ts';

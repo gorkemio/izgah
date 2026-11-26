@@ -1,17 +1,28 @@
 import {
 	colorSchemeFor,
 	DARK_THEME_VALUES,
+	DEFAULT_EFFECTS,
 	DEFAULT_PALETTE,
+	EFFECT_VALUES,
 	LIGHT_THEME_VALUES,
 	pickAllowed,
 	THEME_VALUES,
+	type EffectLevel,
 	type Palette,
 	type ThemePreference
 } from '#lib/types/appearance.ts';
 
-export { THEME_VALUES, type ThemePreference } from '#lib/types/appearance.ts';
+export { EFFECT_VALUES, THEME_VALUES, type ThemePreference } from '#lib/types/appearance.ts';
 
 export const THEME_COOKIE = 'izgah_theme';
+
+/** Effect level cookie (docs/designs/izgah-ui-v5.md §7). */
+export const EFFECTS_COOKIE = 'izgah_effects';
+
+/** Only whitelisted values reach `<html data-effects>`. */
+export function parseEffectLevel(raw: string | null | undefined): EffectLevel {
+	return pickAllowed(EFFECT_VALUES, raw, DEFAULT_EFFECTS);
+}
 
 /** One cookie per palette field (docs/designs/izgah-themes.md §3). */
 export const PALETTE_COOKIES = {
@@ -44,21 +55,22 @@ export function parsePalette(getCookie: (name: string) => string | undefined): P
 export function fillAppearancePlaceholders(
 	html: string,
 	theme: ThemePreference,
-	palette: Palette
+	palette: Palette,
+	effects: EffectLevel = DEFAULT_EFFECTS
 ): string {
 	return html
 		.replace('%izgah.theme%', () => theme)
+		.replace('%izgah.effects%', () => effects)
 		.replace('%izgah.colorScheme%', () => colorSchemeFor(theme))
 		.replace('%izgah.lightTheme%', () => palette.lightTheme)
 		.replace('%izgah.darkTheme%', () => palette.darkTheme);
 }
 
-const PRELOADED_FONT_PATTERN = /atkinson-hyperlegible-next-latin(?:-ext)?-wght-normal/;
+const PRELOADED_FONT_PATTERN = /geist-latin(?:-ext)?-wght-normal/;
 
 /**
- * Preloads the Atkinson Hyperlegible Next normal woff2 files Turkish pages always need (latin for ı,
- * latin-ext for ğ ş İ Ğ Ş); italic subsets load on demand through unicode-range
- * (docs/designs/izgah-ui-v4.md §2).
+ * Preloads the Geist normal woff2 files Turkish pages always need (latin for ı, latin-ext for
+ * ğ ş İ Ğ Ş); italic subsets load on demand through unicode-range (docs/designs/izgah-ui-v5.md §3.2).
  */
 export function shouldPreload({ type, path }: { type: string; path: string }): boolean {
 	if (type === 'js' || type === 'css') {
