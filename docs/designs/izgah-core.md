@@ -6,6 +6,8 @@
 
 > **Open-source note (2026-11-25):** This document describes Izgah as it was first designed: a Turkish-only tool for one team, deployed on the author's server with Dokploy. [izgah-i18n-oss.md](./izgah-i18n-oss.md) made it an open-source, self-hosted project with an English base language, a full Turkish translation and runtime instance settings (`DEFAULT_LOCALE`, `APP_TIME_ZONE`, `INSTANCE_NAME`, `SOURCE_URL`); the deployment guides are in [docs/deploy/](../deploy/). Where the two differ, the later document wins.
 
+> **UI v5 note (2026-11-27):** [izgah-ui-v5.md](./izgah-ui-v5.md) makes JavaScript a requirement. Server rendering and form actions stay, but the no-JavaScript requirement and the query-parameter fallbacks below (`?edit=`, `?delete=`, `?editComment=`, `?deleteComment=`; `?compose=1` remains as a deep link) no longer apply; see v5 §8 and §13.
+
 --------------------------------------------------------------------------------
 
 ## Overview

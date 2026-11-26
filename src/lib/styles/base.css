@@ -40,10 +40,10 @@
 
 @layer base {
 	html {
-		font: var(--text-body);
-		color: var(--color-text);
-		background: var(--color-bg);
-		accent-color: var(--color-accent);
+		font: var(--k-text-body);
+		color: var(--k-color-text);
+		background: var(--k-color-bg);
+		accent-color: var(--k-color-accent);
 		scroll-padding-block-start: calc(var(--sticky-top) + var(--space-3));
 		scroll-padding-block-end: calc(var(--tab-bar-h) + var(--space-3));
 		font-synthesis: none;
@@ -54,8 +54,8 @@
 
 	body {
 		min-block-size: 100dvh;
-		background: var(--color-bg);
-		color: var(--color-text);
+		background: var(--k-color-bg);
+		color: var(--k-color-text);
 	}
 
 	/* Background scroll lock while a modal dialog is open. */
@@ -77,7 +77,7 @@
 
 	/* One family (izgah-ui-v4 §2): hierarchy from size and weight only. */
 	h1 {
-		font: var(--text-display);
+		font: var(--k-text-display);
 		letter-spacing: -0.01em;
 	}
 
@@ -89,7 +89,7 @@
 		color: inherit;
 		text-decoration-line: underline;
 		text-decoration-thickness: 1px;
-		text-decoration-color: var(--color-line-strong);
+		text-decoration-color: var(--k-color-line-strong);
 		text-underline-offset: 0.2em;
 		transition:
 			color var(--dur-fast) var(--ease),
@@ -97,7 +97,7 @@
 	}
 
 	a:hover {
-		color: var(--color-accent-text);
+		color: var(--k-color-accent-text);
 		text-decoration-color: currentColor;
 	}
 
@@ -108,22 +108,22 @@
 	 */
 	.content-link,
 	.content-link:link {
-		color: var(--color-link);
+		color: var(--k-color-link);
 		text-decoration-color: currentColor;
 	}
 
 	.content-link:visited {
-		color: var(--color-visited);
+		color: var(--k-color-visited);
 	}
 
 	.content-link:hover {
-		color: var(--color-link);
+		color: var(--k-color-link);
 		text-decoration-thickness: 2px;
 	}
 
 	::selection {
-		background: var(--color-accent);
-		color: var(--color-on-accent);
+		background: var(--k-color-accent);
+		color: var(--k-color-on-accent);
 	}
 
 	/*
@@ -135,8 +135,8 @@
 		outline: 2px solid transparent;
 		outline-offset: 2px;
 		box-shadow:
-			0 0 0 2px var(--color-bg),
-			0 0 0 4px var(--color-accent);
+			0 0 0 2px var(--k-color-bg),
+			0 0 0 4px var(--k-color-accent);
 	}
 
 	code,
@@ -149,7 +149,7 @@
 
 	hr {
 		border: 0;
-		border-block-start: 1px solid var(--color-line);
+		border-block-start: 1px solid var(--k-color-line);
 	}
 
 	.visually-hidden:where(:not(:focus-within, :active)) {
@@ -173,18 +173,18 @@
 		align-items: center;
 		min-block-size: 44px;
 		padding: var(--space-2) var(--space-4);
-		background: var(--color-accent);
-		color: var(--color-on-accent);
-		font: var(--text-ui);
+		background: var(--k-color-accent);
+		color: var(--k-color-on-accent);
+		font: var(--k-text-ui);
 		font-weight: 600;
 		text-decoration: none;
-		border: 1px solid var(--color-accent);
-		border-radius: var(--radius-sm);
+		border: 1px solid var(--k-color-accent);
+		border-radius: var(--k-radius-sm);
 		transform: translateY(-200%);
 	}
 
 	.skip-link:hover {
-		color: var(--color-on-accent);
+		color: var(--k-color-on-accent);
 	}
 
 	.skip-link:focus {

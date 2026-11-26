@@ -845,7 +845,7 @@
 		align-items: center;
 		gap: var(--space-2);
 		padding: 12px var(--space-4);
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 	}
 
 	.cmdk-input {
@@ -853,8 +853,8 @@
 		min-inline-size: 0;
 		border: 0;
 		background: transparent;
-		font: var(--text-body);
-		color: var(--color-text);
+		font: var(--k-text-body);
+		color: var(--k-color-text);
 		outline: none;
 		box-shadow: none;
 	}
@@ -865,7 +865,7 @@
 	}
 
 	.cmdk-input::placeholder {
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.cmdk-input::-webkit-search-cancel-button {
@@ -881,21 +881,21 @@
 		padding: 2px;
 		background: transparent;
 		border: 0;
-		border-radius: var(--radius-xs);
-		color: var(--color-text-muted);
+		border-radius: var(--k-radius-xs);
+		color: var(--k-color-text-muted);
 		cursor: pointer;
 	}
 
 	.cmdk-clear-btn {
-		font: var(--text-hint);
+		font: var(--k-text-hint);
 		text-decoration: underline;
-		text-decoration-color: var(--color-line-strong);
+		text-decoration-color: var(--k-color-line-strong);
 		text-underline-offset: 0.2em;
 	}
 
 	.cmdk-clear-btn:hover {
-		color: var(--color-text);
-		background: var(--color-surface-2);
+		color: var(--k-color-text);
+		background: var(--k-color-surface-2);
 	}
 
 	.cmdk-scopes {
@@ -903,7 +903,7 @@
 		align-items: center;
 		gap: 6px;
 		padding: var(--space-2) var(--space-4);
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 		overflow-x: auto;
 	}
 
@@ -912,10 +912,10 @@
 		align-items: center;
 		min-block-size: 26px;
 		padding: 0 10px;
-		border-radius: var(--radius-pill);
-		font: var(--text-ui);
+		border-radius: var(--k-radius-pill);
+		font: var(--k-text-ui);
 		font-size: 0.78125rem;
-		color: var(--color-text-secondary);
+		color: var(--k-color-text-secondary);
 		background: transparent;
 		border: 1px solid transparent;
 		white-space: nowrap;
@@ -927,11 +927,11 @@
 	}
 
 	.cmdk-scope:hover:not(.is-active) {
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.cmdk-scope.is-active {
-		color: var(--color-text);
+		color: var(--k-color-text);
 		font-weight: 600;
 		text-decoration: underline;
 		text-underline-offset: 0.3em;
@@ -953,15 +953,15 @@
 
 	.cmdk-group-tail {
 		padding-block-start: var(--space-2);
-		border-block-start: 1px solid var(--color-line);
+		border-block-start: 1px solid var(--k-color-line);
 	}
 
 	.cmdk-group-label {
 		padding: 6px 10px 3px;
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-size: 0.75rem;
 		font-weight: 600;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.cmdk-item {
@@ -971,9 +971,9 @@
 		inline-size: 100%;
 		padding: var(--space-2) 10px;
 		border: 1px solid transparent;
-		border-radius: var(--radius-sm);
+		border-radius: var(--k-radius-sm);
 		background: transparent;
-		color: var(--color-text);
+		color: var(--k-color-text);
 		text-align: start;
 		cursor: pointer;
 		transition:
@@ -982,8 +982,8 @@
 	}
 
 	.cmdk-item.is-selected {
-		background: var(--color-surface-2);
-		border-color: var(--color-line);
+		background: var(--k-color-surface-2);
+		border-color: var(--k-color-line);
 	}
 
 	.cmdk-item-main {
@@ -994,18 +994,18 @@
 	}
 
 	.cmdk-item-title {
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 500;
-		color: var(--color-text);
+		color: var(--k-color-text);
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
 
 	.cmdk-item-sub {
-		font: var(--text-hint);
+		font: var(--k-text-hint);
 		font-size: 0.75rem;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -1037,11 +1037,11 @@
 		gap: var(--space-2);
 		margin: var(--space-1) var(--space-2);
 		padding: var(--space-2) var(--space-3);
-		border-radius: var(--radius-sm);
-		background: var(--color-danger-soft);
-		border: 1px solid var(--color-danger-border);
-		color: var(--color-danger);
-		font: var(--text-hint);
+		border-radius: var(--k-radius-sm);
+		background: var(--k-color-danger-soft);
+		border: 1px solid var(--k-color-danger-border);
+		color: var(--k-color-danger);
+		font: var(--k-text-hint);
 	}
 
 	.cmdk-inline-link {
@@ -1059,8 +1059,8 @@
 	}
 
 	.cmdk-empty-title {
-		font: var(--text-ui);
-		color: var(--color-text-secondary);
+		font: var(--k-text-ui);
+		color: var(--k-color-text-secondary);
 	}
 
 	.cmdk-empty-actions {
@@ -1077,9 +1077,9 @@
 		justify-content: space-between;
 		gap: var(--space-3);
 		padding: 9px var(--space-4);
-		border-block-start: 1px solid var(--color-line);
-		font: var(--text-meta);
-		color: var(--color-text-muted);
+		border-block-start: 1px solid var(--k-color-line);
+		font: var(--k-text-meta);
+		color: var(--k-color-text-muted);
 	}
 
 	.cmdk-hints {
@@ -1096,8 +1096,8 @@
 	}
 
 	.cmdk-count {
-		font: var(--text-meta);
-		color: var(--color-text-muted);
+		font: var(--k-text-meta);
+		color: var(--k-color-text-muted);
 		white-space: nowrap;
 	}
 

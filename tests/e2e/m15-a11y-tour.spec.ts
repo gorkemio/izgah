@@ -220,7 +220,7 @@ test.describe('UI v2 visual and accessibility tour', () => {
 				expect((await page.goto(path))?.status(), label).toBe(200);
 				const resolved = await page.evaluate(() => {
 					const probe = document.createElement('div');
-					probe.style.background = 'var(--color-accent)';
+					probe.style.background = 'var(--k-color-accent)';
 					document.body.append(probe);
 					const html = getComputedStyle(document.documentElement);
 					const result = {

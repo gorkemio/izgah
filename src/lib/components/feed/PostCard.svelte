@@ -850,7 +850,7 @@
 		column-gap: var(--space-4);
 		padding: 14px 0 15px;
 		background: transparent;
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 		outline: none;
 		transition: background-color var(--dur-fast) var(--ease);
 	}
@@ -862,13 +862,13 @@
 
 	.share-card:focus-visible {
 		outline: 2px solid transparent;
-		background: var(--color-surface-2);
-		box-shadow: inset 0 0 0 2px var(--color-focus-outer);
+		background: var(--k-color-surface-2);
+		box-shadow: inset 0 0 0 2px var(--k-color-focus-outer);
 	}
 
 	/* The entry shown in the reading pane carries the selected-row surface (§4). */
 	:global(.share-card[aria-current='true']) {
-		background: var(--color-surface-2);
+		background: var(--k-color-surface-2);
 	}
 
 	.post-head {
@@ -887,31 +887,31 @@
 	}
 
 	.post-time {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 		text-decoration: none;
 		white-space: nowrap;
 	}
 
 	.post-time:hover {
-		color: var(--color-text);
+		color: var(--k-color-text);
 		text-decoration: underline;
 	}
 
 	.post-author {
 		max-inline-size: 100%;
 		overflow: hidden;
-		font: var(--text-ui);
-		color: var(--color-text-secondary);
+		font: var(--k-text-ui);
+		color: var(--k-color-text-secondary);
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
 
 	/* "New" is a word in link blue, not a badge (§7). */
 	.unseen-pill {
-		font: var(--text-meta);
-		color: var(--color-link);
+		font: var(--k-text-meta);
+		color: var(--k-color-link);
 	}
 
 	/* Künye line: tertiary ink, one line that wraps at narrow widths. */
@@ -920,8 +920,8 @@
 		flex-wrap: wrap;
 		align-items: baseline;
 		margin: 0;
-		font: var(--text-hint);
-		color: var(--color-text-muted);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-muted);
 		overflow-wrap: anywhere;
 	}
 
@@ -933,7 +933,7 @@
 
 	.kunye :global(.kunye-sep) {
 		padding-inline: 0.4em;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.kunye a,
@@ -942,18 +942,18 @@
 		z-index: 2;
 		padding: 0;
 		font: inherit;
-		color: var(--color-text-secondary);
+		color: var(--k-color-text-secondary);
 		background: transparent;
 		border: 0;
 		text-decoration: underline;
-		text-decoration-color: var(--color-line-strong);
+		text-decoration-color: var(--k-color-line-strong);
 		text-underline-offset: 0.2em;
 		cursor: pointer;
 	}
 
 	.kunye a:hover,
 	.kunye :global(.kunye-action:hover) {
-		color: var(--color-text);
+		color: var(--k-color-text);
 		text-decoration-color: currentColor;
 	}
 
@@ -963,7 +963,7 @@
 	}
 
 	.badge-failed {
-		color: var(--color-danger);
+		color: var(--k-color-danger);
 	}
 
 	/*
@@ -1025,25 +1025,25 @@
 		inline-size: 100%;
 		min-block-size: 34px;
 		padding: 0 var(--space-3);
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 400;
-		color: var(--color-text);
+		color: var(--k-color-text);
 		text-align: start;
 		text-decoration: none;
 		background: transparent;
 		border: 0;
-		border-radius: var(--radius-sm);
+		border-radius: var(--k-radius-sm);
 		cursor: pointer;
 	}
 
 	.card-menu-item:hover {
-		background: var(--color-surface-2);
+		background: var(--k-color-surface-2);
 		text-decoration: none;
 	}
 
 	.card-menu-item.is-danger,
 	.card-menu-item.is-danger:hover {
-		color: var(--color-danger);
+		color: var(--k-color-danger);
 	}
 
 	@media (pointer: coarse) {
@@ -1059,8 +1059,8 @@
 
 	.post-note {
 		margin: 0;
-		font: var(--text-body);
-		color: var(--color-text);
+		font: var(--k-text-body);
+		color: var(--k-color-text);
 		white-space: pre-line;
 		overflow-wrap: anywhere;
 		max-inline-size: var(--measure);
@@ -1080,8 +1080,8 @@
 	.note-toggle {
 		justify-self: start;
 		padding: 0;
-		font: var(--text-hint);
-		color: var(--color-text-secondary);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-secondary);
 		text-decoration: underline;
 		text-underline-offset: 0.2em;
 		background: transparent;
@@ -1111,21 +1111,21 @@
 	.inline-card-panel {
 		margin-block-start: var(--space-3);
 		padding: var(--space-4) var(--space-5);
-		border: 1px solid var(--color-line-strong);
-		border-radius: var(--radius-lg);
-		background: var(--color-surface-1);
+		border: 1px solid var(--k-color-line-strong);
+		border-radius: var(--k-radius-lg);
+		background: var(--k-color-surface-1);
 	}
 
 	.inline-card-panel.is-danger {
-		border-color: var(--color-danger-border);
+		border-color: var(--k-color-danger-border);
 	}
 
 	.panel-heading,
 	.dialog-title {
 		margin: 0 0 var(--space-3);
-		font: var(--text-section);
+		font: var(--k-text-section);
 		font-size: 1.0625rem;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.dialog-header {
@@ -1143,11 +1143,11 @@
 	.panel-error {
 		margin-block-end: var(--space-3);
 		padding: var(--space-3) var(--space-4);
-		border: 1px solid var(--color-danger-border);
-		border-radius: var(--radius-sm);
-		background: var(--color-danger-soft);
-		color: var(--color-danger);
-		font: var(--text-ui);
+		border: 1px solid var(--k-color-danger-border);
+		border-radius: var(--k-radius-sm);
+		background: var(--k-color-danger-soft);
+		color: var(--k-color-danger);
+		font: var(--k-text-ui);
 	}
 
 	.panel-form {
@@ -1165,11 +1165,11 @@
 	.readonly-note {
 		margin: 0;
 		padding: var(--space-2) var(--space-3);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-sm);
-		background: var(--color-surface-2);
-		font: var(--text-hint);
-		color: var(--color-text-secondary);
+		border: 1px solid var(--k-color-line);
+		border-radius: var(--k-radius-sm);
+		background: var(--k-color-surface-2);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-secondary);
 	}
 
 	.sections-fieldset {
@@ -1195,18 +1195,18 @@
 		align-items: center;
 		gap: var(--space-2);
 		min-block-size: 34px;
-		font: var(--text-ui);
-		color: var(--color-text);
+		font: var(--k-text-ui);
+		color: var(--k-color-text);
 		cursor: pointer;
 	}
 
 	.sections-grid .checkbox-row {
 		padding: 0;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.sections-grid .checkbox-row:hover {
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.sections-grid .checkbox-row:has(input:checked) {
@@ -1221,13 +1221,13 @@
 
 	.silent-checkbox {
 		padding: var(--space-2) 0 0;
-		border-block-start: 1px solid var(--color-line);
+		border-block-start: 1px solid var(--k-color-line);
 	}
 
 	.delete-confirm-text {
 		margin: 0 0 var(--space-4);
-		font: var(--text-body);
-		color: var(--color-text-secondary);
+		font: var(--k-text-body);
+		color: var(--k-color-text-secondary);
 	}
 
 	.panel-actions {

@@ -500,15 +500,15 @@
 	}
 
 	h1 {
-		font: var(--text-display);
+		font: var(--k-text-display);
 		letter-spacing: -0.02em;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.page-subtitle {
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 400;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	/* Underline subtabs: calm Studio indicator, zero loud neon block. */
@@ -516,7 +516,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: var(--space-2);
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 	}
 
 	.settings-subnav a {
@@ -525,8 +525,8 @@
 		min-block-size: 38px;
 		padding: var(--space-2) var(--space-3) 10px;
 		margin-block-end: -1px;
-		font: var(--text-ui);
-		color: var(--color-text-muted);
+		font: var(--k-text-ui);
+		color: var(--k-color-text-muted);
 		text-decoration: none;
 		border-block-end: 2px solid transparent;
 		transition:
@@ -535,13 +535,13 @@
 	}
 
 	.settings-subnav a:not([aria-current='page']):hover {
-		color: var(--color-text);
+		color: var(--k-color-text);
 		text-decoration: none;
 	}
 
 	.settings-subnav a[aria-current='page'],
 	.settings-subnav a[aria-current='page']:hover {
-		color: var(--color-text);
+		color: var(--k-color-text);
 		font-weight: 600;
 		text-decoration: none;
 	}
@@ -552,7 +552,7 @@
 		}
 	}
 
-	/* Strict serif boundary: section h2 stays --font-sans (--text-section). */
+	/* Strict serif boundary: section h2 stays --font-sans (--k-text-section). */
 	.settings-section {
 		display: grid;
 		gap: var(--space-2);
@@ -560,10 +560,10 @@
 	}
 
 	.section-title {
-		font: var(--text-section);
-		color: var(--color-text);
+		font: var(--k-text-section);
+		color: var(--k-color-text);
 		padding-block-end: var(--space-2);
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 	}
 
 	.settings-rows {
@@ -576,7 +576,7 @@
 		grid-template-columns: minmax(0, 1fr);
 		gap: var(--space-3);
 		padding-block: var(--space-5);
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 		align-items: start;
 	}
 
@@ -599,9 +599,9 @@
 	}
 
 	.settings-row-title {
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 600;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.settings-row-control {
@@ -615,15 +615,15 @@
 	}
 
 	.profile-value {
-		font: var(--text-body);
+		font: var(--k-text-body);
 		font-weight: 500;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.profile-email {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-size: 0.84375rem;
-		color: var(--color-text-secondary);
+		color: var(--k-color-text-secondary);
 		overflow-wrap: anywhere;
 	}
 
@@ -642,8 +642,8 @@
 		flex-wrap: wrap;
 		align-items: center;
 		gap: 6px;
-		font: var(--text-hint);
-		color: var(--color-text-secondary);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-secondary);
 	}
 
 	/* Shortcuts: a native checkbox, not a switch (izgah-ui-v4 §7). */
@@ -668,9 +668,9 @@
 		align-items: center;
 		gap: var(--space-2);
 		min-block-size: 32px;
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 400;
-		color: var(--color-text);
+		color: var(--k-color-text);
 		cursor: pointer;
 	}
 
@@ -685,8 +685,8 @@
 	}
 
 	.role-value {
-		font: var(--text-body);
-		color: var(--color-text);
+		font: var(--k-text-body);
+		color: var(--k-color-text);
 	}
 
 	@media (pointer: coarse) {
@@ -722,7 +722,7 @@
 
 	.field.is-invalid input,
 	.password-row input:global(.user-invalid-fallback) {
-		border-color: var(--color-danger);
+		border-color: var(--k-color-danger);
 	}
 
 	/* Shown only after interaction (:user-invalid or the JS fallback class). */

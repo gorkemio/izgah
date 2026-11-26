@@ -8,7 +8,7 @@
 
 ## Overview
 
-Izgah is a shared link library for small teams: members post useful links with a short note into a reverse-chronological feed, admins file them into sections, each URL has one discussion, and search finds them in English and Turkish. The core ([izgah-core.md](./izgah-core.md)) is solid: sharing never waits for the network, previews are fetched safely in the background, every flow works without JavaScript, and an instance is one container plus PostgreSQL.
+Izgah is a shared link library for small teams: members post useful links with a short note into a reverse-chronological feed, admins file them into sections, each URL has one discussion, and search finds them in English and Turkish. The core ([izgah-core.md](./izgah-core.md)) is solid: sharing never waits for the network, previews are fetched safely in the background, every change is a server form action, and an instance is one container plus PostgreSQL.
 
 This document records the product direction after the open-source release: where Izgah sits among similar tools, what makes it hard to replace, what is missing, what to remove, and the order of work. It revisits several non-goals of the core design (see [Changed decisions](#changed-decisions)).
 
@@ -32,7 +32,7 @@ None of them is a **team feed with one discussion per link**. Izgah is closer to
 2.  **People write notes, machines describe links.** A model never writes in a member's voice, and machine text is labelled.
 3.  **Suggest by default.** Automatic changes are opt-in, say who made them and can be undone in one click.
 4.  **Your server, your keys.** Optional AI uses the instance's own key or a local model; admins see exactly what leaves the server; the operator can switch AI off with one variable.
-5.  **Forms and links first.** Every new flow works without JavaScript.
+5.  **Server first.** Pages render on the server and every change goes through a form action with server-side validation. Since [UI v5](./izgah-ui-v5.md) JavaScript is required and new flows need no separate no-JavaScript fallback.
 6.  **One container.** New background work reuses the in-process PostgreSQL job pattern: no Redis, no headless browser.
 
 ## Moat
@@ -74,7 +74,9 @@ None of them is a **team feed with one discussion per link**. Izgah is closer to
 | Separate admin tabs for preview jobs and metrics | One "System" page: queues, AI usage, health. |
 | Back-compat aliases (`--color-signal`, …) and page-local copies of shared styles | Already recorded as debt in [izgah-ui-v3.md](./izgah-ui-v3.md). |
 
-Kept: one resource per URL, silent resources, `⌘K`, single-key shortcuts, JavaScript-free flows, the Safari extension and the audit log.
+Kept: one resource per URL, silent resources, `⌘K`, single-key shortcuts, the Safari extension and the audit log.
+
+> **UI v5 note (2026-11-27):** [izgah-ui-v5.md](./izgah-ui-v5.md) reverses the rows above about monogram avatars (they return, with profile photos), about nested cards, pills and shadows (cards, chips and an elevation scale are part of the v5 language), and about a single type family (v5 allows a display face). The single accent rule becomes one brand gradient; the removed accent picker and the "dim" palette stay removed. JavaScript-free flows are no longer kept.
 
 ## Changed decisions
 
@@ -85,7 +87,8 @@ Kept: one resource per URL, silent resources, `⌘K`, single-key shortcuts, Java
 | No mobile share sheet | PWA with an Android share target; an iOS Shortcut. |
 | No SMTP and no OAuth | Optional SMTP; passkeys; optional OIDC. All off by default; invite links remain. |
 | No freeform tags | Unchanged. Sections, the `#section` shortcut and hidden AI keywords cover the need without tag sprawl. |
-| The v3 visual language | Proposed replacement: [izgah-ui-v4.md](./izgah-ui-v4.md) ("Künye"), pending the prototype review. |
+| Every flow works without JavaScript | JavaScript is required; server rendering and form actions stay ([izgah-ui-v5.md](./izgah-ui-v5.md) §8). |
+| The v3 visual language | Replaced by [izgah-ui-v4.md](./izgah-ui-v4.md) ("Künye", 2026-11-26), then by [izgah-ui-v5.md](./izgah-ui-v5.md) ("Fener", approved 2026-11-27). |
 
 ## Phases
 
@@ -95,6 +98,7 @@ Kept: one resource per URL, silent resources, `⌘K`, single-key shortcuts, Java
 | R1 | Smart capture: `#section`, history suggestions, page text in search, optional AI enrichment, `/admin/ai` | Specified tests pass |
 | R2 | Künye prototype with realistic data | Maintainer review ([izgah-ui-v4.md](./izgah-ui-v4.md) §9) |
 | R3 | Künye implementation: tokens → shell → register → reading pane → resource and search → settings and admin → sign-in and errors → extension → izgah.com; the removals above | Existing E2E contract green; axe colour-contrast clean |
+| R3b | UI v5 "Fener" ([izgah-ui-v5.md](./izgah-ui-v5.md)): Tailwind CSS v4 and shadcn-svelte, the theme lab, every screen, interactions and motion, site icons, profile photos, undo delete, extensions, izgah.com | E2E contract green as amended by v5 §14; axe clean in light, dark, high contrast and reduced effects |
 | R4 | Find and return: page-text snippets, comment search, operators, read later, manual metadata edits, dead-link check | — |
 | R5 | In and out: export, bookmark and chat imports, read API, RSS, webhooks, MCP | — |
 | R6 | Share from anywhere: PWA and share target, iOS Shortcut, `/share`, suggestions in the extension, multi-link paste | — |

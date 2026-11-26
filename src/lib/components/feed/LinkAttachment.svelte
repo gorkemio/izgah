@@ -131,15 +131,15 @@
 
 	.attachment-title {
 		margin: 0;
-		font: var(--text-title);
+		font: var(--k-text-title);
 		overflow-wrap: anywhere;
 	}
 
 	.card-thumbnail-frame {
 		overflow: hidden;
 		aspect-ratio: 16 / 10;
-		background: var(--color-surface-2);
-		border-radius: var(--radius-xs);
+		background: var(--k-color-surface-2);
+		border-radius: var(--k-radius-xs);
 	}
 
 	.card-thumbnail {

@@ -433,11 +433,11 @@
 		max-block-size: 100dvh;
 		padding: 0;
 		border: 0;
-		border-inline-start: 1px solid var(--color-line);
+		border-inline-start: 1px solid var(--k-color-line);
 		border-radius: 0;
-		background: var(--color-bg);
-		color: var(--color-text);
-		box-shadow: var(--shadow-lg);
+		background: var(--k-color-bg);
+		color: var(--k-color-text);
+		box-shadow: var(--k-shadow-lg);
 		overflow: hidden;
 	}
 
@@ -459,7 +459,7 @@
 	}
 
 	dialog.side-peek-dialog::backdrop {
-		background: var(--color-backdrop);
+		background: var(--k-color-backdrop);
 		overflow: hidden;
 		overscroll-behavior: contain;
 	}
@@ -470,29 +470,29 @@
 		justify-content: flex-end;
 		gap: var(--space-3);
 		padding: var(--space-3) var(--space-4);
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 	}
 
 	.peek-full-link {
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-size: 0.875rem;
-		color: var(--color-link);
+		color: var(--k-color-link);
 	}
 
 	.peek-close {
 		min-block-size: 28px;
 		padding: 0 4px;
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-size: 0.875rem;
-		color: var(--color-text-secondary);
+		color: var(--k-color-text-secondary);
 		background: transparent;
 		border: 0;
-		border-radius: var(--radius-sm);
+		border-radius: var(--k-radius-sm);
 		cursor: pointer;
 	}
 
 	.peek-close:hover {
-		color: var(--color-text);
+		color: var(--k-color-text);
 		text-decoration: underline;
 		text-underline-offset: 0.3em;
 	}
@@ -535,23 +535,23 @@
 	}
 
 	.peek-kunye {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.peek-title {
 		font-size: 1.25rem;
 		font-weight: 600;
 		line-height: 1.3;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.peek-cover {
 		overflow: hidden;
 		aspect-ratio: 16 / 10;
-		border-radius: var(--radius-xs);
-		background: var(--color-surface-2);
+		border-radius: var(--k-radius-xs);
+		background: var(--k-color-surface-2);
 	}
 
 	.peek-cover img {
@@ -562,9 +562,9 @@
 	}
 
 	.peek-desc {
-		font: var(--text-body);
+		font: var(--k-text-body);
 		font-size: 0.90625rem;
-		color: var(--color-text-secondary);
+		color: var(--k-color-text-secondary);
 	}
 
 	.peek-cta-row {
@@ -580,16 +580,16 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 6px;
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.peek-section {
 		display: grid;
 		gap: var(--space-3);
 		padding-block-start: var(--space-4);
-		border-block-start: 1px solid var(--color-line);
+		border-block-start: 1px solid var(--k-color-line);
 	}
 
 	.peek-section-head {
@@ -600,15 +600,15 @@
 	}
 
 	.peek-section-title {
-		font: var(--text-section);
+		font: var(--k-text-section);
 		font-size: 0.9375rem;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.peek-inline-link {
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-size: 0.8125rem;
-		color: var(--color-link);
+		color: var(--k-color-link);
 	}
 
 	.peek-timeline {
@@ -635,7 +635,7 @@
 		display: grid;
 		gap: 6px;
 		padding-block: var(--space-3);
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 	}
 
 	.peek-comment-item:first-child {
@@ -655,23 +655,23 @@
 	}
 
 	.peek-author {
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 600;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.peek-time {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.peek-note {
-		font: var(--text-body);
+		font: var(--k-text-body);
 		font-size: 0.90625rem;
 		white-space: pre-line;
 		overflow-wrap: anywhere;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.peek-tags {
@@ -681,8 +681,8 @@
 	}
 
 	.peek-muted-note {
-		font: var(--text-hint);
-		color: var(--color-text-muted);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-muted);
 	}
 
 	.peek-section-foot {
@@ -695,9 +695,9 @@
 		justify-items: start;
 		gap: var(--space-3);
 		padding: var(--space-3) 0;
-		border-block: 1px solid var(--color-danger);
-		color: var(--color-danger);
-		font: var(--text-ui);
+		border-block: 1px solid var(--k-color-danger);
+		color: var(--k-color-danger);
+		font: var(--k-text-ui);
 	}
 
 	@media (forced-colors: active) {

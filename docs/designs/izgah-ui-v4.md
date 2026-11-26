@@ -1,7 +1,7 @@
 # Izgah UI v4 — "Künye"
 
 *   **Author:** Gorkem Inanc Ozdemir
-*   **Status:** Approved (2026-11-26, after the prototype review in §9). Implementation is roadmap R3.
+*   **Status:** Approved (2026-11-26, after the prototype review in §9). Implementation is roadmap R3. Its visual language is superseded by [izgah-ui-v5.md](./izgah-ui-v5.md) ("Fener", approved 2026-11-27); v5 §13 lists what stays binding.
 *   **Date:** 2026-11-26
 
 --------------------------------------------------------------------------------

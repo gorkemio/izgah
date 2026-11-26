@@ -205,10 +205,10 @@
 		display: none;
 		margin-block-start: var(--space-4);
 		padding: var(--space-3) var(--space-4);
-		border: 1px solid var(--color-warn-border);
-		border-radius: var(--radius-md);
-		background: var(--color-warn-soft);
-		color: var(--color-warn-text);
+		border: 1px solid var(--k-color-warn-border);
+		border-radius: var(--k-radius-md);
+		background: var(--k-color-warn-soft);
+		color: var(--k-color-warn-text);
 		gap: var(--space-3);
 	}
 
@@ -218,7 +218,7 @@
 
 	.discard-warning {
 		margin: 0;
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 600;
 	}
 
@@ -231,24 +231,24 @@
 
 	.discard-confirm-btn,
 	.discard-cancel-btn {
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 600;
 		min-block-size: 36px;
 		padding: 0 var(--space-4);
-		border-radius: var(--radius-sm);
+		border-radius: var(--k-radius-sm);
 		cursor: pointer;
 	}
 
 	.discard-confirm-btn {
-		border: 1px solid var(--color-danger);
-		background: var(--color-danger);
-		color: var(--color-on-danger);
+		border: 1px solid var(--k-color-danger);
+		background: var(--k-color-danger);
+		color: var(--k-color-on-danger);
 	}
 
 	.discard-cancel-btn {
-		border: 1px solid var(--color-line-strong);
-		background: var(--color-surface-1);
-		color: var(--color-text);
+		border: 1px solid var(--k-color-line-strong);
+		background: var(--k-color-surface-1);
+		color: var(--k-color-text);
 	}
 
 	@media (pointer: coarse) {

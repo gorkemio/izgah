@@ -1,6 +1,18 @@
-@layer reset, tokens, base, components, utilities;
+/*
+ * Cascade order (docs/designs/izgah-ui-v5.md §1.1). Tailwind's parts are imported into our own
+ * layers: Preflight is the reset, theme variables come before our tokens, utilities win over
+ * component classes. Svelte <style> blocks are unlayered and beat all of these.
+ */
+@layer reset, theme, tokens, base, components, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(reset);
+/* Scan only src/ for class names: docs, tests, the extensions and the site are not app UI. */
+@import 'tailwindcss/utilities.css' layer(utilities) source('.');
+@import 'tw-animate-css';
 
 @import './lib/styles/palette.css';
 @import './lib/styles/tokens.css';
+@import './lib/styles/theme.css';
 @import './lib/styles/base.css';
 @import './lib/styles/components.css';

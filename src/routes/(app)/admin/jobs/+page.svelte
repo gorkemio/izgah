@@ -159,19 +159,19 @@
 	}
 
 	.kpi-box.has-dead {
-		color: var(--color-danger);
+		color: var(--k-color-danger);
 	}
 
 	.kpi-box.has-dead h2 {
-		color: var(--color-danger);
+		color: var(--k-color-danger);
 	}
 
 	.kpi-box.has-dead .kpi-value {
-		color: var(--color-danger);
+		color: var(--k-color-danger);
 	}
 
 	.table-card {
-		border-block-start: 1px solid var(--color-text);
+		border-block-start: 1px solid var(--k-color-text);
 		overflow: hidden;
 	}
 
@@ -182,12 +182,12 @@
 		justify-content: space-between;
 		gap: var(--space-3);
 		padding: var(--space-3) var(--space-4);
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 	}
 
 	.table-toolbar h2 {
 		margin: 0;
-		font: var(--text-section);
+		font: var(--k-text-section);
 		letter-spacing: -0.01em;
 		font-variant-numeric: tabular-nums;
 	}
@@ -203,7 +203,7 @@
 	}
 
 	.table-wrapper:focus-visible {
-		outline: 2px solid var(--color-accent);
+		outline: 2px solid var(--k-color-accent);
 		outline-offset: -2px;
 		box-shadow: none;
 	}
@@ -217,7 +217,7 @@
 	.responsive-jobs-table th,
 	.responsive-jobs-table td {
 		padding: 11px var(--space-4);
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 		text-align: start;
 		vertical-align: top;
 	}
@@ -228,10 +228,10 @@
 	}
 
 	.responsive-jobs-table thead th {
-		background: var(--color-surface-2);
-		font: var(--text-micro);
+		background: var(--k-color-surface-2);
+		font: var(--k-text-micro);
 		font-weight: 600;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 		position: sticky;
 		inset-block-start: 0;
 		z-index: 1;
@@ -244,7 +244,7 @@
 	}
 
 	.responsive-jobs-table tbody tr:hover {
-		background: var(--color-surface-2);
+		background: var(--k-color-surface-2);
 	}
 
 	.job-url-stack {
@@ -260,14 +260,14 @@
 	}
 
 	.job-domain {
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 600;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.job-link {
-		font: var(--text-meta);
-		color: var(--color-text-muted);
+		font: var(--k-text-meta);
+		color: var(--k-color-text-muted);
 		word-break: normal;
 		overflow-wrap: anywhere;
 	}
@@ -280,7 +280,7 @@
 	}
 
 	.responsive-jobs-table tbody td.num-col {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
 	}
 
@@ -294,9 +294,9 @@
 	}
 
 	.date-cell {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 		white-space: nowrap;
 	}
 
@@ -305,29 +305,29 @@
 		display: inline-flex;
 		align-items: center;
 		padding: 2px 9px;
-		border-radius: var(--radius-pill);
-		border: 1px solid var(--color-danger-border);
-		background: var(--color-danger-soft);
-		font: var(--text-micro);
+		border-radius: var(--k-radius-pill);
+		border: 1px solid var(--k-color-danger-border);
+		background: var(--k-color-danger-soft);
+		font: var(--k-text-micro);
 		font-variant-numeric: tabular-nums;
 		letter-spacing: 0.02em;
-		color: var(--color-danger);
+		color: var(--k-color-danger);
 		white-space: nowrap;
 	}
 
 	.error-detail {
-		font: var(--text-hint);
-		color: var(--color-text-secondary);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-secondary);
 	}
 
 	.empty-state {
 		margin: 0;
 		padding: var(--space-5) var(--space-4);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-sm);
-		background: var(--color-surface-2);
-		font: var(--text-ui);
-		color: var(--color-text-muted);
+		border: 1px solid var(--k-color-line);
+		border-radius: var(--k-radius-sm);
+		background: var(--k-color-surface-2);
+		font: var(--k-text-ui);
+		color: var(--k-color-text-muted);
 	}
 
 	@container (width < 640px) {
@@ -344,7 +344,7 @@
 		}
 
 		.responsive-jobs-table tr {
-			border-block-end: 2px solid var(--color-line);
+			border-block-end: 2px solid var(--k-color-line);
 			padding: var(--space-2) 0;
 		}
 
@@ -366,8 +366,8 @@
 		}
 
 		.responsive-jobs-table td::before {
-			font: var(--text-micro);
-			color: var(--color-text-muted);
+			font: var(--k-text-micro);
+			color: var(--k-color-text-muted);
 		}
 
 		.responsive-jobs-table td:nth-child(2)::before {

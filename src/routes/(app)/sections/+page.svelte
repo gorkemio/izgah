@@ -74,22 +74,22 @@
 	}
 
 	h1 {
-		font: var(--text-display);
+		font: var(--k-text-display);
 		letter-spacing: -0.02em;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.page-subtitle {
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 400;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.section-list {
 		list-style: none;
 		margin: 0;
 		padding: 0;
-		border-block-start: 1px solid var(--color-text);
+		border-block-start: 1px solid var(--k-color-text);
 	}
 
 	.section-row {
@@ -99,13 +99,13 @@
 		align-items: baseline;
 		gap: 2px var(--space-4);
 		padding-block: var(--space-3);
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 	}
 
 	.section-link {
 		min-inline-size: 0;
-		font: var(--text-title);
-		color: var(--color-link);
+		font: var(--k-text-title);
+		color: var(--k-color-link);
 		text-decoration: none;
 	}
 
@@ -122,25 +122,25 @@
 	}
 
 	.section-count {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.section-desc {
 		grid-column: 1 / -1;
 		max-inline-size: var(--measure);
-		font: var(--text-hint);
-		color: var(--color-text-secondary);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-secondary);
 	}
 
 	.empty-title {
-		font: var(--text-section);
-		color: var(--color-text);
+		font: var(--k-text-section);
+		color: var(--k-color-text);
 	}
 
 	.empty-desc {
-		font: var(--text-hint);
-		color: var(--color-text-secondary);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-secondary);
 	}
 </style>

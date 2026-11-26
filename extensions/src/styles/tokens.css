@@ -1,6 +1,6 @@
 /*
  * Künye tokens for the browser extension (docs/designs/izgah-ui-v4.md §1–§2). Colours come from
- * palette.css, generated from tokens/kunye.json like the web app's (`pnpm tokens` at the repo root).
+ * palette.css, generated from tokens/izgah.json like the web app's (`pnpm tokens` at the repo root).
  * The extension runs on its own origin and cannot read the izgah_theme cookie, so it follows
  * prefers-color-scheme and prefers-contrast. Bundles only the Atkinson Hyperlegible Next latin +
  * latin-ext normal subsets; the latin one is the plain-zero copy from scripts/fonts/plain-zero.py.

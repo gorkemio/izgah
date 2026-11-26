@@ -42,7 +42,7 @@ Trigger-maintained `tsvector` columns combine the `simple`, `english` and `turki
 ## UI
 
 - Svelte 5 runes, no UI framework. Native `<dialog>`, `popover`, View Transitions and container queries.
-- The "Künye" visual language ([izgah-ui-v4.md](./docs/designs/izgah-ui-v4.md)): one type family, rules instead of boxes, words instead of icons. Colours for the app, the extensions and izgah.com come from one source, [`tokens/kunye.json`](./tokens/kunye.json) (`pnpm tokens` writes the palette CSS); [`src/lib/styles/tokens.css`](./src/lib/styles/tokens.css) maps them to semantic `light-dark()` tokens in four palettes (light and dark, standard and high contrast).
+- The "Künye" visual language ([izgah-ui-v4.md](./docs/designs/izgah-ui-v4.md)): one type family, rules instead of boxes, words instead of icons. Colours for the app, the extensions and izgah.com come from one source, [`tokens/izgah.json`](./tokens/izgah.json) (`pnpm tokens` writes the palette CSS); [`src/lib/styles/tokens.css`](./src/lib/styles/tokens.css) maps them to semantic `light-dark()` tokens in four palettes (light and dark, standard and high contrast).
 - i18n in [`src/lib/i18n`](./src/lib/i18n): typed message catalogs (`en` is the source), resolved per request.
 
 ## Browser extensions

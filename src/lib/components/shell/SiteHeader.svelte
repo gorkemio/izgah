@@ -246,18 +246,18 @@
 		font-weight: 600;
 		line-height: 1;
 		letter-spacing: -0.015em;
-		color: var(--color-text);
+		color: var(--k-color-text);
 		text-decoration: none;
 	}
 
 	.brand:hover {
-		color: var(--color-text);
+		color: var(--k-color-text);
 		text-decoration: none;
 	}
 
 	.brand-gah {
 		font-weight: 400;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.rail-search form {
@@ -281,7 +281,7 @@
 		inline-size: 100%;
 		min-block-size: 36px;
 		padding-inline-end: 34px;
-		border-color: var(--color-line-strong);
+		border-color: var(--k-color-line-strong);
 	}
 
 	.rail-search-kbd {
@@ -305,8 +305,8 @@
 		display: inline-flex;
 		align-items: center;
 		gap: var(--space-2);
-		font: var(--text-hint);
-		color: var(--color-text-secondary);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-secondary);
 	}
 
 	.rail-nav ul {
@@ -319,8 +319,8 @@
 
 	.nav-group-label {
 		margin: var(--space-4) 0 var(--space-1);
-		font: var(--text-hint);
-		color: var(--color-text-muted);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-muted);
 	}
 
 	.nav-item {
@@ -329,24 +329,24 @@
 		gap: var(--space-2);
 		margin-inline: -8px;
 		padding: 5px 8px;
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-size: 0.9375rem;
 		font-weight: 400;
-		color: var(--color-text-secondary);
+		color: var(--k-color-text-secondary);
 		text-decoration: none;
-		border-radius: var(--radius-sm);
+		border-radius: var(--k-radius-sm);
 	}
 
 	.nav-item:hover {
-		color: var(--color-text);
-		background: var(--color-surface-2);
+		color: var(--k-color-text);
+		background: var(--k-color-surface-2);
 		text-decoration: none;
 	}
 
 	.nav-item[aria-current='page'] {
 		font-weight: 600;
-		color: var(--color-text);
-		background: var(--color-surface-2);
+		color: var(--k-color-text);
+		background: var(--k-color-surface-2);
 	}
 
 	.nav-section .nav-label {
@@ -374,7 +374,7 @@
 	.rail-account {
 		margin-block-start: auto;
 		padding-block-start: var(--space-3);
-		border-block-start: 1px solid var(--color-line);
+		border-block-start: 1px solid var(--k-color-line);
 	}
 
 	:global(.account-trigger) {
@@ -384,16 +384,16 @@
 		inline-size: 100%;
 		margin-inline: -8px;
 		padding: 6px 8px;
-		color: var(--color-text);
+		color: var(--k-color-text);
 		text-align: start;
 		background: transparent;
 		border: 0;
-		border-radius: var(--radius-sm);
+		border-radius: var(--k-radius-sm);
 		cursor: pointer;
 	}
 
 	:global(.account-trigger:hover) {
-		background: var(--color-surface-2);
+		background: var(--k-color-surface-2);
 	}
 
 	.account-meta {
@@ -403,15 +403,15 @@
 
 	.account-name {
 		overflow: hidden;
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 600;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
 
 	.account-role {
-		font: var(--text-hint);
-		color: var(--color-text-muted);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-muted);
 	}
 
 	.account-menu {
@@ -427,19 +427,19 @@
 		inline-size: 100%;
 		min-block-size: 36px;
 		padding: 0 var(--space-3);
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 400;
-		color: var(--color-text);
+		color: var(--k-color-text);
 		text-align: start;
 		text-decoration: none;
 		background: transparent;
 		border: 0;
-		border-radius: var(--radius-sm);
+		border-radius: var(--k-radius-sm);
 		cursor: pointer;
 	}
 
 	.menu-item:hover {
-		background: var(--color-surface-2);
+		background: var(--k-color-surface-2);
 		text-decoration: none;
 	}
 
@@ -457,7 +457,7 @@
 			padding: 0 var(--gutter);
 			overflow: visible;
 			border-inline-end: 0;
-			border-block-end: 1px solid var(--color-line);
+			border-block-end: 1px solid var(--k-color-line);
 		}
 
 		.site-header-inner {

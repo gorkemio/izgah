@@ -77,7 +77,7 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 7px;
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		cursor: pointer;
 		transition:
 			background-color var(--dur-fast) var(--ease),
@@ -89,7 +89,7 @@
 	.is-menu fieldset {
 		margin: var(--space-1) 0;
 		padding: var(--space-2) 0;
-		border-block: 1px solid var(--color-line);
+		border-block: 1px solid var(--k-color-line);
 	}
 
 	.is-menu legend {
@@ -98,7 +98,7 @@
 		font-family: var(--font-sans);
 		font-size: 0.75rem;
 		font-weight: 600;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.is-menu .theme-options {
@@ -110,18 +110,18 @@
 		display: flex;
 		min-block-size: 32px;
 		padding: 0 var(--space-2);
-		color: var(--color-text-secondary);
-		border-radius: var(--radius-sm);
+		color: var(--k-color-text-secondary);
+		border-radius: var(--k-radius-sm);
 	}
 
 	.is-menu .theme-option:hover {
-		background: var(--color-surface-2);
-		color: var(--color-text);
+		background: var(--k-color-surface-2);
+		color: var(--k-color-text);
 	}
 
 	.is-menu .theme-option:has(input:checked) {
-		background: var(--color-surface-2);
-		color: var(--color-text);
+		background: var(--k-color-surface-2);
+		color: var(--k-color-text);
 		font-weight: 600;
 	}
 
@@ -145,9 +145,9 @@
 		align-items: center;
 		gap: var(--space-2);
 		min-block-size: 32px;
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 400;
-		color: var(--color-text);
+		color: var(--k-color-text);
 		cursor: pointer;
 	}
 

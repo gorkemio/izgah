@@ -1,7 +1,7 @@
 # Izgah UI v2 — "Signal"
 
 *   **Author:** Gorkem Inanc Ozdemir
-*   **Status:** Partially Superseded by [izgah-ui-v3.md](./izgah-ui-v3.md) and [izgah-ui-v4.md](./izgah-ui-v4.md) (§2, §9, §11 and §12 remain binding)
+*   **Status:** Partially Superseded by [izgah-ui-v3.md](./izgah-ui-v3.md), [izgah-ui-v4.md](./izgah-ui-v4.md) and [izgah-ui-v5.md](./izgah-ui-v5.md) (§2, §9, §11 and §12 remain binding; §12 as amended by v5 §14; the no-JavaScript rules of §8 and §13 end with v5 §8)
 *   **Date:** 2026-11-20
 
 > **UI v3 transition note (2026-11-24):** The visual language, colour palette, banned clichés, component inventory, shell and card layout and the extension colour tokens of this document (**§1, §3, §4, §5, §6, §7, §13 and §14**) were updated by [izgah-ui-v3.md](./izgah-ui-v3.md) ("Izgah Studio"), and later by [izgah-ui-v4.md](./izgah-ui-v4.md) ("Künye"). **§2** (self-hosted Fontsource fonts and the `latin`/`latin-ext` preload mechanism), **§9** (theme cookies and flash-free SSR), **§11** (security headers and an enforced CSP) and **§12** (fixed E2E hooks and accessible names) remain binding.

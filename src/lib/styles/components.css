@@ -8,15 +8,15 @@
 	}
 
 	.attachment-title {
-		font: var(--text-title);
+		font: var(--k-text-title);
 		letter-spacing: -0.01em;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.resource-title {
-		font: var(--text-display);
+		font: var(--k-text-display);
 		letter-spacing: -0.02em;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	/* Buttons (§7.1) ------------------------------------------------------ */
@@ -27,11 +27,11 @@
 		gap: var(--space-2);
 		min-block-size: 36px;
 		padding: 0 var(--space-4);
-		font: var(--text-ui);
-		color: var(--color-text);
-		background: var(--color-surface-1);
-		border: 1px solid var(--color-line-strong);
-		border-radius: var(--radius-sm);
+		font: var(--k-text-ui);
+		color: var(--k-color-text);
+		background: var(--k-color-surface-1);
+		border: 1px solid var(--k-color-line-strong);
+		border-radius: var(--k-radius-sm);
 		text-decoration: none;
 		white-space: nowrap;
 		cursor: pointer;
@@ -49,9 +49,9 @@
 	}
 
 	.btn:hover:not(:disabled, [aria-disabled='true']) {
-		background: var(--color-surface-2);
-		border-color: var(--color-text-secondary);
-		color: var(--color-text);
+		background: var(--k-color-surface-2);
+		border-color: var(--k-color-text-secondary);
+		color: var(--k-color-text);
 	}
 
 	.btn:active:not(:disabled, [aria-disabled='true']) {
@@ -60,9 +60,9 @@
 
 	.btn[aria-disabled='true'],
 	.btn:disabled {
-		color: var(--color-text-muted);
-		background: var(--color-surface-2);
-		border-color: var(--color-line);
+		color: var(--k-color-text-muted);
+		background: var(--k-color-surface-2);
+		border-color: var(--k-color-line);
 		cursor: not-allowed;
 		opacity: 0.65;
 	}
@@ -80,9 +80,9 @@
 	}
 
 	.btn-primary:hover:not(:disabled, [aria-disabled='true']) {
-		background: color-mix(in oklab, var(--btn-primary-bg) 88%, var(--color-text));
+		background: color-mix(in oklab, var(--btn-primary-bg) 88%, var(--k-color-text));
 		color: var(--btn-primary-fg);
-		border-color: color-mix(in oklab, var(--btn-primary-bg) 88%, var(--color-text));
+		border-color: color-mix(in oklab, var(--btn-primary-bg) 88%, var(--k-color-text));
 	}
 
 	.btn-primary[aria-disabled='true'],
@@ -95,72 +95,72 @@
 
 	.btn-subtle {
 		background: transparent;
-		border-color: var(--color-line-strong);
-		color: var(--color-text);
+		border-color: var(--k-color-line-strong);
+		color: var(--k-color-text);
 	}
 
 	.btn-subtle:hover:not(:disabled, [aria-disabled='true']) {
-		background: var(--color-surface-2);
-		border-color: var(--color-text-secondary);
+		background: var(--k-color-surface-2);
+		border-color: var(--k-color-text-secondary);
 	}
 
 	.btn-ghost {
 		background: transparent;
 		border-color: transparent;
-		color: var(--color-text-secondary);
+		color: var(--k-color-text-secondary);
 	}
 
 	.btn-ghost:hover:not(:disabled, [aria-disabled='true']) {
-		background: var(--color-surface-2);
+		background: var(--k-color-surface-2);
 		border-color: transparent;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.btn-outline {
-		background: var(--color-surface-1);
-		border-color: var(--color-line-strong);
-		color: var(--color-text);
+		background: var(--k-color-surface-1);
+		border-color: var(--k-color-line-strong);
+		color: var(--k-color-text);
 	}
 
 	.btn-danger {
-		background: var(--color-danger);
-		color: var(--color-on-danger);
-		border-color: var(--color-danger);
+		background: var(--k-color-danger);
+		color: var(--k-color-on-danger);
+		border-color: var(--k-color-danger);
 		font-weight: 600;
 	}
 
 	.btn-danger:hover:not(:disabled, [aria-disabled='true']) {
-		background: var(--color-danger);
-		color: var(--color-on-danger);
-		border-color: var(--color-danger);
+		background: var(--k-color-danger);
+		color: var(--k-color-on-danger);
+		border-color: var(--k-color-danger);
 		opacity: 0.9;
 	}
 
 	.btn-danger[aria-disabled='true'],
 	.btn-danger:disabled {
-		background: var(--color-danger);
-		color: var(--color-on-danger);
-		border-color: var(--color-danger);
+		background: var(--k-color-danger);
+		color: var(--k-color-on-danger);
+		border-color: var(--k-color-danger);
 		opacity: 0.55;
 	}
 
 	.btn-danger-soft {
 		background: transparent;
-		color: var(--color-danger);
-		border-color: var(--color-danger);
+		color: var(--k-color-danger);
+		border-color: var(--k-color-danger);
 	}
 
 	.btn-danger-soft:hover:not(:disabled, [aria-disabled='true']) {
-		background: var(--color-danger);
-		color: var(--color-on-danger);
-		border-color: var(--color-danger);
+		background: var(--k-color-danger);
+		color: var(--k-color-on-danger);
+		border-color: var(--k-color-danger);
 	}
 
 	.btn-danger-soft[aria-disabled='true'],
 	.btn-danger-soft:disabled {
-		color: var(--color-text-muted);
-		background: var(--color-surface-2);
-		border-color: var(--color-line-strong);
+		color: var(--k-color-text-muted);
+		background: var(--k-color-surface-2);
+		border-color: var(--k-color-line-strong);
 	}
 
 	.btn-icon {
@@ -195,15 +195,15 @@
 
 	.field > label,
 	.field-label {
-		font: var(--text-ui);
+		font: var(--k-text-ui);
 		font-weight: 600;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
-	/* .field-hint MUST use --font-sans (--text-hint), NEVER monospace (§2.2). */
+	/* .field-hint MUST use --font-sans (--k-text-hint), NEVER monospace (§2.2). */
 	.field-hint {
-		font: var(--text-hint);
-		color: var(--color-text-muted);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-muted);
 	}
 
 	.field input:where(:not([type='checkbox'], [type='radio'])),
@@ -215,11 +215,11 @@
 		inline-size: 100%;
 		min-block-size: 38px;
 		padding: var(--space-2) var(--space-3);
-		font: var(--text-body);
-		color: var(--color-text);
+		font: var(--k-text-body);
+		color: var(--k-color-text);
 		background: var(--input-bg);
-		border: 1px solid var(--color-line-strong);
-		border-radius: var(--radius-sm);
+		border: 1px solid var(--k-color-line-strong);
+		border-radius: var(--k-radius-sm);
 		transition:
 			border-color var(--dur-fast) var(--ease),
 			background-color var(--dur-fast) var(--ease);
@@ -229,7 +229,7 @@
 	.field textarea::placeholder,
 	.input::placeholder,
 	.textarea::placeholder {
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.field input:where(:not([type='checkbox'], [type='radio'])):hover:not(:disabled, :read-only),
@@ -238,7 +238,7 @@
 	.input:hover:not(:disabled, :read-only),
 	.textarea:hover:not(:disabled, :read-only),
 	.select:hover:not(:disabled) {
-		border-color: var(--color-text-secondary);
+		border-color: var(--k-color-text-secondary);
 	}
 
 	.field input:where(:not([type='checkbox'], [type='radio'])):focus-visible,
@@ -247,7 +247,7 @@
 	.input:focus-visible,
 	.textarea:focus-visible,
 	.select:focus-visible {
-		border-color: var(--color-accent);
+		border-color: var(--k-color-accent);
 	}
 
 	.field input:where(:not([type='checkbox'], [type='radio'])):disabled,
@@ -256,9 +256,9 @@
 	.input:disabled,
 	.textarea:disabled,
 	.select:disabled {
-		background: var(--color-surface-2);
-		color: var(--color-text-muted);
-		border-color: var(--color-line);
+		background: var(--k-color-surface-2);
+		color: var(--k-color-text-muted);
+		border-color: var(--k-color-line);
 		cursor: not-allowed;
 	}
 
@@ -266,7 +266,7 @@
 	.field textarea:read-only,
 	.input:read-only,
 	.textarea:read-only {
-		background: var(--color-surface-2);
+		background: var(--k-color-surface-2);
 	}
 
 	.field select,
@@ -278,8 +278,8 @@
 		cursor: pointer;
 		/* Chevron drawn with two gradients so it follows the theme's muted text colour. */
 		background-image:
-			linear-gradient(45deg, transparent 50%, var(--color-text-muted) 50%),
-			linear-gradient(135deg, var(--color-text-muted) 50%, transparent 50%);
+			linear-gradient(45deg, transparent 50%, var(--k-color-text-muted) 50%),
+			linear-gradient(135deg, var(--k-color-text-muted) 50%, transparent 50%);
 		background-repeat: no-repeat;
 		background-position:
 			calc(100% - 15px) 52%,
@@ -294,9 +294,9 @@
 	}
 
 	.field-error {
-		font: var(--text-hint);
+		font: var(--k-text-hint);
 		font-weight: 500;
-		color: var(--color-danger);
+		color: var(--k-color-danger);
 	}
 
 	.field :user-invalid,
@@ -307,7 +307,7 @@
 	.input[aria-invalid='true'],
 	.textarea[aria-invalid='true'],
 	.select[aria-invalid='true'] {
-		border-color: var(--color-danger);
+		border-color: var(--k-color-danger);
 	}
 
 	/*
@@ -319,19 +319,19 @@
 		align-items: baseline;
 		gap: 5px;
 		padding: 0;
-		font: var(--text-hint);
-		color: var(--color-text-secondary);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-secondary);
 		background: none;
 		border: 0;
 		text-decoration: underline;
-		text-decoration-color: var(--color-line-strong);
+		text-decoration-color: var(--k-color-line-strong);
 		text-underline-offset: 0.2em;
 		white-space: nowrap;
 	}
 
 	a.tag:hover,
 	button.tag:hover {
-		color: var(--color-text);
+		color: var(--k-color-text);
 		text-decoration-color: currentColor;
 	}
 
@@ -340,7 +340,7 @@
 	}
 
 	.tag-accent {
-		color: var(--color-text-secondary);
+		color: var(--k-color-text-secondary);
 	}
 
 	.badge {
@@ -348,16 +348,16 @@
 		align-items: baseline;
 		gap: var(--space-1);
 		padding: 0;
-		font: var(--text-hint);
+		font: var(--k-text-hint);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 		background: none;
 		border: 0;
 		white-space: nowrap;
 	}
 
 	.badge-accent {
-		color: var(--color-link);
+		color: var(--k-color-link);
 	}
 
 	.status-pill {
@@ -365,9 +365,9 @@
 		align-items: baseline;
 		gap: 6px;
 		padding: 0;
-		font: var(--text-hint);
+		font: var(--k-text-hint);
 		white-space: nowrap;
-		color: var(--color-text-secondary);
+		color: var(--k-color-text-secondary);
 		background: none;
 		border: 0;
 	}
@@ -377,15 +377,15 @@
 	}
 
 	.status-active {
-		color: var(--color-ok-text);
+		color: var(--k-color-ok-text);
 	}
 
 	.status-pending {
-		color: var(--color-warn-text);
+		color: var(--k-color-warn-text);
 	}
 
 	.status-passive {
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.kbd {
@@ -395,14 +395,14 @@
 		min-inline-size: 20px;
 		block-size: 20px;
 		padding: 0 5px;
-		font: var(--text-micro);
+		font: var(--k-text-micro);
 		font-variant-numeric: tabular-nums;
 		letter-spacing: 0.03em;
-		color: var(--color-text-muted);
-		background: var(--color-surface-2);
-		border: 1px solid var(--color-line);
-		border-block-end-color: var(--color-line-strong);
-		border-radius: var(--radius-xs);
+		color: var(--k-color-text-muted);
+		background: var(--k-color-surface-2);
+		border: 1px solid var(--k-color-line);
+		border-block-end-color: var(--k-color-line-strong);
+		border-radius: var(--k-radius-xs);
 		line-height: 1;
 	}
 
@@ -413,8 +413,8 @@
 
 	/* Search hit highlight (§1.1 & §1.2) */
 	mark.hl {
-		background: var(--color-highlight-bg);
-		color: var(--color-highlight-fg);
+		background: var(--k-color-highlight-bg);
+		color: var(--k-color-highlight-fg);
 		padding-inline: 1px;
 		border-radius: 2px;
 		box-decoration-break: clone;
@@ -423,8 +423,8 @@
 	/* Skeleton: a still placeholder; Künye moves only colour and the list → detail View Transition. */
 	.skeleton {
 		display: block;
-		background: var(--color-surface-2);
-		border-radius: var(--radius-xs);
+		background: var(--k-color-surface-2);
+		border-radius: var(--k-radius-xs);
 	}
 
 	.skeleton-line {
@@ -434,11 +434,11 @@
 
 	.skeleton-thumb {
 		aspect-ratio: 1200 / 630;
-		border-radius: var(--radius-sm);
+		border-radius: var(--k-radius-sm);
 	}
 
 	.skeleton-circle {
-		border-radius: var(--radius-pill);
+		border-radius: var(--k-radius-pill);
 	}
 
 	/* Feed structure ------------------------------------------------------ */
@@ -447,19 +447,19 @@
 		inset-block-start: var(--header-h);
 		z-index: 5;
 		padding-block: var(--space-4) var(--space-2);
-		font: var(--text-day);
+		font: var(--k-text-day);
 		letter-spacing: -0.01em;
-		color: var(--color-text);
-		background: var(--color-bg);
-		border-block-end: 1px solid var(--color-line);
+		color: var(--k-color-text);
+		background: var(--k-color-bg);
+		border-block-end: 1px solid var(--k-color-line);
 	}
 
 	.unseen-mark {
 		display: inline-block;
 		inline-size: 8px;
 		block-size: 8px;
-		background: var(--color-accent);
-		border-radius: var(--radius-pill);
+		background: var(--k-color-accent);
+		border-radius: var(--k-radius-pill);
 		flex: none;
 	}
 
@@ -486,8 +486,8 @@
 		justify-items: start;
 		gap: var(--space-3);
 		padding: var(--space-5) 0;
-		color: var(--color-text);
-		border-block: 1px solid var(--color-line);
+		color: var(--k-color-text);
+		border-block: 1px solid var(--k-color-line);
 	}
 
 	/* Native modal <dialog> (§3, §7.1, §8) -------------------------------- */
@@ -498,11 +498,11 @@
 		overflow-y: auto;
 		margin: auto;
 		padding: var(--space-5);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-lg);
-		background: var(--color-surface-1);
-		color: var(--color-text);
-		box-shadow: var(--shadow-lg);
+		border: 1px solid var(--k-color-line);
+		border-radius: var(--k-radius-lg);
+		background: var(--k-color-surface-1);
+		color: var(--k-color-text);
+		box-shadow: var(--k-shadow-lg);
 	}
 
 	dialog.izgah-dialog:modal {
@@ -510,17 +510,17 @@
 	}
 
 	dialog.izgah-dialog::backdrop {
-		background: var(--color-backdrop);
+		background: var(--k-color-backdrop);
 	}
 
 	/* Popover panels + feature-gated CSS Anchor Positioning (WebKit fix preserved) */
 	.popover-panel[popover] {
 		padding: var(--space-1);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-md);
-		background: var(--color-surface-1);
-		color: var(--color-text);
-		box-shadow: var(--shadow-lg);
+		border: 1px solid var(--k-color-line);
+		border-radius: var(--k-radius-md);
+		background: var(--k-color-surface-1);
+		color: var(--k-color-text);
+		box-shadow: var(--k-shadow-lg);
 		min-inline-size: 10.5rem;
 		max-inline-size: calc(100dvw - 1rem);
 	}
@@ -555,8 +555,8 @@
 	.page-lead {
 		margin: 0;
 		max-inline-size: 68ch;
-		font: var(--text-body);
-		color: var(--color-text-muted);
+		font: var(--k-text-body);
+		color: var(--k-color-text-muted);
 	}
 
 	/* ---- Admin KPI strip (ui-v3 §9: tabular 3-up strip on Members/Metrics/Jobs) ---- */
@@ -566,7 +566,7 @@
 		flex-wrap: wrap;
 		gap: var(--space-1) var(--space-5);
 		padding-block: var(--space-2);
-		border-block-end: 1px solid var(--color-line);
+		border-block-end: 1px solid var(--k-color-line);
 	}
 
 	.kpi-strip-4 {
@@ -583,8 +583,8 @@
 	.kpi-box h2,
 	.kpi-label {
 		margin: 0;
-		font: var(--text-body);
-		color: var(--color-text-secondary);
+		font: var(--k-text-body);
+		color: var(--k-color-text-secondary);
 	}
 
 	.kpi-value-row {
@@ -594,7 +594,7 @@
 	.kpi-value {
 		order: -1;
 		margin: 0;
-		font: var(--text-body);
+		font: var(--k-text-body);
 		font-weight: 600;
 		font-variant-numeric: tabular-nums;
 		color: inherit;
@@ -602,9 +602,9 @@
 
 	.kpi-sub {
 		margin: 0;
-		font: var(--text-hint);
+		font: var(--k-text-hint);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	/* ---- Inline status banners (JS-off fallback for toasts, form results) ---- */
@@ -614,23 +614,23 @@
 		align-items: center;
 		gap: var(--space-2);
 		padding: var(--space-2) 0;
-		font: var(--text-ui);
-		color: var(--color-text);
+		font: var(--k-text-ui);
+		color: var(--k-color-text);
 		background: none;
-		border-block: 1px solid var(--color-line);
+		border-block: 1px solid var(--k-color-line);
 	}
 
 	.banner-success {
-		color: var(--color-ok-text);
+		color: var(--k-color-ok-text);
 	}
 
 	.banner-error {
-		color: var(--color-danger);
-		border-block-color: var(--color-danger-border);
+		color: var(--k-color-danger);
+		border-block-color: var(--k-color-danger-border);
 	}
 
 	.banner-warn {
-		color: var(--color-warn-text);
+		color: var(--k-color-warn-text);
 	}
 
 	@media (forced-colors: active) {
@@ -727,19 +727,19 @@
 	.ai-summary {
 		margin-block: var(--space-3) 0;
 		padding-block: var(--space-2);
-		border-block: 1px solid var(--color-line);
+		border-block: 1px solid var(--k-color-line);
 	}
 
 	.ai-summary-label {
 		display: block;
-		font: var(--text-hint);
-		color: var(--color-text-muted);
+		font: var(--k-text-hint);
+		color: var(--k-color-text-muted);
 	}
 
 	.ai-summary p {
 		margin: var(--space-1) 0 0;
-		font: var(--text-body);
+		font: var(--k-text-body);
 		font-style: italic;
-		color: var(--color-text-secondary);
+		color: var(--k-color-text-secondary);
 	}
 }

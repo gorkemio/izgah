@@ -231,18 +231,18 @@
 	}
 
 	.resource-title {
-		font: var(--text-display);
+		font: var(--k-text-display);
 		font-size: 1.625rem;
 		letter-spacing: -0.01em;
 		line-height: 1.22;
 		overflow-wrap: anywhere;
-		color: var(--color-text);
+		color: var(--k-color-text);
 	}
 
 	.hero-kunye {
-		font: var(--text-meta);
+		font: var(--k-text-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		color: var(--k-color-text-muted);
 	}
 
 	.hero-deleted {
@@ -252,8 +252,8 @@
 	.hero-media {
 		overflow: hidden;
 		aspect-ratio: 16 / 10;
-		background: var(--color-surface-2);
-		border-radius: var(--radius-xs);
+		background: var(--k-color-surface-2);
+		border-radius: var(--k-radius-xs);
 	}
 
 	.hero-thumbnail {
@@ -272,8 +272,8 @@
 
 	.resource-description {
 		max-inline-size: var(--measure);
-		font: var(--text-body);
-		color: var(--color-text-secondary);
+		font: var(--k-text-body);
+		color: var(--k-color-text-secondary);
 	}
 
 	.hero-actions {
@@ -282,7 +282,7 @@
 		align-items: center;
 		gap: var(--space-2);
 		padding-block-start: var(--space-3);
-		border-block-start: 1px solid var(--color-line);
+		border-block-start: 1px solid var(--k-color-line);
 	}
 
 	.hero-actions form {
@@ -296,7 +296,7 @@
 
 	.hero-like-btn.is-liked {
 		font-weight: 600;
-		border-color: var(--color-text);
+		border-color: var(--k-color-text);
 	}
 
 	@media (max-width: 479px) {

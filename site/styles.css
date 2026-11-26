@@ -36,7 +36,7 @@
 /* The specimen redeclares the aliases so its Light · Dark choice (palette.css) reaches them. */
 :root,
 .specimen {
-	/* Colours come from palette.css, generated from tokens/kunye.json with the app's (pnpm tokens). */
+	/* Colours come from palette.css, generated from tokens/izgah.json with the app's (pnpm tokens). */
 	--paper: var(--color-bg);
 	--sunk: var(--color-surface-2);
 	--ink: var(--color-text);
