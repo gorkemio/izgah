@@ -338,7 +338,7 @@
 
 	/*
 	 * Migration bridge (izgah-ui-v5.md §2.2): screens not yet moved to v5 keep their Künye layout
-	 * but take the Lantern colours, radii and shadows through their --k-* variables, so the v5 shell
+	 * but take the v5 (Jade) colours, radii and shadows through their --k-* variables, so the v5 shell
 	 * and the older content read as one product. Removed with the --k-* variables in M11.
 	 */
 	:root,

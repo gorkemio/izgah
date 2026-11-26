@@ -187,10 +187,10 @@ test.describe('UI v2 visual and accessibility tour', () => {
 				// The removed "dim" palette and old accent cookies fall back to the defaults.
 				cookies: { izgah_theme: 'dark', izgah_theme_dark: 'dim', izgah_accent: 'plum' },
 				colorScheme: 'light' as const,
-				// UI v5 Lantern dark (izgah-ui-v5.md §3.1).
+				// UI v5 Jade dark (izgah-ui-v5.md §3.1).
 				bg: 'rgb(9, 9, 11)',
 				text: 'rgb(244, 244, 245)',
-				accent: 'rgb(242, 184, 103)'
+				accent: 'rgb(85, 208, 166)'
 			},
 			{
 				// System mode follows the OS scheme and picks the chosen dark palette.

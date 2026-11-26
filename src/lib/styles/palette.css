@@ -145,7 +145,7 @@
 	}
 
 	:root,
-	[data-v5-theme='lantern'] {
+	[data-v5-theme='jade'] {
 		--v5-light-success: #17784a;
 		--v5-light-success-foreground: #ffffff;
 		--v5-light-success-soft: #edf8f1;
@@ -192,20 +192,20 @@
 		--v5-light-backdrop: rgb(23 23 26 / 0.28);
 		--v5-light-hairline: rgb(0 0 0 / 0.07);
 		--v5-light-sheen: rgb(255 255 255 / 0);
-		--v5-light-primary: #9a5a0e;
+		--v5-light-primary: #0f7a5c;
 		--v5-light-primary-foreground: #ffffff;
-		--v5-light-ring: #9a5a0e;
-		--v5-light-sidebar-primary: #9a5a0e;
+		--v5-light-ring: #0f7a5c;
+		--v5-light-sidebar-primary: #0f7a5c;
 		--v5-light-sidebar-primary-foreground: #ffffff;
-		--v5-light-sidebar-ring: #9a5a0e;
-		--v5-light-brand-1: #9a5a0e;
-		--v5-light-brand-2: #ab4a35;
-		--v5-light-brand-3: #9f3d64;
+		--v5-light-sidebar-ring: #0f7a5c;
+		--v5-light-brand-1: #0f7a5c;
+		--v5-light-brand-2: #0e6f7c;
+		--v5-light-brand-3: #225fa8;
 		--v5-light-brand-foreground: #ffffff;
-		--v5-light-glow: rgb(196 128 40 / 0.18);
-		--v5-light-link: #8a4d0a;
-		--v5-light-visited: #7a6450;
-		--v5-light-highlight: #fbefd5;
+		--v5-light-glow: rgb(15 122 92 / 0.16);
+		--v5-light-link: #0b6b51;
+		--v5-light-visited: #4f6f68;
+		--v5-light-highlight: #dcf5ec;
 		--v5-light-highlight-foreground: #17171a;
 		--v5-light-shadow-sm: 0 0 0 1px rgb(0 0 0 / 0.05), 0 1px 2px rgb(0 0 0 / 0.04);
 		--v5-light-shadow-md: 0 0 0 1px rgb(0 0 0 / 0.05), 0 6px 16px -6px rgb(0 0 0 / 0.08);
@@ -257,20 +257,20 @@
 		--v5-dark-backdrop: rgb(0 0 0 / 0.6);
 		--v5-dark-hairline: rgb(255 255 255 / 0.07);
 		--v5-dark-sheen: rgb(255 255 255 / 0.035);
-		--v5-dark-primary: #f2b867;
-		--v5-dark-primary-foreground: #1a1206;
-		--v5-dark-ring: #f2b867;
-		--v5-dark-sidebar-primary: #f2b867;
-		--v5-dark-sidebar-primary-foreground: #1a1206;
-		--v5-dark-sidebar-ring: #f2b867;
-		--v5-dark-brand-1: #f6c57a;
-		--v5-dark-brand-2: #f0a072;
-		--v5-dark-brand-3: #e08a8f;
-		--v5-dark-brand-foreground: #1a1206;
-		--v5-dark-glow: rgb(242 184 103 / 0.24);
-		--v5-dark-link: #f3c47f;
-		--v5-dark-visited: #c9b59b;
-		--v5-dark-highlight: #3a2c14;
+		--v5-dark-primary: #55d0a6;
+		--v5-dark-primary-foreground: #04140e;
+		--v5-dark-ring: #55d0a6;
+		--v5-dark-sidebar-primary: #55d0a6;
+		--v5-dark-sidebar-primary-foreground: #04140e;
+		--v5-dark-sidebar-ring: #55d0a6;
+		--v5-dark-brand-1: #6be0b8;
+		--v5-dark-brand-2: #45c6c4;
+		--v5-dark-brand-3: #5aa9e6;
+		--v5-dark-brand-foreground: #04140e;
+		--v5-dark-glow: rgb(85 208 166 / 0.2);
+		--v5-dark-link: #82e2c1;
+		--v5-dark-visited: #a0bcb3;
+		--v5-dark-highlight: #123329;
 		--v5-dark-highlight-foreground: #f4f4f5;
 		--v5-dark-shadow-sm: 0 0 0 1px rgb(255 255 255 / 0.06), 0 1px 2px rgb(0 0 0 / 0.5);
 		--v5-dark-shadow-md: 0 0 0 1px rgb(255 255 255 / 0.07), 0 8px 24px -8px rgb(0 0 0 / 0.6);

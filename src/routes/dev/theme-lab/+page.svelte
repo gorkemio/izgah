@@ -2,7 +2,7 @@
 	UI v5 theme lab (docs/designs/izgah-ui-v5.md §15, M1). Development only: the server load answers
 	404 in production, so the sample texts below are fixtures, not user-facing strings.
 
-	Lantern in Geist, dark and light side by side. No decorative gradients: depth comes from solid
+	Jade in Geist, dark and light side by side. No decorative gradients: depth comes from solid
 	surfaces, hairlines and short shadows; colour only where it means something (§3.0).
 -->
 <script lang="ts">
@@ -38,7 +38,7 @@
 		{ name: 'jade', label: 'Jade' }
 	];
 
-	let theme = $state<ThemeName>('lantern');
+	let theme = $state<ThemeName>('jade');
 	let scheme = $state<'both' | Scheme>('both');
 	let effects = $state<'full' | 'reduced'>('full');
 	let loading = $state(false);
