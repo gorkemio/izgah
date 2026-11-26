@@ -4,6 +4,8 @@ The static project site, published to GitHub Pages by `.github/workflows/site.ym
 
 Preview locally with any static server, e.g. `npx -y serve site`.
 
+GitHub Pages lets browsers cache every file for 10 minutes, so a new page can meet an old stylesheet right after a deploy. Both pages link `styles.css?v=<date>`: when you change `styles.css`, set the same new date in `index.html` and `tr/index.html` so browsers fetch the matching file at once.
+
 ## Domain setup (once)
 
 1. In the repository settings → **Pages**, set **Source** to **GitHub Actions** and the custom domain to `izgah.com` (the `CNAME` file keeps it).
