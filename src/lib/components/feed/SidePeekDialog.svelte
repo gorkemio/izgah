@@ -7,7 +7,8 @@
 	import Skeleton from '#lib/components/ui/Skeleton.svelte';
 	import { formatDateTime } from '#lib/format/date.ts';
 	import type { ContentType, ProviderMeta, UnfurlStatus } from '#lib/types/domain.ts';
-	import { contentTypeLabel, type FeedShareItem } from '#lib/types/feed.ts';
+	import { resourceFacts } from '#lib/format/kunye.ts';
+	import type { FeedShareItem } from '#lib/types/feed.ts';
 
 	interface PeekShareItem {
 		id: string;
@@ -253,11 +254,6 @@
 >
 	{#if item && resource}
 		<header class="peek-header">
-			<div class="peek-kicker">
-				<span class="peek-domain">{resource.siteName || resource.domain}</span>
-				<span aria-hidden="true">·</span>
-				<span>{contentTypeLabel(resource.contentType)}</span>
-			</div>
 			<div class="peek-header-actions">
 				<a href="/resources/{resource.id}" class="peek-full-link">{t('peek.openFull')}</a>
 				<!-- The docked pane keeps focus in the register; the modal drawer takes it. -->
@@ -275,8 +271,12 @@
 		</header>
 
 		<div class="peek-body">
-			<section class="peek-hero">
-				<h2 id={titleId} class="peek-title">{displayTitle}</h2>
+			<!-- Same catalogue order as the resource page (izgah-ui-v4 §5). -->
+			<section class="peek-hero" class:has-cover={showThumbnail && resource.thumbnailAssetKey}>
+				<div class="peek-head">
+					<h2 id={titleId} class="peek-title">{displayTitle}</h2>
+					<p class="peek-kunye">{resourceFacts(resource).join(' · ')}</p>
+				</div>
 
 				{#if showThumbnail && resource.thumbnailAssetKey}
 					<div class="peek-cover">
@@ -467,7 +467,7 @@
 	.peek-header {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
+		justify-content: flex-end;
 		gap: var(--space-3);
 		padding: var(--space-3) var(--space-4);
 		border-block-end: 1px solid var(--color-line);
@@ -497,21 +497,6 @@
 		text-underline-offset: 0.3em;
 	}
 
-	.peek-kicker {
-		display: flex;
-		align-items: center;
-		gap: 6px;
-		min-inline-size: 0;
-		font: var(--text-meta);
-		color: var(--color-text-muted);
-	}
-
-	.peek-domain {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
-
 	.peek-header-actions {
 		display: inline-flex;
 		align-items: center;
@@ -530,7 +515,29 @@
 
 	.peek-hero {
 		display: grid;
-		gap: var(--space-3);
+		grid-template-columns: minmax(0, 1fr);
+		gap: var(--space-3) var(--space-4);
+		align-items: start;
+	}
+
+	.peek-hero.has-cover {
+		grid-template-columns: minmax(0, 1fr) 120px;
+	}
+
+	.peek-hero > :not(.peek-head, .peek-cover) {
+		grid-column: 1 / -1;
+	}
+
+	.peek-head {
+		display: grid;
+		gap: var(--space-1);
+		min-inline-size: 0;
+	}
+
+	.peek-kunye {
+		font: var(--text-meta);
+		font-variant-numeric: tabular-nums;
+		color: var(--color-text-muted);
 	}
 
 	.peek-title {
@@ -542,14 +549,15 @@
 
 	.peek-cover {
 		overflow: hidden;
-		border-radius: var(--radius-sm);
+		aspect-ratio: 16 / 10;
+		border-radius: var(--radius-xs);
 		background: var(--color-surface-2);
 	}
 
 	.peek-cover img {
+		display: block;
 		inline-size: 100%;
-		block-size: auto;
-		aspect-ratio: 1200 / 630;
+		block-size: 100%;
 		object-fit: cover;
 	}
 
