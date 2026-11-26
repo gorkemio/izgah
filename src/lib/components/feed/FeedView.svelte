@@ -16,7 +16,7 @@
 	import { dayDetail, dayKey, dayLabel, formatTime } from '#lib/format/date.ts';
 	import type { SectionListItem } from '#lib/server/sections/service.ts';
 	import type { ContentType } from '#lib/types/domain.ts';
-	import type { FeedShareItem, FeedSnapshot, ShareCardFormError } from '#lib/types/feed.ts';
+	import type { FeedShareItem, FeedSnapshot } from '#lib/types/feed.ts';
 
 	export interface FeedViewData {
 		items: FeedShareItem[];
@@ -26,8 +26,6 @@
 		hasCursorApplied: boolean;
 		sections: SectionListItem[];
 		user: { id: string; name?: string; role: 'member' | 'admin' };
-		editShareId: string | null;
-		deleteShareId: string | null;
 		todayKey: string;
 	}
 
@@ -263,19 +261,6 @@
 		};
 	});
 
-	const activeFormError = $derived.by((): ShareCardFormError | null => {
-		const raw = page.form as Partial<ShareCardFormError> | null | undefined;
-		if (
-			raw &&
-			(raw.formType === 'updateShare' || raw.formType === 'deleteShare') &&
-			typeof raw.shareId === 'string' &&
-			typeof raw.errorMessage === 'string'
-		) {
-			return raw as ShareCardFormError;
-		}
-		return null;
-	});
-
 	// Pending previews: refresh up to 5 times every 3s while the tab is visible (core §6).
 	let pollCount = 0;
 	let knownPendingIds = new Set<string>();
@@ -508,9 +493,6 @@
 								priorityImage={index === firstImageIndex}
 								unseen={lastSeenMarker?.unseen.has(item.id) ?? false}
 								selected={peekItem?.id === item.id}
-								activeEditShareId={data.editShareId}
-								activeDeleteShareId={data.deleteShareId}
-								{activeFormError}
 								onDeleted={handleShareDeleted}
 								onPreview={handlePreview}
 							/>
@@ -532,7 +514,7 @@
 					class="btn btn-outline load-more"
 					class:is-loading={loadingMore}
 					aria-busy={loadingMore}
-					data-sveltekit-preload-data="off"
+					data-sveltekit-preload-data="false"
 					onclick={handleLoadMore}
 				>
 					{loadingMore
@@ -559,6 +541,8 @@
 />
 
 <style>
+	/* Feed (izgah-ui-v5.md §5.1, §5.2): cards on a calm column, sticky day rows, an accent
+	   last-visit marker. */
 	.feed-view {
 		inline-size: 100%;
 		max-inline-size: var(--read-w);
@@ -570,59 +554,80 @@
 	}
 
 	.feed-head h1 {
-		font: var(--k-text-display);
-		letter-spacing: -0.01em;
+		font-size: 1.625rem;
+		font-weight: 600;
+		line-height: 1.1;
+		letter-spacing: -0.03em;
 	}
 
 	.feed-desc {
-		margin-block-start: var(--space-1);
-		font: var(--k-text-ui);
-		font-weight: 400;
-		color: var(--k-color-text-muted);
+		margin-block-start: 6px;
+		font-size: 13px;
+		color: var(--muted-foreground);
 	}
 
-	/* Day divider (izgah-ui-v4.md §4): an ink rule, the date on the left, the count on the right. */
 	.day-group {
-		margin-block-start: var(--space-6);
+		margin-block-start: var(--space-5);
 	}
 
 	.day-row {
+		position: sticky;
+		inset-block-start: var(--header-h);
+		z-index: 5;
 		display: flex;
-		align-items: baseline;
-		justify-content: space-between;
-		gap: var(--space-4);
-		padding-block-end: 6px;
-		border-block-end: 1px solid var(--k-color-text);
+		align-items: center;
+		gap: var(--space-3);
+		padding-block: var(--space-3) var(--space-2);
+		background: var(--background);
+	}
+
+	.day-row::after {
+		content: '';
+		order: 1;
+		flex: 1;
+		block-size: 1px;
+		background: var(--hairline);
 	}
 
 	.day-group .day-heading {
+		position: static;
 		margin: 0;
-		font: var(--k-text-day);
+		padding: 0;
+		font-size: 12px;
+		font-weight: 500;
+		letter-spacing: 0;
+		background: none;
 		border: 0;
 	}
 
 	.day-date {
 		margin-inline-start: var(--space-2);
 		font-weight: 400;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 	}
 
 	.day-count {
-		font: var(--k-text-hint);
+		order: 2;
+		font-size: 12px;
 		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 	}
 
 	.feed-view .feed-list {
-		gap: 0;
+		gap: var(--space-3);
 	}
 
 	.empty-feed {
+		justify-items: center;
 		margin-block-start: var(--space-2);
+		padding: var(--space-7) var(--space-5);
+		text-align: center;
+		border: 1px dashed var(--hairline);
+		border-radius: var(--radius-lg);
 	}
 
 	.empty-feed p {
-		color: var(--k-color-text-secondary);
+		color: var(--muted-foreground);
 	}
 
 	.pagination-bar {
@@ -641,38 +646,36 @@
 	}
 
 	.load-more.is-loading {
-		color: var(--k-color-text-muted);
-		background: var(--k-color-surface-2);
-		border-color: var(--k-color-line-strong);
+		color: var(--muted-foreground);
 		cursor: progress;
 	}
 
-	/* j/k reveal posts below the sticky day heading as well as the sticky bars. */
+	/* j/k reveal posts below the sticky day row as well as the sticky bars. */
 	.feed-list :global(.share-card) {
 		scroll-margin-block-start: calc(var(--space-7) + var(--space-3));
 	}
 
-	.is-first-seen {
-		position: relative;
-		border-block-start: 2px solid var(--k-color-link);
+	.last-seen-label {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		margin: 0 0 var(--space-2);
+		font-size: 12px;
+		font-weight: 500;
+		color: var(--primary);
 	}
 
-	.last-seen-label {
-		margin: 0;
-		padding-block: 4px;
-		font: var(--k-text-hint);
-		color: var(--k-color-link);
+	.last-seen-label::after {
+		content: '';
+		flex: 1;
+		block-size: 1px;
+		background: color-mix(in oklab, var(--primary) 40%, transparent);
 	}
 
 	@media (forced-colors: active) {
-		.is-first-seen {
-			border-block-start-color: Highlight;
-		}
-
 		.last-seen-label {
 			background: Highlight;
 			color: HighlightText;
-			border-color: Highlight;
 		}
 	}
 </style>

@@ -5,24 +5,10 @@
 	import FeedFilterBar from '#lib/components/feed/FeedFilterBar.svelte';
 	import PostCard from '#lib/components/feed/PostCard.svelte';
 	import { highlightTerms } from '#lib/search/highlight.ts';
-	import type { ShareCardFormError } from '#lib/types/feed.ts';
 	import type { ContentType } from '#lib/types/domain.ts';
 	import type { PageData } from './$types';
 
-	interface SearchShareFormErrorPayload {
-		formType?: string;
-		shareId?: string;
-		errorMessage?: string;
-		fieldErrors?: Record<string, string[]>;
-		values?: {
-			note?: string;
-			sectionIds?: string[];
-			contentType?: string;
-			silentMode?: boolean;
-		};
-	}
-
-	let { data, form }: { data: PageData; form: SearchShareFormErrorPayload | null } = $props();
+	let { data }: { data: PageData } = $props();
 
 	// Seed the controls from `data` synchronously so the server-rendered HTML (and JS-off users)
 	// show the submitted query and scope; the effect below keeps them in sync on later navigations.
@@ -111,22 +97,6 @@
 			page: currentPage
 		})
 	);
-
-	const activeShareFormError = $derived.by((): ShareCardFormError | null => {
-		if (!form || !form.shareId) {
-			return null;
-		}
-		if (form.formType === 'updateShare' || form.formType === 'deleteShare') {
-			return {
-				formType: form.formType,
-				shareId: form.shareId,
-				errorMessage: form.errorMessage ?? t('common.actionFailed'),
-				fieldErrors: form.fieldErrors,
-				values: form.values
-			};
-		}
-		return null;
-	});
 </script>
 
 <svelte:head>
@@ -301,9 +271,6 @@
 						actionBase="/search"
 						returnTo={currentReturnTo}
 						priorityImage={index < 2}
-						activeEditShareId={data.editShareId}
-						activeDeleteShareId={data.deleteShareId}
-						activeFormError={activeShareFormError}
 						highlightTerms={terms}
 					/>
 				</li>

@@ -366,7 +366,7 @@ test.describe('Milestone M6 — Discussion, Bilingual Search & Notifications', (
 			await expect(searchLikeBtn).toHaveAttribute('aria-pressed', 'false');
 			await searchLikeBtn.click();
 			await expect(searchLikeBtn).toHaveAttribute('aria-pressed', 'true');
-			await expect(searchLikeBtn).toContainText('1 beğeni');
+			await expect(searchLikeBtn).toHaveAccessibleName(/^1 beğeni/);
 
 			// Navigate to canonical discussion page
 			await searchCards.first().locator('a.card-discussion-link').click();
@@ -397,8 +397,12 @@ test.describe('Milestone M6 — Discussion, Bilingual Search & Notifications', (
 			const feedCards2 = page2.locator('article.share-card');
 			await expect(feedCards2).toHaveCount(2);
 			for (let i = 0; i < 2; i++) {
-				await expect(feedCards2.nth(i).locator('button[aria-pressed]')).toContainText('1 beğeni');
-				await expect(feedCards2.nth(i).locator('a.card-discussion-link')).toContainText('1 yorum');
+				await expect(feedCards2.nth(i).locator('button[aria-pressed]')).toHaveAccessibleName(
+					/^1 beğeni/
+				);
+				await expect(feedCards2.nth(i).locator('a.card-discussion-link')).toHaveAccessibleName(
+					/^1 yorum/
+				);
 			}
 		} finally {
 			await context2.close();
@@ -623,7 +627,6 @@ test.describe('Milestone M6 — Discussion, Bilingual Search & Notifications', (
 		await expect(page.locator('article.share-card')).toHaveCount(2);
 
 		// Filter by content type "Repo": open the "Süz" disclosure first (izgah-ui-v4 §7)
-		await page.locator('details.feed-filter > summary').click();
 		await page
 			.getByRole('navigation', { name: 'İçerik türü süzgeci' })
 			.getByRole('link', { name: 'Repo' })

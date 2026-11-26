@@ -233,7 +233,12 @@ test.describe('UI v2 feed interactions — shortcuts, day groups, last visit, ne
 		await expect(
 			page.getByRole('region', { name: 'Bugün' }).locator('article.share-card')
 		).toHaveCount(1);
-		expect(await headings.first().evaluate((el) => getComputedStyle(el).position)).toBe('sticky');
+		// The whole day row (heading, rule, count) sticks (izgah-ui-v5 §5.2).
+		expect(
+			await headings
+				.first()
+				.evaluate((el) => getComputedStyle(el.closest('.day-row') ?? el).position)
+		).toBe('sticky');
 	});
 
 	test('CUJ U3: last-visit marker flags newer posts by others and advances on leave', async ({

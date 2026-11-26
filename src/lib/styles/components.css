@@ -472,8 +472,9 @@
 
 	.feed-list > li.is-deferred {
 		content-visibility: auto;
-		/* A künye entry without a cover is about 110px tall (izgah-ui-v4 §4). */
-		contain-intrinsic-size: auto none auto 120px;
+		/* A v5 feed card is about 230–280px tall (izgah-ui-v5 §5.1); the estimate keeps WebKit from
+		   jumping while deferred cards settle their size. */
+		contain-intrinsic-size: auto none auto 260px;
 	}
 
 	.share-card-container {

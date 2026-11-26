@@ -77,8 +77,6 @@ export const load: PageServerLoad = async ({ depends, locals, params, url }) => 
 	return {
 		...discussion,
 		aiSummary: await loadVisibleAiSummary(params.id),
-		editShareId: url.searchParams.get('edit') || null,
-		deleteShareId: url.searchParams.get('delete') || null,
 		editCommentId: url.searchParams.get('editComment') || null,
 		deleteCommentId: url.searchParams.get('deleteComment') || null
 	};
