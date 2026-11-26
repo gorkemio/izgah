@@ -238,19 +238,8 @@ describe('Künye token contrast (docs/designs/izgah-ui-v4.md §1)', () => {
 		expect(resolvedRoot['--k-shadow-sm']).toBeUndefined();
 	});
 
-	it('keeps every corner radius at 3px or less', () => {
-		for (const name of [
-			'--k-radius-xs',
-			'--k-radius-sm',
-			'--k-radius-md',
-			'--k-radius-lg',
-			'--k-radius-pill'
-		]) {
-			const value = rootDecls[name];
-			expect(value, name).toMatch(/^\d+px$/);
-			expect(Number.parseInt(value, 10), name).toBeLessThanOrEqual(3);
-		}
-	});
+	// The Künye 3px radius ceiling ended with UI v5; tests/unit/tokens-v5-contrast.test.ts checks
+	// the v5 radius scale (izgah-ui-v5.md §2.3, §3.3).
 
 	for (const { label, tokens } of combinations) {
 		it.each(aaTextPairs)(`${label}: %s on %s meets WCAG 2.2 AA (>= 4.5:1)`, (fg, bg) => {

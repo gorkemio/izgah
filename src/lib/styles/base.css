@@ -41,9 +41,10 @@
 @layer base {
 	html {
 		font: var(--k-text-body);
-		color: var(--k-color-text);
-		background: var(--k-color-bg);
-		accent-color: var(--k-color-accent);
+		/* UI v5 surfaces (izgah-ui-v5.md §3.1); screens not yet moved keep their --k-* colours. */
+		color: var(--foreground);
+		background: var(--background);
+		accent-color: var(--primary);
 		scroll-padding-block-start: calc(var(--sticky-top) + var(--space-3));
 		scroll-padding-block-end: calc(var(--tab-bar-h) + var(--space-3));
 		font-synthesis: none;
@@ -54,8 +55,8 @@
 
 	body {
 		min-block-size: 100dvh;
-		background: var(--k-color-bg);
-		color: var(--k-color-text);
+		background: var(--background);
+		color: var(--foreground);
 	}
 
 	/* Background scroll lock while a modal dialog is open. */

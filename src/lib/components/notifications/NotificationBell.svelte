@@ -2,7 +2,8 @@
 	import { t } from '#lib/i18n/index.ts';
 	import { formatWhen } from '#lib/format/date.ts';
 	import { startVisibilityPoller } from '#lib/client/visibility-poller.ts';
-	import PopoverPanel from '#lib/components/legacy/PopoverPanel.svelte';
+	import Bell from '@lucide/svelte/icons/bell';
+	import * as Popover from '#lib/components/ui/popover/index.ts';
 	import type { NotificationFeedItem } from '#lib/server/interactions/service.ts';
 
 	const POLL_INTERVAL_MS = 60_000;
@@ -20,6 +21,11 @@
 	);
 
 	const formatTrRelativeOrDate = formatWhen;
+
+	let open = $state(false);
+	function close(): void {
+		open = false;
+	}
 
 	async function fetchUnreadNotifications(): Promise<void> {
 		const requestEpoch = mutationEpoch;
@@ -122,284 +128,78 @@
 	});
 </script>
 
-<div class="notification-bell-wrap">
-	<PopoverPanel
-		id="notification-bell-popover"
-		{triggerLabel}
-		iconOnly={true}
-		triggerClass="notification-bell-trigger"
-		panelClass="notification-bell-panel"
+<Popover.Root bind:open>
+	<Popover.Trigger
+		class="notification-bell-trigger group/bell relative flex items-center gap-2.5 rounded-lg text-muted-foreground transition-colors hover:bg-sidebar-accent/70 hover:text-foreground max-md:size-9 max-md:justify-center md:min-h-8 md:w-full md:px-2.5 pointer-coarse:min-h-11 data-open:bg-sidebar-accent data-open:text-foreground"
+		aria-label={triggerLabel}
 	>
-		{#snippet trigger()}
-			<span class="bell-trigger-content">
-				<span class="bell-label">{t('notif.label')}</span>
-				{#if unreadCount > 0}
-					<span class="notification-badge" aria-hidden="true">{unreadCount}</span>
-				{/if}
+		<Bell class="size-[15px] shrink-0 max-md:size-[18px]" aria-hidden="true" />
+		<span class="text-[13px] tracking-[-0.005em] max-md:sr-only">{t('notif.label')}</span>
+		{#if unreadCount > 0}
+			<span
+				class="notification-badge ml-auto text-[11px] font-medium text-primary tabular-nums max-md:absolute max-md:top-1 max-md:right-1 max-md:grid max-md:min-w-4 max-md:place-items-center max-md:rounded-full max-md:bg-primary max-md:px-1 max-md:text-[10px] max-md:text-primary-foreground"
+				aria-hidden="true"
+			>
+				{unreadCount}
 			</span>
-		{/snippet}
+		{/if}
+	</Popover.Trigger>
+	<Popover.Content
+		id="notification-bell-popover"
+		side="right"
+		align="start"
+		sideOffset={10}
+		collisionPadding={12}
+		class="w-[340px] max-w-[calc(100vw-24px)] gap-0 rounded-xl border border-hairline p-0 shadow-lg ring-0"
+	>
+		<div class="flex items-center justify-between gap-3 border-b border-hairline px-4 py-3">
+			<h2 class="text-[14px] font-semibold tracking-[-0.01em]">{t('notif.label')}</h2>
+			{#if items.length > 0}
+				<button
+					type="button"
+					class="rounded-md px-2 py-1 text-[12px] font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:opacity-50"
+					disabled={markingAll}
+					onclick={handleMarkAllRead}
+				>
+					{t('notif.markAll')}
+				</button>
+			{/if}
+		</div>
 
-		{#snippet children({ close })}
-			<div class="notif-panel-inner">
-				<div class="notif-panel-header">
-					<h2 class="notif-panel-title">{t('notif.label')}</h2>
-					{#if items.length > 0}
-						<button
-							type="button"
-							class="btn btn-subtle btn-sm notif-mark-all-btn"
-							disabled={markingAll}
-							onclick={handleMarkAllRead}
-						>
-							{t('notif.markAll')}
-						</button>
-					{/if}
-				</div>
-
-				{#if loadError}
-					<p class="notif-empty" role="status">{t('notif.loadFailed')}</p>
-				{:else if !hasLoadedOnce}
-					<div class="notif-skeleton" role="status">
-						<span class="visually-hidden">{t('notif.loading')}</span>
-						<div class="notif-skeleton-row" aria-hidden="true">
-							<span class="skeleton skeleton-line notif-skeleton-primary"></span>
-							<span class="skeleton skeleton-line notif-skeleton-secondary"></span>
-						</div>
-						<div class="notif-skeleton-row" aria-hidden="true">
-							<span class="skeleton skeleton-line notif-skeleton-primary"></span>
-							<span class="skeleton skeleton-line notif-skeleton-secondary"></span>
-						</div>
+		{#if loadError}
+			<p class="px-4 py-6 text-center text-[13px] text-muted-foreground" role="status">
+				{t('notif.loadFailed')}
+			</p>
+		{:else if !hasLoadedOnce}
+			<div class="grid gap-3 px-4 py-4" role="status">
+				<span class="sr-only">{t('notif.loading')}</span>
+				{#each [0, 1] as row (row)}
+					<div class="grid gap-1.5" aria-hidden="true">
+						<span class="h-3 w-4/5 animate-pulse rounded bg-muted"></span>
+						<span class="h-2.5 w-1/2 animate-pulse rounded bg-muted"></span>
 					</div>
-				{:else if items.length === 0}
-					<p class="notif-empty">{t('notif.empty')}</p>
-				{:else}
-					<ul class="notif-list" role="list">
-						{#each items as notif (notif.id)}
-							<li class="notif-list-item">
-								<a
-									href="/resources/{notif.resourceId}"
-									class="notif-item-link"
-									onclick={() => handleNotificationClick(notif.id, close)}
-								>
-									<span class="notif-item-body">
-										<span class="notif-item-message">{notif.message}</span>
-										<span class="notif-item-meta">
-											{notif.resourceTitle || notif.resourceDomain} ·
-											<time datetime={notif.createdAt}>
-												{formatTrRelativeOrDate(notif.createdAt)}
-											</time>
-										</span>
-									</span>
-								</a>
-							</li>
-						{/each}
-					</ul>
-				{/if}
+				{/each}
 			</div>
-		{/snippet}
-	</PopoverPanel>
-</div>
-
-<style>
-	.notification-bell-wrap {
-		position: relative;
-		flex-shrink: 0;
-	}
-
-	:global(.notification-bell-trigger) {
-		position: relative;
-		display: inline-flex;
-		align-items: center;
-		gap: 9px;
-		inline-size: calc(100% + 16px);
-		min-block-size: 32px;
-		margin-inline: -8px;
-		padding: 5px 8px;
-		font: var(--k-text-ui);
-		font-size: 0.9375rem;
-		font-weight: 400;
-		color: var(--k-color-text-secondary);
-		background: transparent;
-		border: 0;
-		border-radius: var(--k-radius-sm);
-		cursor: pointer;
-		transition:
-			background-color var(--dur-fast) var(--ease),
-			color var(--dur-fast) var(--ease),
-			opacity var(--dur-fast) var(--ease);
-	}
-
-	:global(.notification-bell-trigger:hover) {
-		background: var(--k-color-surface-2);
-		color: var(--k-color-text);
-	}
-
-	:global(.notification-bell-trigger:active) {
-		opacity: 0.88;
-	}
-
-	/* A word, not a bell (izgah-ui-v4 §1); the unread count is a link-blue figure after it. */
-	.bell-trigger-content {
-		display: inline-flex;
-		align-items: baseline;
-		gap: var(--space-2);
-		inline-size: 100%;
-	}
-
-	.notification-badge {
-		margin-inline-start: auto;
-		font-weight: 600;
-		font-variant-numeric: tabular-nums;
-		color: var(--k-color-link);
-	}
-
-	@media (max-width: 767px) {
-		:global(.notification-bell-trigger) {
-			inline-size: auto;
-			margin-inline: 0;
-		}
-	}
-
-	:global(.notification-bell-panel) {
-		inline-size: min(22.5rem, calc(100dvw - 2 * var(--gutter)));
-		padding: var(--space-3);
-	}
-
-	.notif-panel-inner {
-		display: grid;
-		gap: var(--space-3);
-	}
-
-	.notif-panel-header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: var(--space-2);
-		padding-block-end: var(--space-2);
-		border-block-end: 1px solid var(--k-color-line);
-	}
-
-	.notif-panel-title {
-		margin: 0;
-		font: var(--k-text-ui);
-		font-weight: 600;
-		color: var(--k-color-text);
-	}
-
-	.notif-mark-all-btn {
-		min-block-size: 28px;
-		padding: 0 var(--space-2);
-		font-size: 0.78125rem;
-		white-space: nowrap;
-	}
-
-	.notif-empty {
-		margin: 0;
-		padding: var(--space-3) 0;
-		font: var(--k-text-hint);
-		color: var(--k-color-text-muted);
-	}
-
-	.notif-skeleton {
-		display: grid;
-		gap: var(--space-2);
-		padding: var(--space-1) 0;
-	}
-
-	.notif-skeleton-row {
-		display: grid;
-		gap: var(--space-1);
-		padding: var(--space-2);
-		border-radius: var(--k-radius-sm);
-	}
-
-	.notif-skeleton-primary {
-		inline-size: 88%;
-	}
-
-	.notif-skeleton-secondary {
-		inline-size: 56%;
-		block-size: 0.75em;
-	}
-
-	.notif-list {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: grid;
-		gap: 2px;
-		max-block-size: 20rem;
-		overflow-y: auto;
-	}
-
-	.notif-item-link {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr);
-		align-items: start;
-		gap: var(--space-2);
-		padding: var(--space-2);
-		border-radius: var(--k-radius-sm);
-		text-decoration: none;
-		color: var(--k-color-text);
-		border: 1px solid transparent;
-		transition:
-			background-color var(--dur-fast) var(--ease),
-			border-color var(--dur-fast) var(--ease),
-			opacity var(--dur-fast) var(--ease);
-	}
-
-	.notif-item-link:hover {
-		background: var(--k-color-surface-2);
-		border-color: var(--k-color-line);
-		color: var(--k-color-text);
-		text-decoration: none;
-	}
-
-	.notif-item-link:active {
-		opacity: 0.88;
-	}
-
-	.notif-item-body {
-		display: grid;
-		gap: 3px;
-		min-inline-size: 0;
-	}
-
-	.notif-item-message {
-		font: var(--k-text-ui);
-		font-weight: 500;
-		color: var(--k-color-text);
-	}
-
-	.notif-item-meta {
-		font: var(--k-text-meta);
-		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-muted);
-		overflow-wrap: anywhere;
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		:global(.notification-bell-trigger) {
-			transition:
-				background-color var(--dur-fast) var(--ease),
-				color var(--dur-fast) var(--ease),
-				opacity var(--dur-fast) var(--ease);
-		}
-	}
-
-	@media (pointer: coarse) {
-		.notif-mark-all-btn {
-			min-block-size: 44px;
-		}
-	}
-
-	@media (forced-colors: active) {
-		:global(.notification-bell-trigger:active),
-		.notif-item-link:active {
-			opacity: 1;
-		}
-
-		.notification-badge {
-			color: LinkText;
-		}
-	}
-</style>
+		{:else if items.length === 0}
+			<p class="px-4 py-8 text-center text-[13px] text-muted-foreground">{t('notif.empty')}</p>
+		{:else}
+			<ul class="max-h-[60dvh] overflow-y-auto p-1.5" role="list">
+				{#each items as notif (notif.id)}
+					<li>
+						<a
+							href="/resources/{notif.resourceId}"
+							class="flex flex-col gap-0.5 rounded-lg px-2.5 py-2 text-foreground no-underline transition-colors hover:bg-accent"
+							onclick={() => handleNotificationClick(notif.id, close)}
+						>
+							<span class="text-[13px] leading-snug">{notif.message}</span>
+							<span class="truncate text-[12px] text-muted-foreground">
+								{notif.resourceTitle || notif.resourceDomain} ·
+								<time datetime={notif.createdAt}>{formatTrRelativeOrDate(notif.createdAt)}</time>
+							</span>
+						</a>
+					</li>
+				{/each}
+			</ul>
+		{/if}
+	</Popover.Content>
+</Popover.Root>

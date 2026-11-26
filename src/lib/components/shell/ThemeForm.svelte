@@ -89,7 +89,7 @@
 	.is-menu fieldset {
 		margin: var(--space-1) 0;
 		padding: var(--space-2) 0;
-		border-block: 1px solid var(--k-color-line);
+		border-block: 1px solid var(--hairline);
 	}
 
 	.is-menu legend {
@@ -98,7 +98,7 @@
 		font-family: var(--font-sans);
 		font-size: 0.75rem;
 		font-weight: 600;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 	}
 
 	.is-menu .theme-options {
@@ -110,18 +110,18 @@
 		display: flex;
 		min-block-size: 32px;
 		padding: 0 var(--space-2);
-		color: var(--k-color-text-secondary);
-		border-radius: var(--k-radius-sm);
+		color: var(--muted-foreground);
+		border-radius: var(--radius-md);
 	}
 
 	.is-menu .theme-option:hover {
-		background: var(--k-color-surface-2);
-		color: var(--k-color-text);
+		background: var(--accent);
+		color: var(--foreground);
 	}
 
 	.is-menu .theme-option:has(input:checked) {
-		background: var(--k-color-surface-2);
-		color: var(--k-color-text);
+		background: var(--accent);
+		color: var(--foreground);
 		font-weight: 600;
 	}
 
@@ -147,7 +147,7 @@
 		min-block-size: 32px;
 		font: var(--k-text-ui);
 		font-weight: 400;
-		color: var(--k-color-text);
+		color: var(--foreground);
 		cursor: pointer;
 	}
 

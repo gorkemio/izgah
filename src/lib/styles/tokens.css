@@ -16,7 +16,7 @@
 	   light-dark() live on subtrees. */
 	:root,
 	.theme-preview {
-		--k-color-bg: light-dark(var(--light-bg), var(--dark-bg));
+		--k-color-bg: var(--background); /* v5 page surface during the migration */
 		--k-color-surface-1: light-dark(var(--light-surface-1), var(--dark-surface-1));
 		--k-color-surface-2: light-dark(var(--light-surface-2), var(--dark-surface-2));
 		--k-color-surface-3: light-dark(var(--light-surface-3), var(--dark-surface-3));
@@ -121,7 +121,7 @@
 		--k-radius-pill: 3px;
 
 		/* Shell dimensions (§3). The entry gutter is shared with izgah.com. */
-		--rail-w: 224px;
+		--rail-w: 248px;
 		--pane-w: 420px;
 		--read-w: 720px;
 		--wide-w: 960px;
@@ -334,5 +334,45 @@
 			--elevation-lg: none;
 			--elevation-xl: none;
 		}
+	}
+
+	/*
+	 * Migration bridge (izgah-ui-v5.md §2.2): screens not yet moved to v5 keep their Künye layout
+	 * but take the Lantern colours, radii and shadows through their --k-* variables, so the v5 shell
+	 * and the older content read as one product. Removed with the --k-* variables in M11.
+	 */
+	:root,
+	[data-v5-theme],
+	[data-scheme] {
+		--k-color-bg: var(--background);
+		--k-color-surface-1: var(--card);
+		--k-color-surface-2: var(--muted);
+		--k-color-surface-3: var(--secondary);
+		--k-color-text: var(--foreground);
+		--k-color-text-secondary: var(--muted-foreground);
+		--k-color-text-muted: var(--muted-foreground);
+		--k-color-line: var(--border);
+		--k-color-line-strong: var(--input);
+		--k-color-accent: var(--primary);
+		--k-color-on-accent: var(--primary-foreground);
+		--k-color-accent-text: var(--link);
+		--k-color-link: var(--link);
+		--k-color-visited: var(--visited);
+		--k-color-danger: var(--destructive);
+		--k-color-on-danger: var(--destructive-foreground);
+		--k-color-ok-soft: var(--success-soft);
+		--k-color-ok-text: var(--success);
+		--k-color-warn-soft: var(--warning-soft);
+		--k-color-warn-text: var(--warning);
+		--k-color-focus-outer: var(--ring);
+		--k-color-highlight-bg: var(--highlight);
+		--k-color-highlight-fg: var(--highlight-foreground);
+		--k-color-backdrop: var(--backdrop);
+		--k-shadow-lg: var(--elevation-lg);
+		--k-radius-xs: 4px;
+		--k-radius-sm: 6px;
+		--k-radius-md: 8px;
+		--k-radius-lg: 12px;
+		--k-radius-pill: 9999px;
 	}
 }
