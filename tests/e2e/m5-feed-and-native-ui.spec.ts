@@ -356,10 +356,12 @@ test.describe('Milestone M5 — Web Feed, Sections & Native Platform UI', () => 
 			)
 			.toBeGreaterThan(0);
 
-		const wideColumns = await attachment.evaluate(
-			(el) => getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length
-		);
-		expect(wideColumns).toBe(2);
+		// Text and thumbnail sit side by side in the link card (izgah-ui-v5 §5.1).
+		const thumbBox = await cardThumb.boundingBox();
+		const titleBox = await card
+			.getByRole('heading', { name: 'Modern Web Tasarım İlkeleri' })
+			.boundingBox();
+		expect(thumbBox && titleBox && thumbBox.x > titleBox.x).toBe(true);
 
 		// The share trigger focuses the inline form again; typing runs the debounced duplicate check.
 		await page.getByRole('button', { name: 'Link Paylaş' }).click();
@@ -374,13 +376,9 @@ test.describe('Milestone M5 — Web Feed, Sections & Native Platform UI', () => 
 		// The mobile tab bar hides while a text field has focus; leave the composer first.
 		await urlField.blur();
 
-		// 360px mobile layout: the thumbnail stays small on the right (izgah-ui-v4 §3), no overflow
+		// 360px mobile layout: the thumbnail stays small on the right (izgah-ui-v5 §3.6), no overflow
 		await page.setViewportSize({ width: 360, height: 740 });
-		await expect
-			.poll(() =>
-				attachment.evaluate((el) => getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/))
-			)
-			.toEqual([expect.any(String), '88px']);
+		await expect.poll(async () => Math.round((await cardThumb.boundingBox())?.width ?? 0)).toBe(96);
 
 		const overflow = await page.evaluate(() => ({
 			scrollWidth: document.documentElement.scrollWidth,
@@ -694,7 +692,6 @@ test.describe('Milestone M5 — Web Feed, Sections & Native Platform UI', () => 
 		await expect(loadMoreLink).toBeHidden();
 
 		// Same-pathname query filter must NOT steal focus onto <h1>
-		await page.locator('details.feed-filter > summary').click();
 		const videoFilterLink = page
 			.getByRole('navigation', { name: 'İçerik türü süzgeci' })
 			.getByRole('link', { name: 'Video' });
@@ -715,7 +712,7 @@ test.describe('Milestone M5 — Web Feed, Sections & Native Platform UI', () => 
 		await expect(page.locator('#main-content h1')).toBeFocused();
 	});
 
-	test('Full CRUD works with JavaScript disabled (progressive enhancement fallback)', async ({
+	test('sharing posts to the server form action, even before JavaScript runs (izgah-ui-v5 §8)', async ({
 		browser
 	}) => {
 		const member = await seedUserWithSession({
@@ -748,34 +745,7 @@ test.describe('Milestone M5 — Web Feed, Sections & Native Platform UI', () => 
 			const card = page.locator('article.share-card').first();
 			await expect(card.getByText('JS olmadan ilk not')).toBeVisible();
 
-			// Native HTML [popover="auto"] overflow works even with JS off
-			await card.getByRole('button', { name: 'Paylaşım işlemleri' }).click();
-			await page.locator('a.card-menu-item', { hasText: 'Düzenle' }).click();
-			await page.waitForURL((url) => url.searchParams.has('edit'));
-
-			await page.locator('.inline-card-panel textarea[name="note"]').fill('JS olmadan güncel not');
-			await page.getByRole('button', { name: 'Değişiklikleri kaydet' }).click();
-
-			await page.waitForURL((url) => url.pathname === '/' && !url.searchParams.has('edit'));
-			await expect(
-				page.locator('article.share-card').first().getByText('JS olmadan güncel not')
-			).toBeVisible();
-
-			// Delete without JS
-			await page
-				.locator('article.share-card')
-				.first()
-				.getByRole('button', { name: 'Paylaşım işlemleri' })
-				.click();
-			await page.locator('a.card-menu-item', { hasText: 'Sil' }).click();
-			await page.waitForURL((url) => url.searchParams.has('delete'));
-
-			await page
-				.locator('.inline-card-panel')
-				.getByRole('button', { name: 'Paylaşımı sil' })
-				.click();
-			await page.waitForURL((url) => url.pathname === '/' && !url.searchParams.has('delete'));
-			await expect(page.locator('article.share-card')).toHaveCount(0);
+			// Edit and delete have no JavaScript-free fallback since UI v5 (izgah-ui-v5 §8).
 		} finally {
 			await noJsContext.close();
 		}

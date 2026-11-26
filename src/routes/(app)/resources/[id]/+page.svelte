@@ -8,7 +8,6 @@
 	import { untrack } from 'svelte';
 	import PostCard from '#lib/components/feed/PostCard.svelte';
 	import ResourceHero from '#lib/components/resource/ResourceHero.svelte';
-	import type { ShareCardFormError } from '#lib/types/feed.ts';
 	import Dialog from '#lib/components/legacy/Dialog.svelte';
 	import type { PageData } from './$types';
 
@@ -133,22 +132,6 @@
 	const commentDescribedBy = $derived(
 		commentErrorMessage ? `${commentHintId} ${commentErrorId}` : commentHintId
 	);
-
-	const activeShareFormError = $derived.by((): ShareCardFormError | null => {
-		if (!form || !form.shareId) {
-			return null;
-		}
-		if (form.formType === 'updateShare' || form.formType === 'deleteShare') {
-			return {
-				formType: form.formType,
-				shareId: form.shareId,
-				errorMessage: form.errorMessage ?? t('common.actionFailed'),
-				fieldErrors: form.fieldErrors,
-				values: form.values
-			};
-		}
-		return null;
-	});
 
 	function validateCommentValue(value: string): string | null {
 		const trimmed = value.trim();
@@ -673,9 +656,6 @@
 							actionBase={`/resources/${data.resource.id}`}
 							returnTo={`/resources/${data.resource.id}`}
 							compact
-							activeEditShareId={data.editShareId}
-							activeDeleteShareId={data.deleteShareId}
-							activeFormError={activeShareFormError}
 						/>
 					</li>
 				{/each}

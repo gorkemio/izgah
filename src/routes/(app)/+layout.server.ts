@@ -29,8 +29,6 @@ export const load: LayoutServerLoad = async ({ locals, url, cookies, request }) 
 		palette: parsePalette((name) => cookies.get(name)),
 		effects: parseEffectLevel(cookies.get(EFFECTS_COOKIE)),
 		modifierKey: detectModifierKey(request.headers),
-		composeRequested: url.searchParams.get('compose') === '1',
-		editShareId: url.searchParams.get('edit') || null,
-		deleteShareId: url.searchParams.get('delete') || null
+		composeRequested: url.searchParams.get('compose') === '1'
 	};
 };

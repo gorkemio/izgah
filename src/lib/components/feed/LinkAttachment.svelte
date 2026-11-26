@@ -68,6 +68,9 @@
 		}
 	}
 
+	const siteInitial = $derived(
+		(item.resource.domain.replace(/^www\./, '')[0] ?? '?').toLocaleUpperCase('tr')
+	);
 	const showThumbnail = $derived(Boolean(item.resource.thumbnailAssetKey && !imgFailed));
 	const repoSlug = $derived(extractRepoSlug(item.resource.canonicalUrl || item.rawUrl));
 	const title = $derived(
@@ -77,26 +80,47 @@
 	);
 </script>
 
-<!-- Künye (docs/designs/izgah-ui-v4.md §4): no box around the link; a title in link blue, one künye
-     line under it and an optional small cover on the right. -->
-<div class="link-attachment" class:has-thumbnail={showThumbnail}>
-	<div class="attachment-text">
-		<h3 id={titleId} class="attachment-title">
+<!-- Link card (docs/designs/izgah-ui-v5.md §5.1): the facts line with a site tile, the title, a
+     two-line description and an optional 16:10 thumbnail on the right. -->
+<div
+	class="link-attachment mt-3 flex gap-3.5 rounded-lg border border-hairline bg-background p-3 transition-colors hover:bg-accent/40"
+	class:has-thumbnail={showThumbnail}
+>
+	<div class="attachment-text grid min-w-0 flex-1 content-start gap-1">
+		<div class="flex min-w-0 items-start gap-1.5">
+			<span
+				class="mt-px grid size-4 shrink-0 place-items-center rounded-[4px] bg-muted text-[9px] font-semibold text-muted-foreground uppercase"
+				aria-hidden="true"
+			>
+				{siteInitial}
+			</span>
+			<div class="min-w-0 flex-1">{@render kunye?.()}</div>
+		</div>
+		<h3
+			id={titleId}
+			class="attachment-title text-[14.5px] leading-snug font-medium tracking-[-0.01em] text-balance"
+		>
 			<a
 				href={item.rawUrl}
 				target="_blank"
 				rel="noopener noreferrer"
-				class="card-title-link content-link"
+				class="card-title-link content-link text-foreground no-underline decoration-1 underline-offset-2 visited:text-visited hover:underline"
 			>
 				<Highlight text={title} terms={highlightTerms} />
 			</a>
 		</h3>
-		{@render kunye?.()}
+		{#if item.resource.description}
+			<p class="line-clamp-2 text-[13px] leading-snug text-muted-foreground">
+				{item.resource.description}
+			</p>
+		{/if}
 	</div>
 	{#if showThumbnail && item.resource.thumbnailAssetKey}
-		<div class="card-thumbnail-frame">
+		<div
+			class="card-thumbnail-frame aspect-[16/10] w-24 shrink-0 self-start overflow-hidden rounded-md bg-muted ring-1 ring-hairline sm:w-28"
+		>
 			<img
-				class="card-thumbnail"
+				class="card-thumbnail size-full object-cover"
 				src={`/media/thumbnails/${encodeURIComponent(item.resource.thumbnailAssetKey)}`}
 				alt=""
 				width={item.resource.thumbnailWidth ?? 1200}
@@ -109,49 +133,3 @@
 		</div>
 	{/if}
 </div>
-
-<style>
-	.link-attachment {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr);
-		gap: var(--space-4);
-		align-items: start;
-		margin-block-start: var(--space-2);
-	}
-
-	.link-attachment.has-thumbnail {
-		grid-template-columns: minmax(0, 1fr) 112px;
-	}
-
-	.attachment-text {
-		display: grid;
-		gap: 2px;
-		min-inline-size: 0;
-	}
-
-	.attachment-title {
-		margin: 0;
-		font: var(--k-text-title);
-		overflow-wrap: anywhere;
-	}
-
-	.card-thumbnail-frame {
-		overflow: hidden;
-		aspect-ratio: 16 / 10;
-		background: var(--k-color-surface-2);
-		border-radius: var(--k-radius-xs);
-	}
-
-	.card-thumbnail {
-		display: block;
-		inline-size: 100%;
-		block-size: 100%;
-		object-fit: cover;
-	}
-
-	@media (max-width: 479px) {
-		.link-attachment.has-thumbnail {
-			grid-template-columns: minmax(0, 1fr) 88px;
-		}
-	}
-</style>

@@ -32,9 +32,7 @@ export const load: PageServerLoad = async ({ depends, locals, url }) => {
 	});
 
 	return {
-		...searchResult,
-		editShareId: url.searchParams.get('edit') || null,
-		deleteShareId: url.searchParams.get('delete') || null
+		...searchResult
 	};
 };
 

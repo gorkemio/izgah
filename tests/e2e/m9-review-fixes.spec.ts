@@ -152,7 +152,7 @@ test.describe('Review fixes — feed state, navigation and no-JS flows', () => {
 		await lastLike.evaluate((el) => el.scrollIntoView({ block: 'center' }));
 		await lastLike.click();
 		await expect(lastLike).toHaveAttribute('aria-pressed', 'true');
-		await expect(lastLike).toContainText('1 beğeni');
+		await expect(lastLike).toHaveAccessibleName(/^1 beğeni/);
 
 		// Give any (former) feed invalidation time to land, then the appended page must still be there.
 		await page.waitForTimeout(1_000);

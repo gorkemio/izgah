@@ -649,14 +649,27 @@
 {/if}
 
 <style>
-	/* Feed variant: collapsed to the URL row until focused, filled or showing an error. Pure CSS,
-	   so it also works without JS (izgah-ui-v2 §8.1). */
-	/* Künye: the composer is a ruled strip, not a card (izgah-ui-v4.md §3). */
+	/* Feed variant (izgah-ui-v5.md §5.3): a card collapsed to the URL row until focused, filled or
+	   showing an error; it expands in place with the accent focus halo. */
 	.inline-composer-card.is-feed {
 		margin-block-end: var(--space-2);
-		padding-block: var(--space-3);
-		background: transparent;
-		border-block: 1px solid var(--k-color-line);
+		padding: var(--space-2);
+		background: var(--card);
+		border: 1px solid var(--hairline);
+		border-radius: var(--radius-xl);
+		box-shadow: var(--elevation-sm);
+		transition: box-shadow var(--dur-fast) var(--ease);
+	}
+
+	.inline-composer-card.is-feed:focus-within {
+		box-shadow:
+			0 0 0 1px color-mix(in oklab, var(--primary) 55%, transparent),
+			0 0 0 4px color-mix(in oklab, var(--primary) 12%, transparent);
+	}
+
+	.is-feed:focus-within :global(.composer-more),
+	.is-feed:focus-within .composer-actions {
+		padding-inline: var(--space-2);
 	}
 
 	.is-feed .composer-header {
@@ -670,9 +683,10 @@
 	}
 
 	.is-feed .url-input {
-		border-color: var(--k-color-line);
-		background: var(--input-bg);
 		min-inline-size: 0;
+		border-color: transparent;
+		background: transparent;
+		box-shadow: none;
 		text-overflow: ellipsis;
 	}
 
@@ -680,11 +694,9 @@
 		text-overflow: ellipsis;
 	}
 
-	.is-feed:focus-within .url-input,
-	.is-feed:has(input[name='url']:not(:placeholder-shown)) .url-input,
-	.is-feed.has-error .url-input {
-		border-color: var(--k-color-line-strong);
-		background: var(--input-bg);
+	.is-feed .url-input:focus-visible {
+		outline: none;
+		box-shadow: none;
 	}
 
 	.composer-kbd {

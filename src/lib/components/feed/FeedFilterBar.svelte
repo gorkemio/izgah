@@ -3,9 +3,8 @@
 	import type { ContentType } from '#lib/server/db/schema.ts';
 
 	/**
-	 * Content-type filter as a "Filter" disclosure (docs/designs/izgah-ui-v4.md §7): a native
-	 * <details> that starts closed, opens itself while a type is active, and needs no JavaScript.
-	 * The links keep the `?type=` URLs, so filters stay shareable and work in search.
+	 * Content-type filter (docs/designs/izgah-ui-v5.md §5.4): a segmented row of links. The links
+	 * keep the `?type=` URLs, so filters stay shareable and work in search.
 	 */
 	interface Props {
 		basePath: string;
@@ -40,141 +39,23 @@
 		const encoded = params.toString();
 		return encoded ? `${basePath}?${encoded}` : basePath;
 	}
-
-	const activeLabel = $derived(
-		activeType ? (FILTER_ITEMS.find((item) => item.param === activeType)?.label ?? null) : null
-	);
 </script>
 
-<details class="feed-filter" open={activeType !== null}>
-	<summary>
-		{t('filter.summary')}{#if activeLabel}<span class="feed-filter-active">
-				: {activeLabel}
-			</span>{/if}
-	</summary>
-	<nav aria-label={t('filter.label')}>
-		<ul role="list">
-			{#each FILTER_ITEMS as item (item.param ?? 'all')}
-				<li>
-					<a
-						href={buildFilterHref(item.param)}
-						aria-current={item.param === activeType ? 'page' : undefined}
-					>
-						{item.label}
-					</a>
-				</li>
-			{/each}
-		</ul>
-	</nav>
-	{#if activeLabel}
-		<p class="filter-status" role="status">
-			<span>{t('filter.active')} <strong>{activeLabel}</strong></span>
-			<a href={buildFilterHref(null)} class="filter-clear-link">{t('filter.clear')}</a>
-		</p>
-	{/if}
-</details>
-
-<style>
-	.feed-filter {
-		margin-block-end: var(--space-4);
-		font: var(--k-text-ui);
-	}
-
-	summary {
-		display: inline-flex;
-		align-items: baseline;
-		min-block-size: 32px;
-		padding-block: 4px;
-		font-size: 0.9375rem;
-		color: var(--k-color-text-secondary);
-		cursor: pointer;
-		list-style: none;
-	}
-
-	summary::-webkit-details-marker {
-		display: none;
-	}
-
-	summary::after {
-		content: ' ▾';
-		margin-inline-start: 0.3em;
-		color: var(--k-color-text-muted);
-	}
-
-	.feed-filter[open] > summary::after {
-		content: ' ▴';
-	}
-
-	summary:hover {
-		color: var(--k-color-text);
-	}
-
-	.feed-filter-active {
-		font-weight: 600;
-		color: var(--k-color-text);
-	}
-
-	nav ul {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--space-1) var(--space-4);
-		margin: var(--space-1) 0 0;
-		padding: var(--space-2) 0;
-		list-style: none;
-		border-block: 1px solid var(--k-color-line);
-	}
-
-	nav a {
-		font-size: 0.9375rem;
-		color: var(--k-color-text-secondary);
-		text-decoration: none;
-	}
-
-	nav a:hover {
-		color: var(--k-color-text);
-		text-decoration: underline;
-		text-underline-offset: 0.35em;
-	}
-
-	nav a[aria-current='page'] {
-		font-weight: 600;
-		color: var(--k-color-text);
-		text-decoration: underline;
-		text-decoration-thickness: 2px;
-		text-underline-offset: 0.35em;
-	}
-
-	.filter-status {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: baseline;
-		gap: var(--space-3);
-		margin: var(--space-2) 0 0;
-		font: var(--k-text-hint);
-		color: var(--k-color-text-muted);
-	}
-
-	.filter-status strong {
-		font-weight: 600;
-		color: var(--k-color-text);
-	}
-
-	.filter-clear-link {
-		color: var(--k-color-link);
-	}
-
-	@media (pointer: coarse) {
-		summary,
-		nav a {
-			display: inline-flex;
-			align-items: center;
-			min-block-size: 44px;
-		}
-	}
-
-	@media (forced-colors: active) {
-		nav a[aria-current='page'] {
-			color: LinkText;
-		}
-	}
-</style>
+<nav
+	class="feed-filter mb-4 flex w-fit max-w-full overflow-x-auto rounded-lg border border-hairline bg-muted p-0.5 text-[12.5px]"
+	aria-label={t('filter.label')}
+>
+	<ul role="list" class="flex gap-0.5">
+		{#each FILTER_ITEMS as item (item.param ?? 'all')}
+			<li>
+				<a
+					href={buildFilterHref(item.param)}
+					aria-current={item.param === activeType ? 'page' : undefined}
+					class="block rounded-md px-2.5 py-1 whitespace-nowrap text-muted-foreground no-underline transition-colors hover:text-foreground aria-[current=page]:bg-card aria-[current=page]:font-medium aria-[current=page]:text-foreground aria-[current=page]:shadow-sm pointer-coarse:py-2.5"
+				>
+					{item.label}
+				</a>
+			</li>
+		{/each}
+	</ul>
+</nav>

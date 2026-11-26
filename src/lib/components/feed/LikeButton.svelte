@@ -4,6 +4,10 @@
 	import { goto } from '$app/navigation';
 	import { toasts } from '#lib/client/toast.svelte.ts';
 	import type { FeedShareItem } from '#lib/types/feed.ts';
+	import Heart from '@lucide/svelte/icons/heart';
+	import { Spring } from 'svelte/motion';
+	import AnimatedNumber from '#lib/motion/AnimatedNumber.svelte';
+	import { SPRING, effectsReduced } from '#lib/motion/index.ts';
 
 	interface Props {
 		item: FeedShareItem;
@@ -14,6 +18,7 @@
 	let { item, actionBase, returnTo }: Props = $props();
 
 	let submitting = $state(false);
+	const heart = new Spring(1, SPRING.bouncy);
 	let override = $state<{ liked: boolean; count: number } | null>(null);
 
 	const liked = $derived(override?.liked ?? Boolean(item.resource.likedByViewer));
@@ -38,6 +43,10 @@
 		const desired = !previous.liked;
 		submitting = true;
 		override = { liked: desired, count: Math.max(0, previous.count + (desired ? 1 : -1)) };
+		if (desired && !effectsReduced()) {
+			heart.set(1.25, { instant: true });
+			void heart.set(1);
+		}
 
 		return async ({ result }) => {
 			submitting = false;
@@ -59,48 +68,44 @@
 	};
 </script>
 
-<!--
-	One control for the count and the action (izgah-ui-v4 §4): with likes it reads "4 likes" as part of
-	the künye line; at zero it reads "Like" and joins the entry actions, shown on hover and focus.
--->
-<span class="kunye-part like-part" class:is-idle={count === 0}>
-	{#if count > 0}<span class="kunye-sep" aria-hidden="true">·</span>{/if}
-	<form method="POST" action="{actionBase}?/toggleLike" use:enhance={handleEnhance}>
-		<input type="hidden" name="resourceId" value={item.resource.id} />
-		<input type="hidden" name="liked" value={String(!liked)} />
-		<input type="hidden" name="returnTo" value={returnTo} />
-		<button
-			type="submit"
-			class="kunye-action card-stat-btn"
-			class:is-liked={liked}
-			aria-pressed={liked}
-			aria-label={count > 0
-				? t('like.label', { count, title: label })
-				: t('like.actionLabel', { title: label })}
-			disabled={submitting}
-			data-shortcut="like"
-		>
-			{count > 0 ? t('common.likes', { count }) : t('like.action')}
-		</button>
-	</form>
-</span>
+<!-- Like (izgah-ui-v5.md §6): the heart fills with the accent and the count rolls. -->
+<form method="POST" action="{actionBase}?/toggleLike" use:enhance={handleEnhance} class="contents">
+	<input type="hidden" name="resourceId" value={item.resource.id} />
+	<input type="hidden" name="liked" value={String(!liked)} />
+	<input type="hidden" name="returnTo" value={returnTo} />
+	<button
+		type="submit"
+		class="card-stat-btn card-action like-button"
+		class:is-liked={liked}
+		aria-pressed={liked}
+		aria-label={count > 0
+			? t('like.label', { count, title: label })
+			: t('like.actionLabel', { title: label })}
+		disabled={submitting}
+		data-shortcut="like"
+	>
+		<span class="inline-flex" style="transform: scale({heart.current})">
+			<Heart class="size-[15px] {liked ? 'fill-current' : ''}" aria-hidden="true" />
+		</span>
+		{#if count > 0}
+			<AnimatedNumber value={count} />
+		{:else}
+			<span class="max-sm:sr-only">{t('like.action')}</span>
+		{/if}
+	</button>
+</form>
 
 <style>
-	form {
-		display: contents;
+	.like-button.is-liked {
+		color: var(--primary);
 	}
 
-	.is-liked {
-		font-weight: 600;
-		color: var(--k-color-text);
-	}
-
-	.kunye-action:disabled {
+	.like-button:disabled {
 		cursor: progress;
 	}
 
 	@media (forced-colors: active) {
-		.is-liked {
+		.like-button.is-liked {
 			color: Highlight;
 		}
 	}
