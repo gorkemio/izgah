@@ -54,7 +54,7 @@ Excluded on purpose, because they are model defaults: Inter, Geist, Space Grotes
 | Token | Size / line height | Weight | Use |
 | :--- | :--- | :--- | :--- |
 | `--t-page` | 1.375rem / 1.25 | 600 | Page `h1` |
-| `--t-note` | 1rem / 1.55 | 400 | Notes, comments, body text |
+| `--t-note` | 1rem / 1.5 | 400 | Notes, comments, body text (at most 68ch in the feed) |
 | `--t-title` | 1rem / 1.4 | 500 | Link titles (blue, underlined) |
 | `--t-kunye` | 0.875rem / 1.45 | 400 | Künye line, form hints |
 | `--t-ui` | 0.875rem / 1.3 | 500 | Navigation, buttons, labels |
@@ -79,8 +79,9 @@ No top bar, no breadcrumb, no right-rail dashboard.
                      github.com · code · Go · AI tools · 2 comments · 5 likes
 ```
 
-*   Time (tabular figures) and name sit in a left gutter; the note, the link title and the künye line share one column.
-*   Like, Read later, Copy and More are text buttons at the end of the künye line, shown on hover and focus and always on touch.
+*   Time (tabular figures) and name sit in a 104 px left gutter; the note, the link title and the künye line share one column.
+*   The künye line keeps one order: site · type · language · stars · author · sections · first share · silent and preview state · comments · likes. Counts are links or buttons themselves ("2 comments", "5 likes").
+*   Actions with nothing to report ("Comment", "Like", "Actions") wait at the end of the line, shown on hover, focus and selection and always on touch. "Actions" holds Preview, Copy, Edit and Delete; Space opens the preview on wide screens. *Decision, 2026-11-26:* option A of the refinement review (§11).
 *   A thumbnail, when there is one, sits on the right at a fixed 16:10 ratio and 112 px wide; never a full-width banner.
 *   The selected entry gets the "selected row" surface; no stripe.
 *   Day dividers are a full-width rule with the date on the left and the count on the right ("Tuesday 25 November · 7 links").
@@ -94,7 +95,7 @@ Turkish uses the name's metaphor: sharing is **"İz bırak"** ("leave a trace") 
 
 The site is built like the product, from the same CSS, with a live HTML register instead of PNG screenshots:
 
-*   A left-aligned two-line statement and, right under it, the install commands: for a self-hosted tool the call to action is a command, not a button.
+*   A left-aligned two-line statement, then the live specimen with side notes, then the install commands. *Decision, 2026-11-26* (§11): the product comes before the command; the specimen answers j/k, Space and Like with a small script and offers a CSS-only Light · Dark choice.
 *   Features as an annotated list of real links (design documents, source files), not a card grid; `:visited` works on the page itself.
 *   "Why it exists" (the WhatsApp story), "What it doesn't do" (when Karakeep or Linkwarden is the better choice), "What runs on your server and what leaves it", and the public roadmap.
 *   Concrete facts only (one container, no external services). No invented testimonials, round statistics, emoji bullets or gradients. English and Turkish.
@@ -133,6 +134,24 @@ The accent colours (`teal`, `cobalt`, `terracotta`, `plum`) and the `dim` palett
 *   izgah.com is rebuilt from the prototype: a live HTML specimen instead of screenshots, in English and Turkish.
 
 Kept on purpose: `PostCard` and `LinkAttachment` keep their names and test hooks (`ui-v2.md` §12) and are restyled as the register entry; `rail-summary.ts` stays for the "Most discussed" sort.
+
+## 11. Refinement (2026-11-26)
+
+A pass over the app, the extensions and izgah.com after R3, approved by the maintainer as proposals Ö1–Ö22 with feed entry option A. It refines Künye without changing its language, so it is recorded here rather than in a v5.
+
+*   **One colour source (Ö18).** `tokens/kunye.json` holds the four palettes; `pnpm tokens` (`scripts/tokens/build.ts`) writes `src/lib/styles/palette.css`, `extensions/src/styles/palette.css` and `site/palette.css`. `tests/unit/tokens-sync.test.ts` fails when a file is stale; the contrast test reads the generated palette. The extension's old v3 high-contrast colours and blue primary button are gone. Weights are 600 and 500 everywhere (Ö8).
+*   **No icons (Ö2–Ö4).** Every icon became a word ("Close", "Clear", "Settings", "Actions") or was removed, with `Icon`, `icons.ts`, `Avatar`, `AvatarStack`, `SegmentedControl` and `Tooltip`; Lucide left `THIRD_PARTY_NOTICES.md`. Press scaling and entry animations were removed.
+*   **Feed entry, option A (Ö5–Ö7).** One künye line in a fixed order (§4); the description, the "Open" link and the separate stats row are gone; day headings carry the date for the last week ("Bugün 25 Kasım Çarşamba"); a link without a title shows its address.
+*   **Rules, not boxes (Ö9, Ö10, Ö13).** Admin forms are ruled sections, KPI strips one line of facts, tabs ink and bold without a stripe; secondary buttons are outlined and destructive ones outlined in danger ink. Settings use radio lists and a native checkbox; section choices are a checkbox list.
+*   **Sections index (Ö11).** A ruled list with the number of links per section, silent ones included.
+*   **Catalogue card (Ö12).** The resource page and the reading pane share one order: title, künye line and a small 16:10 cover beside them, then the abstract and the actions. The künye facts come from `src/lib/format/kunye.ts`.
+*   **Palette (Ö14).** Link results read as a künye line; scopes are underlined words.
+*   **Copy (Ö15).** Turkish titles and buttons are in sentence case like the English ones; "Ana Akış" and "Link Paylaş" stay as fixed test names (`ui-v2.md` §12). No copy speaks of cards.
+*   **Dates (Ö16).** `formatWhen` gives "25 Kas 17:20" / "Nov 25, 17:20" with the year only when it differs, in comments, share history, notifications and admin tables; the audit log keeps seconds.
+*   **Extension (Ö17, Ö19, Ö20).** "İz bırak" / "Add a link", the iz + gah wordmark, "Settings" as a word, the ink primary button, notices as text between rules. The size target is measured as the stores do: zip ≤ 150 KB and JS+CSS gzip ≤ 30 KB, checked by `verify-manifests` (`izgah-extensions.md`). No manual theme choice: the popup follows the system theme and contrast.
+*   **izgah.com (Ö21, Ö20b, Ö22).** See §6. The gutter (104 px) and the 68ch measure match the app.
+
+Not done: a font subset for the extension (Ö19b) needs fontTools, which is not installed here; the font stays the shared latin and latin-ext files.
 
 ## Alternatives considered
 

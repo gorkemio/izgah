@@ -305,7 +305,7 @@ Eklenti [Detailed Implementation Plan](#detailed-implementation-plan) (`E1`–`E
     *   Uzak İzgah adresleri için yalnızca `https:` şeması kabul edilir; `http:` yalnızca yerel geliştirme konaklarıyla (`localhost`, `127.0.0.1`, `[::1]`) sınırlandırılır. Tüm istekler çerez taşımamak için `credentials: 'omit'` kullanır.
     *   Manifest düzeyinde `content_scripts`, `scripting`, `tabs` ve `<all_urls>` bulunmaz; sayfa DOM içeriği asla okunmaz, `script-src 'self'; object-src 'none'` CSP uygulanır ve sunucudan dönen başlık, bölüm adı, yazar adı ve hata iletileri `innerHTML` yerine `textContent` ile DOM'a yazılır.
 *   **Başarım, Gecikme ve Paket Ayak İzi:**
-    *   Harici arayüz çerçevesi eklenmeden sıkıştırılmamış JS/CSS çıktısının `< 30 KB`, PNG simgeler dahil toplam paket boyutunun `< 150 KB` sınırında tutulması hedeflenir.
+    *   Harici arayüz çerçevesi eklenmez. Boyut, mağazaların ölçtüğü gibi tanımlanır: mağaza zip paketi (simgeler ve font dahil, kaynak haritaları hariç) `≤ 150 KB`, gzip ile sıkıştırılmış JS/CSS toplamı `≤ 30 KB`. `scripts/verify-manifests.mjs` her derlemede iki değeri ölçer ve sınır aşılırsa başarısız olur ([izgah-ui-v4.md](./izgah-ui-v4.md) §11).
     *   Açılır pencere başlangıçta ağ yanıtlarını beklemeden yerel önbellekteki kullanıcı rolüyle ilk arayüz çizimini (`< 50 ms` hedefiyle) gerçekleştirip oturum önbelleği durumuna göre `/api/v1/links/check` (ve soğukken `/api/v1/me` ile `/api/v1/sections`) çağrılarını başlatır.
     *   Arka plan betiği olay güdümlüdür (`runtime.onInstalled`, `contextMenus.onClicked`, `runtime.onMessage`); arka planda bildirim yoklaması, zamanlayıcı döngüsü (`setInterval`) veya harici telemetri/LLM çağrısı yapılmaz.
 *   **Sürümleme, Yayın ve Geri Alma Güvenliği:**

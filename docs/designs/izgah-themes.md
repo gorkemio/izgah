@@ -1,8 +1,10 @@
 # İzgah Temaları — Loş, Yüksek Kontrast ve Vurgu Rengi
 
 *   **Author:** Gorkem Inanc Ozdemir
-*   **Status:** Mechanism Active — Palet ve vurgu değerleri [izgah-ui-v3.md](./izgah-ui-v3.md) §1 ile güncellenmiştir
+*   **Status:** Mechanism Active — Vurgu renkleri ve Dim paleti [izgah-ui-v4.md](./izgah-ui-v4.md) §8 ile kaldırıldı
 *   **Date:** 2026-11-22
+
+> **UI v4 Notu (2026-11-26):** Künye ile vurgu renkleri ve Dim paleti kaldırıldı ([izgah-ui-v4.md](./izgah-ui-v4.md) §8); eski `izgah_accent` ve `dim` çerez değerleri beyaz liste üzerinden varsayılana düşer. Kalan dört paletin (açık ve koyu × standart ve yüksek kontrast) renkleri `tokens/kunye.json` dosyasından `pnpm tokens` ile üretilir (v4 §11). Aşağıdaki §1 ve §2 tarihsel kayıttır.
 
 > **UI v3 Geçiş Notu (2026-11-24):** Bu dokümandaki **mod + gündüz/gece paleti + vurgu** mimarisi, çerez/SSR sözleşmesi (§3), `light-dark()` + `.theme-preview` CSS katmanı (§4) ve `/settings` önizlemeli ayar akışı (§5) aynen korunur. **§1 (Paletler)** ve **§2 (Vurgu Renkleri — `lime`/`cyan`/`pink`/`blue` → `teal`/`cobalt`/`terracotta`/`plum`)** değerleri [izgah-ui-v3.md](./izgah-ui-v3.md#1-token-sistemi-primitive--semantic--component) ile güncellenmiştir.
 
