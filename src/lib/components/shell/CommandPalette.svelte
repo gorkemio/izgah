@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { t } from '#lib/i18n/index.ts';
+	import { kunyeCase } from '#lib/format/kunye.ts';
 	import { contentTypeLabel } from '#lib/types/feed.ts';
 	import { tick } from 'svelte';
 	import { deserialize } from '$app/forms';
@@ -92,7 +93,6 @@
 		group: 'links' | 'sections' | 'actions' | 'search';
 		title: string;
 		subtitle?: string;
-		badge?: string;
 		shortcut?: string;
 		run: () => void;
 	}
@@ -242,8 +242,13 @@
 			return [];
 		}
 		return remoteItems.map((item) => {
-			const sectionNames = item.sections.map((s) => s.name).join(', ');
-			const subParts = [item.author.name, sectionNames || item.resource.domain];
+			// The feed's künye order: site · type · sections · author · likes (izgah-ui-v4 §4).
+			const subParts = [
+				item.resource.domain,
+				kunyeCase(contentTypeLabel(item.resource.contentType)),
+				...item.sections.map((section) => section.name),
+				item.author.name
+			];
 			if (item.resource.likeCount > 0) {
 				subParts.push(t('common.likes', { count: item.resource.likeCount }));
 			}
@@ -252,7 +257,6 @@
 				group: 'links',
 				title: item.resource.title || item.resource.domain,
 				subtitle: subParts.filter(Boolean).join(' · '),
-				badge: contentTypeLabel(item.resource.contentType),
 				run: () => {
 					closePalette();
 					void goto(`/resources/${item.resource.id}`);
@@ -673,9 +677,6 @@
 									</span>
 								{/if}
 							</span>
-							{#if entry.badge}
-								<span class="tag">{entry.badge}</span>
-							{/if}
 							{#if idx === selectedIndex}
 								<kbd class="kbd" aria-hidden="true">↵</kbd>
 							{/if}
