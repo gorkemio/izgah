@@ -3,8 +3,9 @@
 </script>
 
 <script lang="ts">
-	import { t } from '#lib/i18n/index.ts';
-	import { formatDate, formatDateTime, formatTime } from '#lib/format/date.ts';
+	import { formatCompactNumber, formatNumber, intlLocale, t } from '#lib/i18n/index.ts';
+	import { formatDate, formatDateTime, formatShortDate, formatTime } from '#lib/format/date.ts';
+	import { toasts } from '#lib/client/toast.svelte.ts';
 	import { enhance, type SubmitFunction } from '$app/forms';
 	import { goto, invalidate } from '$app/navigation';
 	import Dialog from '#lib/components/ui/Dialog.svelte';
@@ -16,8 +17,9 @@
 		FeedShareItem as PostItem,
 		ShareCardFormError as PostFormError
 	} from '#lib/types/feed.ts';
+	import { contentTypeLabel } from '#lib/types/feed.ts';
+	import LikeButton from './LikeButton.svelte';
 	import LinkAttachment from './LinkAttachment.svelte';
-	import PostActions from './PostActions.svelte';
 	import ShareSuggestions from './ShareSuggestions.svelte';
 
 	interface Props {
@@ -37,6 +39,8 @@
 		onPreview?: (item: PostItem) => void;
 		/** Newer than the viewer's last visit (izgah-ui-v2 §8.4). */
 		unseen?: boolean;
+		/** Shown in the reading pane: the entry takes the selected-row surface (izgah-ui-v4 §4). */
+		selected?: boolean;
 		/** Search terms to mark in the note and the link attachment (/search). */
 		highlightTerms?: readonly string[];
 		/**
@@ -60,6 +64,7 @@
 		onDeleted,
 		onPreview,
 		unseen = false,
+		selected = false,
 		highlightTerms = [],
 		compact = false
 	}: Props = $props();
@@ -98,6 +103,39 @@
 	const authorId = $derived(`share-${item.id}-author`);
 	const noteId = $derived(`share-${item.id}-note`);
 	const cardLabel = $derived(item.resource.title || item.resource.domain);
+	const isPendingUnfurl = $derived(
+		item.resource.unfurlStatus === 'queued' || item.resource.unfurlStatus === 'running'
+	);
+
+	function lower(text: string): string {
+		return text.toLocaleLowerCase(intlLocale());
+	}
+
+	function formatStars(stars: number): string {
+		return stars >= 1000 ? formatCompactNumber(stars) : formatNumber(stars);
+	}
+
+	// The link's own facts, in künye order: site · type · language · stars · author.
+	const metaParts = $derived(
+		[
+			item.resource.domain,
+			lower(contentTypeLabel(item.resource.contentType)),
+			item.resource.providerMeta?.language ?? null,
+			item.resource.providerMeta?.stars !== undefined
+				? t('share.stars', { count: formatStars(item.resource.providerMeta.stars) })
+				: null,
+			item.resource.providerMeta?.authorName ?? null
+		].filter((part): part is string => Boolean(part))
+	);
+
+	async function copyLink(): Promise<void> {
+		try {
+			await navigator.clipboard.writeText(item.rawUrl);
+			toasts.push(t('link.copied'), { tone: 'success' });
+		} catch {
+			toasts.push(t('link.copyFailed'), { tone: 'error' });
+		}
+	}
 
 	let noteEl = $state<HTMLElement | null>(null);
 	let noteOverflows = $state(false);
@@ -326,6 +364,7 @@
 		class:is-unseen={unseen}
 		class:is-compact={compact}
 		tabindex="-1"
+		aria-current={selected ? 'true' : undefined}
 		aria-labelledby={compact ? authorId : `${authorId} ${cardTitleId}`}
 		data-share-id={item.id}
 		data-post
@@ -346,64 +385,6 @@
 			<strong id={authorId} class="post-author">{item.author.name}</strong>
 			{#if unseen}
 				<span class="unseen-pill">{t('share.new')}</span>
-			{/if}
-			{#if (!compact && onPreview) || canManage}
-				<div class="post-head-tools">
-					{#if !compact && onPreview}
-						<!-- A plain word without a hover hint (ui-v4 §1: words instead of icons). -->
-						<a
-							href="/resources/{item.resource.id}"
-							class="tag preview-trigger"
-							aria-label={t('share.peekLabel', { title: cardLabel })}
-							onclick={handlePreviewClick}
-						>
-							<span>{t('share.peek')}</span>
-						</a>
-					{/if}
-
-					{#if canManage}
-						<div class="card-menu-wrap">
-							<PopoverPanel
-								triggerLabel={t('share.actions')}
-								iconOnly
-								triggerClass="card-menu-trigger"
-							>
-								{#snippet trigger()}
-									<span>{t('share.actionsShort')}</span>
-								{/snippet}
-								{#snippet children({ close })}
-									<div class="card-menu-list">
-										{#if hydrated}
-											<button
-												type="button"
-												class="card-menu-item"
-												onclick={() => {
-													close();
-													openEditDialog();
-												}}
-											>
-												{t('common.edit')}
-											</button>
-											<button
-												type="button"
-												class="card-menu-item is-danger"
-												onclick={() => {
-													close();
-													openDeleteDialog();
-												}}
-											>
-												{t('common.delete')}
-											</button>
-										{:else}
-											<a href={editHref} class="card-menu-item">{t('common.edit')}</a>
-											<a href={deleteHref} class="card-menu-item is-danger">{t('common.delete')}</a>
-										{/if}
-									</div>
-								{/snippet}
-							</PopoverPanel>
-						</div>
-					{/if}
-				</div>
 			{/if}
 		</header>
 
@@ -434,30 +415,162 @@
 				</div>
 			{/if}
 
-			{#if compact && item.sections.length > 0}
-				<p class="post-tags">
-					{#each item.sections as section (section.id)}
-						<a href="/sections/{section.slug}" class="section-chip">{section.name}</a>
-					{/each}
-				</p>
-			{/if}
-
-			{#if !compact}
-				<LinkAttachment {item} titleId={cardTitleId} {priorityImage} {highlightTerms} />
-
-				{#if item.sections.length > 0 || !item.isFeedVisible || item.resource.unfurlStatus === 'queued' || item.resource.unfurlStatus === 'running'}
-					<p class="post-tags">
-						{#each item.sections as section (section.id)}
-							<a href="/sections/{section.slug}" class="section-chip">{section.name}</a>
+			{#if compact}
+				{#if item.sections.length > 0}
+					<div class="kunye">
+						{#each item.sections as section, index (section.id)}
+							<span class="kunye-part">
+								{#if index > 0}<span class="kunye-sep" aria-hidden="true">·</span>{/if}
+								<a href="/sections/{section.slug}" class="section-chip">{section.name}</a>
+							</span>
 						{/each}
-						{#if !item.isFeedVisible}
-							<span class="badge-silent">{t('share.silent')}</span>
-						{/if}
-						{#if item.resource.unfurlStatus === 'queued' || item.resource.unfurlStatus === 'running'}
-							<span class="badge-pending">{t('share.previewPending')}</span>
-						{/if}
-					</p>
+					</div>
 				{/if}
+			{:else}
+				<LinkAttachment {item} titleId={cardTitleId} {priorityImage} {highlightTerms}>
+					{#snippet kunye()}
+						<!-- One künye line in a fixed order; empty fields are left out (izgah-ui-v4 §4). -->
+						<div class="kunye">
+							{#each metaParts as part, index (index)}
+								<span class="kunye-part">
+									{#if index > 0}<span class="kunye-sep" aria-hidden="true">·</span>{/if}
+									{part}
+								</span>
+							{/each}
+							{#each item.sections as section (section.id)}
+								<span class="kunye-part">
+									<span class="kunye-sep" aria-hidden="true">·</span>
+									<a href="/sections/{section.slug}" class="section-chip">{section.name}</a>
+								</span>
+							{/each}
+							{#if item.attribution}
+								<span class="kunye-part post-attribution">
+									<span class="kunye-sep" aria-hidden="true">·</span>
+									{#if item.attribution.kind === 'original-deleted'}
+										<span class="attribution-notice is-deleted">{t('share.originalDeleted')}</span>
+									{:else}
+										<a
+											class="attribution-notice"
+											href="/resources/{item.resource.id}#share-{item.attribution.shareId}"
+										>
+											{t('share.firstShort', {
+												name: item.attribution.authorName,
+												date: formatShortDate(item.attribution.createdAt)
+											})}
+										</a>
+									{/if}
+								</span>
+							{/if}
+							{#if !item.isFeedVisible}
+								<span class="kunye-part badge-silent">
+									<span class="kunye-sep" aria-hidden="true">·</span>
+									{lower(t('share.silent'))}
+								</span>
+							{/if}
+							{#if isPendingUnfurl}
+								<span class="kunye-part badge-pending">
+									<span class="kunye-sep" aria-hidden="true">·</span>
+									{lower(t('share.previewPending'))}
+								</span>
+							{:else if item.resource.unfurlStatus === 'failed'}
+								<span class="kunye-part badge-failed">
+									<span class="kunye-sep" aria-hidden="true">·</span>
+									{t('share.previewFailed')}
+								</span>
+							{/if}
+							<span class="kunye-part" class:is-idle={item.resource.commentCount === 0}>
+								{#if item.resource.commentCount > 0}
+									<span class="kunye-sep" aria-hidden="true">·</span>
+								{/if}
+								<a
+									href="/resources/{item.resource.id}#comments"
+									class="kunye-action card-discussion-link"
+									aria-label={item.resource.commentCount > 0
+										? t('comment.countLabel', {
+												count: item.resource.commentCount,
+												title: cardLabel
+											})
+										: t('comment.writeLabel', { title: cardLabel })}
+									data-shortcut="comments"
+									onclick={markCardForViewTransition}
+								>
+									{item.resource.commentCount > 0
+										? t('common.commentCount', { count: item.resource.commentCount })
+										: t('comment.write')}
+								</a>
+							</span>
+							<LikeButton {item} {actionBase} {returnTo} />
+							<div class="kunye-part is-idle card-menu-wrap">
+								<PopoverPanel
+									triggerLabel={t('share.actions')}
+									iconOnly
+									triggerClass="kunye-action card-menu-trigger"
+								>
+									{#snippet trigger()}
+										<span>{t('share.actionsShort')}</span>
+									{/snippet}
+									{#snippet children({ close })}
+										<div class="card-menu-list">
+											{#if onPreview}
+												<a
+													href="/resources/{item.resource.id}"
+													class="card-menu-item"
+													aria-label={t('share.peekLabel', { title: cardLabel })}
+													data-shortcut="peek"
+													onclick={(event) => {
+														close();
+														handlePreviewClick(event);
+													}}
+												>
+													{t('share.peek')}
+												</a>
+											{/if}
+											<button
+												type="button"
+												class="card-menu-item"
+												onclick={() => {
+													close();
+													void copyLink();
+												}}
+											>
+												{t('share.copyShort')}
+											</button>
+											{#if canManage}
+												{#if hydrated}
+													<button
+														type="button"
+														class="card-menu-item"
+														onclick={() => {
+															close();
+															openEditDialog();
+														}}
+													>
+														{t('common.edit')}
+													</button>
+													<button
+														type="button"
+														class="card-menu-item is-danger"
+														onclick={() => {
+															close();
+															openDeleteDialog();
+														}}
+													>
+														{t('common.delete')}
+													</button>
+												{:else}
+													<a href={editHref} class="card-menu-item">{t('common.edit')}</a>
+													<a href={deleteHref} class="card-menu-item is-danger">
+														{t('common.delete')}
+													</a>
+												{/if}
+											{/if}
+										</div>
+									{/snippet}
+								</PopoverPanel>
+							</div>
+						</div>
+					{/snippet}
+				</LinkAttachment>
 
 				{#if item.suggestions?.length}
 					<ShareSuggestions
@@ -467,8 +580,6 @@
 						{returnTo}
 					/>
 				{/if}
-
-				<PostActions {item} {actionBase} {returnTo} onOpenDiscussion={markCardForViewTransition} />
 			{/if}
 		</div>
 	</article>
@@ -746,16 +857,16 @@
 
 <style>
 	/*
-	 * Register entry (docs/designs/izgah-ui-v4.md §4): time and name in a left gutter; note, link,
-	 * künye and actions in one column; rules between entries, no card box.
+	 * Register entry (docs/designs/izgah-ui-v4.md §4): time and name in a left gutter; note, title and
+	 * one künye line in a column; rules between entries, no card box. The rule spans exactly the
+	 * column the day heading spans (Ö22).
 	 */
 	.share-card {
 		position: relative;
 		display: grid;
-		grid-template-columns: 104px minmax(0, 1fr);
+		grid-template-columns: var(--entry-gutter) minmax(0, 1fr);
 		column-gap: var(--space-4);
-		margin-inline: -10px;
-		padding: 14px 10px 12px;
+		padding: 14px 0 15px;
 		background: transparent;
 		border-block-end: 1px solid var(--color-line);
 		outline: none;
@@ -771,6 +882,11 @@
 		outline: 2px solid transparent;
 		background: var(--color-surface-2);
 		box-shadow: inset 0 0 0 2px var(--color-focus-outer);
+	}
+
+	/* The entry shown in the reading pane carries the selected-row surface (§4). */
+	:global(.share-card[aria-current='true']) {
+		background: var(--color-surface-2);
 	}
 
 	.post-head {
@@ -805,102 +921,115 @@
 		max-inline-size: 100%;
 		overflow: hidden;
 		font: var(--text-ui);
-		font-weight: 500;
 		color: var(--color-text-secondary);
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
 
+	/* "New" is a word in link blue, not a badge (§7). */
 	.unseen-pill {
-		padding: 0 4px;
-		font: var(--text-micro);
-		color: var(--color-highlight-fg);
-		background: var(--color-highlight-bg);
-		border-radius: var(--radius-xs);
+		font: var(--text-meta);
+		color: var(--color-link);
 	}
 
-	.post-tags {
+	/* Künye line: tertiary ink, one line that wraps at narrow widths. */
+	.kunye {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0 var(--space-3);
+		align-items: baseline;
 		margin: 0;
 		font: var(--text-hint);
 		color: var(--color-text-muted);
+		overflow-wrap: anywhere;
 	}
 
-	.section-chip {
+	.kunye :global(.kunye-part) {
+		display: inline-flex;
+		align-items: baseline;
+		min-inline-size: 0;
+	}
+
+	.kunye :global(.kunye-sep) {
+		padding-inline: 0.4em;
+		color: var(--color-text-muted);
+	}
+
+	.kunye a,
+	.kunye :global(.kunye-action) {
 		position: relative;
 		z-index: 2;
+		padding: 0;
+		font: inherit;
 		color: var(--color-text-secondary);
+		background: transparent;
+		border: 0;
+		text-decoration: underline;
 		text-decoration-color: var(--color-line-strong);
+		text-underline-offset: 0.2em;
+		cursor: pointer;
+	}
+
+	.kunye a:hover,
+	.kunye :global(.kunye-action:hover) {
+		color: var(--color-text);
+		text-decoration-color: currentColor;
 	}
 
 	.badge-silent,
 	.badge-pending {
-		color: var(--color-text-muted);
 		font-style: italic;
 	}
 
-	.post-head-tools {
-		display: flex;
-		align-items: center;
-		gap: var(--space-2);
-		margin-block-start: var(--space-1);
+	.badge-failed {
+		color: var(--color-danger);
+	}
+
+	/*
+	 * Actions (Comment and Like at zero, then Actions) gather at the end of the line without
+	 * separators, so hiding them leaves no gap; they appear on hover and focus, always on touch.
+	 */
+	.kunye :global(.is-idle) {
+		order: 1;
+		margin-inline-start: 1em;
 		opacity: 0;
 		transition: opacity var(--dur-fast) var(--ease);
 	}
 
-	.share-card:hover .post-head-tools,
-	.share-card:focus-within .post-head-tools {
+	.kunye .card-menu-wrap {
+		order: 2;
+	}
+
+	.share-card:hover .kunye :global(.is-idle),
+	.share-card:focus-within .kunye :global(.is-idle),
+	:global(.share-card[aria-current='true']) .kunye :global(.is-idle) {
 		opacity: 1;
 	}
 
 	@media (hover: none) {
-		.post-head-tools {
+		.kunye :global(.is-idle) {
 			opacity: 1;
 		}
 	}
 
-	.preview-trigger {
-		position: relative;
-		z-index: 2;
-		font: var(--text-hint);
-		color: var(--color-text-secondary);
-		text-decoration-color: var(--color-line-strong);
-	}
-
-	@media (max-width: 1023px) {
-		.preview-trigger {
-			display: none;
+	/* 44px touch targets without spreading the line: the hit area grows, the text does not. */
+	@media (pointer: coarse) {
+		.kunye a::after,
+		.kunye :global(.kunye-action)::after {
+			content: '';
+			position: absolute;
+			inset: -12px -6px;
 		}
 	}
 
 	.card-menu-wrap {
 		position: relative;
 		z-index: 2;
-		flex: none;
 	}
 
-	/* "Actions" as a word, set like the künye line (izgah-ui-v4 §1). */
-	:global(.card-menu-trigger) {
-		min-inline-size: 0 !important;
-		min-block-size: 24px !important;
-		padding: 0 4px !important;
-		font: var(--text-hint) !important;
-		background: transparent !important;
-		border-color: transparent !important;
-		color: var(--color-text-muted) !important;
-	}
-
-	:global(.card-menu-trigger:hover) {
-		color: var(--color-text) !important;
-	}
-
-	@media (pointer: coarse) {
-		:global(.card-menu-trigger) {
-			min-inline-size: 44px !important;
-			min-block-size: 44px !important;
-		}
+	:global(.card-menu-trigger.kunye-action) {
+		min-inline-size: 0;
+		min-block-size: 0;
+		border-radius: 0;
 	}
 
 	.card-menu-list {
@@ -935,12 +1064,24 @@
 		color: var(--color-danger);
 	}
 
+	@media (pointer: coarse) {
+		.card-menu-item {
+			min-block-size: 44px;
+		}
+	}
+
+	.section-chip {
+		position: relative;
+		z-index: 2;
+	}
+
 	.post-note {
 		margin: 0;
 		font: var(--text-body);
 		color: var(--color-text);
 		white-space: pre-line;
 		overflow-wrap: anywhere;
+		max-inline-size: var(--measure);
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 6;
@@ -981,10 +1122,6 @@
 			align-items: baseline;
 			gap: var(--space-2);
 			margin-block-end: var(--space-1);
-		}
-
-		.post-head-tools {
-			margin: 0 0 0 auto;
 		}
 	}
 

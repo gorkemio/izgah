@@ -472,7 +472,8 @@
 
 	.feed-list > li.is-deferred {
 		content-visibility: auto;
-		contain-intrinsic-size: auto none auto 240px;
+		/* A künye entry without a cover is about 110px tall (izgah-ui-v4 §4). */
+		contain-intrinsic-size: auto none auto 120px;
 	}
 
 	.share-card-container {

@@ -1,22 +1,23 @@
 <script lang="ts">
-	import { t, formatCompactNumber, formatNumber } from '#lib/i18n/index.ts';
+	import type { Snippet } from 'svelte';
 	import { watchImageError } from '#lib/client/image-error.ts';
 	import Highlight from '#lib/components/ui/Highlight.svelte';
-	import Skeleton from '#lib/components/ui/Skeleton.svelte';
-	import { contentTypeLabel, type FeedShareItem } from '#lib/types/feed.ts';
+	import type { FeedShareItem } from '#lib/types/feed.ts';
 
 	interface Props {
 		item: FeedShareItem;
 		titleId: string;
 		/** First image-bearing post loads eagerly with high priority; the rest lazily. */
 		priorityImage?: boolean;
-		/** Search terms to mark in the title and description. */
+		/** Search terms to mark in the title. */
 		highlightTerms?: readonly string[];
+		/** The künye line, set under the title and beside the thumbnail. */
+		kunye?: Snippet;
 	}
 
 	const REPO_HOSTS = new Set(['github.com', 'gitlab.com', 'codeberg.org', 'bitbucket.org']);
 
-	let { item, titleId, priorityImage = false, highlightTerms = [] }: Props = $props();
+	let { item, titleId, priorityImage = false, highlightTerms = [], kunye }: Props = $props();
 
 	let imgFailed = $state(false);
 	let thumbnailEl = $state<HTMLImageElement | null>(null);
@@ -56,36 +57,28 @@
 		return null;
 	}
 
-	function formatCompactStars(stars: number): string {
-		return stars >= 1000 ? formatCompactNumber(stars) : formatNumber(stars);
+	/** Without a page title the address itself is the title: host and path, no scheme or "www.". */
+	function displayAddress(rawUrl: string): string {
+		try {
+			const parsed = new URL(rawUrl);
+			const path = `${parsed.pathname}${parsed.search}`.replace(/\/$/, '');
+			return `${parsed.hostname.replace(/^www\./, '')}${path}`;
+		} catch {
+			return rawUrl;
+		}
 	}
 
 	const showThumbnail = $derived(Boolean(item.resource.thumbnailAssetKey && !imgFailed));
-	const isPendingUnfurl = $derived(
-		item.resource.unfurlStatus === 'queued' || item.resource.unfurlStatus === 'running'
-	);
 	const repoSlug = $derived(extractRepoSlug(item.resource.canonicalUrl || item.rawUrl));
 	const title = $derived(
 		item.resource.title ||
 			(item.resource.contentType === 'repo' && repoSlug ? repoSlug : null) ||
-			item.resource.siteName ||
-			item.resource.domain
-	);
-	// One künye line (docs/designs/izgah-ui-v4.md §4): site · type · language · stars · author.
-	const metaParts = $derived(
-		[
-			item.resource.siteName || item.resource.domain,
-			contentTypeLabel(item.resource.contentType),
-			item.resource.providerMeta?.language ?? null,
-			item.resource.providerMeta?.stars !== undefined
-				? t('share.stars', { count: formatCompactStars(item.resource.providerMeta.stars) })
-				: null,
-			item.resource.providerMeta?.authorName ?? null,
-			repoSlug && title.toLowerCase() !== repoSlug.toLowerCase() ? repoSlug : null
-		].filter(Boolean)
+			displayAddress(item.resource.canonicalUrl || item.rawUrl)
 	);
 </script>
 
+<!-- Künye (docs/designs/izgah-ui-v4.md §4): no box around the link; a title in link blue, one künye
+     line under it and an optional small cover on the right. -->
 <div class="link-attachment" class:has-thumbnail={showThumbnail}>
 	<div class="attachment-text">
 		<h3 id={titleId} class="attachment-title">
@@ -98,15 +91,7 @@
 				<Highlight text={title} terms={highlightTerms} />
 			</a>
 		</h3>
-		<p class="attachment-meta">{metaParts.join(' · ')}</p>
-		{#if item.resource.description}
-			<p class="attachment-desc">
-				<Highlight text={item.resource.description} terms={highlightTerms} />
-			</p>
-		{/if}
-		{#if isPendingUnfurl}
-			<Skeleton variant="line" width="55%" />
-		{/if}
+		{@render kunye?.()}
 	</div>
 	{#if showThumbnail && item.resource.thumbnailAssetKey}
 		<div class="card-thumbnail-frame">
@@ -126,7 +111,6 @@
 </div>
 
 <style>
-	/* Künye: no box around the link; a title in link blue, one künye line, an optional small cover. */
 	.link-attachment {
 		display: grid;
 		grid-template-columns: minmax(0, 1fr);
@@ -141,7 +125,7 @@
 
 	.attachment-text {
 		display: grid;
-		gap: 3px;
+		gap: 2px;
 		min-inline-size: 0;
 	}
 
@@ -149,24 +133,6 @@
 		margin: 0;
 		font: var(--text-title);
 		overflow-wrap: anywhere;
-	}
-
-	.attachment-meta {
-		margin: 0;
-		font: var(--text-hint);
-		color: var(--color-text-muted);
-		overflow-wrap: anywhere;
-	}
-
-	.attachment-desc {
-		display: -webkit-box;
-		margin: 0;
-		overflow: hidden;
-		font: var(--text-hint);
-		color: var(--color-text-secondary);
-		-webkit-line-clamp: 2;
-		line-clamp: 2;
-		-webkit-box-orient: vertical;
 	}
 
 	.card-thumbnail-frame {

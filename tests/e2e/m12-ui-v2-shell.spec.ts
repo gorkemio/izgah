@@ -541,6 +541,8 @@ test.describe('UI v2 shell — rail, bottom tab bar, /sections and theme cookie'
 		await expect(page.locator('html[data-hydrated]')).toHaveCount(1);
 
 		const card = page.locator('article.share-card').first();
+		// "Önizle" lives in the entry's Actions menu (izgah-ui-v4 §4, §11).
+		await card.getByRole('button', { name: 'Paylaşım işlemleri' }).click();
 		await card.getByRole('link', { name: /^Önizle —/ }).click();
 
 		// From 1280px the preview is a docked, non-modal reading pane (izgah-ui-v4 §3).
@@ -562,6 +564,7 @@ test.describe('UI v2 shell — rail, bottom tab bar, /sections and theme cookie'
 
 		// Below 1280px the same preview is a modal side drawer.
 		await page.setViewportSize({ width: 1100, height: 800 });
+		await card.getByRole('button', { name: 'Paylaşım işlemleri' }).click();
 		await card.getByRole('link', { name: /^Önizle —/ }).click();
 		await expect(drawer).toBeVisible();
 		await expect(drawer).not.toHaveClass(/is-docked/);
@@ -576,11 +579,10 @@ test.describe('UI v2 shell — rail, bottom tab bar, /sections and theme cookie'
 		await attachSessionCookie(noJsContext, member.cookieValue);
 		const noJsPage = await noJsContext.newPage();
 		await noJsPage.goto('/');
-		await noJsPage
-			.locator('article.share-card')
-			.first()
-			.getByRole('link', { name: /^Önizle —/ })
-			.click();
+		const noJsCard = noJsPage.locator('article.share-card').first();
+		// The menu is a native popover: it opens without JavaScript.
+		await noJsCard.getByRole('button', { name: 'Paylaşım işlemleri' }).click();
+		await noJsCard.getByRole('link', { name: /^Önizle —/ }).click();
 		await expect(noJsPage).toHaveURL(new RegExp(`/resources/${resource.id}$`));
 		await expect(noJsPage.locator('#main-content h1')).toHaveText('Yandan Önizleme Yazısı');
 		await noJsContext.close();

@@ -200,6 +200,20 @@
 				}
 				return;
 			}
+			case ' ': {
+				// Space previews the focused entry (izgah-ui-v4 §11, Linear's peek); elsewhere the page
+				// scrolls as usual.
+				const active = document.activeElement;
+				const peek =
+					active instanceof HTMLElement && active.matches('[data-post]')
+						? active.querySelector<HTMLElement>('[data-shortcut="peek"]')
+						: null;
+				if (peek && window.matchMedia('(min-width: 1024px)').matches) {
+					event.preventDefault();
+					peek.click();
+				}
+				return;
+			}
 			case 'l': {
 				if (event.repeat) {
 					return;

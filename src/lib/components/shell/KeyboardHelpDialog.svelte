@@ -19,6 +19,7 @@
 	const postRows = [
 		{ keys: ['j', 'k'], action: t('help.nextPrev') },
 		{ keys: ['o', 'Enter'], action: t('help.openLink') },
+		{ keys: [t('help.spaceKey')], action: t('help.peek') },
 		{ keys: ['l'], action: t('help.like') },
 		{ keys: ['c'], action: t('help.comments') }
 	];

@@ -1,4 +1,4 @@
-export const SHORTCUT_KEYS = ['j', 'k', 'o', 'Enter', 'l', 'c', '/', 'n', '?'] as const;
+export const SHORTCUT_KEYS = ['j', 'k', 'o', 'Enter', ' ', 'l', 'c', '/', 'n', '?'] as const;
 export type ShortcutKey = (typeof SHORTCUT_KEYS)[number];
 
 export interface ShortcutEventLike {

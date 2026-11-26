@@ -13,7 +13,7 @@
 	import SidePeekDialog from '#lib/components/feed/SidePeekDialog.svelte';
 	import { FeedState } from '#lib/feed/feed-state.svelte.ts';
 	import { groupByDay } from '#lib/feed/group-by-day.ts';
-	import { dayKey, dayLabel, formatTime } from '#lib/format/date.ts';
+	import { dayDetail, dayKey, dayLabel, formatTime } from '#lib/format/date.ts';
 	import type { SectionListItem } from '#lib/server/sections/service.ts';
 	import type { ContentType } from '#lib/types/domain.ts';
 	import type { FeedShareItem, FeedSnapshot, ShareCardFormError } from '#lib/types/feed.ts';
@@ -477,7 +477,12 @@
 		{#each dayGroups as group (group.key)}
 			<section class="day-group" aria-labelledby="{headingId}-day-{group.key}">
 				<div class="day-row">
-					<h2 id="{headingId}-day-{group.key}" class="day-heading">{group.label}</h2>
+					<h2 id="{headingId}-day-{group.key}" class="day-heading">
+						{group.label}
+						{#if dayDetail(group.key, data.todayKey)}
+							<span class="day-date">{dayDetail(group.key, data.todayKey)}</span>
+						{/if}
+					</h2>
 					<span class="day-count">{t('feed.dayCount', { count: group.items.length })}</span>
 				</div>
 				<ol class="feed-list" role="list">
@@ -502,6 +507,7 @@
 								returnTo={cleanReturnTo}
 								priorityImage={index === firstImageIndex}
 								unseen={lastSeenMarker?.unseen.has(item.id) ?? false}
+								selected={peekItem?.id === item.id}
 								activeEditShareId={data.editShareId}
 								activeDeleteShareId={data.deleteShareId}
 								{activeFormError}
@@ -593,6 +599,12 @@
 		margin: 0;
 		font: var(--text-day);
 		border: 0;
+	}
+
+	.day-date {
+		margin-inline-start: var(--space-2);
+		font-weight: 400;
+		color: var(--color-text-muted);
 	}
 
 	.day-count {
