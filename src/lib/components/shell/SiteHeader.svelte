@@ -243,7 +243,7 @@
 
 	.brand {
 		font-size: 1.5rem;
-		font-weight: 650;
+		font-weight: 600;
 		line-height: 1;
 		letter-spacing: -0.015em;
 		color: var(--color-text);
@@ -344,7 +344,7 @@
 	}
 
 	.nav-item[aria-current='page'] {
-		font-weight: 650;
+		font-weight: 600;
 		color: var(--color-text);
 		background: var(--color-surface-2);
 	}

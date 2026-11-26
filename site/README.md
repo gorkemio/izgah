@@ -4,7 +4,9 @@ The static project site, published to GitHub Pages by `.github/workflows/site.ym
 
 Preview locally with any static server, e.g. `npx -y serve site`.
 
-GitHub Pages lets browsers cache every file for 10 minutes, so a new page can meet an old stylesheet right after a deploy. Both pages link `styles.css?v=<date>`: when you change `styles.css`, set the same new date in `index.html` and `tr/index.html` so browsers fetch the matching file at once.
+GitHub Pages lets browsers cache every file for 10 minutes, so a new page can meet an old stylesheet right after a deploy. Both pages link `palette.css?v=<version>` and `styles.css?v=<version>`: when you change either, set the same new version in `index.html` and `tr/index.html` so browsers fetch the matching files at once.
+
+`palette.css` is generated from `tokens/kunye.json`, the colour source shared with the app and the extensions: edit the JSON and run `pnpm tokens` at the repository root, never the CSS.
 
 ## Domain setup (once)
 

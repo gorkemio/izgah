@@ -287,11 +287,13 @@ test.describe('UI v2 visual and accessibility tour', () => {
 			return {
 				duration: getComputedStyle(button).transitionDuration,
 				token: root.getPropertyValue('--dur-fast').trim(),
-				alias: root.getPropertyValue('--dur-1').trim()
+				base: root.getPropertyValue('--dur-base').trim(),
+				panel: root.getPropertyValue('--dur-panel').trim()
 			};
 		});
 		expect(motion.token).toBe('0ms');
-		expect(motion.alias).toBe('0ms');
+		expect(motion.base).toBe('0ms');
+		expect(motion.panel).toBe('0ms');
 		expect(motion.duration.split(',').every((value) => parseFloat(value) === 0)).toBe(true);
 		await context.close();
 	});

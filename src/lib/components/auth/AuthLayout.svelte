@@ -77,7 +77,7 @@
 	.wordmark {
 		margin: 0;
 		font-size: 1.625rem;
-		font-weight: 650;
+		font-weight: 600;
 		line-height: 1;
 		letter-spacing: -0.015em;
 		color: var(--color-text);
@@ -102,7 +102,7 @@
 		max-inline-size: 16ch;
 		margin: 0;
 		font-size: clamp(1.875rem, 1.3rem + 1.6vw, 2.5rem);
-		font-weight: 650;
+		font-weight: 600;
 		line-height: 1.1;
 		letter-spacing: -0.02em;
 		color: var(--color-text);

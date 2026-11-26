@@ -14,8 +14,11 @@ interface CssRule {
 	decls: Record<string, string>;
 }
 
-const rawCss = fs
-	.readFileSync(path.resolve('src/lib/styles/tokens.css'), 'utf8')
+// The palette slots are generated from tokens/kunye.json (scripts/tokens/build.ts); tokens.css maps
+// them into the semantic layer. Read both, palette first, as app.css imports them.
+const rawCss = ['src/lib/styles/palette.css', 'src/lib/styles/tokens.css']
+	.map((file) => fs.readFileSync(path.resolve(file), 'utf8'))
+	.join('\n')
 	.replace(/\/\*[\s\S]*?\*\//g, '');
 
 /** Parses top-level and @layer/@media rules in tokens.css with brace-depth tracking. */
@@ -232,10 +235,8 @@ describe('Künye token contrast (docs/designs/izgah-ui-v4.md §1)', () => {
 		expect(resolvedRoot['--dark-bg']).toBe('#0f0f10');
 		expect(resolvedRoot['--light-link']).toBe('#1f3fd0');
 		expect(resolvedRoot['--dark-link']).toBe('#9db7ff');
-		expect(resolvedRoot['--light-shadow-sm']).toBe('none');
-		expect(resolvedRoot['--dark-shadow-sm']).toBe('none');
-		expect(resolvedRoot['--surface-sheen']).toBe('none');
-		expect(resolvedRoot['--glow-primary']).toBe('0 0 0 0 transparent');
+		expect(resolvedRoot['--shadow-sm']).toBe('none');
+		expect(resolvedRoot['--shadow-xs']).toBe('none');
 	});
 
 	it('keeps every corner radius at 3px or less', () => {
@@ -284,10 +285,7 @@ describe('Künye token contrast (docs/designs/izgah-ui-v4.md §1)', () => {
 			).toBeGreaterThanOrEqual(7);
 			expect(contrast(tokens['--color-line'], tokens['--color-bg'])).toBeGreaterThanOrEqual(4.5);
 
-			expect(slots[`--${scheme}-shadow-xs`]).toBe('none');
-			expect(slots[`--${scheme}-shadow-sm`]).toBe('none');
 			expect(slots[`--${scheme}-shadow-lg`]).toBe('none');
-			expect(slots[`--${scheme}-specular-top`]).toBe('none');
 		}
 	);
 
@@ -298,7 +296,7 @@ describe('Künye token contrast (docs/designs/izgah-ui-v4.md §1)', () => {
 				rule.media?.includes('forced-colors: active')
 		);
 		expect(contrastMedia).toBeDefined();
-		for (const key of ['--light-shadow-lg', '--dark-shadow-lg', '--shadow-lg', '--shadow-dialog']) {
+		for (const key of ['--light-shadow-lg', '--dark-shadow-lg', '--shadow-lg']) {
 			expect(contrastMedia!.decls[key], key).toBe('none');
 		}
 	});

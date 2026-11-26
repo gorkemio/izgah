@@ -564,7 +564,7 @@
 
 	.peek-title {
 		font-size: 1.25rem;
-		font-weight: 650;
+		font-weight: 600;
 		line-height: 1.3;
 		color: var(--color-text);
 	}

@@ -110,7 +110,7 @@
 	}
 
 	.feed-filter-active {
-		font-weight: 650;
+		font-weight: 600;
 		color: var(--color-text);
 	}
 
@@ -137,7 +137,7 @@
 	}
 
 	nav a[aria-current='page'] {
-		font-weight: 650;
+		font-weight: 600;
 		color: var(--color-text);
 		text-decoration: underline;
 		text-decoration-thickness: 2px;

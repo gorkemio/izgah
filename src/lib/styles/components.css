@@ -488,7 +488,7 @@
 	.seg-item[aria-pressed='true'],
 	.seg-item:has(input:checked) {
 		color: var(--color-text);
-		font-weight: 650;
+		font-weight: 600;
 		text-decoration: underline;
 		text-decoration-thickness: 2px;
 		text-underline-offset: 0.35em;
@@ -770,7 +770,7 @@
 	.kpi-value {
 		margin: 0;
 		font-size: 1.5rem;
-		font-weight: 650;
+		font-weight: 600;
 		line-height: 1.15;
 		font-variant-numeric: tabular-nums;
 		color: var(--color-text);

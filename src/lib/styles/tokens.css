@@ -4,269 +4,16 @@
  * Ink and paper: neutral white and near-black surfaces, one accent (link blue), rules instead of
  * boxes, no shadows except dialogs and popovers, corner radius at most 3px, one type family.
  *
- * Three layers:
- *   1. Primitive layer (--p-*): raw neutral and semantic hex stops, used only inside this file.
- *   2. Palette slots (--light-*, --dark-*) resolved by light-dark() into the semantic layer
- *      (--color-*), so data-theme only switches color-scheme. The mapping is mirrored on
- *      .theme-preview so subtrees can render either scheme.
- *   3. Component layer (--card-*, --btn-*, --rail-*, …): surfaces, radii, shell sizes, motion.
+ * Two layers:
+ *   1. Palette slots (--light-*, --dark-*) live in palette.css, generated from tokens/kunye.json
+ *      (`pnpm tokens`), the same source as the extensions and izgah.com.
+ *   2. This file resolves them with light-dark() into the semantic layer (--color-*), so data-theme
+ *      only switches color-scheme. The mapping is mirrored on .theme-preview so subtrees can render
+ *      either scheme. It also holds type, spacing, radii, shell sizes and motion.
  */
 @layer tokens {
-	/* ---------------------------------------------------------------------
-	 * 1. Primitive Layer (--p-*)
-	 * ------------------------------------------------------------------- */
-	:root {
-		/* Paper (light) */
-		--p-white: #ffffff;
-		--p-paper-100: #f3f3f3;
-		--p-paper-200: #e8e8e8;
-		--p-paper-250: #dadada;
-		--p-paper-300: #e0e0e0;
-		--p-ink-300: #767676;
-		--p-ink-400: #666666;
-		--p-ink-500: #4a4a4a;
-		--p-ink-600: #3a3a3a;
-		--p-ink-700: #2b2b2b;
-		--p-ink-800: #1f1f1f;
-		--p-ink-900: #121212;
-		--p-black: #000000;
-
-		/* Ink (dark) */
-		--p-night-950: #0f0f10;
-		--p-night-900: #151517;
-		--p-night-850: #19191b;
-		--p-night-800: #232326;
-		--p-night-750: #2a2a2c;
-		--p-night-500: #77777a;
-		--p-night-400: #929290;
-		--p-night-300: #b4b4b0;
-		--p-night-200: #c8c8c4;
-		--p-night-100: #e2e2de;
-		--p-night-50: #f2f2f0;
-
-		/* Link blue and visited (the only accent) */
-		--p-link-700: #1f3fd0;
-		--p-link-800: #1a35b0;
-		--p-link-50: #eef1fc;
-		--p-link-200: #c3cdf5;
-		--p-link-300: #9db7ff;
-		--p-link-900: #172142;
-		--p-link-850: #2a3a6e;
-		--p-link-950: #0b1028;
-		--p-visited-700: #5f5878;
-		--p-visited-300: #aba5c6;
-
-		/* Semantic stops */
-		--p-red-50: #fdf1f0;
-		--p-red-200: #f2c4bf;
-		--p-red-300: #ff9a8f;
-		--p-red-700: #b42318;
-		--p-red-800: #8f1c13;
-		--p-red-900: #3a1513;
-		--p-red-925: #5c2420;
-		--p-red-950: #2a0e0c;
-
-		--p-green-50: #eef6ef;
-		--p-green-200: #bfdcc3;
-		--p-green-300: #8fd19a;
-		--p-green-700: #22662e;
-		--p-green-800: #1b5225;
-		--p-green-900: #142a17;
-		--p-green-850: #244a2a;
-
-		--p-amber-100: #fdf3d4;
-		--p-amber-250: #f2dd9a;
-		--p-amber-300: #fde047;
-		--p-amber-700: #7a4a00;
-		--p-amber-750: #663d00;
-		--p-amber-200: #f5d38a;
-		--p-amber-800: #5a4316;
-		--p-amber-900: #2e2410;
-		--p-amber-950: #4a3b08;
-		--p-amber-ink: #fef08a;
-	}
-
-	/* ---------------------------------------------------------------------
-	 * 2. Palette Slots (--light-*, --dark-*)
-	 * ------------------------------------------------------------------- */
-
-	/* Light palette: default (paper) */
-	:root,
-	[data-light-theme='default'] {
-		--light-bg: var(--p-white);
-		--light-surface-1: var(--p-white);
-		--light-surface-2: var(--p-paper-100);
-		--light-surface-3: var(--p-paper-200);
-		--light-text: var(--p-ink-900);
-		--light-text-secondary: var(--p-ink-500);
-		--light-text-muted: var(--p-ink-400);
-		--light-line: var(--p-paper-250);
-		--light-line-strong: var(--p-ink-300);
-		--light-danger: var(--p-red-700);
-		--light-on-danger: var(--p-white);
-		--light-danger-soft: var(--p-red-50);
-		--light-danger-border: var(--p-red-200);
-		--light-ok: var(--p-green-700);
-		--light-ok-soft: var(--p-green-50);
-		--light-ok-text: var(--p-green-800);
-		--light-ok-border: var(--p-green-200);
-		--light-warn: var(--p-amber-700);
-		--light-warn-soft: var(--p-amber-100);
-		--light-warn-text: var(--p-amber-750);
-		--light-warn-border: var(--p-amber-250);
-		--light-link: var(--p-link-700);
-		--light-visited: var(--p-visited-700);
-		--light-focus-inner: var(--p-ink-900);
-		--light-highlight-bg: var(--p-amber-100);
-		--light-highlight-fg: var(--p-ink-900);
-		--light-backdrop: rgb(18 18 18 / 0.32);
-		--light-avatar-1-bg: var(--p-paper-100);
-		--light-avatar-2-bg: var(--p-paper-100);
-		--light-avatar-3-bg: var(--p-paper-100);
-		--light-avatar-4-bg: var(--p-paper-100);
-		--light-shadow-xs: none;
-		--light-shadow-sm: none;
-		--light-shadow-lg: 0 24px 64px rgb(0 0 0 / 0.18);
-		--light-specular-top: none;
-	}
-
-	/* Light palette: high contrast (AAA text, >= 4.5:1 rules, no depth effects) */
-	[data-light-theme='contrast'] {
-		--light-bg: var(--p-white);
-		--light-surface-1: var(--p-white);
-		--light-surface-2: var(--p-paper-100);
-		--light-surface-3: var(--p-paper-300);
-		--light-text: var(--p-black);
-		--light-text-secondary: var(--p-ink-700);
-		--light-text-muted: var(--p-ink-600);
-		--light-line: var(--p-ink-300);
-		--light-line-strong: var(--p-ink-800);
-		--light-danger: var(--p-red-800);
-		--light-on-danger: var(--p-white);
-		--light-danger-soft: var(--p-red-50);
-		--light-danger-border: var(--p-red-800);
-		--light-ok: var(--p-green-800);
-		--light-ok-soft: var(--p-green-50);
-		--light-ok-text: var(--p-green-800);
-		--light-ok-border: var(--p-green-800);
-		--light-warn: var(--p-amber-750);
-		--light-warn-soft: var(--p-amber-100);
-		--light-warn-text: var(--p-amber-750);
-		--light-warn-border: var(--p-amber-750);
-		--light-link: var(--p-link-800);
-		--light-visited: var(--p-visited-700);
-		--light-focus-inner: var(--p-black);
-		--light-highlight-bg: var(--p-amber-300);
-		--light-highlight-fg: var(--p-black);
-		--light-backdrop: rgb(0 0 0 / 0.65);
-		--light-avatar-1-bg: var(--p-paper-100);
-		--light-avatar-2-bg: var(--p-paper-100);
-		--light-avatar-3-bg: var(--p-paper-100);
-		--light-avatar-4-bg: var(--p-paper-100);
-		--light-shadow-xs: none;
-		--light-shadow-sm: none;
-		--light-shadow-lg: none;
-		--light-specular-top: none;
-	}
-
-	/* Dark palette: default (ink) */
-	:root,
-	[data-dark-theme='default'] {
-		--dark-bg: var(--p-night-950);
-		--dark-surface-1: var(--p-night-900);
-		--dark-surface-2: var(--p-night-850);
-		--dark-surface-3: var(--p-night-800);
-		--dark-text: var(--p-night-50);
-		--dark-text-secondary: var(--p-night-300);
-		--dark-text-muted: var(--p-night-400);
-		--dark-line: var(--p-night-750);
-		--dark-line-strong: var(--p-night-500);
-		--dark-danger: var(--p-red-300);
-		--dark-on-danger: var(--p-night-950);
-		--dark-danger-soft: var(--p-red-950);
-		--dark-danger-border: var(--p-red-925);
-		--dark-ok: var(--p-green-300);
-		--dark-ok-soft: var(--p-green-900);
-		--dark-ok-text: var(--p-green-300);
-		--dark-ok-border: var(--p-green-850);
-		--dark-warn: var(--p-amber-200);
-		--dark-warn-soft: var(--p-amber-900);
-		--dark-warn-text: var(--p-amber-200);
-		--dark-warn-border: var(--p-amber-800);
-		--dark-link: var(--p-link-300);
-		--dark-visited: var(--p-visited-300);
-		--dark-focus-inner: var(--p-night-50);
-		--dark-highlight-bg: var(--p-amber-950);
-		--dark-highlight-fg: var(--p-amber-ink);
-		--dark-backdrop: rgb(0 0 0 / 0.62);
-		--dark-avatar-1-bg: var(--p-night-850);
-		--dark-avatar-2-bg: var(--p-night-850);
-		--dark-avatar-3-bg: var(--p-night-850);
-		--dark-avatar-4-bg: var(--p-night-850);
-		--dark-shadow-xs: none;
-		--dark-shadow-sm: none;
-		--dark-shadow-lg: 0 24px 64px rgb(0 0 0 / 0.6);
-		--dark-specular-top: none;
-	}
-
-	/* Dark palette: high contrast (AAA text, >= 4.5:1 rules, no depth effects) */
-	[data-dark-theme='contrast'] {
-		--dark-bg: var(--p-black);
-		--dark-surface-1: var(--p-black);
-		--dark-surface-2: var(--p-night-900);
-		--dark-surface-3: var(--p-night-800);
-		--dark-text: var(--p-white);
-		--dark-text-secondary: var(--p-night-100);
-		--dark-text-muted: var(--p-night-200);
-		--dark-line: var(--p-night-400);
-		--dark-line-strong: var(--p-night-100);
-		--dark-danger: var(--p-red-300);
-		--dark-on-danger: var(--p-black);
-		--dark-danger-soft: var(--p-red-950);
-		--dark-danger-border: var(--p-red-300);
-		--dark-ok: var(--p-green-300);
-		--dark-ok-soft: var(--p-green-900);
-		--dark-ok-text: var(--p-green-300);
-		--dark-ok-border: var(--p-green-300);
-		--dark-warn: var(--p-amber-200);
-		--dark-warn-soft: var(--p-amber-900);
-		--dark-warn-text: var(--p-amber-200);
-		--dark-warn-border: var(--p-amber-200);
-		--dark-link: var(--p-link-300);
-		--dark-visited: var(--p-visited-300);
-		--dark-focus-inner: var(--p-white);
-		--dark-highlight-bg: var(--p-amber-950);
-		--dark-highlight-fg: var(--p-amber-ink);
-		--dark-backdrop: rgb(0 0 0 / 0.82);
-		--dark-avatar-1-bg: var(--p-night-900);
-		--dark-avatar-2-bg: var(--p-night-900);
-		--dark-avatar-3-bg: var(--p-night-900);
-		--dark-avatar-4-bg: var(--p-night-900);
-		--dark-shadow-xs: none;
-		--dark-shadow-sm: none;
-		--dark-shadow-lg: none;
-		--dark-specular-top: none;
-	}
-
-	/* The accent is link blue in every palette (§1). Primary buttons are ink, not blue. */
-	:root,
-	.theme-preview {
-		--accent-light: var(--light-link);
-		--on-accent-light: var(--p-white);
-		--accent-soft-light: var(--p-link-50);
-		--accent-text-light: var(--light-link);
-		--accent-border-light: var(--p-link-200);
-		--accent-dark: var(--dark-link);
-		--on-accent-dark: var(--p-link-950);
-		--accent-soft-dark: var(--p-link-900);
-		--accent-text-dark: var(--dark-link);
-		--accent-border-dark: var(--p-link-850);
-	}
-
-	/* ---------------------------------------------------------------------
-	 * 3. Semantic & Component Layer (:root + .theme-preview)
-	 *    Unregistered custom properties keep light-dark() live on subtrees.
-	 * ------------------------------------------------------------------- */
+	/* Semantic & component layer (:root + .theme-preview). Unregistered custom properties keep
+	   light-dark() live on subtrees. */
 	:root,
 	.theme-preview {
 		--color-bg: light-dark(var(--light-bg), var(--dark-bg));
@@ -294,12 +41,10 @@
 		--color-danger-soft: light-dark(var(--light-danger-soft), var(--dark-danger-soft));
 		--color-danger-border: light-dark(var(--light-danger-border), var(--dark-danger-border));
 
-		--color-ok: light-dark(var(--light-ok), var(--dark-ok));
 		--color-ok-soft: light-dark(var(--light-ok-soft), var(--dark-ok-soft));
 		--color-ok-text: light-dark(var(--light-ok-text), var(--dark-ok-text));
 		--color-ok-border: light-dark(var(--light-ok-border), var(--dark-ok-border));
 
-		--color-warn: light-dark(var(--light-warn), var(--dark-warn));
 		--color-warn-soft: light-dark(var(--light-warn-soft), var(--dark-warn-soft));
 		--color-warn-text: light-dark(var(--light-warn-text), var(--dark-warn-text));
 		--color-warn-border: light-dark(var(--light-warn-border), var(--dark-warn-border));
@@ -310,59 +55,24 @@
 		--color-highlight-fg: light-dark(var(--light-highlight-fg), var(--dark-highlight-fg));
 		--color-backdrop: light-dark(var(--light-backdrop), var(--dark-backdrop));
 
-		--color-avatar-1-bg: light-dark(var(--light-avatar-1-bg), var(--dark-avatar-1-bg));
-		--color-avatar-2-bg: light-dark(var(--light-avatar-2-bg), var(--dark-avatar-2-bg));
-		--color-avatar-3-bg: light-dark(var(--light-avatar-3-bg), var(--dark-avatar-3-bg));
-		--color-avatar-4-bg: light-dark(var(--light-avatar-4-bg), var(--dark-avatar-4-bg));
+		/* Avatar tones: kept for the Avatar components until they are removed (§7). */
+		--color-avatar-1-bg: var(--color-surface-2);
+		--color-avatar-2-bg: var(--color-surface-2);
+		--color-avatar-3-bg: var(--color-surface-2);
+		--color-avatar-4-bg: var(--color-surface-2);
 
-		/* Non-color depth tokens (light-dark() accepts only <color>). */
-		--shadow-xs: var(--light-shadow-xs);
-		--shadow-sm: var(--light-shadow-sm);
+		/* Depth: only dialogs and popovers cast a shadow (light-dark() accepts only <color>). */
+		--shadow-xs: none;
+		--shadow-sm: none;
 		--shadow-lg: var(--light-shadow-lg);
-		--specular-top: var(--light-specular-top);
 
-		/* Component-layer tokens: rules, not boxes; primary actions are ink. */
+		/* Component layer: rules, not boxes; primary actions are ink. */
 		--card-bg: var(--color-bg);
-		--card-border: var(--color-line);
-		--card-shadow: none;
 		--btn-primary-bg: var(--color-text);
 		--btn-primary-fg: var(--color-bg);
 		--rail-bg: var(--color-bg);
 		--rail-border: var(--color-line);
-		--attach-bg: var(--color-bg);
 		--input-bg: var(--color-bg);
-
-		/* Backward-compatibility aliases kept for existing components. */
-		--color-surface: var(--color-surface-2);
-		--color-signal: var(--color-accent);
-		--color-on-signal: var(--color-on-accent);
-		--color-surface-muted: var(--color-surface-2);
-		--color-surface-accent: var(--color-accent-soft);
-		--color-surface-warn: var(--color-warn-soft);
-		--color-surface-danger: var(--color-danger-soft);
-		--color-surface-success: var(--color-ok-soft);
-		--color-text-subtle: var(--color-text-muted);
-		--color-focus: var(--color-focus-inner);
-		--color-primary: var(--color-text);
-		--color-primary-contrast: var(--color-bg);
-		--color-danger-text: var(--color-danger);
-		--color-success-text: var(--color-ok-text);
-		--color-border: var(--color-line);
-		--color-border-strong: var(--color-line-strong);
-		--color-border-danger: var(--color-danger-border);
-		--color-border-success: var(--color-ok-border);
-		--color-border-warn: var(--color-warn-border);
-		--shadow-card: none;
-		--shadow-card-hover: none;
-		--shadow-overlay: var(--shadow-lg);
-		--shadow-popover: var(--shadow-lg);
-		--shadow-dialog: var(--shadow-lg);
-		--edge-highlight: none;
-		--surface-sheen: none;
-		--glow-primary: 0 0 0 0 transparent;
-		--glow-primary-hover: 0 0 0 0 transparent;
-		--glow-nav: 0 0 0 0 transparent;
-		--glow-focus: 0 0 0 0 transparent;
 	}
 
 	.theme-preview.is-light {
@@ -386,17 +96,18 @@
 	:root {
 		color-scheme: light dark;
 
-		/* One family (§2). Display and mono names stay as aliases; mono is the system stack for code. */
+		/* One family (§2). Display is an alias; mono is the system stack for code, URLs and keys. */
 		--font-sans:
 			'Atkinson Hyperlegible Next Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
 		--font-display: var(--font-sans);
 		--font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-		--text-display: 650 1.375rem / 1.25 var(--font-sans);
-		--text-day: 650 1rem / 1.3 var(--font-sans);
-		--text-title: 550 1rem / 1.4 var(--font-sans);
-		--text-section: 650 1rem / 1.35 var(--font-sans);
-		--text-body: 400 1rem / 1.55 var(--font-sans);
+		/* Weights 400 / 500 / 600 only (§2). */
+		--text-display: 600 1.375rem / 1.25 var(--font-sans);
+		--text-day: 600 1rem / 1.3 var(--font-sans);
+		--text-title: 500 1rem / 1.4 var(--font-sans);
+		--text-section: 600 1rem / 1.35 var(--font-sans);
+		--text-body: 400 1rem / 1.5 var(--font-sans);
 		--text-ui: 500 0.875rem / 1.3 var(--font-sans);
 		--text-hint: 400 0.875rem / 1.45 var(--font-sans);
 		--text-meta: 400 0.8125rem / 1.3 var(--font-sans);
@@ -409,7 +120,6 @@
 		--space-5: 24px;
 		--space-6: 32px;
 		--space-7: 48px;
-		--space-8: 64px;
 		--gutter: 16px;
 
 		/* Corner radius at most 3px (§ principle 3). */
@@ -419,16 +129,13 @@
 		--radius-lg: 3px;
 		--radius-pill: 3px;
 
-		/* Backward-compatibility radius aliases */
-		--radius-1: var(--radius-xs);
-		--radius-2: var(--radius-sm);
-		--radius-3: var(--radius-md);
-
-		/* Shell dimensions (§3) */
+		/* Shell dimensions (§3). The entry gutter is shared with izgah.com. */
 		--rail-w: 224px;
 		--pane-w: 420px;
 		--read-w: 720px;
 		--wide-w: 960px;
+		--entry-gutter: 104px;
+		--measure: 68ch;
 		--topbar-h: 0px;
 		--header-h: var(--topbar-h);
 		--tab-bar-h: 0px;
@@ -439,10 +146,6 @@
 		--dur-base: 160ms;
 		--dur-panel: 200ms;
 		--ease: cubic-bezier(0.2, 0, 0, 1);
-
-		/* Backward-compatibility duration aliases */
-		--dur-1: var(--dur-fast);
-		--dur-2: var(--dur-base);
 	}
 
 	:root[data-theme='light'] {
@@ -475,9 +178,6 @@
 			--light-shadow-lg: none;
 			--dark-shadow-lg: none;
 			--shadow-lg: none;
-			--shadow-overlay: none;
-			--shadow-popover: none;
-			--shadow-dialog: none;
 		}
 	}
 
@@ -487,8 +187,6 @@
 			--dur-fast: 0ms;
 			--dur-base: 0ms;
 			--dur-panel: 0ms;
-			--dur-1: 0ms;
-			--dur-2: 0ms;
 		}
 	}
 }

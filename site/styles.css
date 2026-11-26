@@ -32,42 +32,21 @@
 :root {
 	color-scheme: light dark;
 
-	--paper: #ffffff;
-	--sunk: #f7f7f7;
-	--ink: #121212;
-	--ink-2: #4a4a4a;
-	--ink-3: #666666;
-	--rule: #dadada;
-	--rule-strong: #767676;
-	--link: #1f3fd0;
-	--visited: #5f5878;
+	/* Colours come from palette.css, generated from tokens/kunye.json with the app's (pnpm tokens). */
+	--paper: var(--color-bg);
+	--sunk: var(--color-surface-2);
+	--ink: var(--color-text);
+	--ink-2: var(--color-text-secondary);
+	--ink-3: var(--color-text-muted);
+	--rule: var(--color-line);
+	--rule-strong: var(--color-line-strong);
+	--link: var(--color-link);
+	--visited: var(--color-visited);
 
 	--font: 'Atkinson Hyperlegible Next', system-ui, -apple-system, 'Segoe UI', sans-serif;
 	--mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 	--gutter: 112px;
 	--dur: 120ms;
-}
-
-@media (prefers-color-scheme: dark) {
-	:root {
-		--paper: #0f0f10;
-		--sunk: #151517;
-		--ink: #f2f2f0;
-		--ink-2: #b4b4b0;
-		--ink-3: #929290;
-		--rule: #2a2a2c;
-		--rule-strong: #77777a;
-		--link: #9db7ff;
-		--visited: #aba5c6;
-	}
-}
-
-@media (prefers-contrast: more) {
-	:root {
-		--ink-2: var(--ink);
-		--ink-3: var(--ink);
-		--rule: var(--rule-strong);
-	}
 }
 
 *,
@@ -213,7 +192,7 @@ kbd {
 	max-inline-size: 22ch;
 	margin-block: clamp(40px, 8vw, 88px) 18px;
 	font-size: clamp(2rem, 1.4rem + 2.6vw, 3.25rem);
-	font-weight: 650;
+	font-weight: 600;
 	line-height: 1.08;
 	letter-spacing: -0.025em;
 }
@@ -267,7 +246,7 @@ kbd {
 
 .day h2 {
 	font-size: 1rem;
-	font-weight: 650;
+	font-weight: 600;
 }
 
 .day h2 span {
@@ -315,7 +294,7 @@ kbd {
 
 .title {
 	font-size: 1rem;
-	font-weight: 550;
+	font-weight: 500;
 	line-height: 1.4;
 }
 
@@ -347,7 +326,7 @@ kbd {
 main h2:not(.day h2) {
 	margin-block: 64px 14px;
 	font-size: 1.375rem;
-	font-weight: 650;
+	font-weight: 600;
 	letter-spacing: -0.01em;
 }
 
@@ -375,7 +354,7 @@ main h2:not(.day h2) {
 }
 
 .annotated a {
-	font-weight: 550;
+	font-weight: 500;
 }
 
 .annotated p {

@@ -23,6 +23,7 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --fail-on-warnings && tsc --noEmit",
 		"lint": "eslint . && prettier --check .",
 		"format": "prettier --write .",
+		"tokens": "tsx scripts/tokens/build.ts",
 		"test": "vitest run",
 		"test:e2e": "playwright test",
 		"test:docker": "docker build -t izgah-core:test . && PLAYWRIGHT_DOCKER_SMOKE=1 playwright test tests/e2e/m8-docker-smoke.spec.ts",
