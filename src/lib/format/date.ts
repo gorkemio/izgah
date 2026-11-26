@@ -155,6 +155,44 @@ export function dayLabel(key: string, today: string): string {
 	return locale === 'en' ? `${base}, ${year}` : `${base} ${year}`;
 }
 
+/**
+ * The full date beside a day heading for the last week (izgah-ui-v4 §4): "25 Kasım Çarşamba" /
+ * "Wednesday, November 25" after "Bugün" and "Dün", the date alone after a weekday; older headings
+ * already are a date, so they get none.
+ */
+export function dayDetail(key: string, today: string): string {
+	if (!key || !today) {
+		return '';
+	}
+	const diffDays = Math.round((dayKeyToUtcNoon(today) - dayKeyToUtcNoon(key)) / 86_400_000);
+	if (diffDays < 0 || diffDays >= 7) {
+		return '';
+	}
+	const locale = getLocale();
+	const [, month, day] = key.split('-').map(Number);
+	const date = dayMonth(locale, day, MONTHS[locale][month - 1]);
+	if (diffDays >= 2) {
+		return date;
+	}
+	const weekday = WEEKDAYS[locale][new Date(dayKeyToUtcNoon(key)).getUTCDay()];
+	return locale === 'en' ? `${weekday}, ${date}` : `${date} ${weekday}`;
+}
+
+/** One short date for the whole UI: "12 Kas" / "Nov 12", with the year only when it differs. */
+export function formatShortDate(value: DateInput, now: DateInput = new Date()): string {
+	const key = dayKey(value);
+	if (!key) {
+		return String(value);
+	}
+	const locale = getLocale();
+	const [year, month, day] = key.split('-').map(Number);
+	const base = dayMonth(locale, day, SHORT_MONTHS[locale][month - 1]);
+	if (year === Number(dayKey(now).slice(0, 4))) {
+		return base;
+	}
+	return locale === 'en' ? `${base}, ${year}` : `${base} ${year}`;
+}
+
 /** Short "Nov 20" / "20 Kas" label for a `YYYY-MM-DD` key (feed rail heading). */
 export function formatDayKeyShort(key: string): string {
 	const parts = key.split('-').map(Number);

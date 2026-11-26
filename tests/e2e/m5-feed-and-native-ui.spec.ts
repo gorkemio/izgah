@@ -436,11 +436,11 @@ test.describe('Milestone M5 — Web Feed, Sections & Native Platform UI', () => 
 		// Silent resource must NOT appear in main feed /
 		await expect(page.locator('article.share-card')).toHaveCount(0);
 
-		// Appears on section page with the "Sessiz" badge
+		// Appears on section page with the "sessiz" mark in its künye line
 		await gotoHydrated(page, '/sections/mimari');
 		const silentCard = page.locator('article.share-card').first();
 		await expect(silentCard).toBeVisible();
-		await expect(silentCard.getByText('Sessiz', { exact: true })).toBeVisible();
+		await expect(silentCard.locator('.badge-silent', { hasText: /^\W*sessiz\W*$/ })).toBeVisible();
 
 		// Switch to member: share same URL visibly -> appears on main feed with first-share notice
 		await attachSessionCookie(context, member.cookieValue);
@@ -455,7 +455,7 @@ test.describe('Milestone M5 — Web Feed, Sections & Native Platform UI', () => 
 
 		const promotedCard = page.locator('article.share-card').first();
 		await expect(promotedCard).toBeVisible();
-		await expect(promotedCard.getByText('İlk paylaşan: Admin Kullanıcı')).toBeVisible();
+		await expect(promotedCard.getByText('ilk: Admin Kullanıcı')).toBeVisible();
 
 		// Admin soft-deletes the original share -> remaining card shows "Orijinal gönderi silindi"
 		await attachSessionCookie(context, admin.cookieValue);

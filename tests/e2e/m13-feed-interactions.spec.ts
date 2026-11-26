@@ -228,7 +228,8 @@ test.describe('UI v2 feed interactions — shortcuts, day groups, last visit, ne
 
 		const headings = page.locator('h2.day-heading');
 		await expect(headings).toHaveCount(2);
-		await expect(headings.first()).toHaveText('Bugün');
+		// "Bugün" followed by the full date on the same heading (izgah-ui-v4 §4).
+		await expect(headings.first()).toHaveText(/^Bugün\b/);
 		await expect(
 			page.getByRole('region', { name: 'Bugün' }).locator('article.share-card')
 		).toHaveCount(1);
