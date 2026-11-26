@@ -23,7 +23,7 @@
 - **Smart capture** — `#section` in a note files the link, and sections are suggested from your team's history. Admins can optionally connect OpenRouter, Anthropic, OpenAI, Gemini or a local OpenAI-compatible model for short summaries, search keywords and section suggestions. AI is off until configured.
 - **Link previews** — an in-process worker fetches titles, descriptions and cover images behind SSRF guards and stores resized WebP thumbnails locally.
 - **Browser extensions** — Chrome, Firefox and Safari extensions share the current tab or a right-clicked link with a personal API key.
-- **Works without JavaScript** — sharing, navigation, search, discussion, themes and admin are plain forms and links first; JavaScript only enhances them.
+- **Server-rendered, fast to load** — every page renders on the server and every change goes through a server form action; the interface adds icons, previews and motion on top, with a reduced effects setting.
 - **Accessible by default** — light and dark themes, each with a standard and a high-contrast palette, all meeting WCAG 2.2 AA (AAA in high contrast). Links you have opened fade through the browser's own `:visited` history; the server records nothing.
 - **English and Turkish** — each member picks a language; the instance sets the default.
 - **Small footprint** — one Node.js container and PostgreSQL. No external e-mail, queue or cache service.

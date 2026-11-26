@@ -171,6 +171,51 @@ export function renderLabPalette(tokens: KunyeTokens): string {
 	].join('\n');
 }
 
+/**
+ * Extension and site colours (izgah-ui-v5.md §11, §12): the v5 default theme (or the v5 high
+ * contrast palette) under the semantic --color-* names those stylesheets already use. Status
+ * borders and soft fills without a v5 role keep their Künye values.
+ */
+export function standaloneRoles(tokens: KunyeTokens, scheme: Scheme, name: PaletteName): Palette {
+	const v5 =
+		name === 'default'
+			? v5Palette(tokens, tokens.v5.default, scheme)
+			: v5ContrastPalette(tokens, scheme);
+	const legacy = tokens.palettes[scheme][name];
+	return {
+		...legacy,
+		bg: v5.background,
+		'surface-1': v5.card,
+		'surface-2': v5.muted,
+		'surface-3': v5.secondary,
+		text: v5.foreground,
+		'text-secondary': v5['muted-foreground'],
+		'text-muted': v5['muted-foreground'],
+		line: v5.border,
+		'line-strong': v5.input,
+		link: v5.link,
+		visited: v5.visited,
+		danger: v5.destructive,
+		'on-danger': v5['destructive-foreground'],
+		ok: v5.success,
+		'ok-soft': v5['success-soft'],
+		'ok-text': v5.success,
+		warn: v5.warning,
+		'warn-soft': v5['warning-soft'],
+		'warn-text': v5.warning,
+		'focus-inner': v5.foreground,
+		'highlight-bg': v5.highlight,
+		'highlight-fg': v5['highlight-foreground'],
+		backdrop: v5.backdrop,
+		accent: v5.primary,
+		'accent-text': v5.link,
+		'on-accent': v5['primary-foreground'],
+		'accent-soft': v5.muted,
+		'accent-border': v5.input,
+		'shadow-lg': v5['shadow-lg'] === 'none' ? 'none' : v5['shadow-lg']
+	};
+}
+
 /** Extension and site: semantic --color-* names switched by prefers-color-scheme / -contrast. */
 /**
  * Optional selectors that pin one scheme regardless of the system, e.g. the izgah.com specimen's
@@ -187,18 +232,12 @@ export function renderStandalonePalette(
 	scopes?: SchemeScopes
 ): string {
 	const semantic = (scheme: Scheme, name: PaletteName, indent: string) => {
-		const accent = tokens.accent[scheme];
-		const link = tokens.palettes[scheme][name].link;
+		const roles = standaloneRoles(tokens, scheme, name);
 		return [
-			...declarations('color-', tokens.palettes[scheme][name], indent).filter(
+			...declarations('color-', roles, indent).filter(
 				(line) => !line.includes('--color-shadow-lg')
 			),
-			`${indent}--color-accent: ${link};`,
-			`${indent}--color-accent-text: ${link};`,
-			`${indent}--color-on-accent: ${accent['on-accent']};`,
-			`${indent}--color-accent-soft: ${accent['accent-soft']};`,
-			`${indent}--color-accent-border: ${accent['accent-border']};`,
-			`${indent}--shadow-lg: ${tokens.palettes[scheme][name]['shadow-lg']};`
+			`${indent}--shadow-lg: ${roles['shadow-lg']};`
 		];
 	};
 	const media = (query: string, scheme: Scheme, name: PaletteName) =>
