@@ -1,19 +1,18 @@
 /*
- * Künye tokens for the browser extension (docs/designs/izgah-ui-v4.md §1–§2). Colours come from
- * palette.css, generated from tokens/izgah.json like the web app's (`pnpm tokens` at the repo root).
- * The extension runs on its own origin and cannot read the izgah_theme cookie, so it follows
- * prefers-color-scheme and prefers-contrast. Bundles only the Atkinson Hyperlegible Next latin +
- * latin-ext normal subsets; the latin one is the plain-zero copy from scripts/fonts/plain-zero.py.
+ * UI v5 tokens for the browser extension (docs/designs/izgah-ui-v5.md §11). Colours come from
+ * palette.css, generated from tokens/izgah.json like the web app's (`pnpm tokens` at the repo root):
+ * the Jade theme and its high contrast palette. The extension runs on its own origin and cannot read
+ * the izgah_theme cookie, so it follows prefers-color-scheme and prefers-contrast. Bundles only the
+ * Geist latin and latin-ext normal subsets (SIL OFL, fonts/OFL-Geist.txt).
  */
 @import './palette.css';
 
 @font-face {
-	font-family: 'Atkinson Hyperlegible Next Variable';
+	font-family: 'Geist Variable';
 	font-style: normal;
 	font-display: swap;
-	font-weight: 200 800;
-	src: url('@fontsource-variable/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-ext-wght-normal.woff2')
-		format('woff2-variations');
+	font-weight: 100 900;
+	src: url('./fonts/geist-latin-ext-wght-normal.woff2') format('woff2-variations');
 	unicode-range:
 		U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
 		U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
@@ -21,19 +20,18 @@
 }
 
 @font-face {
-	font-family: 'Atkinson Hyperlegible Next Variable';
+	font-family: 'Geist Variable';
 	font-style: normal;
 	font-display: swap;
-	font-weight: 200 800;
-	src: url('./fonts/atkinson-hyperlegible-next-latin-wght-normal.woff2') format('woff2-variations');
+	font-weight: 100 900;
+	src: url('./fonts/geist-latin-wght-normal.woff2') format('woff2-variations');
 	unicode-range:
 		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
 		U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 :root {
-	--font-sans:
-		'Atkinson Hyperlegible Next Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--font-sans: 'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
 	--font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
 	--input-bg: var(--color-bg);
@@ -46,18 +44,18 @@
 	--space-5: 24px;
 	--space-6: 32px;
 
-	--radius-xs: 2px;
-	--radius-sm: 3px;
-	--radius-md: 3px;
+	--radius-xs: 4px;
+	--radius-sm: 8px;
+	--radius-md: 12px;
 
-	--shadow-sm: none;
+	--shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
 
 	--dur-fast: 120ms;
 	--dur-base: 160ms;
 	--ease: cubic-bezier(0.2, 0, 0, 1);
 
 	color-scheme: light dark;
-	accent-color: var(--color-text);
+	accent-color: var(--color-accent);
 }
 
 *,
