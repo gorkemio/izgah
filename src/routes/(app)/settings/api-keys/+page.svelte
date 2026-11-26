@@ -2,7 +2,7 @@
 	import { t } from '#lib/i18n/index.ts';
 	import { pageTitle, sourceUrl } from '#lib/instance.ts';
 	import { page } from '$app/state';
-	import { formatDateTime } from '#lib/format/date.ts';
+	import { formatWhen } from '#lib/format/date.ts';
 	import { enhance } from '$app/forms';
 	import Dialog from '#lib/components/ui/Dialog.svelte';
 	import type { ActionData, PageData } from './$types';
@@ -63,7 +63,7 @@
 			return t('apiKeys.neverUsed');
 		}
 		const date = value instanceof Date ? value : new Date(value);
-		return formatDateTime(date);
+		return formatWhen(date);
 	}
 
 	function isControlUserInvalid(

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { t } from '#lib/i18n/index.ts';
-	import { formatShortDateTime } from '#lib/format/date.ts';
+	import { formatWhen } from '#lib/format/date.ts';
 	import { startVisibilityPoller } from '#lib/client/visibility-poller.ts';
 	import PopoverPanel from '#lib/components/ui/PopoverPanel.svelte';
 	import type { NotificationFeedItem } from '#lib/server/interactions/service.ts';
@@ -19,7 +19,7 @@
 		unreadCount > 0 ? t('notif.labelUnread', { count: unreadCount }) : t('notif.label')
 	);
 
-	const formatTrRelativeOrDate = formatShortDateTime;
+	const formatTrRelativeOrDate = formatWhen;
 
 	async function fetchUnreadNotifications(): Promise<void> {
 		const requestEpoch = mutationEpoch;

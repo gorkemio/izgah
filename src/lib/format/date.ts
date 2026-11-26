@@ -53,11 +53,6 @@ export function formatDate(value: DateInput): string {
 	return formatWith({ dateStyle: 'medium' }, value);
 }
 
-/** "11/20/26, 2:32 PM" / "20.11.2026 14:32" */
-export function formatShortDateTime(value: DateInput): string {
-	return formatWith({ dateStyle: 'short', timeStyle: 'short' }, value);
-}
-
 /** "14:32" — 24-hour clock in every locale, matching the mono meta style. */
 export function formatTime(value: DateInput): string {
 	return formatWith({ hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }, value);
@@ -191,6 +186,19 @@ export function formatShortDate(value: DateInput, now: DateInput = new Date()): 
 		return base;
 	}
 	return locale === 'en' ? `${base}, ${year}` : `${base} ${year}`;
+}
+
+/**
+ * Date and time for lists, comments, notifications and admin tables: "25 Kas 17:20" /
+ * "Nov 25, 17:20", with the year only when it differs (izgah-ui-v4 §10).
+ */
+export function formatWhen(value: DateInput, now: DateInput = new Date()): string {
+	if (!toDate(value)) {
+		return String(value);
+	}
+	const date = formatShortDate(value, now);
+	const time = formatTime(value);
+	return getLocale() === 'en' ? `${date}, ${time}` : `${date} ${time}`;
 }
 
 /** Short "Nov 20" / "20 Kas" label for a `YYYY-MM-DD` key (feed rail heading). */

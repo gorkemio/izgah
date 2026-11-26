@@ -2,7 +2,7 @@
 	import { t } from '#lib/i18n/index.ts';
 	import { pageTitle } from '#lib/instance.ts';
 	import { modifierLabel } from '#lib/platform.ts';
-	import { formatDateTime } from '#lib/format/date.ts';
+	import { formatWhen } from '#lib/format/date.ts';
 	import { enhance, type SubmitFunction } from '$app/forms';
 	import { goto, invalidate } from '$app/navigation';
 	import { untrack } from 'svelte';
@@ -415,7 +415,7 @@
 		};
 	};
 
-	const formatTrDateTime = formatDateTime;
+	const formatTrDateTime = formatWhen;
 </script>
 
 <svelte:head>

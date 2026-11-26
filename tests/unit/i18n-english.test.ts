@@ -1,6 +1,12 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { setFallbackLocale } from '../../src/lib/i18n';
-import { dayLabel, formatDate, formatDayKeyShort, formatTime } from '../../src/lib/format/date';
+import {
+	dayLabel,
+	formatDate,
+	formatDayKeyShort,
+	formatTime,
+	formatWhen
+} from '../../src/lib/format/date';
 import { contentTypeLabel } from '../../src/lib/types/feed';
 
 // The default (base) locale is English; tests normally run in Turkish (tests/setup/locale.ts).
@@ -21,6 +27,7 @@ describe('English base locale', () => {
 		// 21:30 UTC is 00:30 the next day in Europe/Istanbul (tests/setup/locale.ts).
 		expect(formatDate('2026-11-20T21:30:00Z')).toBe('Nov 21, 2026');
 		expect(formatTime('2026-11-20T21:30:00Z')).toBe('00:30');
+		expect(formatWhen('2026-11-20T21:30:00Z', '2026-11-25T12:00:00Z')).toBe('Nov 21, 00:30');
 	});
 
 	it('labels content types', () => {

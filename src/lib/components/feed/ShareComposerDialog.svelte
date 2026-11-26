@@ -3,7 +3,7 @@
 	import { contentTypeLabel } from '#lib/types/feed.ts';
 	import { page } from '$app/state';
 	import { shortcutLabel, type ModifierKey } from '#lib/platform.ts';
-	import { formatDate } from '#lib/format/date.ts';
+	import { formatShortDate } from '#lib/format/date.ts';
 	import { enhance, type SubmitFunction } from '$app/forms';
 	import { goto, invalidate } from '$app/navigation';
 	import { untrack } from 'svelte';
@@ -476,7 +476,7 @@
 						{:else if summary.firstShare}
 							<p class="duplicate-detail">
 								{t('share.firstSharedBy')} <strong>{summary.firstShare.authorName}</strong> ·
-								{formatDate(summary.firstShare.createdAt)}
+								{formatShortDate(summary.firstShare.createdAt)}
 								{t('composer.dupTotal', { count: summary.totalCount })}
 							</p>
 							{#if summary.firstShare.sectionNames.length > 0}
