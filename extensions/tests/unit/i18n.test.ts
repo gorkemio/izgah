@@ -22,7 +22,7 @@ describe('extension i18n (izgah-i18n-oss.md §7)', () => {
 
 	it('translates messages and substitutions in English', () => {
 		globalThis.__IZGAH_EXTENSION_LOCALE__ = 'en';
-		expect(msg('share')).toBe('Share');
+		expect(msg('share')).toBe('Add a link');
 		expect(msg('errRetryAfter', 30)).toBe('Please wait 30 seconds and try again.');
 		const result = normalizeServerOrigin('');
 		expect(result.ok ? null : result.message).toBe('The Izgah server address cannot be empty.');
@@ -36,7 +36,7 @@ describe('extension i18n (izgah-i18n-oss.md §7)', () => {
 		`;
 		localizeDocument(document);
 		expect(document.documentElement.lang).toBe('en');
-		expect(document.querySelector('h1')?.textContent).toBe('Share to Izgah');
+		expect(document.querySelector('h1')?.textContent).toBe('Add a link to Izgah');
 		const input = document.querySelector('input');
 		expect(input?.getAttribute('placeholder')).toBe('https://example.com/article');
 		expect(input?.getAttribute('aria-label')).toBe('Link address');
@@ -44,6 +44,6 @@ describe('extension i18n (izgah-i18n-oss.md §7)', () => {
 		globalThis.__IZGAH_EXTENSION_LOCALE__ = 'tr';
 		localizeDocument(document);
 		expect(document.documentElement.lang).toBe('tr');
-		expect(document.querySelector('h1')?.textContent).toBe("İzgah'a paylaş");
+		expect(document.querySelector('h1')?.textContent).toBe("İzgah'ta iz bırak");
 	});
 });

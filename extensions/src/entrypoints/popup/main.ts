@@ -80,9 +80,24 @@ function queryRequiredElement<T extends Element>(root: Document, selector: strin
 	return el;
 }
 
+/** The host as the feed's künye line shows it: no scheme, no leading "www.". */
+function displayHost(raw: string): string {
+	try {
+		return new URL(raw).hostname.replace(/^www\./, '');
+	} catch {
+		return '';
+	}
+}
+
 function formatShareDate(iso: string): string {
 	try {
-		return new Intl.DateTimeFormat(uiLanguage(), { dateStyle: 'medium' }).format(new Date(iso));
+		// Dates follow the language of the loaded messages, not the browser's, so an English popup
+		// never shows a Turkish month (and the other way round).
+		return new Intl.DateTimeFormat(msg('localeCode') || uiLanguage(), {
+			day: 'numeric',
+			month: 'long',
+			year: 'numeric'
+		}).format(new Date(iso));
 	} catch {
 		return iso;
 	}
@@ -120,11 +135,28 @@ async function consumeIncomingPendingShare(): Promise<PendingShareContext | null
 }
 
 /**
+ * Wordmark as in the app (docs/designs/izgah-ui-v4.md §5): "iz" in ink, the rest in tertiary ink.
+ * The name comes from the catalog, so "Izgah" and "İzgah" both split.
+ */
+function splitWordmark(doc: Document): void {
+	const nameEl = doc.querySelector<HTMLElement>('.wordmark [data-i18n="extName"]');
+	const name = nameEl?.textContent ?? '';
+	if (!nameEl || name.length < 3) {
+		return;
+	}
+	const tail = doc.createElement('span');
+	tail.className = 'gah';
+	tail.textContent = name.slice(2);
+	nameEl.replaceChildren(name.slice(0, 2), tail);
+}
+
+/**
  * Initializes the extension share popup across toolbar, keyboard, context menu, and standalone flows.
  */
 export async function initPopupPage(deps: InitPopupPageDeps = {}): Promise<PopupPageController> {
 	const doc = deps.root ?? document;
 	localizeDocument(doc);
+	splitWordmark(doc);
 	const runtimeMeta = resolveRuntimeClientMeta();
 	const browserTarget = deps.browserTarget ?? runtimeMeta.browserTarget;
 	const clientVersion = deps.clientVersion ?? runtimeMeta.clientVersion;
@@ -158,6 +190,7 @@ export async function initPopupPage(deps: InitPopupPageDeps = {}): Promise<Popup
 	const urlNoticeTextEl = queryRequiredElement<HTMLElement>(doc, '#share-url-notice-text');
 	const titlePreviewEl = queryRequiredElement<HTMLElement>(doc, '#share-title-preview');
 	const titleTextEl = queryRequiredElement<HTMLElement>(doc, '#share-title-text');
+	const titleDomainEl = queryRequiredElement<HTMLElement>(doc, '#share-title-domain');
 	const linkCheckRegion = queryRequiredElement<HTMLElement>(doc, '#link-check-region');
 	const linkCheckLoading = queryRequiredElement<HTMLElement>(doc, '#link-check-loading');
 	const duplicateBanner = queryRequiredElement<HTMLElement>(doc, '#duplicate-banner');
@@ -209,7 +242,7 @@ export async function initPopupPage(deps: InitPopupPageDeps = {}): Promise<Popup
 				control: noteInput,
 				validate() {
 					return noteInput.value.length > MAX_NOTE_LENGTH
-						? `Not en fazla ${MAX_NOTE_LENGTH} karakter olabilir.`
+						? msg('noteTooLong', MAX_NOTE_LENGTH)
 						: null;
 				}
 			}
@@ -248,7 +281,8 @@ export async function initPopupPage(deps: InitPopupPageDeps = {}): Promise<Popup
 	}
 
 	function setUrlNotice(message: string | null) {
-		if (!message) {
+		// A field error under the input already says it; never show the same sentence twice.
+		if (!message || urlInput.getAttribute('aria-invalid') === 'true') {
 			urlNoticeTextEl.textContent = '';
 			urlNoticeEl.hidden = true;
 			return;
@@ -287,6 +321,7 @@ export async function initPopupPage(deps: InitPopupPageDeps = {}): Promise<Popup
 			return;
 		}
 		titleTextEl.textContent = resolvedTitle;
+		titleDomainEl.textContent = displayHost(urlInput.value);
 		titlePreviewEl.hidden = false;
 	}
 
@@ -737,6 +772,7 @@ export async function initPopupPage(deps: InitPopupPageDeps = {}): Promise<Popup
 			validator.setServerFieldError(silentCheckbox, '');
 
 			if (!validator.validateAllAndFocusFirst()) {
+				setUrlNotice(null);
 				announcer.announce(msg('fixFormErrors'));
 				return;
 			}

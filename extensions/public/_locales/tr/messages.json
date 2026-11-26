@@ -1,6 +1,6 @@
 {
 	"actionTitle": {
-		"message": "İzgah'a paylaş"
+		"message": "İzgah'ta iz bırak"
 	},
 	"addedSilently": {
 		"message": "Bağlantı yalnızca seçili bölümlere sessiz kaynak olarak eklendi."
@@ -63,7 +63,7 @@
 		"message": "Sağ tık bağlamının süresi dolduğu için sekme adresi otomatik alınamadı; paylaşmak istediğiniz http:// veya https:// adresini yapıştırabilirsiniz."
 	},
 	"contextMenuShare": {
-		"message": "İzgah'a paylaş"
+		"message": "İzgah'ta iz bırak"
 	},
 	"copied": {
 		"message": "Kopyalandı"
@@ -149,8 +149,11 @@
 	"loadedSavedTest": {
 		"message": "Kayıtlı ayarlar yüklendi. Bağlantıyı test edebilirsiniz."
 	},
+	"localeCode": {
+		"message": "tr"
+	},
 	"newShare": {
-		"message": "Yeni paylaşım"
+		"message": "Yeni iz"
 	},
 	"noSectionInfo": {
 		"message": "bölüm bilgisi yok"
@@ -167,6 +170,9 @@
 	"notePlaceholder": {
 		"message": "Neden paylaşmaya değer? (Cmd/Ctrl+Enter ile gönder)"
 	},
+	"noteTooLong": {
+		"message": "Not en fazla $1 karakter olabilir."
+	},
 	"openApiKeys": {
 		"message": "/settings/api-keys sayfasını aç"
 	},
@@ -177,7 +183,7 @@
 		"message": "Tarayıcı eklentisini ekip sunucunuza ve kişisel API anahtarınıza bağlayın."
 	},
 	"optionsTitle": {
-		"message": "İzgah Eklenti Ayarları"
+		"message": "İzgah eklenti ayarları"
 	},
 	"originCredentials": {
 		"message": "Sunucu adresinde kullanıcı adı veya parola bulunamaz."
@@ -195,10 +201,10 @@
 		"message": "Sunucu adresi yalnızca https:// veya yerel geliştirme için http:// olabilir."
 	},
 	"popupTitle": {
-		"message": "İzgah'a paylaş"
+		"message": "İzgah'ta iz bırak"
 	},
 	"popupWordmarkSuffix": {
-		"message": ": bağlantı paylaş"
+		"message": ": iz bırak"
 	},
 	"publishedToFeed": {
 		"message": "Bağlantı ana akışta yayınlandı."
@@ -240,10 +246,10 @@
 		"message": "Konu bölümleri yüklendi."
 	},
 	"sectionsOptional": {
-		"message": "Konu Bölümleri (isteğe bağlı)"
+		"message": "Konu bölümleri (isteğe bağlı)"
 	},
 	"sectionsRequired": {
-		"message": "Konu Bölümleri (en az bir bölüm zorunlu)"
+		"message": "Konu bölümleri (en az bir bölüm zorunlu)"
 	},
 	"serverOrigin": {
 		"message": "İzgah sunucu adresi"
@@ -258,19 +264,19 @@
 		"message": "Bağlantı paylaşmadan önce eklenti ayarlarından İzgah sunucu adresini ve kişisel API anahtarınızı tanımlayın."
 	},
 	"share": {
-		"message": "Paylaş"
+		"message": "İz bırak"
 	},
 	"shareUnexpected": {
 		"message": "Paylaşım sırasında beklenmeyen bir hata oluştu."
 	},
 	"sharedHeading": {
-		"message": "Bağlantı İzgah'a paylaşıldı"
+		"message": "İz bırakıldı"
 	},
 	"sharedToIzgah": {
-		"message": "Bağlantı İzgah'a paylaşıldı."
+		"message": "İz bırakıldı."
 	},
 	"sharing": {
-		"message": "Paylaşılıyor…"
+		"message": "İz bırakılıyor…"
 	},
 	"show": {
 		"message": "Göster"
@@ -285,10 +291,10 @@
 		"message": "Ana akışta yayınlama (yalnızca seçili bölümlere sessiz ekle)"
 	},
 	"sourceContextLink": {
-		"message": "Sağ tık: Bağlantı"
+		"message": "Sağ tık: bağlantı"
 	},
 	"sourceContextPage": {
-		"message": "Sağ tık: Sayfa"
+		"message": "Sağ tık: sayfa"
 	},
 	"tabUrlRestricted": {
 		"message": "Aktif sekmenin adresi tarayıcı kısıtlaması nedeniyle okunamadı; geçerli bir http:// veya https:// adresi yapıştırabilirsiniz."

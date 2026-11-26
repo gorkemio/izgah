@@ -80,7 +80,7 @@ body {
 	margin: 0;
 	color: var(--color-text);
 	background: var(--color-bg);
-	font-size: 0.9375rem;
+	font-size: 0.875rem;
 }
 
 a {
@@ -132,7 +132,7 @@ a:not(.btn):hover {
 
 .form-label {
 	font-weight: 600;
-	font-size: 0.84375rem;
+	font-size: 0.875rem;
 	line-height: 1.35;
 	color: var(--color-text);
 }
@@ -233,7 +233,7 @@ select {
 	border-radius: var(--radius-sm);
 	border: 1px solid var(--color-line-strong);
 	font: inherit;
-	font-size: 0.84375rem;
+	font-size: 0.875rem;
 	font-weight: 500;
 	line-height: 1.3;
 	cursor: pointer;
@@ -275,17 +275,18 @@ select {
 	font-size: 0.8125rem;
 }
 
+/* Primary actions are ink, as in the web app (izgah-ui-v4 §1): link blue is for links only. */
 .btn-primary {
-	background: var(--color-accent);
-	color: var(--color-on-accent);
-	border-color: var(--color-accent);
+	background: var(--color-text);
+	color: var(--color-bg);
+	border-color: var(--color-text);
 	font-weight: 600;
 }
 
 .btn-primary:hover:not(:disabled) {
-	background: color-mix(in oklab, var(--color-accent) 88%, var(--color-text));
-	border-color: color-mix(in oklab, var(--color-accent) 88%, var(--color-text));
-	color: var(--color-on-accent);
+	background: color-mix(in oklab, var(--color-text) 86%, var(--color-bg));
+	border-color: color-mix(in oklab, var(--color-text) 86%, var(--color-bg));
+	color: var(--color-bg);
 }
 
 .btn-secondary {
@@ -313,9 +314,9 @@ select {
 }
 
 .btn-danger-outline {
-	background: var(--color-danger-soft);
+	background: transparent;
 	color: var(--color-danger);
-	border-color: var(--color-danger-border);
+	border-color: var(--color-danger);
 }
 
 .btn-danger-outline:hover:not(:disabled) {
@@ -329,40 +330,37 @@ select {
 	cursor: not-allowed;
 }
 
+/* Notices are text between rules, not filled boxes (izgah-ui-v4 §3); state colour is for words. */
 .banner {
-	padding: 10px var(--space-3);
-	border-radius: var(--radius-sm);
-	border: 1px solid var(--color-line);
+	padding: 10px 0;
+	border-block: 1px solid var(--color-line);
 	font-size: 0.8125rem;
 	line-height: 1.45;
+	color: var(--color-text);
 }
 
 .banner-error {
-	background: var(--color-danger-soft);
-	border-color: var(--color-danger-border);
 	color: var(--color-danger);
 }
 
 .banner-info {
-	background: var(--color-surface-2);
-	border-color: var(--color-line);
-	color: var(--color-text);
+	color: var(--color-text-secondary);
 }
 
-.banner-warn {
-	background: var(--color-warn-soft);
-	border-color: var(--color-warn-border);
-	color: var(--color-warn-text);
-}
-
+.banner-warn,
+.banner-note,
 .banner-success {
-	background: var(--color-ok-soft);
-	border-color: var(--color-ok-border);
-	color: var(--color-ok-text);
+	color: var(--color-text);
 }
 
 .banner-message {
 	margin: 0;
+}
+
+/* Notices that follow each other share one rule instead of drawing two. */
+.banner + .banner,
+.banner + [hidden] + .banner {
+	border-block-start: 0;
 }
 
 .request-id-row {
@@ -371,7 +369,7 @@ select {
 	align-items: center;
 	gap: var(--space-2);
 	margin-block-start: var(--space-2);
-	font-size: 0.78125rem;
+	font-size: 0.8125rem;
 }
 
 .request-id-row code {
@@ -393,7 +391,7 @@ select {
 .copy-feedback {
 	opacity: 0;
 	pointer-events: none;
-	font-size: 0.78125rem;
+	font-size: 0.8125rem;
 	font-weight: 500;
 	transition: opacity var(--dur-base) var(--ease);
 }
