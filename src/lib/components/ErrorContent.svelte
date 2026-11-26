@@ -68,7 +68,6 @@
 
 <div class="error-content">
 	<p class="error-code" class:is-server-error={isServerError}>
-		<span class="error-code-dot" aria-hidden="true"></span>
 		<span>{page.status}</span>
 	</p>
 	<h1 tabindex="-1">{heading}</h1>
@@ -97,42 +96,20 @@
 		justify-items: start;
 		gap: var(--space-4);
 		max-inline-size: var(--read-w);
-		padding: var(--space-6);
-		background: var(--color-surface-1);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-lg);
+		padding: var(--space-5) 0 0;
+		border-block-start: 1px solid var(--color-text);
 	}
 
 	.error-code {
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-		padding: 3px var(--space-3);
-		font: var(--text-micro);
+		font: var(--text-meta);
 		font-variant-numeric: tabular-nums;
-		letter-spacing: 0.04em;
-		color: var(--color-text-secondary);
-		background: var(--color-surface-2);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-pill);
-	}
-
-	.error-code-dot {
-		inline-size: 6px;
-		block-size: 6px;
-		border-radius: var(--radius-pill);
-		background: var(--color-accent);
-		flex: none;
+		color: var(--color-text-muted);
 	}
 
 	.error-code.is-server-error {
 		background: var(--color-danger-soft);
 		color: var(--color-danger);
 		border-color: var(--color-danger-border);
-	}
-
-	.error-code.is-server-error .error-code-dot {
-		background: var(--color-danger);
 	}
 
 	h1 {
@@ -152,10 +129,6 @@
 		flex-wrap: wrap;
 		align-items: center;
 		gap: var(--space-2);
-		padding: var(--space-2) var(--space-3);
-		background: var(--color-surface-2);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-sm);
 		font: var(--text-hint);
 		color: var(--color-text-secondary);
 	}
@@ -188,7 +161,7 @@
 
 	@media (max-width: 767px) {
 		.error-content {
-			padding: var(--space-5);
+			padding-block-start: var(--space-4);
 		}
 	}
 
@@ -199,10 +172,6 @@
 		.error-code {
 			border-color: CanvasText;
 			box-shadow: none;
-		}
-
-		.error-code-dot {
-			background: Highlight;
 		}
 	}
 </style>

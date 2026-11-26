@@ -159,7 +159,7 @@
 	}
 
 	.kpi-box.has-dead {
-		background: var(--color-danger-soft);
+		color: var(--color-danger);
 	}
 
 	.kpi-box.has-dead h2 {

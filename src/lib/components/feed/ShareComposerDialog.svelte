@@ -796,10 +796,8 @@
 
 	.sections-fieldset {
 		margin: 0;
-		padding: var(--space-3) var(--space-4);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-md);
-		background: var(--color-surface-1);
+		padding: 0;
+		border: 0;
 	}
 
 	.sections-fieldset > legend {
@@ -808,10 +806,10 @@
 	}
 
 	.sections-grid {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--space-2);
-		margin-block-start: var(--space-2);
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+		gap: 0 var(--space-4);
+		margin-block-start: var(--space-1);
 	}
 
 	.checkbox-row {
@@ -825,25 +823,15 @@
 	}
 
 	.sections-grid .checkbox-row {
-		padding: 0 var(--space-3);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-pill);
-		background: var(--color-surface-2);
-		transition:
-			background-color var(--dur-fast) var(--ease),
-			border-color var(--dur-fast) var(--ease),
-			color var(--dur-fast) var(--ease);
+		padding: 0;
+		color: var(--color-text);
 	}
 
 	.sections-grid .checkbox-row:hover {
-		background: var(--color-surface-3);
-		border-color: var(--color-line-strong);
+		color: var(--color-text);
 	}
 
 	.sections-grid .checkbox-row:has(input:checked) {
-		background: var(--color-accent-soft);
-		border-color: var(--color-accent-border);
-		color: var(--color-accent-text);
 		font-weight: 600;
 	}
 
@@ -854,10 +842,8 @@
 	}
 
 	.silent-checkbox {
-		padding: var(--space-2) var(--space-3);
-		border: 1px dashed var(--color-line-strong);
-		border-radius: var(--radius-sm);
-		background: var(--color-surface-2);
+		padding: var(--space-2) 0 0;
+		border-block-start: 1px solid var(--color-line);
 	}
 
 	.composer-actions {

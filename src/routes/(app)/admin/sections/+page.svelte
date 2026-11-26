@@ -887,13 +887,14 @@
 	}
 
 	.panel {
-		background: var(--color-surface-1);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-md);
-		padding: var(--space-5);
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-4);
+		padding: var(--space-4) 0 0;
+		background: none;
+		border: 0;
+		border-block-start: 1px solid var(--color-text);
+		border-radius: 0;
 	}
 
 	.panel h2,
@@ -1037,17 +1038,10 @@
 	}
 
 	.silent-badge {
-		display: inline-flex;
-		align-items: center;
 		margin-inline-start: var(--space-2);
-		padding: 2px 9px;
-		border-radius: var(--radius-pill);
-		font: var(--text-micro);
-		font-variant-numeric: tabular-nums;
-		letter-spacing: 0.02em;
-		background: var(--color-warn-soft);
-		border: 1px solid var(--color-warn-border);
-		color: var(--color-warn-text);
+		font: var(--text-hint);
+		font-style: italic;
+		color: var(--color-text-muted);
 	}
 
 	.sort-controls {

@@ -162,13 +162,14 @@
 	}
 
 	.panel {
-		background: var(--color-surface-1);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-md);
-		padding: var(--space-4) var(--space-5);
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-4);
+		padding: var(--space-4) 0 0;
+		background: none;
+		border: 0;
+		border-block-start: 1px solid var(--color-text);
+		border-radius: 0;
 	}
 
 	.table-card {

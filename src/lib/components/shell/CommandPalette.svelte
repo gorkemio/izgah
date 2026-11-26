@@ -926,15 +926,14 @@
 	}
 
 	.cmdk-scope:hover:not(.is-active) {
-		background: var(--color-surface-2);
 		color: var(--color-text);
 	}
 
 	.cmdk-scope.is-active {
-		background: var(--color-accent-soft);
-		color: var(--color-accent-text);
-		border-color: var(--color-accent-border);
+		color: var(--color-text);
 		font-weight: 600;
+		text-decoration: underline;
+		text-underline-offset: 0.3em;
 	}
 
 	.cmdk-body {
@@ -1078,9 +1077,7 @@
 		gap: var(--space-3);
 		padding: 9px var(--space-4);
 		border-block-start: 1px solid var(--color-line);
-		background: var(--color-surface-2);
-		font: var(--text-hint);
-		font-size: 0.75rem;
+		font: var(--text-meta);
 		color: var(--color-text-muted);
 	}
 
