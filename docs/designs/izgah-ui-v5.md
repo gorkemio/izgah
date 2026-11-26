@@ -79,7 +79,7 @@ Screen-by-screen feedback from the team is collected during the review of this d
 *   First set: button, input, textarea, label, field, checkbox, switch, radio-group, select, combobox (command in a popover), command, dialog, alert-dialog, sheet, drawer, popover, dropdown-menu, tooltip, hover-card, tabs, toggle-group, badge, avatar, card, separator, skeleton, sonner, table, pagination, sidebar, scroll-area, kbd, empty, spinner.
 *   Components use the v5 tokens only (§2): no raw colours, no ad-hoc radii.
 *   Today's native wrappers (`src/lib/components/ui/Dialog.svelte`, `PopoverPanel.svelte`, `Toaster.svelte`, `Skeleton.svelte`) move to `src/lib/components/legacy/` in M1 and are deleted when their last user moves (M11).
-*   The `toasts` API in [`src/lib/client/toast.svelte.ts`](../../src/lib/client/toast.svelte.ts) keeps its signature (`push`, `announce`, tones and actions) and renders through `svelte-sonner`, so call sites do not change.
+*   The `toasts` API in [`src/lib/client/toast.svelte.ts`](../../src/lib/client/toast.svelte.ts) and its `Toaster` stay: they already pause on hover and focus and use separate polite and assertive live regions. Toasts take the v5 look through the migration bridge (§16) and are restyled with the screens; `svelte-sonner` is not used.
 
 ### 1.3 Icons
 
@@ -456,6 +456,7 @@ Work happens on the `feat/ui-v5` branch; `main` receives v5 in one step after M1
 *   **2026-11-27 (M1 groundwork):** the shadcn-svelte first set is in `src/lib/components/ui/`, the Künye wrappers moved to `src/lib/components/legacy/`, motion presets live in `src/lib/motion/`, the `izgah_effects` cookie and the Settings switch work, `/admin` redirects to `/admin/users`, a `<noscript>` banner explains the JavaScript requirement, `pnpm seed:demo` writes realistic local data, and the theme lab runs at `/dev/theme-lab` (development only). Lucide no longer ships brand icons, so content types use generic glyphs (§3.6).
 *   **2026-11-27 (M1 theme lab, maintainer):** **Lantern** (warm amber `#f2b867` dark / `#9a5a0e` light, amber → apricot → rose) on the shared neutral system, set in **Geist** for both body and display. Indigo night and Jade stay in the lab file only. Geist replaces Atkinson Hyperlegible Next in the app at once (the extension and izgah.com follow in M9 and M10); the plain-zero Atkinson build is no longer needed by the app and goes in M11.
 *   **2026-11-27 (maintainer, after the second lab):** gradients still read as generated; keep the new direction but with minimal or no gradients, in dark and light. The `lantern`, `mesh`, `sheen`, `bg-brand`, `text-brand`, `ring-brand` and `shimmer` utilities were removed; the primary button is solid ink, the selected entry has a solid accent border, loading uses a solid accent bar and pulsing placeholders.
+*   **2026-11-27 (M2):** the rail, the mobile top bar, the tab bar, the account menu and the notification panel are rebuilt in Lantern with icons and labels (shadcn-svelte Popover for the menus). A migration bridge in `src/lib/styles/tokens.css` maps the Künye `--k-*` colours, radii and shadows to v5 roles, so screens that M3–M6 have not rebuilt yet keep their layout but share the Lantern palette; the bridge goes with the `--k-*` variables in M11. The Künye 3 px radius test was retired in favour of the v5 radius scale.
 
 ## 17. Open questions
 

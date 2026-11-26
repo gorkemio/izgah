@@ -1,10 +1,29 @@
+<!--
+	App rail (≥ 768px) and mobile top bar (< 768px), docs/designs/izgah-ui-v5.md §4.
+
+	Lantern: solid surfaces and hairlines, icons with labels, the accent only on the active item and
+	counts. Accessible names and E2E hooks follow izgah-ui-v2.md §12 (one "Ana gezinme" landmark at
+	every width: below 768px the rail navigation is display:none and BottomTabBar takes over).
+-->
 <script lang="ts">
 	import { t } from '#lib/i18n/index.ts';
 	import { instanceName } from '#lib/instance.ts';
 	import { page } from '$app/state';
+	import ArrowRight from '@lucide/svelte/icons/arrow-right';
+	import Hash from '@lucide/svelte/icons/hash';
+	import Inbox from '@lucide/svelte/icons/inbox';
+	import KeyRound from '@lucide/svelte/icons/key-round';
+	import Layers from '@lucide/svelte/icons/layers';
+	import LogOut from '@lucide/svelte/icons/log-out';
+	import Plus from '@lucide/svelte/icons/plus';
+	import Search from '@lucide/svelte/icons/search';
+	import Settings from '@lucide/svelte/icons/settings';
+	import Shield from '@lucide/svelte/icons/shield';
+	import ChevronsUpDown from '@lucide/svelte/icons/chevrons-up-down';
 	import NotificationBell from '#lib/components/notifications/NotificationBell.svelte';
-	import PopoverPanel from '#lib/components/legacy/PopoverPanel.svelte';
 	import ThemeForm from '#lib/components/shell/ThemeForm.svelte';
+	import * as Popover from '#lib/components/ui/popover/index.ts';
+	import { avatarTone, initials } from '#lib/format/avatar.ts';
 
 	interface SectionLink {
 		id: string;
@@ -37,8 +56,8 @@
 	}: Props = $props();
 
 	/**
-	 * Wordmark (docs/designs/izgah-ui-v4.md §5): "iz" in ink, the rest in tertiary ink. Applied only
-	 * when the instance name starts with "iz"; any other name is shown as one word.
+	 * Wordmark (izgah-ui-v4.md §5, kept by v5 §13): "iz" in the foreground, the rest muted. Applied
+	 * only when the instance name starts with "iz"; any other name is shown as one word.
 	 */
 	const wordmark = $derived.by(() => {
 		const name = instanceName();
@@ -49,60 +68,89 @@
 
 	const pathname = $derived(page.url.pathname);
 	const onSearchPage = $derived(pathname === '/search');
+	let accountOpen = $state(false);
 
 	function handleCompose(event: MouseEvent): void {
 		event.preventDefault();
 		onCompose();
 	}
+
+	const navItem =
+		'relative flex min-h-8 items-center gap-2.5 rounded-lg px-2.5 text-[13px] tracking-[-0.005em] text-muted-foreground no-underline transition-colors before:absolute before:top-2 before:bottom-2 before:-left-2 before:hidden before:w-[2px] before:rounded-full before:bg-primary hover:bg-sidebar-accent/70 hover:text-foreground aria-[current=page]:bg-sidebar-accent aria-[current=page]:font-medium aria-[current=page]:text-sidebar-accent-foreground aria-[current=page]:before:block pointer-coarse:min-h-11';
+	const menuItem =
+		'flex min-h-8 w-full items-center gap-2.5 rounded-md px-2 text-[13px] text-foreground transition-colors hover:bg-accent pointer-coarse:min-h-11';
 </script>
 
-<header class="site-header is-rail">
-	<div class="site-header-inner">
-		<div class="brand-row">
-			<a href="/" class="brand">
+<header
+	class="site-header is-rail sticky top-0 z-30 self-start border-hairline bg-sidebar max-md:flex max-md:h-(--header-h) max-md:items-center max-md:justify-between max-md:border-b max-md:px-(--gutter) md:h-dvh md:border-r"
+>
+	<div class="contents md:flex md:h-full md:flex-col md:gap-1 md:overflow-y-auto md:p-3">
+		<!-- Brand -->
+		<a
+			href="/"
+			class="flex items-center gap-2 rounded-lg px-1.5 py-1 text-foreground no-underline md:mb-2"
+		>
+			<span class="grid size-6 place-items-center rounded-[7px] bg-primary" aria-hidden="true">
+				<span class="size-1.5 rounded-full bg-primary-foreground"></span>
+			</span>
+			<span class="text-[17px] tracking-[-0.02em]">
 				{#if wordmark}
-					<span class="brand-iz">{wordmark.head}</span><span class="brand-gah">
+					<span class="font-semibold">{wordmark.head}</span><span class="text-muted-foreground">
 						{wordmark.tail}
 					</span>
 				{:else}
-					<span class="brand-iz">{instanceName()}</span>
+					<span class="font-semibold">{instanceName()}</span>
 				{/if}
-			</a>
-		</div>
+			</span>
+		</a>
 
+		<!-- Search (hidden on /search, which has its own field) -->
 		{#if !onSearchPage}
-			<search class="rail-search" aria-label={t('search.landmark')}>
-				<form method="GET" action="/search">
-					<label for="rail-search-input" class="visually-hidden">
+			<search class="rail-search max-md:hidden" aria-label={t('search.landmark')}>
+				<form method="GET" action="/search" class="grid gap-1.5">
+					<label for="rail-search-input" class="sr-only">
 						{t('search.inInstance', { name: instanceName() })}
 					</label>
-					<div class="rail-search-bar">
-						<div class="rail-search-field">
-							<input
-								id="rail-search-input"
-								class="input rail-search-input"
-								type="search"
-								name="q"
-								value={headerQuery}
-								oninput={(event) => onQueryInput(event.currentTarget.value)}
-								placeholder={t('search.placeholderShort')}
-								autocapitalize="none"
-								spellcheck={false}
-							/>
-							<kbd class="kbd kbd-hint rail-search-kbd" aria-hidden="true">/</kbd>
-						</div>
-						<button type="submit" class="btn btn-subtle btn-sm rail-search-submit">
-							{t('search.submit')}
+					<div
+						class="flex h-8 items-center gap-2 rounded-lg border border-hairline bg-background px-2.5 transition-shadow focus-within:halo"
+					>
+						<Search class="size-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
+						<input
+							id="rail-search-input"
+							class="peer min-w-0 flex-1 bg-transparent text-[13px] outline-none placeholder:text-muted-foreground"
+							type="search"
+							name="q"
+							value={headerQuery}
+							oninput={(event) => onQueryInput(event.currentTarget.value)}
+							placeholder={t('search.placeholderShort')}
+							autocapitalize="none"
+							spellcheck={false}
+						/>
+						<kbd
+							class="rounded border border-hairline px-1 font-sans text-[10px] text-muted-foreground peer-[:not(:placeholder-shown)]:hidden"
+							aria-hidden="true"
+						>
+							/
+						</kbd>
+						<button
+							type="submit"
+							class="-mr-1 grid size-6 place-items-center rounded-md text-muted-foreground transition-colors peer-placeholder-shown:hidden hover:bg-accent hover:text-foreground"
+							aria-label={t('search.submit')}
+						>
+							<ArrowRight class="size-3.5" aria-hidden="true" />
 						</button>
 					</div>
 					{#if activeSection}
-						<label class="scope-toggle">
+						<label
+							class="scope-toggle flex items-center gap-2 px-1 text-[12px] text-muted-foreground"
+						>
 							<input
 								type="checkbox"
 								name="section"
 								value={activeSection.id}
 								checked={scopeInCurrentSection}
 								onchange={(event) => onScopeChange(event.currentTarget.checked)}
+								class="accent-primary"
 							/>
 							<span>{t('search.thisSection')}</span>
 						</label>
@@ -111,386 +159,129 @@
 			</search>
 		{/if}
 
-		<nav aria-label={t('nav.main')} class="rail-nav">
-			<ul role="list">
-				<li>
-					<a href="/" class="nav-item" aria-current={pathname === '/' ? 'page' : undefined}>
-						<span class="nav-label">{t('nav.feed')}</span>
-					</a>
-				</li>
-			</ul>
-			<p class="nav-group-label" aria-hidden="true">{t('nav.sections')}</p>
-			<ul role="list" class="nav-sections-full">
+		<!-- Primary action -->
+		<form method="GET" action="/" class="rail-compose mt-1.5 max-md:hidden">
+			<input type="hidden" name="compose" value="1" />
+			<button
+				type="submit"
+				class="flex h-8 w-full items-center justify-center gap-1.5 rounded-lg bg-ink text-[13px] font-medium tactile transition-opacity hover:opacity-90"
+				aria-label={t('nav.shareLink')}
+				onclick={handleCompose}
+			>
+				<Plus class="size-3.5" aria-hidden="true" />
+				<span>{t('nav.share')}</span>
+				<kbd class="ml-1 font-sans text-[11px] opacity-60" aria-hidden="true">n</kbd>
+			</button>
+		</form>
+
+		<!-- Navigation -->
+		<nav aria-label={t('nav.main')} class="rail-nav mt-3 flex flex-col gap-px max-md:hidden">
+			<a href="/" class={navItem} aria-current={pathname === '/' ? 'page' : undefined}>
+				<Inbox class="size-[15px] shrink-0" aria-hidden="true" />
+				<span>{t('nav.feed')}</span>
+			</a>
+
+			<p class="mt-4 mb-1 px-2.5 text-[11px] font-medium text-muted-foreground" aria-hidden="true">
+				{t('nav.sections')}
+			</p>
+			<ul role="list" class="flex flex-col gap-px">
 				{#each sections as section (section.id)}
 					{@const sectionPath = `/sections/${section.slug}`}
 					<li>
 						<a
 							href={sectionPath}
-							class="nav-item nav-section"
+							class={navItem}
 							aria-current={pathname === sectionPath ? 'page' : undefined}
 						>
-							<span class="nav-label">{section.name}</span>
+							<Hash class="size-3.5 shrink-0" aria-hidden="true" />
+							<span class="truncate">{section.name}</span>
 						</a>
 					</li>
 				{/each}
 				<li>
 					<a
 						href="/sections"
-						class="nav-item nav-section nav-all"
+						class={navItem}
 						aria-current={pathname === '/sections' ? 'page' : undefined}
 					>
-						<span class="nav-label">{t('nav.allSections')}</span>
+						<Layers class="size-3.5 shrink-0" aria-hidden="true" />
+						<span>{t('nav.allSections')}</span>
 					</a>
 				</li>
 			</ul>
+
+			{#if user.role === 'admin'}
+				<a
+					href="/admin/users"
+					class="{navItem} mt-3"
+					aria-current={pathname.startsWith('/admin') ? 'page' : undefined}
+				>
+					<Shield class="size-[15px] shrink-0" aria-hidden="true" />
+					<span>{t('nav.admin')}</span>
+				</a>
+			{/if}
 		</nav>
 
-		<div class="rail-bell">
+		<!-- Notifications: a rail row on wide screens, an icon button in the mobile top bar -->
+		<div class="rail-bell md:order-none md:mt-1">
 			<NotificationBell />
 		</div>
 
-		<form method="GET" action="/" class="rail-compose">
-			<input type="hidden" name="compose" value="1" />
-			<button
-				type="submit"
-				class="btn btn-primary compose-btn"
-				aria-label={t('nav.shareLink')}
-				onclick={handleCompose}
-			>
-				<span class="nav-label">{t('nav.share')}</span>
-				<kbd class="kbd kbd-hint compose-kbd" aria-hidden="true">n</kbd>
-			</button>
-		</form>
-
-		{#if user.role === 'admin'}
-			<div class="rail-admin-group">
-				<a
-					href="/admin/users"
-					class="nav-item rail-admin"
-					aria-current={pathname.startsWith('/admin') ? 'page' : undefined}
+		<!-- Account -->
+		<div class="rail-account mt-auto pt-3 max-md:hidden">
+			<Popover.Root bind:open={accountOpen}>
+				<Popover.Trigger
+					class="flex w-full items-center gap-2.5 rounded-lg p-1.5 text-left transition-colors hover:bg-sidebar-accent/70 data-open:bg-sidebar-accent"
+					aria-label={t('nav.accountMenu', { name: user.name })}
 				>
-					<span class="nav-label">{t('nav.admin')}</span>
-				</a>
-			</div>
-		{/if}
-
-		<div class="rail-account">
-			<PopoverPanel
-				id="account-menu"
-				triggerLabel={t('nav.accountMenu', { name: user.name })}
-				iconOnly
-				triggerClass="account-trigger"
-				panelClass="account-panel"
-			>
-				{#snippet trigger()}
-					<span class="nav-label account-meta">
-						<span class="account-name">{user.name}</span>
-						<span class="account-role">
+					<span
+						class="grid size-7 shrink-0 place-items-center rounded-full text-[11px] font-semibold text-avatar-foreground"
+						style="background: var(--avatar-{avatarTone(user.id)})"
+						aria-hidden="true"
+					>
+						{initials(user.name)}
+					</span>
+					<span class="min-w-0 flex-1 leading-tight">
+						<span class="block truncate text-[13px] font-medium">{user.name}</span>
+						<span class="block text-[11px] text-muted-foreground">
 							{user.role === 'admin' ? t('role.admin') : t('role.member')}
 						</span>
 					</span>
-				{/snippet}
-				{#snippet children({ close })}
-					<div class="account-menu">
-						<a href="/settings" class="menu-item" onclick={close}>
-							{t('nav.settings')}
-						</a>
-						<a href="/settings/api-keys" class="menu-item" onclick={close}>
-							{t('nav.apiKeys')}
-						</a>
-						<ThemeForm {theme} />
-						<form method="POST" action="/logout">
-							<button
-								type="submit"
-								class="menu-item"
-								aria-label={t('nav.signOutLabel', { name: user.name })}
-							>
-								{t('nav.signOut')}
-							</button>
-						</form>
-					</div>
-				{/snippet}
-			</PopoverPanel>
+					<ChevronsUpDown class="size-3.5 text-muted-foreground" aria-hidden="true" />
+				</Popover.Trigger>
+				<Popover.Content
+					side="top"
+					align="start"
+					sideOffset={6}
+					class="w-60 gap-1 rounded-xl border border-hairline p-1.5 shadow-lg ring-0"
+				>
+					<a href="/settings" class="{menuItem} no-underline" onclick={() => (accountOpen = false)}>
+						<Settings class="size-4 text-muted-foreground" aria-hidden="true" />
+						{t('nav.settings')}
+					</a>
+					<a
+						href="/settings/api-keys"
+						class="{menuItem} no-underline"
+						onclick={() => (accountOpen = false)}
+					>
+						<KeyRound class="size-4 text-muted-foreground" aria-hidden="true" />
+						{t('nav.apiKeys')}
+					</a>
+					<div class="my-1 h-px bg-hairline"></div>
+					<ThemeForm {theme} />
+					<div class="my-1 h-px bg-hairline"></div>
+					<form method="POST" action="/logout">
+						<button
+							type="submit"
+							class={menuItem}
+							aria-label={t('nav.signOutLabel', { name: user.name })}
+						>
+							<LogOut class="size-4 text-muted-foreground" aria-hidden="true" />
+							{t('nav.signOut')}
+						</button>
+					</form>
+				</Popover.Content>
+			</Popover.Root>
 		</div>
 	</div>
 </header>
-
-<style>
-	/* Künye index (docs/designs/izgah-ui-v4.md §3): rules and type, no icons, no stripes. */
-	.site-header {
-		align-self: stretch;
-		z-index: 30;
-		background: var(--rail-bg);
-		border-inline-end: 1px solid var(--rail-border);
-	}
-
-	.site-header-inner {
-		position: sticky;
-		inset-block-start: 0;
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-4);
-		block-size: 100dvh;
-		padding: var(--space-4) var(--space-4) var(--space-4) 22px;
-		overflow-y: auto;
-	}
-
-	.brand-row {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-
-	.brand {
-		font-size: 1.5rem;
-		font-weight: 600;
-		line-height: 1;
-		letter-spacing: -0.015em;
-		color: var(--k-color-text);
-		text-decoration: none;
-	}
-
-	.brand:hover {
-		color: var(--k-color-text);
-		text-decoration: none;
-	}
-
-	.brand-gah {
-		font-weight: 400;
-		color: var(--k-color-text-muted);
-	}
-
-	.rail-search form {
-		display: grid;
-		gap: var(--space-2);
-	}
-
-	.rail-search-bar {
-		display: flex;
-		align-items: stretch;
-		gap: var(--space-1);
-	}
-
-	.rail-search-field {
-		position: relative;
-		flex: 1;
-		min-inline-size: 0;
-	}
-
-	.rail-search-input {
-		inline-size: 100%;
-		min-block-size: 36px;
-		padding-inline-end: 34px;
-		border-color: var(--k-color-line-strong);
-	}
-
-	.rail-search-kbd {
-		position: absolute;
-		inset-inline-end: 8px;
-		inset-block-start: 50%;
-		translate: 0 -50%;
-		pointer-events: none;
-	}
-
-	.rail-search-field:focus-within .rail-search-kbd,
-	.rail-search-field:has(input:not(:placeholder-shown)) .rail-search-kbd {
-		opacity: 0;
-	}
-
-	.rail-search-submit {
-		flex: none;
-	}
-
-	.scope-toggle {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-2);
-		font: var(--k-text-hint);
-		color: var(--k-color-text-secondary);
-	}
-
-	.rail-nav ul {
-		display: grid;
-		gap: 1px;
-		margin: 0;
-		padding: 0;
-		list-style: none;
-	}
-
-	.nav-group-label {
-		margin: var(--space-4) 0 var(--space-1);
-		font: var(--k-text-hint);
-		color: var(--k-color-text-muted);
-	}
-
-	.nav-item {
-		display: flex;
-		align-items: baseline;
-		gap: var(--space-2);
-		margin-inline: -8px;
-		padding: 5px 8px;
-		font: var(--k-text-ui);
-		font-size: 0.9375rem;
-		font-weight: 400;
-		color: var(--k-color-text-secondary);
-		text-decoration: none;
-		border-radius: var(--k-radius-sm);
-	}
-
-	.nav-item:hover {
-		color: var(--k-color-text);
-		background: var(--k-color-surface-2);
-		text-decoration: none;
-	}
-
-	.nav-item[aria-current='page'] {
-		font-weight: 600;
-		color: var(--k-color-text);
-		background: var(--k-color-surface-2);
-	}
-
-	.nav-section .nav-label {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
-
-	.rail-compose,
-	.rail-admin-group {
-		display: grid;
-	}
-
-	.compose-btn {
-		justify-content: space-between;
-	}
-
-	.compose-kbd {
-		color: inherit;
-		border-color: currentColor;
-		background: transparent;
-		opacity: 0.7;
-	}
-
-	.rail-account {
-		margin-block-start: auto;
-		padding-block-start: var(--space-3);
-		border-block-start: 1px solid var(--k-color-line);
-	}
-
-	:global(.account-trigger) {
-		display: flex !important;
-		justify-content: flex-start !important;
-		align-items: center;
-		inline-size: 100%;
-		margin-inline: -8px;
-		padding: 6px 8px;
-		color: var(--k-color-text);
-		text-align: start;
-		background: transparent;
-		border: 0;
-		border-radius: var(--k-radius-sm);
-		cursor: pointer;
-	}
-
-	:global(.account-trigger:hover) {
-		background: var(--k-color-surface-2);
-	}
-
-	.account-meta {
-		display: grid;
-		min-inline-size: 0;
-	}
-
-	.account-name {
-		overflow: hidden;
-		font: var(--k-text-ui);
-		font-weight: 600;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
-
-	.account-role {
-		font: var(--k-text-hint);
-		color: var(--k-color-text-muted);
-	}
-
-	.account-menu {
-		display: grid;
-		gap: 1px;
-		min-inline-size: 220px;
-		padding: var(--space-1);
-	}
-
-	.menu-item {
-		display: flex;
-		align-items: center;
-		inline-size: 100%;
-		min-block-size: 36px;
-		padding: 0 var(--space-3);
-		font: var(--k-text-ui);
-		font-weight: 400;
-		color: var(--k-color-text);
-		text-align: start;
-		text-decoration: none;
-		background: transparent;
-		border: 0;
-		border-radius: var(--k-radius-sm);
-		cursor: pointer;
-	}
-
-	.menu-item:hover {
-		background: var(--k-color-surface-2);
-		text-decoration: none;
-	}
-
-	/* Mobile top bar (< 768px): brand + bell only; navigation moves to the bottom tab bar. */
-	@media (max-width: 767px) {
-		.site-header {
-			position: sticky;
-			inset-block-start: 0;
-			align-self: start;
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			justify-content: space-between;
-			block-size: var(--header-h);
-			padding: 0 var(--gutter);
-			overflow: visible;
-			border-inline-end: 0;
-			border-block-end: 1px solid var(--k-color-line);
-		}
-
-		.site-header-inner {
-			display: contents;
-		}
-
-		.brand {
-			font-size: 1.25rem;
-		}
-
-		.rail-search,
-		.rail-nav,
-		.rail-compose,
-		.rail-admin-group,
-		.rail-admin,
-		.rail-account {
-			display: none;
-		}
-	}
-
-	@media (pointer: coarse) {
-		.scope-toggle,
-		.nav-item {
-			min-block-size: 44px;
-			align-items: center;
-		}
-	}
-
-	@media (forced-colors: active) {
-		.nav-item[aria-current='page'] {
-			forced-color-adjust: none;
-			background: Highlight;
-			color: HighlightText;
-		}
-	}
-</style>

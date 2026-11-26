@@ -242,11 +242,15 @@ test.describe('Milestone M5 — Web Feed, Sections & Native Platform UI', () => 
 		await expect(page.getByRole('heading', { name: 'Ana Akış' })).toBeVisible();
 		await expect(page.getByRole('button', { name: 'Link Paylaş' })).toBeVisible();
 
-		// Settings live in the rail's account menu (izgah-ui-v2 §6).
+		// Settings live in the rail's account menu (izgah-ui-v5 §4); the menu needs JavaScript.
+		await expect(page.locator('html[data-hydrated]')).toHaveCount(1);
 		await page.getByRole('button', { name: 'Hesap menüsü' }).click();
 		await page.getByRole('link', { name: 'Ayarlar', exact: true }).click();
 		await page.waitForURL('**/settings');
-		await page.getByRole('link', { name: 'API anahtarları' }).click();
+		await page
+			.getByRole('navigation', { name: 'Hesap ayarları' })
+			.getByRole('link', { name: 'API anahtarları' })
+			.click();
 		await page.waitForURL('**/settings/api-keys');
 		await expect(page.getByRole('button', { name: 'Link Paylaş' })).toBeVisible();
 

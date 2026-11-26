@@ -1,6 +1,11 @@
 <script lang="ts">
 	import { t } from '#lib/i18n/index.ts';
 	import { page } from '$app/state';
+	import Inbox from '@lucide/svelte/icons/inbox';
+	import Layers from '@lucide/svelte/icons/layers';
+	import Plus from '@lucide/svelte/icons/plus';
+	import Search from '@lucide/svelte/icons/search';
+	import UserRound from '@lucide/svelte/icons/user-round';
 
 	interface Props {
 		onCompose: () => void;
@@ -13,40 +18,52 @@
 		event.preventDefault();
 		onCompose();
 	}
+
+	const tab =
+		'relative grid min-h-12 place-items-center content-center gap-1 rounded-lg px-1 text-[11px] text-muted-foreground no-underline transition-colors aria-[current=page]:font-medium aria-[current=page]:text-foreground';
 </script>
 
-<!-- Only visible below 768px; the rail navigation is display:none there, so exactly one
-     "Ana gezinme" landmark exists at every width. -->
-<nav class="tab-bar" aria-label={t('nav.main')}>
-	<a href="/" class="tab" aria-current={pathname === '/' ? 'page' : undefined}>
+<!--
+	Mobile tab bar (< 768px), docs/designs/izgah-ui-v5.md §4. The rail navigation is display:none
+	there, so exactly one "Ana gezinme" landmark exists at every width (izgah-ui-v2.md §12).
+-->
+<nav class="tab-bar border-t border-hairline glass" aria-label={t('nav.main')}>
+	<a href="/" class={tab} aria-current={pathname === '/' ? 'page' : undefined}>
+		<Inbox class="size-5" aria-hidden="true" />
 		<span>{t('nav.feed')}</span>
 	</a>
 	<a
 		href="/sections"
-		class="tab"
+		class={tab}
 		aria-current={pathname.startsWith('/sections') ? 'page' : undefined}
 	>
+		<Layers class="size-5" aria-hidden="true" />
 		<span>{t('nav.sections')}</span>
 	</a>
-	<form method="GET" action="/" class="tab-form">
+	<form method="GET" action="/" class="contents">
 		<input type="hidden" name="compose" value="1" />
 		<button
 			type="submit"
-			class="tab tab-compose"
+			class="grid place-items-center self-center justify-self-center"
 			aria-label={t('nav.shareLink')}
 			onclick={handleCompose}
 		>
-			<span>{t('nav.share')}</span>
+			<span class="grid size-11 place-items-center rounded-full bg-ink tactile">
+				<Plus class="size-5" aria-hidden="true" />
+			</span>
+			<span class="sr-only">{t('nav.share')}</span>
 		</button>
 	</form>
-	<a href="/search" class="tab" aria-current={pathname === '/search' ? 'page' : undefined}>
+	<a href="/search" class={tab} aria-current={pathname === '/search' ? 'page' : undefined}>
+		<Search class="size-5" aria-hidden="true" />
 		<span>{t('nav.search')}</span>
 	</a>
 	<a
 		href="/settings"
-		class="tab"
+		class={tab}
 		aria-current={pathname.startsWith('/settings') ? 'page' : undefined}
 	>
+		<UserRound class="size-5" aria-hidden="true" />
 		<span>{t('nav.profile')}</span>
 	</a>
 </nav>
@@ -66,11 +83,9 @@
 			grid-template-columns: repeat(5, 1fr);
 			gap: var(--space-1);
 			min-block-size: var(--tab-bar-h);
-			padding-block: 6px calc(6px + env(safe-area-inset-bottom, 0px));
+			padding-block: 4px calc(4px + env(safe-area-inset-bottom, 0px));
 			padding-inline: calc(6px + env(safe-area-inset-left, 0px))
 				calc(6px + env(safe-area-inset-right, 0px));
-			background: var(--k-color-bg);
-			border-block-start: 1px solid var(--k-color-line);
 		}
 
 		/* Keep the bar from sitting on top of the virtual keyboard while typing, and keep it away
@@ -82,77 +97,8 @@
 		}
 	}
 
-	.tab-form {
-		display: contents;
-	}
-
-	.tab {
-		position: relative;
-		display: grid;
-		place-items: center;
-		align-content: center;
-		gap: 3px;
-		min-block-size: 48px;
-		padding: var(--space-1);
-		font-family: var(--font-sans);
-		font-size: 0.8125rem;
-		font-weight: 400;
-		line-height: 1.15;
-		color: var(--k-color-text-secondary);
-		text-decoration: none;
-		background: transparent;
-		border: 0;
-		border-radius: var(--k-radius-sm);
-		cursor: pointer;
-		transition:
-			background-color var(--dur-fast) var(--ease),
-			color var(--dur-fast) var(--ease),
-			opacity var(--dur-fast) var(--ease);
-	}
-
-	.tab:not([aria-current='page'], .tab-compose):hover {
-		background: var(--k-color-surface-2);
-		color: var(--k-color-text);
-		text-decoration: none;
-	}
-
-	.tab:active {
-		opacity: 0.88;
-	}
-
-	/* Künye: words only; the current tab is bold and underlined, "Add a link" is bold ink. */
-	.tab[aria-current='page'] {
-		color: var(--k-color-text);
-		font-weight: 600;
-		text-decoration: underline;
-		text-decoration-thickness: 2px;
-		text-underline-offset: 0.35em;
-	}
-
-	.tab-compose {
-		color: var(--k-color-text);
-		font-weight: 600;
-	}
-
-	.tab-compose:hover {
-		background: var(--k-color-surface-2);
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.tab {
-			transition:
-				background-color var(--dur-fast) var(--ease),
-				color var(--dur-fast) var(--ease),
-				opacity var(--dur-fast) var(--ease);
-		}
-	}
-
 	@media (forced-colors: active) {
-		.tab:active {
-			opacity: 1;
-		}
-
-		.tab[aria-current='page'] {
+		.tab-bar :global([aria-current='page']) {
 			forced-color-adjust: none;
 			background: Highlight;
 			color: HighlightText;
