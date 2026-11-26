@@ -133,19 +133,9 @@
 		align-items: center;
 		gap: var(--space-2);
 		min-block-size: 40px;
-		padding: var(--space-2) var(--space-3);
 		font: var(--text-ui);
-		font-weight: 600;
 		color: var(--color-text);
-		background: var(--color-surface-2);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-sm);
 		cursor: pointer;
-		transition: border-color var(--dur-fast) var(--ease);
-	}
-
-	.switch-row:hover {
-		border-color: var(--color-line-strong);
 	}
 
 	.switch-row input {

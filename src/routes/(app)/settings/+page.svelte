@@ -204,14 +204,9 @@
 					<span class="field-hint">{t('settings.roleHint')}</span>
 				</dt>
 				<dd class="settings-row-control">
-					{#if data.user.role === 'admin'}
-						<span class="status-pill status-active">
-							<span class="status-dot" aria-hidden="true"></span>
-							<span>{t('role.admin')}</span>
-						</span>
-					{:else}
-						<span class="badge">{t('role.member')}</span>
-					{/if}
+					<span class="role-value">
+						{data.user.role === 'admin' ? t('role.admin') : t('role.member')}
+					</span>
 				</dd>
 			</div>
 		</dl>
@@ -228,7 +223,7 @@
 					</p>
 				</div>
 				<div class="settings-row-control">
-					<ThemeForm theme={themeChoice} variant="segmented" legend={t('settings.modeLegend')} />
+					<ThemeForm theme={themeChoice} variant="list" legend={t('settings.modeLegend')} />
 				</div>
 			</div>
 
@@ -252,9 +247,9 @@
 				<div class="settings-row-control">
 					<!-- Plain POST + 303: the page reloads in the new language (izgah-i18n-oss.md §2). -->
 					<form method="POST" action="?/setLocale" class="locale-form">
-						<fieldset class="segmented locale-options" aria-labelledby="language-heading">
+						<fieldset class="radio-list locale-options" aria-labelledby="language-heading">
 							{#each LOCALES as code (code)}
-								<label class="seg-item" class:is-active={currentLocale === code}>
+								<label class="radio-option">
 									<input
 										type="radio"
 										name="locale"
@@ -285,9 +280,6 @@
 						</p>
 					</div>
 					<div class="settings-row-control toggle-row">
-						<span class="toggle-status">
-							{shortcutPreference.enabled ? t('settings.shortcutsOn') : t('settings.shortcutsOff')}
-						</span>
 						<input
 							id="single-key-shortcuts"
 							type="checkbox"
@@ -296,6 +288,9 @@
 							checked={shortcutPreference.enabled}
 							onchange={(event) => shortcutPreference.set(event.currentTarget.checked)}
 						/>
+						<span class="toggle-status">
+							{shortcutPreference.enabled ? t('settings.shortcutsOn') : t('settings.shortcutsOff')}
+						</span>
 					</div>
 				</div>
 			{/if}
@@ -541,7 +536,6 @@
 	.settings-subnav a[aria-current='page']:hover {
 		color: var(--color-text);
 		font-weight: 600;
-		border-block-end-color: var(--color-accent);
 		text-decoration: none;
 	}
 
@@ -633,8 +627,7 @@
 	.toggle-row {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
-		gap: var(--space-4);
+		gap: var(--space-2);
 	}
 
 	.toggle-status {
@@ -646,43 +639,53 @@
 		color: var(--color-text-secondary);
 	}
 
-	/* Native checkbox styled as a tactile Studio toggle switch (real focus & forced-colors). */
+	/* Shortcuts: a native checkbox, not a switch (izgah-ui-v4 §7). */
 	.switch-input {
-		appearance: none;
-		position: relative;
-		inline-size: 40px;
-		block-size: 24px;
-		flex: none;
-		margin: 0;
-		border-radius: var(--radius-pill);
-		background: var(--color-surface-3);
-		border: 1px solid var(--color-line-strong);
-		cursor: pointer;
-		transition:
-			background-color var(--dur-fast) var(--ease),
-			border-color var(--dur-fast) var(--ease);
-	}
-
-	.switch-input::after {
-		content: '';
-		position: absolute;
-		inset-block-start: 3px;
-		inset-inline-start: 3px;
 		inline-size: 16px;
 		block-size: 16px;
-		border-radius: var(--radius-pill);
-		background: var(--color-surface-1);
-		transition: translate var(--dur-fast) var(--ease);
+		margin: 0;
+		flex: none;
+		cursor: pointer;
 	}
 
-	.switch-input:checked {
-		background: var(--color-accent);
-		border-color: var(--color-accent);
+	.radio-list {
+		display: grid;
+		gap: 2px;
+		margin: 0;
+		padding: 0;
+		border: 0;
 	}
 
-	.switch-input:checked::after {
-		background: var(--color-on-accent);
-		translate: 16px 0;
+	.radio-option {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		min-block-size: 32px;
+		font: var(--text-ui);
+		font-weight: 400;
+		color: var(--color-text);
+		cursor: pointer;
+	}
+
+	.radio-option:has(input:checked) {
+		font-weight: 600;
+	}
+
+	.radio-option input {
+		inline-size: 16px;
+		block-size: 16px;
+		margin: 0;
+	}
+
+	.role-value {
+		font: var(--text-body);
+		color: var(--color-text);
+	}
+
+	@media (pointer: coarse) {
+		.radio-option {
+			min-block-size: 44px;
+		}
 	}
 
 	.password-column {
@@ -741,25 +744,6 @@
 		.settings-subnav a[aria-current='page']:hover {
 			border-block-end-color: Highlight;
 			color: Highlight;
-		}
-
-		.switch-input {
-			background: Canvas;
-			border-color: ButtonText;
-		}
-
-		.switch-input::after {
-			background: ButtonText;
-			box-shadow: none;
-		}
-
-		.switch-input:checked {
-			background: Highlight;
-			border-color: Highlight;
-		}
-
-		.switch-input:checked::after {
-			background: HighlightText;
 		}
 	}
 </style>

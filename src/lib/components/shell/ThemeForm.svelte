@@ -8,7 +8,7 @@
 	interface Props {
 		/** Server-rendered choice; the shared ThemeState wins once it exists. */
 		theme: ThemeChoice;
-		variant?: 'menu' | 'segmented';
+		variant?: 'menu' | 'list';
 		legend?: string;
 	}
 
@@ -125,81 +125,45 @@
 		font-weight: 600;
 	}
 
-	/* Settings: crisp Studio SegmentedControl look with native radio inputs. */
-	.is-segmented legend {
-		margin-block-end: var(--space-2);
-		font: var(--text-ui);
-		font-weight: 600;
-		color: var(--color-text);
-	}
-
-	.is-segmented .theme-options {
-		display: inline-flex;
-		align-items: center;
-		gap: 2px;
-		padding: 3px;
-		max-inline-size: 100%;
-		overflow-x: auto;
-		background: var(--color-surface-2);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-sm);
-	}
-
-	.is-segmented .theme-option {
-		position: relative;
-		justify-content: center;
-		min-block-size: 32px;
-		padding: 0 14px;
-		border: 1px solid transparent;
-		border-radius: calc(var(--radius-sm) - 2px);
-		color: var(--color-text-secondary);
+	/* Settings: a plain radio list (izgah-ui-v4 §7), native radios with visible labels. */
+	.is-list legend {
+		position: absolute;
+		inline-size: 1px;
+		block-size: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
 		white-space: nowrap;
 	}
 
-	.is-segmented .theme-option:not(:has(input:checked)):hover {
+	.is-list .theme-options {
+		display: grid;
+		gap: 2px;
+	}
+
+	.is-list .theme-option {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		min-block-size: 32px;
+		font: var(--text-ui);
+		font-weight: 400;
 		color: var(--color-text);
-		background: var(--color-surface-3);
-	}
-
-	.is-segmented .theme-option:has(input:checked) {
-		background: var(--color-surface-1);
-		color: var(--color-text);
-		border-color: var(--color-line);
-		font-weight: 600;
-	}
-
-	.is-segmented .theme-option:has(input:focus-visible) {
-		outline: 2px solid transparent;
-		outline-offset: 2px;
-		box-shadow:
-			0 0 0 2px var(--color-bg),
-			0 0 0 4px var(--color-accent);
-	}
-
-	.is-segmented input {
-		/* Transparent radio covering the whole segment: it receives the click itself. */
-		position: absolute;
-		inset: 0;
-		inline-size: 100%;
-		block-size: 100%;
-		margin: 0;
-		opacity: 0;
 		cursor: pointer;
 	}
 
-	@media (pointer: coarse) {
-		.is-segmented .theme-option {
-			min-block-size: 40px;
-		}
+	.is-list .theme-option:has(input:checked) {
+		font-weight: 600;
 	}
 
-	@media (forced-colors: active) {
-		.is-segmented .theme-option:has(input:checked) {
-			forced-color-adjust: none;
-			background: Highlight;
-			color: HighlightText;
-			border-color: Highlight;
-			box-shadow: none;
+	.is-list input {
+		inline-size: 16px;
+		block-size: 16px;
+		margin: 0;
+	}
+
+	@media (pointer: coarse) {
+		.is-list .theme-option {
+			min-block-size: 44px;
 		}
 	}
 </style>

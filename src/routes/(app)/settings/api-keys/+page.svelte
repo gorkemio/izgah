@@ -808,8 +808,7 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: var(--space-2);
-		padding: var(--space-3) var(--space-4);
-		background: var(--color-surface-2);
+		padding: var(--space-3) 0;
 		border-block-end: 1px solid var(--color-line);
 	}
 

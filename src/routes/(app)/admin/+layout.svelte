@@ -130,33 +130,11 @@
 	}
 
 	/* Border-based underline survives forced-colors mode (WCAG 1.4.1). */
-	.admin-subnav-link[aria-current='page']::after {
-		content: '';
-		position: absolute;
-		inset-inline: 0;
-		inset-block-end: -1px;
-		border-block-end: 2px solid var(--color-accent);
-	}
 
 	.subnav-badge {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		min-inline-size: 1.25rem;
-		min-block-size: 18px;
-		padding: 0 6px;
-		border-radius: var(--radius-pill);
-		font: var(--text-micro);
+		font: var(--text-meta);
 		font-variant-numeric: tabular-nums;
-		background: var(--color-surface-2);
-		color: var(--color-text-secondary);
-		border: 1px solid var(--color-line);
-	}
-
-	.admin-subnav-link[aria-current='page'] .subnav-badge {
-		background: var(--color-accent-soft);
-		color: var(--color-accent-text);
-		border-color: var(--color-accent-border);
+		color: var(--color-text-muted);
 	}
 
 	@media (pointer: coarse) {
@@ -168,21 +146,6 @@
 	@media (forced-colors: active) {
 		.admin-subnav-link[aria-current='page'] {
 			color: Highlight;
-		}
-
-		.admin-subnav-link[aria-current='page']::after {
-			border-block-end-width: 3px;
-			border-block-end-color: Highlight;
-		}
-
-		.subnav-badge {
-			border-color: CanvasText;
-		}
-
-		.admin-subnav-link[aria-current='page'] .subnav-badge {
-			background: Highlight;
-			color: HighlightText;
-			border-color: Highlight;
 		}
 	}
 </style>

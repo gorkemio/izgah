@@ -276,13 +276,14 @@
 	}
 
 	.panel {
-		background: var(--color-surface-1);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-md);
-		padding: var(--space-5);
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-4);
+		padding: var(--space-4) 0 0;
+		background: none;
+		border: 0;
+		border-block-start: 1px solid var(--color-text);
+		border-radius: 0;
 	}
 
 	.panel h2,
@@ -300,38 +301,27 @@
 	}
 
 	.checkbox-grid {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--space-2);
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+		gap: 0 var(--space-4);
 	}
 
 	.checkbox-pill {
 		display: inline-flex;
 		align-items: center;
 		gap: var(--space-2);
-		min-block-size: 34px;
-		padding: var(--space-1) var(--space-3);
-		background: var(--color-surface-1);
-		border: 1px solid var(--color-line-strong);
-		border-radius: var(--radius-pill);
+		min-block-size: 32px;
 		font: var(--text-ui);
+		font-weight: 400;
 		color: var(--color-text);
 		cursor: pointer;
-		transition:
-			background-color var(--dur-fast) var(--ease),
-			border-color var(--dur-fast) var(--ease),
-			color var(--dur-fast) var(--ease);
 	}
 
 	.checkbox-pill:hover {
-		background: var(--color-surface-2);
-		border-color: var(--color-text-secondary);
+		color: var(--color-text);
 	}
 
 	.checkbox-pill:has(input:checked) {
-		background: var(--color-accent-soft);
-		border-color: var(--color-accent);
-		color: var(--color-accent-text);
 		font-weight: 600;
 	}
 
@@ -465,16 +455,8 @@
 	}
 
 	.channel-badge {
-		display: inline-flex;
-		align-items: center;
-		padding: 2px 9px;
-		border-radius: var(--radius-pill);
-		font: var(--text-micro);
-		letter-spacing: 0.02em;
-		background: var(--color-surface-2);
-		border: 1px solid var(--color-line);
+		font: var(--text-hint);
 		color: var(--color-text-secondary);
-		white-space: nowrap;
 	}
 
 	.responsive-unassigned-table th.num-col,

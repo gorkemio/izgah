@@ -358,10 +358,6 @@
 		display: grid;
 		gap: var(--space-3);
 		min-inline-size: 0;
-		padding: var(--space-4);
-		background: var(--color-surface-1);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-lg);
 	}
 
 	.search-form {
