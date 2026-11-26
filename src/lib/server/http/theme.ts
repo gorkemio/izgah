@@ -1,5 +1,4 @@
 import {
-	ACCENT_VALUES,
 	colorSchemeFor,
 	DARK_THEME_VALUES,
 	DEFAULT_PALETTE,
@@ -17,8 +16,7 @@ export const THEME_COOKIE = 'izgah_theme';
 /** One cookie per palette field (docs/designs/izgah-themes.md §3). */
 export const PALETTE_COOKIES = {
 	lightTheme: 'izgah_theme_light',
-	darkTheme: 'izgah_theme_dark',
-	accent: 'izgah_accent'
+	darkTheme: 'izgah_theme_dark'
 } as const satisfies Record<keyof Palette, string>;
 
 /** Only whitelisted values ever reach the HTML (the cookie value is written into `<html>`). */
@@ -38,8 +36,7 @@ export function parsePalette(getCookie: (name: string) => string | undefined): P
 			DARK_THEME_VALUES,
 			getCookie(PALETTE_COOKIES.darkTheme),
 			DEFAULT_PALETTE.darkTheme
-		),
-		accent: pickAllowed(ACCENT_VALUES, getCookie(PALETTE_COOKIES.accent), DEFAULT_PALETTE.accent)
+		)
 	};
 }
 
@@ -53,16 +50,15 @@ export function fillAppearancePlaceholders(
 		.replace('%izgah.theme%', () => theme)
 		.replace('%izgah.colorScheme%', () => colorSchemeFor(theme))
 		.replace('%izgah.lightTheme%', () => palette.lightTheme)
-		.replace('%izgah.darkTheme%', () => palette.darkTheme)
-		.replace('%izgah.accent%', () => palette.accent);
+		.replace('%izgah.darkTheme%', () => palette.darkTheme);
 }
 
-const PRELOADED_FONT_PATTERN =
-	/geist-latin(?:-ext)?-wght-normal|newsreader-latin(?:-ext)?-opsz-normal/;
+const PRELOADED_FONT_PATTERN = /atkinson-hyperlegible-next-latin(?:-ext)?-wght-normal/;
 
 /**
- * Preloads the Geist and Newsreader normal woff2 files Turkish pages always need (latin for ı,
- * latin-ext for ğ ş İ Ğ Ş); mono and italic subsets load on demand through unicode-range.
+ * Preloads the Atkinson Hyperlegible Next normal woff2 files Turkish pages always need (latin for ı,
+ * latin-ext for ğ ş İ Ğ Ş); italic subsets load on demand through unicode-range
+ * (docs/designs/izgah-ui-v4.md §2).
  */
 export function shouldPreload({ type, path }: { type: string; path: string }): boolean {
 	if (type === 'js' || type === 'css') {

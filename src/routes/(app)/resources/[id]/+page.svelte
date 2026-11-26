@@ -8,8 +8,6 @@
 	import { untrack } from 'svelte';
 	import PostCard from '#lib/components/feed/PostCard.svelte';
 	import ResourceHero from '#lib/components/resource/ResourceHero.svelte';
-	import Avatar from '#lib/components/ui/Avatar.svelte';
-	import type { AvatarStackItem } from '#lib/components/ui/AvatarStack.svelte';
 	import Icon from '#lib/components/ui/Icon.svelte';
 	import type { ShareCardFormError } from '#lib/types/feed.ts';
 	import Dialog from '#lib/components/ui/Dialog.svelte';
@@ -128,20 +126,6 @@
 		for (const share of data.shares) {
 			for (const section of share.sections) {
 				seen.set(section.id, section);
-			}
-		}
-		return [...seen.values()];
-	});
-
-	// Distinct sharers for the ResourceHero AvatarStack.
-	const resourceSharers = $derived.by((): AvatarStackItem[] => {
-		const seen = new Map<string, AvatarStackItem>();
-		for (const share of data.shares) {
-			if (!seen.has(share.author.id)) {
-				seen.set(share.author.id, {
-					name: share.author.name,
-					self: share.author.id === data.user.id
-				});
 			}
 		}
 		return [...seen.values()];
@@ -451,7 +435,6 @@
 		<ResourceHero
 			resource={data.resource}
 			originalShareDeleted={data.originalShareDeleted}
-			sharers={resourceSharers}
 			aiSummary={data.aiSummary}
 		/>
 
@@ -483,11 +466,6 @@
 
 						<li class="comment-card" data-comment-id={comment.id}>
 							<div class="comment-meta">
-								<Avatar
-									name={comment.author.name}
-									self={comment.author.id === data.user.id}
-									size={26}
-								/>
 								<span class="comment-author">{comment.author.name}</span>
 								<span class="comment-date">
 									<time datetime={comment.createdAt}>{formatTrDateTime(comment.createdAt)}</time>
@@ -820,31 +798,22 @@
 		text-decoration: none;
 	}
 
+	/* Künye: blocks are separated by an ink rule under their heading, not boxed. */
 	.studio-card {
 		display: grid;
-		gap: var(--space-4);
+		gap: var(--space-3);
 		min-inline-size: 0;
-		padding: var(--space-4);
-		background: var(--color-surface-1);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-md);
-		box-shadow: var(--shadow-sm);
-	}
-
-	@media (min-width: 640px) {
-		.studio-card {
-			padding: 20px 22px;
-		}
 	}
 
 	.card-head {
 		display: flex;
-		align-items: center;
+		align-items: baseline;
 		justify-content: space-between;
 		gap: var(--space-2);
+		padding-block-end: 6px;
+		border-block-end: 1px solid var(--color-text);
 	}
 
-	/* Strict serif boundary: panel h2 subheadings stay --font-sans (--text-section). */
 	.card-heading {
 		font: var(--text-section);
 		letter-spacing: -0.01em;
@@ -857,12 +826,9 @@
 		color: var(--color-text-muted);
 	}
 
-	/* Timeline: vertical hairline spine with subtle accent dots. */
+	/* Share history: a plain list; each entry is a compact register row. */
 	.timeline {
-		border-inline-start: 1px solid var(--color-line);
-		margin-inline-start: 6px;
-		padding-inline-start: var(--space-4);
-		gap: var(--space-4);
+		gap: 0;
 	}
 
 	.timeline-entry {
@@ -870,25 +836,9 @@
 		min-inline-size: 0;
 	}
 
-	.timeline-entry::before {
-		content: '';
-		position: absolute;
-		inset-inline-start: calc(-1 * var(--space-4) - 4px);
-		inset-block-start: 12px;
-		inline-size: 7px;
-		block-size: 7px;
-		border-radius: var(--radius-pill);
-		background: var(--color-accent);
-		box-shadow: 0 0 0 3px var(--color-surface-1);
-	}
-
 	.timeline :global(.share-card) {
 		margin-inline: 0;
-		padding: 0;
-		background: transparent;
-		border: 0;
-		border-radius: 0;
-		box-shadow: none;
+		padding-inline: 0;
 	}
 
 	.section-tags {

@@ -85,11 +85,14 @@ async function renderShell(cookies?: Record<string, string>, template = THEME_ON
 				})) ?? '';
 			const preload = options?.preload;
 			preloadDecisions = [
+				['font', '/_app/immutable/assets/atkinson-hyperlegible-next-latin-wght-normal.abc.woff2'],
+				[
+					'font',
+					'/_app/immutable/assets/atkinson-hyperlegible-next-latin-ext-wght-normal.abc.woff2'
+				],
+				['font', '/_app/immutable/assets/atkinson-hyperlegible-next-latin-wght-italic.abc.woff2'],
 				['font', '/_app/immutable/assets/geist-latin-wght-normal.abc.woff2'],
-				['font', '/_app/immutable/assets/geist-latin-ext-wght-normal.abc.woff2'],
 				['font', '/_app/immutable/assets/newsreader-latin-opsz-normal.abc.woff2'],
-				['font', '/_app/immutable/assets/newsreader-latin-ext-opsz-normal.abc.woff2'],
-				['font', '/_app/immutable/assets/newsreader-latin-opsz-italic.abc.woff2'],
 				['font', '/_app/immutable/assets/jetbrains-mono-latin-wght-normal.abc.woff2'],
 				['js', '/_app/immutable/entry/start.js']
 			].map(([type, path]) => [
@@ -117,13 +120,13 @@ describe('UI v3 theme cookie and font preload (docs/designs/izgah-ui-v3.md §2, 
 		);
 	});
 
-	it('preloads only the Geist and Newsreader normal latin and latin-ext fonts', async () => {
+	it('preloads only the Atkinson Hyperlegible Next normal latin and latin-ext fonts', async () => {
 		const { preloadDecisions } = await renderShell();
 		expect(preloadDecisions.map(([, , decision]) => decision)).toEqual([
 			true,
 			true,
-			true,
-			true,
+			false,
+			false,
 			false,
 			false,
 			true
@@ -176,10 +179,10 @@ describe('UI v3 theme cookie and font preload (docs/designs/izgah-ui-v3.md §2, 
 	});
 });
 
-describe('Named themes: palette cookies and setPalette (docs/designs/izgah-ui-v3.md §1, izgah-themes.md §3)', () => {
+describe('Named themes: palette cookies and setPalette (docs/designs/izgah-ui-v4.md §1, izgah-themes.md §3)', () => {
 	const APPEARANCE_TEMPLATE =
 		'<html lang="tr" data-theme="%izgah.theme%" data-light-theme="%izgah.lightTheme%"' +
-		' data-dark-theme="%izgah.darkTheme%" data-accent="%izgah.accent%">' +
+		' data-dark-theme="%izgah.darkTheme%">' +
 		'<head><meta name="color-scheme" content="%izgah.colorScheme%" /></head></html>';
 	type SetPaletteEvent = Parameters<typeof settingsActions.setPalette>[0];
 
@@ -188,39 +191,38 @@ describe('Named themes: palette cookies and setPalette (docs/designs/izgah-ui-v3
 			{
 				izgah_theme: 'dark',
 				izgah_theme_light: 'contrast',
-				izgah_theme_dark: 'dim',
-				izgah_accent: 'plum'
+				izgah_theme_dark: 'contrast'
 			},
 			APPEARANCE_TEMPLATE
 		);
 		expect(html).toContain(
-			'<html lang="tr" data-theme="dark" data-light-theme="contrast" data-dark-theme="dim" data-accent="plum">'
+			'<html lang="tr" data-theme="dark" data-light-theme="contrast" data-dark-theme="contrast">'
 		);
 		expect(html).toContain('<meta name="color-scheme" content="dark" />');
 	});
 
-	it('falls back to the default palette for missing, forged, or legacy v2 accent values', async () => {
+	it('falls back to the default palette for missing, forged, or removed (dim) values', async () => {
 		const { html } = await renderShell(
 			{ izgah_theme_dark: '"><script>x</script>', izgah_accent: 'orange' },
 			APPEARANCE_TEMPLATE
 		);
 		expect(html).toContain(
-			'data-theme="system" data-light-theme="default" data-dark-theme="default" data-accent="teal"'
+			'data-theme="system" data-light-theme="default" data-dark-theme="default"'
 		);
 		expect(html).toContain('<meta name="color-scheme" content="light dark" />');
 		expect(html).not.toContain('<script>');
+		expect(html).not.toContain('data-accent');
 
-		const legacy = await renderShell({ izgah_accent: 'lime' }, APPEARANCE_TEMPLATE);
-		expect(legacy.html).toContain('data-accent="teal"');
+		const legacy = await renderShell({ izgah_theme_dark: 'dim' }, APPEARANCE_TEMPLATE);
+		expect(legacy.html).toContain('data-dark-theme="default"');
 	});
 
-	it('setPalette stores all three cookies and redirects back without JS', async () => {
+	it('setPalette stores both palette cookies and redirects back without JS', async () => {
 		const { event, cookiesSet } = createEvent({
 			url: '/settings?/setPalette',
 			formEntries: {
 				lightTheme: 'contrast',
-				darkTheme: 'dim',
-				accent: 'terracotta',
+				darkTheme: 'contrast',
 				returnTo: '/settings'
 			},
 			user: true
@@ -234,8 +236,7 @@ describe('Named themes: palette cookies and setPalette (docs/designs/izgah-ui-v3
 		expect(isRedirect(thrown) && thrown.location).toBe('/settings');
 		expect(cookiesSet.map(({ name, value }) => [name, value])).toEqual([
 			['izgah_theme_light', 'contrast'],
-			['izgah_theme_dark', 'dim'],
-			['izgah_accent', 'terracotta']
+			['izgah_theme_dark', 'contrast']
 		]);
 		for (const cookie of cookiesSet) {
 			expect(cookie.options).toMatchObject({
@@ -250,12 +251,12 @@ describe('Named themes: palette cookies and setPalette (docs/designs/izgah-ui-v3
 	it('setPalette returns the palette to enhanced submissions and sanitises returnTo', async () => {
 		const enhanced = createEvent({
 			url: '/settings?/setPalette',
-			formEntries: { lightTheme: 'default', darkTheme: 'contrast', accent: 'cobalt' },
+			formEntries: { lightTheme: 'default', darkTheme: 'contrast' },
 			headers: { 'x-sveltekit-action': 'true' },
 			user: true
 		});
 		expect(await settingsActions.setPalette(enhanced.event as SetPaletteEvent)).toMatchObject({
-			palette: { lightTheme: 'default', darkTheme: 'contrast', accent: 'cobalt' }
+			palette: { lightTheme: 'default', darkTheme: 'contrast' }
 		});
 
 		const offsite = createEvent({
@@ -263,7 +264,6 @@ describe('Named themes: palette cookies and setPalette (docs/designs/izgah-ui-v3
 			formEntries: {
 				lightTheme: 'default',
 				darkTheme: 'default',
-				accent: 'teal',
 				returnTo: '//evil.example'
 			},
 			user: true
@@ -279,10 +279,10 @@ describe('Named themes: palette cookies and setPalette (docs/designs/izgah-ui-v3
 
 	it('setPalette rejects unknown, legacy, or missing values without writing any cookie', async () => {
 		const invalidEntries: Array<Record<string, string>> = [
-			{ lightTheme: 'default', darkTheme: 'sepia', accent: 'teal' },
-			{ lightTheme: 'default', darkTheme: 'dim', accent: 'lime' },
-			{ lightTheme: 'default', darkTheme: 'dim', accent: 'purple' },
-			{ darkTheme: 'dim', accent: 'teal' }
+			{ lightTheme: 'default', darkTheme: 'sepia' },
+			{ lightTheme: 'default', darkTheme: 'dim' },
+			{ lightTheme: 'neon', darkTheme: 'default' },
+			{ darkTheme: 'default' }
 		];
 		for (const formEntries of invalidEntries) {
 			const invalid = createEvent({ url: '/settings?/setPalette', formEntries, user: true });
@@ -295,7 +295,7 @@ describe('Named themes: palette cookies and setPalette (docs/designs/izgah-ui-v3
 	it('setPalette requires a session', async () => {
 		const { event, cookiesSet } = createEvent({
 			url: '/settings?/setPalette',
-			formEntries: { lightTheme: 'default', darkTheme: 'dim', accent: 'teal' }
+			formEntries: { lightTheme: 'default', darkTheme: 'default' }
 		});
 		await expect(settingsActions.setPalette(event as SetPaletteEvent)).rejects.toMatchObject({
 			status: 401

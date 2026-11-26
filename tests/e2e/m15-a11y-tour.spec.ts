@@ -171,7 +171,7 @@ test.describe('UI v2 visual and accessibility tour', () => {
 		}
 	});
 
-	test('named themes resolve their palette on first paint (izgah-ui-v3 §1, izgah-themes §1–§2)', async ({
+	test('named themes resolve their palette on first paint (izgah-ui-v4 §1, izgah-themes §1–§2)', async ({
 		browser
 	}) => {
 		const member = await seedUserWithSession({ name: 'Tema Turu', email: 'tema-tur@izgah.test' });
@@ -181,22 +181,23 @@ test.describe('UI v2 visual and accessibility tour', () => {
 				colorScheme: 'dark' as const,
 				bg: 'rgb(255, 255, 255)',
 				text: 'rgb(0, 0, 0)',
-				accent: 'rgb(15, 118, 110)'
+				accent: 'rgb(26, 53, 176)'
 			},
 			{
+				// The removed "dim" palette and old accent cookies fall back to the defaults.
 				cookies: { izgah_theme: 'dark', izgah_theme_dark: 'dim', izgah_accent: 'plum' },
 				colorScheme: 'light' as const,
-				bg: 'rgb(26, 28, 32)',
-				text: 'rgb(239, 239, 237)',
-				accent: 'rgb(196, 181, 253)'
+				bg: 'rgb(15, 15, 16)',
+				text: 'rgb(242, 242, 240)',
+				accent: 'rgb(157, 183, 255)'
 			},
 			{
 				// System mode follows the OS scheme and picks the chosen dark palette.
-				cookies: { izgah_theme_dark: 'contrast', izgah_accent: 'terracotta' },
+				cookies: { izgah_theme_dark: 'contrast' },
 				colorScheme: 'dark' as const,
 				bg: 'rgb(0, 0, 0)',
 				text: 'rgb(255, 255, 255)',
-				accent: 'rgb(251, 146, 60)'
+				accent: 'rgb(157, 183, 255)'
 			}
 		];
 		for (const { cookies, colorScheme, bg, text, accent } of cases) {
@@ -295,7 +296,7 @@ test.describe('UI v2 visual and accessibility tour', () => {
 		await context.close();
 	});
 
-	test('axe color-contrast passes with 0 violations across all 5 Studio palettes', async ({
+	test('axe color-contrast passes with 0 violations across all 4 Künye palettes', async ({
 		browser
 	}) => {
 		test.setTimeout(120_000);
@@ -349,27 +350,22 @@ test.describe('UI v2 visual and accessibility tour', () => {
 			{
 				label: 'light/default',
 				colorScheme: 'light',
-				cookies: { izgah_theme: 'light', izgah_theme_light: 'default', izgah_accent: 'teal' }
+				cookies: { izgah_theme: 'light', izgah_theme_light: 'default' }
 			},
 			{
 				label: 'light/contrast',
 				colorScheme: 'light',
-				cookies: { izgah_theme: 'light', izgah_theme_light: 'contrast', izgah_accent: 'teal' }
+				cookies: { izgah_theme: 'light', izgah_theme_light: 'contrast' }
 			},
 			{
 				label: 'dark/default',
 				colorScheme: 'dark',
-				cookies: { izgah_theme: 'dark', izgah_theme_dark: 'default', izgah_accent: 'teal' }
-			},
-			{
-				label: 'dark/dim',
-				colorScheme: 'dark',
-				cookies: { izgah_theme: 'dark', izgah_theme_dark: 'dim', izgah_accent: 'teal' }
+				cookies: { izgah_theme: 'dark', izgah_theme_dark: 'default' }
 			},
 			{
 				label: 'dark/contrast',
 				colorScheme: 'dark',
-				cookies: { izgah_theme: 'dark', izgah_theme_dark: 'contrast', izgah_accent: 'teal' }
+				cookies: { izgah_theme: 'dark', izgah_theme_dark: 'contrast' }
 			}
 		];
 

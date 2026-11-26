@@ -11,7 +11,6 @@ import { setHeadersOnce } from '#lib/server/http/headers.ts';
 import { sanitizeInternalPath } from '#lib/server/http/safe-path.ts';
 import { PALETTE_COOKIES, THEME_COOKIE, THEME_VALUES } from '#lib/server/http/theme.ts';
 import {
-	ACCENT_VALUES,
 	DARK_THEME_VALUES,
 	LIGHT_THEME_VALUES,
 	parseAllowed,
@@ -65,7 +64,7 @@ export const actions: Actions = {
 	},
 
 	/**
-	 * Stores the light/dark palette and accent in their cookies (docs/designs/izgah-themes.md §3).
+	 * Stores the light/dark palette in their cookies (docs/designs/izgah-themes.md §3).
 	 * Same contract as `setTheme`: 303 back without JS, the values back for enhanced submissions.
 	 */
 	setPalette: async ({ locals, request, cookies }) => {
@@ -75,11 +74,10 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const lightTheme = parseAllowed(LIGHT_THEME_VALUES, formData.get('lightTheme'));
 		const darkTheme = parseAllowed(DARK_THEME_VALUES, formData.get('darkTheme'));
-		const accent = parseAllowed(ACCENT_VALUES, formData.get('accent'));
-		if (!lightTheme || !darkTheme || !accent) {
+		if (!lightTheme || !darkTheme) {
 			return fail(400, { formType: 'setPalette' as const, error: t('settings.invalidTheme') });
 		}
-		const palette: Palette = { lightTheme, darkTheme, accent };
+		const palette: Palette = { lightTheme, darkTheme };
 		for (const key of Object.keys(PALETTE_COOKIES) as Array<keyof Palette>) {
 			setAppearanceCookie(cookies, PALETTE_COOKIES[key], palette[key]);
 		}

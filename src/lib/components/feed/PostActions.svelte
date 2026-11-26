@@ -3,9 +3,6 @@
 	import { enhance, type SubmitFunction } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { toasts } from '#lib/client/toast.svelte.ts';
-	import AvatarStack, { type AvatarStackItem } from '#lib/components/ui/AvatarStack.svelte';
-	import Icon from '#lib/components/ui/Icon.svelte';
-	import Tooltip from '#lib/components/ui/Tooltip.svelte';
 	import { formatDate } from '#lib/format/date.ts';
 	import type { FeedShareItem } from '#lib/types/feed.ts';
 
@@ -13,12 +10,11 @@
 		item: FeedShareItem;
 		actionBase: string;
 		returnTo: string;
-		currentUserId?: string;
 		/** Marks the card for the card → resource-detail View Transition (core §8.4). */
 		onOpenDiscussion?: () => void;
 	}
 
-	let { item, actionBase, returnTo, currentUserId, onOpenDiscussion }: Props = $props();
+	let { item, actionBase, returnTo, onOpenDiscussion }: Props = $props();
 
 	let likeSubmitting = $state(false);
 	let likeOverride = $state<{ liked: boolean; count: number } | null>(null);
@@ -26,18 +22,6 @@
 	const viewerLiked = $derived(likeOverride?.liked ?? Boolean(item.resource.likedByViewer));
 	const likeCount = $derived(likeOverride?.count ?? item.resource.likeCount);
 	const label = $derived(item.resource.title || item.resource.domain);
-
-	const attributionAvatars = $derived.by((): AvatarStackItem[] => {
-		if (!item.attribution || item.attribution.kind !== 'first-share') {
-			return [];
-		}
-		const firstAuthor = item.attribution.authorName;
-		const list: AvatarStackItem[] = [{ name: firstAuthor }];
-		if (item.author.name !== firstAuthor) {
-			list.push({ name: item.author.name, self: item.author.id === currentUserId });
-		}
-		return list;
-	});
 
 	// Fresh server data for this card supersedes the local (optimistic or confirmed) like state.
 	$effect(() => {
@@ -102,9 +86,8 @@
 				disabled={likeSubmitting}
 				data-shortcut="like"
 			>
-				<Icon name="heart" size={15} filled={viewerLiked} />
 				<span class="count">{likeCount}</span>
-				<span class="visually-hidden"> {t('like.suffix', { count: likeCount })}</span>
+				<span>{t('like.suffix', { count: likeCount })}</span>
 			</button>
 		</form>
 
@@ -115,40 +98,29 @@
 			data-shortcut="comments"
 			onclick={() => onOpenDiscussion?.()}
 		>
-			<Icon name="message" size={15} />
 			<span class="count">{item.resource.commentCount}</span>
-			<span class="visually-hidden">
-				{t('comment.suffix', { count: item.resource.commentCount })}
-			</span>
+			<span>{t('comment.suffix', { count: item.resource.commentCount })}</span>
 		</a>
 
-		<Tooltip text={t('link.copy')}>
-			{#snippet children()}
-				<button
-					type="button"
-					class="action is-icon"
-					aria-label={t('link.copyLabel', { title: label })}
-					onclick={copyLink}
-				>
-					<Icon name="copy" size={15} />
-				</button>
-			{/snippet}
-		</Tooltip>
+		<button
+			type="button"
+			class="action"
+			aria-label={t('link.copyLabel', { title: label })}
+			onclick={copyLink}
+		>
+			{t('share.copyShort')}
+		</button>
 
-		<Tooltip text={t('link.openNewTab')} shortcut="o">
-			{#snippet children()}
-				<a
-					href={item.rawUrl}
-					target="_blank"
-					rel="noopener noreferrer"
-					class="action is-icon"
-					aria-label={t('link.openNewTabLabel', { title: label })}
-					data-shortcut="open"
-				>
-					<Icon name="external" size={15} />
-				</a>
-			{/snippet}
-		</Tooltip>
+		<a
+			href={item.rawUrl}
+			target="_blank"
+			rel="noopener noreferrer"
+			class="action"
+			aria-label={t('link.openNewTabLabel', { title: label })}
+			data-shortcut="open"
+		>
+			{t('share.openShort')}
+		</a>
 	</div>
 
 	{#if item.attribution}
@@ -156,9 +128,6 @@
 			{#if item.attribution.kind === 'original-deleted'}
 				<p class="attribution-notice is-deleted">{t('share.originalDeleted')}</p>
 			{:else}
-				{#if attributionAvatars.length > 0}
-					<AvatarStack items={attributionAvatars} max={3} size={22} />
-				{/if}
 				<p class="attribution-notice">
 					<a href="/resources/{item.resource.id}#share-{item.attribution.shareId}">
 						{t('share.firstSharedBy')} <strong>{item.attribution.authorName}</strong> ·
@@ -174,20 +143,21 @@
 </footer>
 
 <style>
+	/* Künye actions (izgah-ui-v4.md §4): words, not icons, on one quiet line. */
 	.post-foot {
 		display: flex;
-		align-items: center;
+		align-items: baseline;
 		justify-content: space-between;
 		flex-wrap: wrap;
-		gap: var(--space-2) var(--space-3);
-		padding-block-start: var(--space-2);
-		border-block-start: 1px solid var(--color-line);
+		gap: var(--space-1) var(--space-3);
+		margin-block-start: var(--space-1);
 	}
 
 	.post-actions {
 		display: flex;
-		align-items: center;
-		gap: 5px;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0 var(--space-4);
 	}
 
 	.post-actions form {
@@ -198,48 +168,28 @@
 		position: relative;
 		z-index: 2;
 		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		gap: 5px;
-		min-block-size: 29px;
-		padding: 0 9px;
-		font: var(--text-meta);
+		align-items: baseline;
+		gap: 0.3em;
+		padding: 0;
+		font: var(--text-hint);
 		font-variant-numeric: tabular-nums;
 		color: var(--color-text-muted);
 		background: transparent;
-		border: 1px solid transparent;
-		border-radius: var(--radius-sm);
-		text-decoration: none;
+		border: 0;
+		text-decoration: underline;
+		text-decoration-color: transparent;
+		text-underline-offset: 0.2em;
 		cursor: pointer;
-		transition:
-			background-color var(--dur-fast) var(--ease),
-			border-color var(--dur-fast) var(--ease),
-			color var(--dur-fast) var(--ease);
-	}
-
-	.action.is-icon {
-		min-inline-size: 29px;
-		padding: 0 7px;
 	}
 
 	.action:hover {
-		background: var(--color-surface-2);
-		border-color: var(--color-line);
 		color: var(--color-text);
-		text-decoration: none;
+		text-decoration-color: currentColor;
 	}
 
 	.action.is-liked {
-		background: var(--color-accent-soft);
-		color: var(--color-accent-text);
-		border-color: var(--color-accent-border);
-		font-weight: 600;
-	}
-
-	.action.is-liked:hover {
-		background: var(--color-accent-soft);
-		color: var(--color-accent-text);
-		border-color: var(--color-accent);
+		font-weight: 650;
+		color: var(--color-text);
 	}
 
 	.action:disabled {
@@ -247,36 +197,29 @@
 	}
 
 	.post-attribution {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-2);
 		min-inline-size: 0;
-		margin-inline-start: auto;
 	}
 
 	.attribution-notice {
+		margin: 0;
 		font: var(--text-hint);
-		font-size: 0.75rem;
-		font-variant-numeric: tabular-nums;
 		color: var(--color-text-muted);
 	}
 
 	.attribution-notice strong {
-		color: var(--color-text-secondary);
 		font-weight: 600;
+		color: var(--color-text-secondary);
 	}
 
 	.attribution-notice a {
 		position: relative;
 		z-index: 2;
 		color: inherit;
-		text-decoration-line: underline;
-		text-decoration-color: var(--color-line);
-		text-underline-offset: 0.2em;
+		text-decoration-color: var(--color-line-strong);
 	}
 
 	.attribution-notice a:hover {
-		color: var(--color-accent-text);
+		color: var(--color-text);
 		text-decoration-color: currentColor;
 	}
 

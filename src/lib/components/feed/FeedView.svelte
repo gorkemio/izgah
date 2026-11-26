@@ -358,6 +358,25 @@
 		peekItem = item;
 	}
 
+	// While the docked reading pane is open, moving focus to another post (j/k, Tab, click) shows
+	// that post in the pane (izgah-ui-v4 §3). The modal drawer is unaffected: it holds the focus.
+	function handleFeedFocusIn(event: FocusEvent): void {
+		if (!peekItem || !document.querySelector('dialog.side-peek-dialog.is-docked[open]')) {
+			return;
+		}
+		const post = (event.target as HTMLElement | null)?.closest?.<HTMLElement>(
+			'article[id^="share-"]'
+		);
+		const id = post?.id.slice('share-'.length);
+		if (!id || id === peekItem.id) {
+			return;
+		}
+		const next = feed.items.find((item) => item.id === id);
+		if (next) {
+			peekItem = next;
+		}
+	}
+
 	async function handleLoadMore(event: MouseEvent): Promise<void> {
 		if (
 			event.defaultPrevented ||
@@ -411,7 +430,7 @@
 	}
 </script>
 
-<section class="feed-view" aria-labelledby={headingId}>
+<section class="feed-view" aria-labelledby={headingId} onfocusin={handleFeedFocusIn}>
 	<header class="feed-head">
 		<div class="feed-head-copy">
 			<h1 id={headingId} tabindex="-1">{heading}</h1>
@@ -427,7 +446,6 @@
 		variant="feed"
 		sections={data.sections}
 		isAdmin={data.user.role === 'admin'}
-		currentUserName={data.user.name}
 		actionUrl={basePath}
 		returnTo={cleanReturnTo}
 		{presetSectionIds}
@@ -459,7 +477,10 @@
 	{:else}
 		{#each dayGroups as group (group.key)}
 			<section class="day-group" aria-labelledby="{headingId}-day-{group.key}">
-				<h2 id="{headingId}-day-{group.key}" class="day-heading">{group.label}</h2>
+				<div class="day-row">
+					<h2 id="{headingId}-day-{group.key}" class="day-heading">{group.label}</h2>
+					<span class="day-count">{t('feed.dayCount', { count: group.items.length })}</span>
+				</div>
 				<ol class="feed-list" role="list">
 					{#each group.items as item (item.id)}
 						{@const index = indexById.get(item.id) ?? 0}
@@ -528,7 +549,6 @@
 
 <SidePeekDialog
 	item={peekItem}
-	currentUserId={data.user.id}
 	onClose={() => {
 		peekItem = null;
 	}}
@@ -547,7 +567,7 @@
 
 	.feed-head h1 {
 		font: var(--text-display);
-		letter-spacing: -0.02em;
+		letter-spacing: -0.01em;
 	}
 
 	.feed-desc {
@@ -557,27 +577,34 @@
 		color: var(--color-text-muted);
 	}
 
-	.day-group + .day-group {
-		margin-block-start: var(--space-4);
+	/* Day divider (izgah-ui-v4.md §4): an ink rule, the date on the left, the count on the right. */
+	.day-group {
+		margin-block-start: var(--space-6);
+	}
+
+	.day-row {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: var(--space-4);
+		padding-block-end: 6px;
+		border-block-end: 1px solid var(--color-text);
 	}
 
 	.day-group .day-heading {
-		display: flex;
-		align-items: center;
-		gap: var(--space-3);
-		margin-block-end: var(--space-3);
-		border-block-end: 0;
+		margin: 0;
+		font: var(--text-day);
+		border: 0;
 	}
 
-	.day-group .day-heading::after {
-		content: '';
-		flex: 1;
-		block-size: 1px;
-		background: var(--color-line);
+	.day-count {
+		font: var(--text-hint);
+		font-variant-numeric: tabular-nums;
+		color: var(--color-text-muted);
 	}
 
 	.feed-view .feed-list {
-		gap: 14px;
+		gap: 0;
 	}
 
 	.empty-feed {
@@ -617,26 +644,14 @@
 
 	.is-first-seen {
 		position: relative;
-		margin-block-start: var(--space-3);
-		padding-block-start: var(--space-4);
-		border-block-start: 2px solid var(--color-accent);
+		border-block-start: 2px solid var(--color-link);
 	}
 
 	.last-seen-label {
-		position: absolute;
-		inset-block-start: 0;
-		inset-inline-start: 0;
-		z-index: 1;
-		padding: 2px 10px;
-		font: var(--text-micro);
-		font-variant-numeric: tabular-nums;
-		letter-spacing: 0.04em;
-		text-transform: uppercase;
-		color: var(--color-accent-text);
-		background: var(--color-accent-soft);
-		border: 1px solid var(--color-accent-border);
-		border-radius: var(--radius-pill);
-		translate: 0 -50%;
+		margin: 0;
+		padding-block: 4px;
+		font: var(--text-hint);
+		color: var(--color-link);
 	}
 
 	@media (forced-colors: active) {

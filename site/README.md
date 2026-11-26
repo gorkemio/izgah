@@ -10,4 +10,4 @@ Preview locally with any static server, e.g. `npx -y serve site`.
 2. At your DNS provider, point the apex `izgah.com` to GitHub Pages with `A` records `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153` (and `AAAA` `2606:50c0:8000::153`, `2606:50c0:8001::153`, `2606:50c0:8002::153`, `2606:50c0:8003::153`), and add `CNAME www → <owner>.github.io`.
 3. Enable **Enforce HTTPS** once the certificate is issued.
 
-Screenshots in `assets/` come from a local instance with demo data (1440×900, light and dark, English and Turkish).
+The page uses no screenshots: the feed specimen is plain HTML set in the app's Künye type and colours (`docs/designs/izgah-ui-v4.md` §6). `assets/og.png` and `assets/og-tr.png` are 1200×630 captures of the top of each page for link previews; retake them when the opening text changes.

@@ -13,22 +13,21 @@ export function colorSchemeFor(theme: ThemePreference): string {
 export const LIGHT_THEME_VALUES = ['default', 'contrast'] as const;
 export type LightTheme = (typeof LIGHT_THEME_VALUES)[number];
 
-export const DARK_THEME_VALUES = ['default', 'dim', 'contrast'] as const;
+/**
+ * Künye (docs/designs/izgah-ui-v4.md §1, §8): one accent (link blue) and no "dim" palette. Old
+ * `dim` and accent cookies fall back to the defaults through `pickAllowed`.
+ */
+export const DARK_THEME_VALUES = ['default', 'contrast'] as const;
 export type DarkTheme = (typeof DARK_THEME_VALUES)[number];
-
-export const ACCENT_VALUES = ['teal', 'cobalt', 'terracotta', 'plum'] as const;
-export type Accent = (typeof ACCENT_VALUES)[number];
 
 export interface Palette {
 	lightTheme: LightTheme;
 	darkTheme: DarkTheme;
-	accent: Accent;
 }
 
 export const DEFAULT_PALETTE: Palette = {
 	lightTheme: 'default',
-	darkTheme: 'default',
-	accent: 'teal'
+	darkTheme: 'default'
 };
 
 /** Returns `raw` when it is one of `values`, otherwise `fallback`. */

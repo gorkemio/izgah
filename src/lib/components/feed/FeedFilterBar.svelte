@@ -1,32 +1,28 @@
 <script lang="ts">
 	import { t } from '#lib/i18n/index.ts';
-	import SegmentedControl, {
-		type SegmentedOption
-	} from '#lib/components/ui/SegmentedControl.svelte';
 	import type { ContentType } from '#lib/server/db/schema.ts';
 
+	/**
+	 * Content-type filter as a "Filter" disclosure (docs/designs/izgah-ui-v4.md §7): a native
+	 * <details> that starts closed, opens itself while a type is active, and needs no JavaScript.
+	 * The links keep the `?type=` URLs, so filters stay shareable and work in search.
+	 */
 	interface Props {
 		basePath: string;
 		activeType: ContentType | null;
 		preserveParams?: Record<string, string | null | undefined>;
 	}
 
-	type FilterValue = 'all' | ContentType;
-
-	const FILTER_ITEMS: ReadonlyArray<{
-		value: FilterValue;
-		param: ContentType | null;
-		label: string;
-	}> = [
-		{ value: 'all', param: null, label: t('filter.all') },
-		{ value: 'article', param: 'article', label: t('contentType.article') },
-		{ value: 'video', param: 'video', label: t('contentType.video') },
-		{ value: 'repo', param: 'repo', label: t('contentType.repo') },
-		{ value: 'social', param: 'social', label: t('contentType.social') },
-		{ value: 'web', param: 'web', label: t('contentType.web') }
-	];
-
 	let { basePath, activeType, preserveParams }: Props = $props();
+
+	const FILTER_ITEMS: ReadonlyArray<{ param: ContentType | null; label: string }> = [
+		{ param: null, label: t('filter.all') },
+		{ param: 'article', label: t('contentType.article') },
+		{ param: 'video', label: t('contentType.video') },
+		{ param: 'repo', label: t('contentType.repo') },
+		{ param: 'social', label: t('contentType.social') },
+		{ param: 'web', label: t('contentType.web') }
+	];
 
 	function buildFilterHref(value: ContentType | null): string {
 		const params = new URLSearchParams();
@@ -45,70 +41,140 @@
 		return encoded ? `${basePath}?${encoded}` : basePath;
 	}
 
-	const options = $derived<ReadonlyArray<SegmentedOption<FilterValue>>>(
-		FILTER_ITEMS.map((item) => ({
-			value: item.value,
-			label: item.label,
-			href: buildFilterHref(item.param)
-		}))
-	);
-
-	const selectedValue = $derived<FilterValue>(activeType ?? 'all');
-
 	const activeLabel = $derived(
-		activeType ? (FILTER_ITEMS.find((option) => option.param === activeType)?.label ?? null) : null
+		activeType ? (FILTER_ITEMS.find((item) => item.param === activeType)?.label ?? null) : null
 	);
-
-	const clearHref = $derived(buildFilterHref(null));
 </script>
 
-<div class="filter-bar-wrap">
-	<SegmentedControl
-		{options}
-		value={selectedValue}
-		ariaLabel={t('filter.label')}
-		mode="links"
-		class="filter-bar"
-	/>
-
+<details class="feed-filter" open={activeType !== null}>
+	<summary>
+		{t('filter.summary')}{#if activeLabel}<span class="feed-filter-active">
+				: {activeLabel}
+			</span>{/if}
+	</summary>
+	<nav aria-label={t('filter.label')}>
+		<ul role="list">
+			{#each FILTER_ITEMS as item (item.param ?? 'all')}
+				<li>
+					<a
+						href={buildFilterHref(item.param)}
+						aria-current={item.param === activeType ? 'page' : undefined}
+					>
+						{item.label}
+					</a>
+				</li>
+			{/each}
+		</ul>
+	</nav>
 	{#if activeLabel}
-		<div class="filter-status" role="status">
+		<p class="filter-status" role="status">
 			<span>{t('filter.active')} <strong>{activeLabel}</strong></span>
-			<a href={clearHref} class="filter-clear-link">{t('filter.clear')}</a>
-		</div>
+			<a href={buildFilterHref(null)} class="filter-clear-link">{t('filter.clear')}</a>
+		</p>
 	{/if}
-</div>
+</details>
 
 <style>
-	.filter-bar-wrap {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr);
-		justify-items: start;
-		gap: var(--space-2);
+	.feed-filter {
 		margin-block-end: var(--space-4);
+		font: var(--text-ui);
 	}
 
-	.filter-bar-wrap :global(.filter-bar) {
-		scrollbar-width: none;
-		overscroll-behavior-inline: contain;
+	summary {
+		display: inline-flex;
+		align-items: baseline;
+		min-block-size: 32px;
+		padding-block: 4px;
+		font-size: 0.9375rem;
+		color: var(--color-text-secondary);
+		cursor: pointer;
+		list-style: none;
+	}
+
+	summary::-webkit-details-marker {
+		display: none;
+	}
+
+	summary::after {
+		content: ' ▾';
+		margin-inline-start: 0.3em;
+		color: var(--color-text-muted);
+	}
+
+	.feed-filter[open] > summary::after {
+		content: ' ▴';
+	}
+
+	summary:hover {
+		color: var(--color-text);
+	}
+
+	.feed-filter-active {
+		font-weight: 650;
+		color: var(--color-text);
+	}
+
+	nav ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-1) var(--space-4);
+		margin: var(--space-1) 0 0;
+		padding: var(--space-2) 0;
+		list-style: none;
+		border-block: 1px solid var(--color-line);
+	}
+
+	nav a {
+		font-size: 0.9375rem;
+		color: var(--color-text-secondary);
+		text-decoration: none;
+	}
+
+	nav a:hover {
+		color: var(--color-text);
+		text-decoration: underline;
+		text-underline-offset: 0.35em;
+	}
+
+	nav a[aria-current='page'] {
+		font-weight: 650;
+		color: var(--color-text);
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 0.35em;
 	}
 
 	.filter-status {
 		display: flex;
 		flex-wrap: wrap;
-		align-items: center;
+		align-items: baseline;
 		gap: var(--space-3);
+		margin: var(--space-2) 0 0;
 		font: var(--text-hint);
 		color: var(--color-text-muted);
 	}
 
 	.filter-status strong {
-		color: var(--color-text);
 		font-weight: 600;
+		color: var(--color-text);
 	}
 
 	.filter-clear-link {
-		color: var(--color-accent-text);
-		font-weight: 500;
+		color: var(--color-link);
+	}
+
+	@media (pointer: coarse) {
+		summary,
+		nav a {
+			display: inline-flex;
+			align-items: center;
+			min-block-size: 44px;
+		}
+	}
+
+	@media (forced-colors: active) {
+		nav a[aria-current='page'] {
+			color: LinkText;
+		}
 	}
 </style>

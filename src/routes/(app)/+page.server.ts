@@ -9,8 +9,6 @@ import {
 	type TimeIdCursor
 } from '#lib/server/db/cursor.ts';
 import { feedScopeConditions } from '#lib/server/feed/query.ts';
-import { getFeedRailSummary, type FeedRailSummary } from '#lib/server/feed/rail-summary.ts';
-import { logger } from '#lib/server/logger.ts';
 import { todayKey } from '#lib/format/date.ts';
 import {
 	canonicalResources,
@@ -686,39 +684,12 @@ async function resolveSuggestion(
 	return { success: true, formType, shareId };
 }
 
-/**
- * The right-rail summary is decorative: it is skipped for "load more" pages (whose result only
- * contributes feed items) and a failing aggregate hides the rail instead of failing the feed.
- */
-async function loadRailSummary(url: URL, requestId: string): Promise<FeedRailSummary | null> {
-	if (url.searchParams.has('cursor')) {
-		return null;
-	}
-	try {
-		return await getFeedRailSummary();
-	} catch (error) {
-		logger.child({ request_id: requestId }).warn('Feed rail summary failed; rendering without it', {
-			error: error instanceof Error ? error.message : String(error)
-		});
-		return null;
-	}
-}
-
-export const load: PageServerLoad = async ({ depends, locals, url }) => {
-	const [feedPage, railSummary] = await Promise.all([
-		_loadFeedPage({
-			depends,
-			url,
-			viewerUserId: locals.user?.id,
-			viewerRole: locals.user?.role
-		}),
-		loadRailSummary(url, locals.requestId)
-	]);
-
-	return {
-		...feedPage,
-		railSummary
-	};
-};
+export const load: PageServerLoad = async ({ depends, locals, url }) =>
+	_loadFeedPage({
+		depends,
+		url,
+		viewerUserId: locals.user?.id,
+		viewerRole: locals.user?.role
+	});
 
 export const actions: Actions = _feedShareActions;

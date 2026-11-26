@@ -75,10 +75,10 @@
 		text-wrap: balance;
 	}
 
-	/* Strict serif boundary (izgah-ui-v3 §2.2): page h1 uses Newsreader Variable. */
+	/* One family (izgah-ui-v4 §2): hierarchy from size and weight only. */
 	h1 {
 		font: var(--text-display);
-		letter-spacing: -0.02em;
+		letter-spacing: -0.01em;
 	}
 
 	p {
@@ -101,14 +101,34 @@
 		text-decoration-color: currentColor;
 	}
 
+	/*
+	 * Content links look like links (izgah-ui-v4 §1, principle 2): link blue, underlined, and faded
+	 * once opened. The browser's :visited is the reading trace; the server records nothing.
+	 * Navigation and UI links keep the inherited ink colour above.
+	 */
+	.content-link,
+	.content-link:link {
+		color: var(--color-link);
+		text-decoration-color: currentColor;
+	}
+
+	.content-link:visited {
+		color: var(--color-visited);
+	}
+
+	.content-link:hover {
+		color: var(--color-link);
+		text-decoration-thickness: 2px;
+	}
+
 	::selection {
 		background: var(--color-accent);
 		color: var(--color-on-accent);
 	}
 
 	/*
-	 * Two-layer crisp focus ring (izgah-ui-v3 §3):
-	 * 2px bg separator + 2px dual-polarity accent (all accents >= 4.75:1 against bg/s2),
+	 * Two-layer crisp focus ring (izgah-ui-v3 §3, kept in v4):
+	 * 2px bg separator + 2px link blue (>= 3:1 against every surface),
 	 * plus transparent outline so Windows High Contrast / forced-colors keeps it visible.
 	 */
 	:focus-visible {

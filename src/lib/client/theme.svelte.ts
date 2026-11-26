@@ -36,7 +36,6 @@ export class ThemeState {
 		const { dataset } = document.documentElement;
 		dataset.lightTheme = palette.lightTheme;
 		dataset.darkTheme = palette.darkTheme;
-		dataset.accent = palette.accent;
 	}
 }
 

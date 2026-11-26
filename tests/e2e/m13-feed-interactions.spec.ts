@@ -283,10 +283,10 @@ test.describe('UI v2 feed interactions — shortcuts, day groups, last visit, ne
 		await page.goto('/');
 		await expect(page.locator('html[data-hydrated]')).toHaveCount(1);
 
-		await expect(page.locator(`#share-${fresh1.shareId} .unseen-mark`)).toHaveCount(1);
-		await expect(page.locator(`#share-${fresh2.shareId} .unseen-mark`)).toHaveCount(1);
-		await expect(page.locator(`#share-${own.shareId} .unseen-mark`)).toHaveCount(0);
-		await expect(page.locator('.unseen-mark')).toHaveCount(2);
+		await expect(page.locator(`#share-${fresh1.shareId} .unseen-pill`)).toHaveCount(1);
+		await expect(page.locator(`#share-${fresh2.shareId} .unseen-pill`)).toHaveCount(1);
+		await expect(page.locator(`#share-${own.shareId} .unseen-pill`)).toHaveCount(0);
+		await expect(page.locator('.unseen-pill')).toHaveCount(2);
 
 		const marker = page.locator('li.is-first-seen');
 		await expect(marker).toHaveCount(1);

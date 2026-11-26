@@ -15,7 +15,7 @@
 - **Link previews** — an in-process unfurl worker fetches titles, descriptions and cover images (with SSRF protection) and stores resized WebP thumbnails locally.
 - **Browser extensions** — Chrome, Firefox and Safari extensions share the current tab with a personal API key.
 - **Works without JavaScript** — every core flow (sharing, navigation, search, details, themes, admin) is a plain form or link first; JavaScript only enhances it.
-- **Accessible themes** — light, dark, dim and high-contrast palettes with four accent colours, all meeting WCAG 2.2 AA (AAA in high contrast).
+- **Accessible themes** — light and dark, each in a standard and a high-contrast palette, all meeting WCAG 2.2 AA (AAA in high contrast). Links you have opened fade, through the browser's own `:visited`; the server records nothing.
 - **English and Turkish UI** — each member picks a language; the instance has its own default.
 - **Small footprint** — one Node.js container and PostgreSQL. No external e-mail, queue or cache service.
 
@@ -117,4 +117,4 @@ The extensions live in [`extensions/`](./extensions). Members install the extens
 
 ## License
 
-Izgah is free software under the [GNU Affero General Public License v3.0](./LICENSE). If you run a modified version for others over a network, you must offer them its source code. Bundled fonts (Geist, Newsreader, JetBrains Mono) are under the SIL Open Font License; icons are from Lucide (ISC). See [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).
+Izgah is free software under the [GNU Affero General Public License v3.0](./LICENSE). If you run a modified version for others over a network, you must offer them its source code. The bundled font (Atkinson Hyperlegible Next) is under the SIL Open Font License; icons are from Lucide (ISC). See [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).

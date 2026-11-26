@@ -2,7 +2,6 @@
 	import { t } from '#lib/i18n/index.ts';
 	import { formatShortDateTime } from '#lib/format/date.ts';
 	import { startVisibilityPoller } from '#lib/client/visibility-poller.ts';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import PopoverPanel from '#lib/components/ui/PopoverPanel.svelte';
 	import type { NotificationFeedItem } from '#lib/server/interactions/service.ts';
 
@@ -133,7 +132,6 @@
 	>
 		{#snippet trigger()}
 			<span class="bell-trigger-content">
-				<Icon name="bell" size={16} />
 				<span class="bell-label">{t('notif.label')}</span>
 				{#if unreadCount > 0}
 					<span class="notification-badge" aria-hidden="true">{unreadCount}</span>
@@ -182,7 +180,6 @@
 									class="notif-item-link"
 									onclick={() => handleNotificationClick(notif.id, close)}
 								>
-									<span class="unseen-mark notif-unseen" aria-hidden="true"></span>
 									<span class="notif-item-body">
 										<span class="notif-item-message">{notif.message}</span>
 										<span class="notif-item-meta">
@@ -213,10 +210,13 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 9px;
-		inline-size: 100%;
-		min-block-size: 34px;
-		padding: 0 9px;
+		inline-size: calc(100% + 16px);
+		min-block-size: 32px;
+		margin-inline: -8px;
+		padding: 5px 8px;
 		font: var(--text-ui);
+		font-size: 0.9375rem;
+		font-weight: 400;
 		color: var(--color-text-secondary);
 		background: transparent;
 		border: 0;
@@ -237,61 +237,26 @@
 		opacity: 0.88;
 	}
 
+	/* A word, not a bell (izgah-ui-v4 §1); the unread count is a link-blue figure after it. */
 	.bell-trigger-content {
 		display: inline-flex;
-		align-items: center;
-		gap: 9px;
+		align-items: baseline;
+		gap: var(--space-2);
 		inline-size: 100%;
 	}
 
-	/* The visible label only shows in the full rail; the accessible name comes from aria-label. */
-	.bell-label {
-		display: none;
-	}
-
-	:global(.site-header.is-rail) .bell-label {
-		display: inline;
-	}
-
-	@media (max-width: 1023px) {
-		:global(.site-header.is-rail) .bell-label {
-			display: none;
-		}
-	}
-
-	@media (min-width: 768px) and (max-width: 1023px) {
-		:global(.notification-bell-trigger) {
-			justify-content: center;
-			inline-size: 44px;
-			min-block-size: 40px;
-			padding: 0;
-		}
-
-		.bell-trigger-content {
-			justify-content: center;
-			gap: 3px;
-		}
-
-		.notification-badge {
-			margin-inline-start: 0;
-		}
-	}
-
 	.notification-badge {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		min-inline-size: 20px;
-		block-size: 20px;
 		margin-inline-start: auto;
-		padding-inline: 6px;
-		font: var(--text-micro);
-		font-weight: 600;
+		font-weight: 650;
 		font-variant-numeric: tabular-nums;
-		color: var(--color-accent-text);
-		background: var(--color-accent-soft);
-		border: 1px solid var(--color-accent-border);
-		border-radius: var(--radius-pill);
+		color: var(--color-link);
+	}
+
+	@media (max-width: 767px) {
+		:global(.notification-bell-trigger) {
+			inline-size: auto;
+			margin-inline: 0;
+		}
 	}
 
 	:global(.notification-bell-panel) {
@@ -329,13 +294,9 @@
 
 	.notif-empty {
 		margin: 0;
-		padding: var(--space-4) var(--space-3);
+		padding: var(--space-3) 0;
 		font: var(--text-hint);
 		color: var(--color-text-muted);
-		text-align: center;
-		background: var(--color-surface-2);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-sm);
 	}
 
 	.notif-skeleton {
@@ -372,7 +333,7 @@
 
 	.notif-item-link {
 		display: grid;
-		grid-template-columns: auto minmax(0, 1fr);
+		grid-template-columns: minmax(0, 1fr);
 		align-items: start;
 		gap: var(--space-2);
 		padding: var(--space-2);
@@ -395,10 +356,6 @@
 
 	.notif-item-link:active {
 		opacity: 0.88;
-	}
-
-	.notif-unseen {
-		margin-block-start: 0.35em;
 	}
 
 	.notif-item-body {
@@ -447,10 +404,7 @@
 		}
 
 		.notification-badge {
-			forced-color-adjust: none;
-			background: Highlight;
-			color: HighlightText;
-			border-color: Highlight;
+			color: LinkText;
 		}
 	}
 </style>

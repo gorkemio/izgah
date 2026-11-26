@@ -1,13 +1,10 @@
 <script lang="ts">
 	import { t } from '#lib/i18n/index.ts';
 	import { preloadData } from '$app/navigation';
+	import { MediaQuery } from 'svelte/reactivity';
 	import { watchImageError } from '#lib/client/image-error.ts';
 	import { toasts } from '#lib/client/toast.svelte.ts';
-	import Avatar from '#lib/components/ui/Avatar.svelte';
-	import AvatarStack, { type AvatarStackItem } from '#lib/components/ui/AvatarStack.svelte';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import Skeleton from '#lib/components/ui/Skeleton.svelte';
-	import Tooltip from '#lib/components/ui/Tooltip.svelte';
 	import { formatDateTime } from '#lib/format/date.ts';
 	import type { ContentType, ProviderMeta, UnfurlStatus } from '#lib/types/domain.ts';
 	import { contentTypeLabel, type FeedShareItem } from '#lib/types/feed.ts';
@@ -63,11 +60,18 @@
 
 	interface Props {
 		item: FeedShareItem | null;
-		currentUserId: string;
 		onClose: () => void;
 	}
 
-	let { item, currentUserId, onClose }: Props = $props();
+	let { item, onClose }: Props = $props();
+
+	/*
+	 * Reading pane (docs/designs/izgah-ui-v4.md §3): from 1280px the dialog opens non-modally as a
+	 * docked column beside the register, so the feed stays usable and j/k move the selection; below
+	 * that it is a modal side drawer. The mode is fixed when the pane opens.
+	 */
+	const wide = new MediaQuery('min-width: 1280px', false);
+	let docked = $state(false);
 
 	let dialogEl = $state<HTMLDialogElement | null>(null);
 	let coverImgEl = $state<HTMLImageElement | null>(null);
@@ -86,21 +90,6 @@
 	const showThumbnail = $derived(Boolean(resource?.thumbnailAssetKey && !imgFailed));
 	const recentComments = $derived(detail ? detail.comments.slice(-5) : []);
 	const hasHiddenComments = $derived(detail ? detail.comments.length > 5 : false);
-	const sharerAvatars = $derived.by((): AvatarStackItem[] => {
-		if (!detail) {
-			return [];
-		}
-		const seen = new Set<string>();
-		const list: AvatarStackItem[] = [];
-		for (const share of detail.shares) {
-			if (seen.has(share.author.id)) {
-				continue;
-			}
-			seen.add(share.author.id);
-			list.push({ name: share.author.name, self: share.author.id === currentUserId });
-		}
-		return list;
-	});
 
 	$effect(() => {
 		const img = coverImgEl;
@@ -132,7 +121,12 @@
 
 		imgFailed = false;
 		if (!el.open) {
-			el.showModal();
+			docked = wide.current;
+			if (docked) {
+				el.show();
+			} else {
+				el.showModal();
+			}
 		}
 
 		const seq = ++requestSeq;
@@ -166,10 +160,32 @@
 			});
 	});
 
-	// Fallback light-dismiss for Safari where `<dialog closedby="any">` is unsupported.
+	// A non-modal dialog gets no close request from Escape, so the docked pane listens itself.
 	$effect(() => {
 		const el = dialogEl;
-		if (!el || 'closedBy' in HTMLDialogElement.prototype) {
+		if (!el || !docked || !item) {
+			return;
+		}
+		const onKeydown = (event: KeyboardEvent) => {
+			if (
+				event.key !== 'Escape' ||
+				event.defaultPrevented ||
+				document.querySelector('dialog:modal') ||
+				document.querySelector(':popover-open')
+			) {
+				return;
+			}
+			event.preventDefault();
+			el.close('close');
+		};
+		document.addEventListener('keydown', onKeydown);
+		return () => document.removeEventListener('keydown', onKeydown);
+	});
+
+	// Fallback light-dismiss for Safari where `<dialog closedby="any">` is unsupported (modal only).
+	$effect(() => {
+		const el = dialogEl;
+		if (!el || docked || 'closedBy' in HTMLDialogElement.prototype) {
 			return;
 		}
 
@@ -209,6 +225,7 @@
 			dialogEl.returnValue = '';
 		}
 		requestSeq += 1;
+		docked = false;
 		onClose();
 	}
 
@@ -229,7 +246,8 @@
 <dialog
 	bind:this={dialogEl}
 	class="side-peek-dialog"
-	closedby="any"
+	class:is-docked={docked}
+	closedby={docked ? 'none' : 'any'}
 	aria-labelledby={titleId}
 	onclose={handleClose}
 >
@@ -241,19 +259,17 @@
 				<span>{contentTypeLabel(resource.contentType)}</span>
 			</div>
 			<div class="peek-header-actions">
-				<a href="/resources/{resource.id}" class="btn btn-subtle btn-sm peek-full-link">
-					<span>{t('peek.openFull')}</span>
-					<Icon name="external" size={14} />
-				</a>
+				<a href="/resources/{resource.id}" class="peek-full-link">{t('peek.openFull')}</a>
+				<!-- The docked pane keeps focus in the register; the modal drawer takes it. -->
 				<!-- svelte-ignore a11y_autofocus -->
 				<button
 					type="button"
-					class="btn btn-ghost btn-icon btn-sm"
+					class="peek-close"
 					aria-label={t('peek.close')}
-					autofocus
+					autofocus={!wide.current}
 					onclick={() => dialogEl?.close('close')}
 				>
-					<Icon name="close" size={16} />
+					{t('common.close')}
 				</button>
 			</div>
 		</header>
@@ -293,21 +309,16 @@
 						rel="noopener noreferrer"
 						class="btn btn-primary btn-sm"
 					>
-						<span>{t('resource.visit')}</span>
-						<Icon name="external" size={14} />
+						{t('resource.visit')}
 					</a>
-					<Tooltip text={t('link.copy')}>
-						{#snippet children()}
-							<button
-								type="button"
-								class="btn btn-outline btn-icon btn-sm"
-								aria-label={t('link.copyLabel', { title: displayTitle })}
-								onclick={copyUrl}
-							>
-								<Icon name="copy" size={14} />
-							</button>
-						{/snippet}
-					</Tooltip>
+					<button
+						type="button"
+						class="btn btn-outline btn-sm"
+						aria-label={t('link.copyLabel', { title: displayTitle })}
+						onclick={copyUrl}
+					>
+						{t('share.copyShort')}
+					</button>
 					<div class="peek-stats">
 						<span>{t('common.likeCount', { count: resource.likeCount })}</span>
 						<span aria-hidden="true">·</span>
@@ -338,9 +349,6 @@
 						<h3 id="peek-shares-heading" class="peek-section-title">
 							{t('resource.shareHistoryCount', { count: detail.shares.length })}
 						</h3>
-						{#if sharerAvatars.length > 0}
-							<AvatarStack items={sharerAvatars} max={4} size={22} />
-						{/if}
 					</div>
 
 					{#if detail.originalShareDeleted}
@@ -351,11 +359,6 @@
 						{#each detail.shares as share (share.id)}
 							<li class="peek-timeline-item">
 								<div class="peek-row-head">
-									<Avatar
-										name={share.author.name}
-										self={share.author.id === currentUserId}
-										size={24}
-									/>
 									<strong class="peek-author">{share.author.name}</strong>
 									<time class="peek-time" datetime={share.createdAt}>
 										{formatDateTime(share.createdAt)}
@@ -395,11 +398,6 @@
 							{#each recentComments as comment (comment.id)}
 								<li class="peek-comment-item">
 									<div class="peek-row-head">
-										<Avatar
-											name={comment.author.name}
-											self={comment.author.id === currentUserId}
-											size={24}
-										/>
 										<strong class="peek-author">{comment.author.name}</strong>
 										<time class="peek-time" datetime={comment.createdAt}>
 											{formatDateTime(comment.createdAt)}
@@ -437,10 +435,18 @@
 		border: 0;
 		border-inline-start: 1px solid var(--color-line);
 		border-radius: 0;
-		background: var(--color-surface-1);
+		background: var(--color-bg);
 		color: var(--color-text);
 		box-shadow: var(--shadow-lg);
 		overflow: hidden;
+	}
+
+	/* Docked: a column on the right edge, ruled off, without shadow or backdrop. */
+	dialog.side-peek-dialog.is-docked {
+		position: fixed;
+		z-index: 20;
+		inline-size: var(--pane-w);
+		box-shadow: none;
 	}
 
 	dialog.side-peek-dialog[open] {
@@ -494,7 +500,30 @@
 		gap: var(--space-3);
 		padding: var(--space-3) var(--space-4);
 		border-block-end: 1px solid var(--color-line);
-		background: var(--color-surface-1);
+	}
+
+	.peek-full-link {
+		font: var(--text-ui);
+		font-size: 0.875rem;
+		color: var(--color-link);
+	}
+
+	.peek-close {
+		min-block-size: 28px;
+		padding: 0 4px;
+		font: var(--text-ui);
+		font-size: 0.875rem;
+		color: var(--color-text-secondary);
+		background: transparent;
+		border: 0;
+		border-radius: var(--radius-sm);
+		cursor: pointer;
+	}
+
+	.peek-close:hover {
+		color: var(--color-text);
+		text-decoration: underline;
+		text-underline-offset: 0.3em;
 	}
 
 	.peek-kicker {
@@ -534,18 +563,15 @@
 	}
 
 	.peek-title {
-		font-family: var(--font-display);
-		font-size: 1.375rem;
-		font-weight: 600;
-		line-height: 1.24;
-		letter-spacing: -0.015em;
+		font-size: 1.25rem;
+		font-weight: 650;
+		line-height: 1.3;
 		color: var(--color-text);
 	}
 
 	.peek-cover {
 		overflow: hidden;
-		border-radius: var(--radius-md);
-		border: 1px solid var(--color-line);
+		border-radius: var(--radius-sm);
 		background: var(--color-surface-2);
 	}
 
@@ -603,36 +629,20 @@
 	.peek-inline-link {
 		font: var(--text-ui);
 		font-size: 0.8125rem;
-		color: var(--color-accent-text);
+		color: var(--color-link);
 	}
 
 	.peek-timeline {
 		list-style: none;
 		margin: 0;
-		margin-inline-start: 8px;
 		padding: 0;
-		padding-inline-start: 16px;
-		border-inline-start: 1px solid var(--color-line);
 		display: grid;
 		gap: var(--space-4);
 	}
 
 	.peek-timeline-item {
-		position: relative;
 		display: grid;
 		gap: 6px;
-	}
-
-	.peek-timeline-item::before {
-		content: '';
-		position: absolute;
-		inset-inline-start: -20px;
-		inset-block-start: 8px;
-		inline-size: 7px;
-		block-size: 7px;
-		border-radius: var(--radius-pill);
-		background: var(--color-accent);
-		box-shadow: 0 0 0 3px var(--color-surface-1);
 	}
 
 	.peek-comments {
@@ -705,10 +715,8 @@
 		display: grid;
 		justify-items: start;
 		gap: var(--space-3);
-		padding: var(--space-4);
-		border-radius: var(--radius-md);
-		background: var(--color-danger-soft);
-		border: 1px solid var(--color-danger-border);
+		padding: var(--space-3) 0;
+		border-block: 1px solid var(--color-danger);
 		color: var(--color-danger);
 		font: var(--text-ui);
 	}
@@ -716,11 +724,6 @@
 	@media (forced-colors: active) {
 		dialog.side-peek-dialog {
 			border-inline-start: 2px solid CanvasText;
-			box-shadow: none;
-		}
-
-		.peek-timeline-item::before {
-			background: Highlight;
 			box-shadow: none;
 		}
 	}

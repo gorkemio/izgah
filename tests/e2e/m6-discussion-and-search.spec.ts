@@ -622,7 +622,8 @@ test.describe('Milestone M6 — Discussion, Bilingual Search & Notifications', (
 		await expect(page.locator('.search-summary')).toContainText('Tüm İzgah');
 		await expect(page.locator('article.share-card')).toHaveCount(2);
 
-		// Filter by content type "Repo"
+		// Filter by content type "Repo": open the "Süz" disclosure first (izgah-ui-v4 §7)
+		await page.locator('details.feed-filter > summary').click();
 		await page
 			.getByRole('navigation', { name: 'İçerik türü süzgeci' })
 			.getByRole('link', { name: 'Repo' })

@@ -1,9 +1,6 @@
 <script lang="ts">
 	import { t } from '#lib/i18n/index.ts';
-	import '@fontsource-variable/geist/wght.css';
-	import '@fontsource-variable/newsreader/opsz.css';
-	import '@fontsource-variable/newsreader/opsz-italic.css';
-	import '@fontsource-variable/jetbrains-mono/wght.css';
+	import '#lib/styles/fonts.css';
 	import '../app.css';
 
 	let { children } = $props();

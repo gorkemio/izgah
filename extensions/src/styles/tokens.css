@@ -1,15 +1,15 @@
 /*
- * İzgah Stüdyo tokens for the browser extension (docs/designs/izgah-ui-v3.md §1–§3, §8, §9).
- * The extension runs on its own origin and cannot read the izgah_theme cookie, so it follows
- * the system color scheme via prefers-color-scheme. Bundles only Geist Variable & Newsreader
- * Variable latin + latin-ext normal subsets to keep the extension package compact.
+ * Künye tokens for the browser extension (docs/designs/izgah-ui-v4.md §1–§2). The extension runs
+ * on its own origin and cannot read the izgah_theme cookie, so it follows prefers-color-scheme.
+ * Bundles only the Atkinson Hyperlegible Next latin + latin-ext normal subsets; the latin one is the
+ * plain-zero copy from scripts/fonts/plain-zero.py.
  */
 @font-face {
-	font-family: 'Geist Variable';
+	font-family: 'Atkinson Hyperlegible Next Variable';
 	font-style: normal;
 	font-display: swap;
-	font-weight: 100 900;
-	src: url('@fontsource-variable/geist/files/geist-latin-ext-wght-normal.woff2')
+	font-weight: 200 800;
+	src: url('@fontsource-variable/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-ext-wght-normal.woff2')
 		format('woff2-variations');
 	unicode-range:
 		U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
@@ -18,82 +18,57 @@
 }
 
 @font-face {
-	font-family: 'Geist Variable';
-	font-style: normal;
-	font-display: swap;
-	font-weight: 100 900;
-	src: url('@fontsource-variable/geist/files/geist-latin-wght-normal.woff2')
-		format('woff2-variations');
-	unicode-range:
-		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-		U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-	font-family: 'Newsreader Variable';
+	font-family: 'Atkinson Hyperlegible Next Variable';
 	font-style: normal;
 	font-display: swap;
 	font-weight: 200 800;
-	src: url('@fontsource-variable/newsreader/files/newsreader-latin-ext-opsz-normal.woff2')
-		format('woff2-variations');
-	unicode-range:
-		U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
-		U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
-		U+A720-A7FF;
-}
-
-@font-face {
-	font-family: 'Newsreader Variable';
-	font-style: normal;
-	font-display: swap;
-	font-weight: 200 800;
-	src: url('@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2')
-		format('woff2-variations');
+	src: url('./fonts/atkinson-hyperlegible-next-latin-wght-normal.woff2') format('woff2-variations');
 	unicode-range:
 		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
 		U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 :root {
-	--font-display: 'Newsreader Variable', Georgia, 'Iowan Old Style', serif;
-	--font-sans: 'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--font-sans:
+		'Atkinson Hyperlegible Next Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--font-display: var(--font-sans);
 	--font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
 	/* Light palette: Warm Alabaster + Forest Teal */
-	--color-bg: #fafaf8;
+	--color-bg: #ffffff;
 	--color-surface-1: #ffffff;
-	--color-surface-2: #f3f2ee;
-	--color-surface-3: #e8e6df;
+	--color-surface-2: #f3f3f3;
+	--color-surface-3: #e8e8e8;
 	--input-bg: #ffffff;
 
-	--color-text: #141413;
-	--color-text-secondary: #52514d;
-	--color-text-muted: #63625c;
-	--color-line: #e6e4dd;
-	--color-line-strong: #77756e;
+	--color-text: #121212;
+	--color-text-secondary: #4a4a4a;
+	--color-text-muted: #666666;
+	--color-line: #dadada;
+	--color-line-strong: #767676;
 
-	--color-accent: #0f766e;
+	--color-accent: #1f3fd0;
 	--color-on-accent: #ffffff;
-	--color-accent-soft: #e6f4f1;
-	--color-accent-text: #0d635c;
-	--color-accent-border: #b2dfd8;
+	--color-accent-soft: #eef1fc;
+	--color-accent-text: #1f3fd0;
+	--color-accent-border: #c3cdf5;
 
-	--color-danger: #c81e1e;
+	--color-danger: #b42318;
 	--color-on-danger: #ffffff;
 	--color-danger-soft: #fef2f2;
 	--color-danger-border: #fecaca;
 
-	--color-ok: #0f766e;
-	--color-ok-soft: #e6f4f1;
-	--color-ok-text: #0d635c;
-	--color-ok-border: #b2dfd8;
+	--color-ok: #22662e;
+	--color-ok-soft: #eef6ef;
+	--color-ok-text: #1b5225;
+	--color-ok-border: #bfdcc3;
 
 	--color-warn: #92400e;
 	--color-warn-soft: #fef3c7;
 	--color-warn-text: #78350f;
 	--color-warn-border: #f5d08a;
 
-	--color-focus-inner: #141413;
+	--color-focus-inner: #121212;
 	--color-focus-outer: var(--color-accent);
 
 	/* Legacy aliases preserved for semantic clarity */
@@ -106,10 +81,10 @@
 	--color-surface-danger: var(--color-danger-soft);
 	--color-surface-success: var(--color-ok-soft);
 	--color-text-subtle: var(--color-text-muted);
-	--color-link: var(--color-accent-text);
+	--color-link: var(--color-accent);
 	--color-focus: var(--color-focus-inner);
-	--color-primary: var(--color-accent);
-	--color-primary-contrast: var(--color-on-accent);
+	--color-primary: var(--color-text);
+	--color-primary-contrast: var(--color-bg);
 	--color-danger-text: var(--color-danger);
 	--color-success-text: var(--color-ok-text);
 	--color-warn-text-legacy: var(--color-warn-text);
@@ -126,17 +101,17 @@
 	--space-5: 24px;
 	--space-6: 32px;
 
-	--radius-xs: 5px;
-	--radius-sm: 7px;
-	--radius-md: 11px;
-	--radius-lg: 14px;
-	--radius-pill: 9999px;
+	--radius-xs: 2px;
+	--radius-sm: 3px;
+	--radius-md: 3px;
+	--radius-lg: 3px;
+	--radius-pill: 3px;
 	--radius-1: var(--radius-xs);
 	--radius-2: var(--radius-sm);
 	--radius-3: var(--radius-md);
 
-	--shadow-xs: 0 1px 2px rgb(20 20 19 / 0.05);
-	--shadow-sm: 0 1px 2px rgb(20 20 19 / 0.04), 0 4px 14px rgb(20 20 19 / 0.03);
+	--shadow-xs: none;
+	--shadow-sm: none;
 	--specular-top: none;
 	--shadow-card: var(--shadow-sm);
 
@@ -153,45 +128,45 @@
 @media (prefers-color-scheme: dark) {
 	:root {
 		/* Dark palette: Warm Graphite + Dual-Polarity Teal */
-		--color-bg: #0d0e10;
-		--color-surface-1: #141518;
-		--color-surface-2: #1c1e22;
-		--color-surface-3: #25282e;
-		--input-bg: #0d0e10;
+		--color-bg: #0f0f10;
+		--color-surface-1: #151517;
+		--color-surface-2: #19191b;
+		--color-surface-3: #232326;
+		--input-bg: #0f0f10;
 
-		--color-text: #f3f3f1;
-		--color-text-secondary: #a3a4a8;
-		--color-text-muted: #8e9096;
-		--color-line: #26282f;
-		--color-line-strong: #6c6f78;
+		--color-text: #f2f2f0;
+		--color-text-secondary: #b4b4b0;
+		--color-text-muted: #929290;
+		--color-line: #2a2a2c;
+		--color-line-strong: #77777a;
 
-		--color-accent: #2dd4bf;
-		--color-on-accent: #061a18;
-		--color-accent-soft: #122a28;
-		--color-accent-text: #5eead4;
-		--color-accent-border: #1c4440;
+		--color-accent: #9db7ff;
+		--color-on-accent: #0b1028;
+		--color-accent-soft: #172142;
+		--color-accent-text: #9db7ff;
+		--color-accent-border: #2a3a6e;
 
-		--color-danger: #f87171;
-		--color-on-danger: #0d0e10;
+		--color-danger: #ff9a8f;
+		--color-on-danger: #0f0f10;
 		--color-danger-soft: #2c1315;
 		--color-danger-border: #5c2224;
 
-		--color-ok: #2dd4bf;
-		--color-ok-soft: #122a28;
-		--color-ok-text: #5eead4;
-		--color-ok-border: #1c4440;
+		--color-ok: #8fd19a;
+		--color-ok-soft: #142a17;
+		--color-ok-text: #8fd19a;
+		--color-ok-border: #244a2a;
 
 		--color-warn: #fbbf24;
 		--color-warn-soft: #362d12;
 		--color-warn-text: #fde68a;
 		--color-warn-border: #63511f;
 
-		--color-focus-inner: #f3f3f1;
+		--color-focus-inner: #f2f2f0;
 		--color-focus-outer: var(--color-accent);
 
-		--shadow-xs: inset 0 1px 0 rgb(255 255 255 / 0.05);
-		--shadow-sm: inset 0 1px 0 rgb(255 255 255 / 0.05);
-		--specular-top: inset 0 1px 0 rgb(255 255 255 / 0.05);
+		--shadow-xs: none;
+		--shadow-sm: none;
+		--specular-top: none;
 		--shadow-card: var(--shadow-sm);
 	}
 }
@@ -286,7 +261,7 @@ a:not(.btn):hover {
 	text-decoration-color: currentColor;
 }
 
-/* Two-layer crisp focus ring matching İzgah Stüdyo (izgah-ui-v3 §3). */
+/* Two-layer crisp focus ring, the same as the web app (izgah-ui-v4 §1). */
 :where(a:any-link, button, input, select, textarea, summary, [tabindex]):focus-visible {
 	outline: 2px solid transparent;
 	outline-offset: 2px;

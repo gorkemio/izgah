@@ -1,7 +1,7 @@
 # Izgah UI v4 — "Künye"
 
 *   **Author:** Gorkem Inanc Ozdemir
-*   **Status:** Proposed. Implementation (roadmap R3) starts after the prototype review in §9.
+*   **Status:** Approved (2026-11-26, after the prototype review in §9). Implementation is roadmap R3.
 *   **Date:** 2026-11-26
 
 --------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ Palettes shrink to Light, Dark and High contrast (light and dark variants); the 
 
 One variable family with italics and `latin-ext`, self-hosted from Fontsource: **Atkinson Hyperlegible Next** (`@fontsource-variable/atkinson-hyperlegible-next`, SIL OFL 1.1). It was designed for legibility and keeps `I l 1` and `O 0` apart in URLs and API keys. The base size is 16 px.
 
-*Decision, 2026-11-26:* chosen by the maintainer after the prototype review over **Ysabeau Office** (a humanist sans on a Garamond skeleton). Its default zero is slashed; R3 checks whether a plain-zero alternate is available for times and counts, and keeps the slashed zero where telling `0` from `O` matters (URLs, keys, code).
+*Decision, 2026-11-26:* chosen by the maintainer after the prototype review over **Ysabeau Office** (a humanist sans on a Garamond skeleton). Its zero is slashed and the font has no plain alternate, so Izgah ships a modified copy of the latin subset whose zero is plain (`scripts/fonts/plain-zero.py` rebuilds the counter from the capital O at every weight; the copy is renamed "Atkinson Hyperlegible Next Izgah"). Times, counts and dates read `10:05`. URLs, keys and code are set in the system monospace, which keeps its own slashed or dotted zero where telling `0` from `O` matters.
 
 Excluded on purpose, because they are model defaults: Inter, Geist, Space Grotesk, IBM Plex, Newsreader, Fraunces, Instrument Serif, JetBrains Mono.
 
@@ -121,6 +121,18 @@ The accent colours (`teal`, `cobalt`, `terracotta`, `plum`) and the `dim` palett
 `docs/designs/prototypes/kunye/` holds static pages with realistic data: the feed with a reading pane (light and dark), a resource page, the share form with suggestions, `/admin/ai`, mobile, and izgah.com, with a font switch. The maintainer reviews them; the chosen font and any changes are recorded here before R3 starts.
 
 *   2026-11-26 — Font: Atkinson Hyperlegible Next (§2). Wordmark: "iz" + "gah" (§5). R3 can start.
+
+## 10. Implementation notes (R3)
+
+*   Tokens, the single font (with the plain zero from §2), the four palettes (light and dark × standard and high contrast) and the removals in §8, in the app, the extensions and izgah.com. `tests/unit/tokens-contrast.test.ts` checks every palette, link and visited colour, and the 3px radius ceiling.
+*   The index rail with the wordmark, a text-only bottom tab bar, the register entry (gutter, note, künye line, ruled day headings with counts), flat resource, settings and admin pages, and the auth layout.
+*   Words instead of icons in the shell: "Notifications" with an unread count in link blue, "Actions" on each entry, "Close" and "Copy" in the reading pane.
+*   The reading pane: from 1280 px `SidePeekDialog` opens non-modally (`show()`) as a docked column of `--pane-w`, and the register makes room for it (`html:has(dialog.is-docked[open])`). Moving focus to another entry (j/k, Tab, click) shows that entry; Escape closes it. Below 1280 px it stays a modal drawer.
+*   The content-type filter is a native "Filter" disclosure (`<details>`), open while a type is active; the `?type=` URLs are unchanged.
+*   The extension icons and the favicon use the Künye mark: an ink square with a paper stem and a link-blue dot.
+*   izgah.com is rebuilt from the prototype: a live HTML specimen instead of screenshots, in English and Turkish.
+
+Kept on purpose: `PostCard` and `LinkAttachment` keep their names and test hooks (`ui-v2.md` §12) and are restyled as the register entry; `rail-summary.ts` stays for the "Most discussed" sort.
 
 ## Alternatives considered
 

@@ -999,8 +999,6 @@
 		font: var(--text-ui);
 		font-size: 0.75rem;
 		font-weight: 600;
-		letter-spacing: 0.05em;
-		text-transform: uppercase;
 		color: var(--color-text-muted);
 	}
 

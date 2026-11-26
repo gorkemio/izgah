@@ -3,8 +3,6 @@
 	import { watchImageError } from '#lib/client/image-error.ts';
 	import { enhance, type SubmitFunction } from '$app/forms';
 	import { goto } from '$app/navigation';
-	import AvatarStack, { type AvatarStackItem } from '#lib/components/ui/AvatarStack.svelte';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import Tooltip from '#lib/components/ui/Tooltip.svelte';
 	import { toasts } from '#lib/client/toast.svelte.ts';
 	import { contentTypeLabel, type FeedShareItem } from '#lib/types/feed.ts';
@@ -30,12 +28,10 @@
 	let {
 		resource,
 		originalShareDeleted = false,
-		sharers = [],
 		aiSummary = null
 	}: {
 		resource: HeroResource;
 		originalShareDeleted?: boolean;
-		sharers?: ReadonlyArray<AvatarStackItem>;
 		/** Labelled machine summary (docs/designs/izgah-smart-capture.md §10). */
 		aiSummary?: string | null;
 	} = $props();
@@ -69,14 +65,9 @@
 				? t('resource.language', { language: resource.providerMeta.language })
 				: null,
 			resource.providerMeta?.stars !== undefined
-				? `★ ${formatNumber(resource.providerMeta.stars)}`
+				? t('share.stars', { count: formatNumber(resource.providerMeta.stars) })
 				: null
 		].filter(Boolean)
-	);
-	const sharersLabel = $derived(
-		sharers.length > 0
-			? t('resource.sharers', { names: sharers.map((item) => item.name).join(', ') })
-			: undefined
 	);
 
 	// Optimistic, idempotent like (izgah-ui-v2 §8.6): send the desired state, apply the result.
@@ -170,8 +161,9 @@
 
 	<div class="hero-body">
 		<div class="hero-meta">
-			<span class="tag tag-accent">{contentTypeLabel(resource.contentType)}</span>
-			<span class="hero-domain">{resource.siteName || resource.domain}</span>
+			<span class="hero-domain">
+				{resource.siteName || resource.domain} · {contentTypeLabel(resource.contentType)}
+			</span>
 			{#if originalShareDeleted}
 				<span class="status-pill status-pending">
 					<span class="status-dot" aria-hidden="true"></span>
@@ -206,7 +198,6 @@
 				aria-label={t('resource.visitLabel', { domain: resource.domain })}
 			>
 				<span>{t('resource.visit')}</span>
-				<Icon name="external" size={15} />
 			</a>
 
 			<form method="POST" action="?/toggleLike" use:enhance={handleLikeEnhance}>
@@ -219,7 +210,6 @@
 					aria-pressed={viewerLiked}
 					disabled={likeSubmitting}
 				>
-					<Icon name="heart" size={16} filled={viewerLiked} />
 					<span>{t('common.likeCount', { count: likeCount })}</span>
 				</button>
 			</form>
@@ -232,39 +222,29 @@
 						aria-label={t('link.copyLabel', { title: resource.title || resource.domain })}
 						onclick={copyResourceUrl}
 					>
-						<Icon name={copied ? 'check' : 'copy'} size={15} />
 						<span>{copied ? t('resource.copied') : t('resource.copy')}</span>
 					</button>
 				{/snippet}
 			</Tooltip>
 
 			<a href="#comments" class="btn btn-ghost hero-comment-count">
-				<Icon name="message" size={15} />
 				<span>{t('common.commentCount', { count: resource.commentCount })}</span>
 			</a>
-
-			{#if sharers.length > 0}
-				<div class="hero-sharers">
-					<AvatarStack items={sharers} max={4} size={26} label={sharersLabel} />
-				</div>
-			{/if}
 		</div>
 	</div>
 </article>
 
 <style>
+	/* Künye: the resource reads like a page, not a card (izgah-ui-v4.md §1, principle 3). */
 	.resource-hero {
 		display: grid;
-		background: var(--color-surface-1);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-lg);
-		box-shadow: var(--shadow-sm);
-		overflow: hidden;
+		gap: var(--space-4);
 	}
 
 	.hero-media {
+		overflow: hidden;
 		background: var(--color-surface-2);
-		border-block-end: 1px solid var(--color-line);
+		border-radius: var(--radius-xs);
 	}
 
 	.hero-thumbnail {
@@ -278,13 +258,6 @@
 		display: grid;
 		gap: var(--space-3);
 		min-inline-size: 0;
-		padding: var(--space-4);
-	}
-
-	@media (min-width: 640px) {
-		.hero-body {
-			padding: var(--space-5) 26px;
-		}
 	}
 
 	.hero-meta {
@@ -302,8 +275,9 @@
 
 	.resource-title {
 		font: var(--text-display);
-		letter-spacing: -0.02em;
-		line-height: 1.18;
+		font-size: 1.625rem;
+		letter-spacing: -0.01em;
+		line-height: 1.22;
 		overflow-wrap: anywhere;
 		color: var(--color-text);
 	}
@@ -358,12 +332,6 @@
 
 	.hero-comment-count {
 		font-variant-numeric: tabular-nums;
-	}
-
-	.hero-sharers {
-		display: inline-flex;
-		align-items: center;
-		margin-inline-start: auto;
 	}
 
 	@media (forced-colors: active) {
