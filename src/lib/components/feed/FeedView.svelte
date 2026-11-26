@@ -358,6 +358,25 @@
 		peekItem = item;
 	}
 
+	// While the docked reading pane is open, moving focus to another post (j/k, Tab, click) shows
+	// that post in the pane (izgah-ui-v4 §3). The modal drawer is unaffected: it holds the focus.
+	function handleFeedFocusIn(event: FocusEvent): void {
+		if (!peekItem || !document.querySelector('dialog.side-peek-dialog.is-docked[open]')) {
+			return;
+		}
+		const post = (event.target as HTMLElement | null)?.closest?.<HTMLElement>(
+			'article[id^="share-"]'
+		);
+		const id = post?.id.slice('share-'.length);
+		if (!id || id === peekItem.id) {
+			return;
+		}
+		const next = feed.items.find((item) => item.id === id);
+		if (next) {
+			peekItem = next;
+		}
+	}
+
 	async function handleLoadMore(event: MouseEvent): Promise<void> {
 		if (
 			event.defaultPrevented ||
@@ -411,7 +430,7 @@
 	}
 </script>
 
-<section class="feed-view" aria-labelledby={headingId}>
+<section class="feed-view" aria-labelledby={headingId} onfocusin={handleFeedFocusIn}>
 	<header class="feed-head">
 		<div class="feed-head-copy">
 			<h1 id={headingId} tabindex="-1">{heading}</h1>

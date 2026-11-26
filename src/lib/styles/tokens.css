@@ -426,8 +426,7 @@
 
 		/* Shell dimensions (§3) */
 		--rail-w: 224px;
-		--icon-rail-w: 68px;
-		--context-rail-w: 280px;
+		--pane-w: 420px;
 		--read-w: 720px;
 		--wide-w: 960px;
 		--topbar-h: 0px;

@@ -543,8 +543,11 @@ test.describe('UI v2 shell — rail, bottom tab bar, /sections and theme cookie'
 		const card = page.locator('article.share-card').first();
 		await card.getByRole('link', { name: /^Önizle —/ }).click();
 
+		// From 1280px the preview is a docked, non-modal reading pane (izgah-ui-v4 §3).
 		const drawer = page.locator('dialog.side-peek-dialog');
 		await expect(drawer).toBeVisible();
+		await expect(drawer).toHaveClass(/is-docked/);
+		await expect(page.locator('dialog:modal')).toHaveCount(0);
 		await expect(page).toHaveURL(/\/$/);
 		await expect(drawer).toContainText('Yandan Önizleme Yazısı');
 		await expect(drawer).toContainText('Hızlı bakış ekip notu');
@@ -554,6 +557,15 @@ test.describe('UI v2 shell — rail, bottom tab bar, /sections and theme cookie'
 			`/resources/${resource.id}`
 		);
 
+		await page.keyboard.press('Escape');
+		await expect(drawer).toBeHidden();
+
+		// Below 1280px the same preview is a modal side drawer.
+		await page.setViewportSize({ width: 1100, height: 800 });
+		await card.getByRole('link', { name: /^Önizle —/ }).click();
+		await expect(drawer).toBeVisible();
+		await expect(drawer).not.toHaveClass(/is-docked/);
+		await expect(page.locator('dialog:modal')).toHaveCount(1);
 		await page.keyboard.press('Escape');
 		await expect(drawer).toBeHidden();
 

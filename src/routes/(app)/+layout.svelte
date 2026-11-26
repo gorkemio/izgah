@@ -553,6 +553,13 @@
 		padding: var(--space-5) var(--gutter) var(--space-7);
 	}
 
+	/* The docked reading pane (≥ 1280px) takes the right edge; the register makes room for it. */
+	@media (min-width: 1280px) {
+		:global(html:has(dialog.side-peek-dialog.is-docked[open])) .app-content-wrap {
+			padding-inline-end: var(--pane-w);
+		}
+	}
+
 	@media (max-width: 767px) {
 		.app-shell {
 			grid-template-columns: minmax(0, 1fr);

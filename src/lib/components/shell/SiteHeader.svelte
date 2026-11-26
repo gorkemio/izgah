@@ -3,7 +3,6 @@
 	import { instanceName } from '#lib/instance.ts';
 	import { page } from '$app/state';
 	import NotificationBell from '#lib/components/notifications/NotificationBell.svelte';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import PopoverPanel from '#lib/components/ui/PopoverPanel.svelte';
 	import ThemeForm from '#lib/components/shell/ThemeForm.svelte';
 
@@ -111,30 +110,12 @@
 				</form>
 			</search>
 		{/if}
-		<a
-			href="/search"
-			class="nav-item rail-search-icon"
-			aria-current={onSearchPage ? 'page' : undefined}
-		>
-			<Icon name="search" size={16} />
-			<span class="nav-label">{t('nav.search')}</span>
-		</a>
 
 		<nav aria-label={t('nav.main')} class="rail-nav">
 			<ul role="list">
 				<li>
 					<a href="/" class="nav-item" aria-current={pathname === '/' ? 'page' : undefined}>
 						<span class="nav-label">{t('nav.feed')}</span>
-					</a>
-				</li>
-				<li class="nav-sections-compact">
-					<a
-						href="/sections"
-						class="nav-item"
-						aria-current={pathname.startsWith('/sections') ? 'page' : undefined}
-					>
-						<Icon name="layers" size={16} />
-						<span class="nav-label">{t('nav.sections')}</span>
 					</a>
 				</li>
 			</ul>
@@ -462,12 +443,6 @@
 		text-decoration: none;
 	}
 
-	/* The icon-only rail is gone: without icons, the full index stays from 768px up. */
-	.rail-search-icon,
-	.nav-sections-compact {
-		display: none;
-	}
-
 	/* Mobile top bar (< 768px): brand + bell only; navigation moves to the bottom tab bar. */
 	@media (max-width: 767px) {
 		.site-header {
@@ -494,7 +469,6 @@
 		}
 
 		.rail-search,
-		.rail-search-icon,
 		.rail-nav,
 		.rail-compose,
 		.rail-admin-group,

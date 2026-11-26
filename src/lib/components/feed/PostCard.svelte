@@ -370,7 +370,7 @@
 								triggerClass="card-menu-trigger"
 							>
 								{#snippet trigger()}
-									<Icon name="more" size={16} />
+									<span>{t('share.actionsShort')}</span>
 								{/snippet}
 								{#snippet children({ close })}
 									<div class="card-menu-list">
@@ -882,10 +882,13 @@
 		flex: none;
 	}
 
+	/* "Actions" as a word, set like the künye line (izgah-ui-v4 §1). */
 	:global(.card-menu-trigger) {
-		min-inline-size: 28px !important;
+		min-inline-size: 0 !important;
 		min-block-size: 24px !important;
-		padding: 0 !important;
+		padding: 0 4px !important;
+		font: var(--text-hint) !important;
+		background: transparent !important;
 		border-color: transparent !important;
 		color: var(--color-text-muted) !important;
 	}

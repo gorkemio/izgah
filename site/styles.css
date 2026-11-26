@@ -1,6 +1,7 @@
 /*
  * izgah.com in the Künye style (docs/designs/izgah-ui-v4.md §6): the app's own type and colours,
- * ink on paper, link blue as the only accent, rules instead of boxes. No build step.
+ * ink on paper, link blue as the only accent, rules instead of boxes. No build step. The latin font
+ * file is the plain-zero copy from scripts/fonts/plain-zero.py.
  */
 
 @font-face {

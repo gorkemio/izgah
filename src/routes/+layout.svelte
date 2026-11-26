@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { t } from '#lib/i18n/index.ts';
-	import '@fontsource-variable/atkinson-hyperlegible-next/wght.css';
-	import '@fontsource-variable/atkinson-hyperlegible-next/wght-italic.css';
+	import '#lib/styles/fonts.css';
 	import '../app.css';
 
 	let { children } = $props();

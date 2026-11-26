@@ -690,6 +690,7 @@ test.describe('Milestone M5 — Web Feed, Sections & Native Platform UI', () => 
 		await expect(loadMoreLink).toBeHidden();
 
 		// Same-pathname query filter must NOT steal focus onto <h1>
+		await page.locator('details.feed-filter > summary').click();
 		const videoFilterLink = page
 			.getByRole('navigation', { name: 'İçerik türü süzgeci' })
 			.getByRole('link', { name: 'Video' });
