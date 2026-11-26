@@ -423,7 +423,7 @@ Shortcuts run through a single `<svelte:window onkeydown>` listener in the layou
 
 *   **Phase 1 (S3) — fixed headers only:** The hook adds `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff` and `Referrer-Policy: strict-origin-when-cross-origin` to every HTML response (the `no-referrer` on `?token=` pages is kept). In Phase 1 `kit.csp` is **not configured**; report-only mode (`reportOnly`) is not used (Decision 2).
 *   **Why no report-only mode:** SvelteKit `2.70.4` rejects a report-only policy without `report-uri` or `report-to` (`csp.js:341-348`), which would need an open, unauthenticated report endpoint. Instead, verification is left to the smoke test that runs against the production image, and no `POST /csp-report` endpoint is added.
-*   **Phase 8 — straight to enforced mode:** [`svelte.config.js`](../../svelte.config.js) `kit.csp` with `mode: 'auto'` (a nonce on SSR pages, a hash on prerendered pages) and the following `directives`:
+*   **Phase 8 — straight to enforced mode:** `svelte.config.js` `kit.csp` with `mode: 'auto'` (a nonce on SSR pages, a hash on prerendered pages) and the following `directives`:
 
 ```text
 default-src 'self';
