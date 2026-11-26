@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { t, formatNumber } from '#lib/i18n/index.ts';
+	import { t } from '#lib/i18n/index.ts';
 	import { watchImageError } from '#lib/client/image-error.ts';
 	import { enhance, type SubmitFunction } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { toasts } from '#lib/client/toast.svelte.ts';
-	import { contentTypeLabel, type FeedShareItem } from '#lib/types/feed.ts';
+	import { kunyeCase, resourceFacts } from '#lib/format/kunye.ts';
+	import type { FeedShareItem } from '#lib/types/feed.ts';
 
 	type HeroResource = Pick<
 		FeedShareItem['resource'],
@@ -55,19 +56,7 @@
 	});
 
 	const showThumbnail = $derived(Boolean(resource.thumbnailAssetKey && !imgFailed));
-	const meta = $derived(
-		[
-			resource.providerMeta?.authorName
-				? t('resource.author', { name: resource.providerMeta.authorName })
-				: null,
-			resource.providerMeta?.language
-				? t('resource.language', { language: resource.providerMeta.language })
-				: null,
-			resource.providerMeta?.stars !== undefined
-				? t('share.stars', { count: formatNumber(resource.providerMeta.stars) })
-				: null
-		].filter(Boolean)
-	);
+	const facts = $derived(resourceFacts(resource));
 
 	// Optimistic, idempotent like (izgah-ui-v2 §8.6): send the desired state, apply the result.
 	let likeSubmitting = $state(false);
@@ -139,7 +128,19 @@
 	}
 </script>
 
-<article class="resource-hero">
+<!-- A catalogue card (izgah-ui-v4 §5): title and künye line, a small cover beside them, then the
+     abstract and the actions. The reading pane uses the same order. -->
+<article class="resource-hero" class:has-thumbnail={showThumbnail}>
+	<div class="hero-head">
+		<h1 tabindex="-1" class="resource-title">{resource.title || resource.canonicalUrl}</h1>
+		<p class="hero-kunye">
+			{facts.join(' · ')}
+			{#if originalShareDeleted}
+				<span class="hero-deleted">· {kunyeCase(t('resource.originalDeleted'))}</span>
+			{/if}
+		</p>
+	</div>
+
 	{#if showThumbnail && resource.thumbnailAssetKey}
 		<div class="hero-media">
 			<img
@@ -159,20 +160,6 @@
 	{/if}
 
 	<div class="hero-body">
-		<div class="hero-meta">
-			<span class="hero-domain">
-				{resource.siteName || resource.domain} · {contentTypeLabel(resource.contentType)}
-			</span>
-			{#if originalShareDeleted}
-				<span class="status-pill status-pending">
-					<span class="status-dot" aria-hidden="true"></span>
-					<span>{t('resource.originalDeleted')}</span>
-				</span>
-			{/if}
-		</div>
-
-		<h1 tabindex="-1" class="resource-title">{resource.title || resource.canonicalUrl}</h1>
-
 		{#if resource.description}
 			<p class="resource-description">{resource.description}</p>
 		{/if}
@@ -182,10 +169,6 @@
 				<span class="ai-summary-label">{t('resource.aiSummary')}</span>
 				<p>{aiSummary}</p>
 			</div>
-		{/if}
-
-		{#if meta.length > 0}
-			<p class="provider-meta">{meta.join(' · ')}</p>
 		{/if}
 
 		<div class="hero-actions">
@@ -230,42 +213,21 @@
 </article>
 
 <style>
-	/* Künye: the resource reads like a page, not a card (izgah-ui-v4.md §1, principle 3). */
 	.resource-hero {
 		display: grid;
-		gap: var(--space-4);
+		grid-template-columns: minmax(0, 1fr);
+		gap: var(--space-4) var(--space-5);
+		align-items: start;
 	}
 
-	.hero-media {
-		overflow: hidden;
-		background: var(--color-surface-2);
-		border-radius: var(--radius-xs);
+	.resource-hero.has-thumbnail {
+		grid-template-columns: minmax(0, 1fr) 160px;
 	}
 
-	.hero-thumbnail {
-		inline-size: 100%;
-		block-size: auto;
-		aspect-ratio: 1200 / 630;
-		object-fit: cover;
-	}
-
-	.hero-body {
+	.hero-head {
 		display: grid;
-		gap: var(--space-3);
-		min-inline-size: 0;
-	}
-
-	.hero-meta {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
 		gap: var(--space-2);
-	}
-
-	.hero-domain {
-		font: var(--text-meta);
-		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
+		min-inline-size: 0;
 	}
 
 	.resource-title {
@@ -277,16 +239,41 @@
 		color: var(--color-text);
 	}
 
-	.resource-description {
-		font: var(--text-body);
-		color: var(--color-text-secondary);
-		line-height: 1.62;
-	}
-
-	.provider-meta {
+	.hero-kunye {
 		font: var(--text-meta);
 		font-variant-numeric: tabular-nums;
 		color: var(--color-text-muted);
+	}
+
+	.hero-deleted {
+		font-style: italic;
+	}
+
+	.hero-media {
+		overflow: hidden;
+		aspect-ratio: 16 / 10;
+		background: var(--color-surface-2);
+		border-radius: var(--radius-xs);
+	}
+
+	.hero-thumbnail {
+		display: block;
+		inline-size: 100%;
+		block-size: 100%;
+		object-fit: cover;
+	}
+
+	.hero-body {
+		grid-column: 1 / -1;
+		display: grid;
+		gap: var(--space-3);
+		min-inline-size: 0;
+	}
+
+	.resource-description {
+		max-inline-size: var(--measure);
+		font: var(--text-body);
+		color: var(--color-text-secondary);
 	}
 
 	.hero-actions {
@@ -302,35 +289,28 @@
 		display: contents;
 	}
 
-	.hero-like-btn {
-		font-variant-numeric: tabular-nums;
-	}
-
-	.hero-like-btn.is-liked {
-		background: var(--color-accent-soft);
-		color: var(--color-accent-text);
-		border-color: var(--color-accent-border);
-		font-weight: 600;
-	}
-
-	.hero-like-btn.is-liked:hover:not(:disabled) {
-		background: var(--color-accent-soft);
-		border-color: var(--color-accent);
-		color: var(--color-accent-text);
-	}
-
+	.hero-like-btn,
 	.hero-comment-count {
 		font-variant-numeric: tabular-nums;
 	}
 
-	@media (forced-colors: active) {
-		.resource-hero {
-			box-shadow: none;
+	.hero-like-btn.is-liked {
+		font-weight: 600;
+		border-color: var(--color-text);
+	}
+
+	@media (max-width: 479px) {
+		.resource-hero.has-thumbnail {
+			grid-template-columns: minmax(0, 1fr) 96px;
 		}
 
+		.resource-title {
+			font-size: 1.375rem;
+		}
+	}
+
+	@media (forced-colors: active) {
 		.hero-like-btn.is-liked {
-			background: Highlight;
-			color: HighlightText;
 			border-color: Highlight;
 		}
 	}

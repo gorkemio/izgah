@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-	import { formatCompactNumber, formatNumber, intlLocale, t } from '#lib/i18n/index.ts';
+	import { t } from '#lib/i18n/index.ts';
 	import { formatDate, formatDateTime, formatShortDate, formatTime } from '#lib/format/date.ts';
 	import { toasts } from '#lib/client/toast.svelte.ts';
 	import { enhance, type SubmitFunction } from '$app/forms';
@@ -17,7 +17,7 @@
 		FeedShareItem as PostItem,
 		ShareCardFormError as PostFormError
 	} from '#lib/types/feed.ts';
-	import { contentTypeLabel } from '#lib/types/feed.ts';
+	import { kunyeCase, resourceFacts } from '#lib/format/kunye.ts';
 	import LikeButton from './LikeButton.svelte';
 	import LinkAttachment from './LinkAttachment.svelte';
 	import ShareSuggestions from './ShareSuggestions.svelte';
@@ -107,26 +107,8 @@
 		item.resource.unfurlStatus === 'queued' || item.resource.unfurlStatus === 'running'
 	);
 
-	function lower(text: string): string {
-		return text.toLocaleLowerCase(intlLocale());
-	}
-
-	function formatStars(stars: number): string {
-		return stars >= 1000 ? formatCompactNumber(stars) : formatNumber(stars);
-	}
-
 	// The link's own facts, in künye order: site · type · language · stars · author.
-	const metaParts = $derived(
-		[
-			item.resource.domain,
-			lower(contentTypeLabel(item.resource.contentType)),
-			item.resource.providerMeta?.language ?? null,
-			item.resource.providerMeta?.stars !== undefined
-				? t('share.stars', { count: formatStars(item.resource.providerMeta.stars) })
-				: null,
-			item.resource.providerMeta?.authorName ?? null
-		].filter((part): part is string => Boolean(part))
-	);
+	const metaParts = $derived(resourceFacts(item.resource));
 
 	async function copyLink(): Promise<void> {
 		try {
@@ -464,13 +446,13 @@
 							{#if !item.isFeedVisible}
 								<span class="kunye-part badge-silent">
 									<span class="kunye-sep" aria-hidden="true">·</span>
-									{lower(t('share.silent'))}
+									{kunyeCase(t('share.silent'))}
 								</span>
 							{/if}
 							{#if isPendingUnfurl}
 								<span class="kunye-part badge-pending">
 									<span class="kunye-sep" aria-hidden="true">·</span>
-									{lower(t('share.previewPending'))}
+									{kunyeCase(t('share.previewPending'))}
 								</span>
 							{:else if item.resource.unfurlStatus === 'failed'}
 								<span class="kunye-part badge-failed">
