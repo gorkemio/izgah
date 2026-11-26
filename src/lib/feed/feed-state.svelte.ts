@@ -3,7 +3,7 @@ import { mergeRefreshedFirstPage, type MergeableFeedItem } from './merge';
 /**
  * Per-FeedView feed state (docs/designs/izgah-ui-v2.md §8.6). Instantiated inside the component —
  * never at module level — so server renders cannot share one user's feed with another.
- * The first page comes from page data; pages appended with "Daha fazla yükle" are kept across
+ * The first page comes from page data; pages appended with "Load more" are kept across
  * same-query refreshes (likes, unfurl polling, edits) and re-stitched with the merge rules.
  */
 export class FeedState<T extends MergeableFeedItem> {
@@ -68,7 +68,7 @@ export class FeedState<T extends MergeableFeedItem> {
 		return fresh.length;
 	}
 
-	/** Re-applies pages restored from a navigation snapshot (Back after "Daha fazla yükle"). */
+	/** Re-applies pages restored from a navigation snapshot (Back after "Load more"). */
 	restore(appended: T[], hasMore: boolean | null, nextCursor: string | null | undefined): void {
 		const existing = new Set(this.base.map((item) => item.id));
 		this.appended = appended.filter((item) => !existing.has(item.id));

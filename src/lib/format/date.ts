@@ -152,7 +152,7 @@ export function dayLabel(key: string, today: string): string {
 
 /**
  * The full date beside a day heading for the last week (izgah-ui-v4 §4): "25 Kasım Çarşamba" /
- * "Wednesday, November 25" after "Bugün" and "Dün", the date alone after a weekday; older headings
+ * "Wednesday, November 25" after "Today" and "Yesterday", the date alone after a weekday; older headings
  * already are a date, so they get none.
  */
 export function dayDetail(key: string, today: string): string {

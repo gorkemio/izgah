@@ -20,7 +20,7 @@ function readCssPx(name: string): number {
 }
 
 /**
- * Routes every share trigger (rail and tab bar "Paylaş", `n`, paste, drop) to one target
+ * Routes every share trigger (rail and tab bar "Add a link", `n`, paste, drop) to one target
  * (docs/designs/izgah-ui-v2.md §8.1, Karar 1): the feed's inline form when it is completely inside
  * the visible area, otherwise the <dialog>. Visibility is measured synchronously at trigger time.
  */

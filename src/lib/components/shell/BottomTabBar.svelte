@@ -120,7 +120,7 @@
 		opacity: 0.88;
 	}
 
-	/* Künye: words only; the current tab is bold and underlined, "İz bırak" is bold ink. */
+	/* Künye: words only; the current tab is bold and underlined, "Add a link" is bold ink. */
 	.tab[aria-current='page'] {
 		color: var(--color-text);
 		font-weight: 600;

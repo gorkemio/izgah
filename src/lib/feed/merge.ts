@@ -7,7 +7,7 @@ export interface MergeableFeedItem {
 export interface MergeFeedInput<T extends MergeableFeedItem> {
 	/** First page currently shown (before the refresh). */
 	previousFirstPage: readonly T[];
-	/** Items appended with "Daha fazla yükle". */
+	/** Items appended with "Load more". */
 	appended: readonly T[];
 	/** Refreshed first page from the server. */
 	freshFirstPage: readonly T[];

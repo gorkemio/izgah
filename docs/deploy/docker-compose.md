@@ -25,9 +25,9 @@ BETTER_AUTH_SECRET=<openssl rand -hex 32>
 ORIGIN=https://links.example.com
 
 # Optional
-DEFAULT_LOCALE=en                 # or tr
-APP_TIME_ZONE=UTC              # e.g. Europe/Istanbul
-INSTANCE_NAME=Izgah        # shown in the UI
+DEFAULT_LOCALE=en        # or tr
+APP_TIME_ZONE=UTC        # e.g. Europe/Istanbul
+INSTANCE_NAME=Izgah      # shown in the UI
 ADMIN_BOOTSTRAP_EMAIL=you@example.com
 ```
 

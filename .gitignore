@@ -34,5 +34,17 @@ test-results/
 extensions/playwright-report/
 extensions/test-results/
 
-# macOS
+# Operating systems
 .DS_Store
+Thumbs.db
+
+# Editors and local agent state
+.vscode/
+.idea/
+*.swp
+.claude/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*

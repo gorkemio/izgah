@@ -30,7 +30,7 @@ pnpm --dir extensions lint && pnpm --dir extensions check && pnpm --dir extensio
 - **UI text:** never hard-code user-facing strings. Add a key to `src/lib/i18n/messages/en.ts` and the same key to `tr.ts` (the type checker and `tests/unit/i18n-messages.test.ts` fail if a locale is missing a key or a placeholder). Extension strings live in `extensions/public/_locales/{en,tr}/messages.json`.
 - **Platform first:** prefer native platform features (`<dialog>`, `popover`, View Transitions, container queries, `Intl`) over libraries and polyfills. Features that are not Baseline "widely available" must be progressive enhancements. We support the last two major versions of Chrome, Firefox and Safari.
 - **Works without JavaScript:** core flows are forms and links first; JavaScript enhances them.
-- **Design tokens:** components use semantic tokens (`--color-*`, `--space-*`, `--radius-*`, `--text-*`) from `src/lib/styles/tokens.css`, never raw colours or ad-hoc sizes.
+- **Design tokens:** components use semantic tokens (`--color-*`, `--space-*`, `--radius-*`, `--text-*`) from `src/lib/styles/tokens.css`, never raw colours or ad-hoc sizes. Colours come from `tokens/kunye.json`: edit it and run `pnpm tokens`, never the generated `palette.css` files.
 - **Accessibility:** WCAG 2.2 AA in every palette. The Playwright a11y tour (`tests/e2e/m15-a11y-tour.spec.ts`) checks contrast with axe.
 - **Secrets:** never commit `.env` files, and never embed secrets in client code or the extensions.
 - **Database:** migrations are generated with `pnpm db:generate` and must be expand-and-contract safe (version N must not break N-1).

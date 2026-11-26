@@ -12,7 +12,7 @@ const CONTEXT_KEY = Symbol('izgah.theme-state');
 
 /**
  * The current mode and palette, shared by every appearance picker on the page (account menu and
- * /settings "Görünüm") so they never disagree after a JS switch (izgah-ui-v2 §9, izgah-themes §5).
+ * /settings "Appearance") so they never disagree after a JS switch (izgah-ui-v2 §9, izgah-themes §5).
  */
 export class ThemeState {
 	value = $state<ThemeChoice>('system');

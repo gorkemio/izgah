@@ -25,10 +25,15 @@ browser / extension ──HTTPS──▶ reverse proxy ──▶ SvelteKit app (
 - **sections**, **resource_comments**, **resource_likes**, **notifications**, **search_logs**, **audit_logs**.
 - **users**, **sessions**, **accounts**, **api_keys**, **invite_tokens** (invites and password resets; no e-mail is sent).
 - **unfurl_jobs** — the preview queue.
+- **enrichment_jobs**, **resource_enrichments**, **instance_settings** — smart capture: page text, optional AI summaries and section suggestions, and the encrypted provider settings.
 
 ## Link previews
 
 [`src/lib/server/unfurl`](./src/lib/server/unfurl): a worker claims jobs with `FOR UPDATE SKIP LOCKED`, fetches pages through [`safe-fetch.ts`](./src/lib/server/unfurl/safe-fetch.ts) (DNS pinning, private-range blocking, port/redirect limits), runs provider adapters (GitHub, YouTube, X, generic HTML meta) and stores resized WebP thumbnails with `sharp`. A circuit breaker backs off failing hosts.
+
+## Smart capture
+
+[`src/lib/server/smart-capture`](./src/lib/server/smart-capture): `#section` hashtags in notes, section suggestions from the team's history, and a second worker that extracts page text and, when an admin has configured a provider, asks the model for a summary, keywords and section suggestions ([izgah-smart-capture.md](./docs/designs/izgah-smart-capture.md)). Model output is suggest-only by default and never runs tools.
 
 ## Search
 
@@ -37,7 +42,7 @@ Trigger-maintained `tsvector` columns combine the `simple`, `english` and `turki
 ## UI
 
 - Svelte 5 runes, no UI framework. Native `<dialog>`, `popover`, View Transitions and container queries.
-- Design tokens in [`src/lib/styles/tokens.css`](./src/lib/styles/tokens.css): primitive → semantic (`light-dark()`) → component layers; five palettes × four accents.
+- The "Künye" visual language ([izgah-ui-v4.md](./docs/designs/izgah-ui-v4.md)): one type family, rules instead of boxes, words instead of icons. Colours for the app, the extensions and izgah.com come from one source, [`tokens/kunye.json`](./tokens/kunye.json) (`pnpm tokens` writes the palette CSS); [`src/lib/styles/tokens.css`](./src/lib/styles/tokens.css) maps them to semantic `light-dark()` tokens in four palettes (light and dark, standard and high contrast).
 - i18n in [`src/lib/i18n`](./src/lib/i18n): typed message catalogs (`en` is the source), resolved per request.
 
 ## Browser extensions
@@ -46,4 +51,4 @@ Trigger-maintained `tsvector` columns combine the `simple`, `english` and `turki
 
 ## Design documents
 
-Approved designs are in [`docs/designs/`](./docs/designs) (Turkish). Start with `izgah-core.md`, then `izgah-ui-v3.md` and `izgah-i18n-oss.md`.
+Approved designs are in [`docs/designs/`](./docs/designs), indexed in [SITEMAP.md](./docs/designs/SITEMAP.md). Start with `izgah-core.md`, then `izgah-ui-v4.md`, `izgah-i18n-oss.md` and `izgah-roadmap.md`.
