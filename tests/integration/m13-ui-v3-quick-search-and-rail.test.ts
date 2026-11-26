@@ -18,6 +18,7 @@ import {
 	users
 } from '../../src/lib/server/db/schema';
 import { getFeedRailSummary } from '../../src/lib/server/feed/rail-summary';
+import { countSharesBySection } from '../../src/lib/server/sections/service';
 import { resetSearchLogDedupe, searchResources } from '../../src/lib/server/search/service';
 import { GET as quickSearchGet } from '../../src/routes/api/internal/search/quick/+server';
 import { closeTestDb, migrateTestDb, resetTestDb, testDb } from '../setup/db';
@@ -542,6 +543,44 @@ describe('UI v3 integration — GET /api/internal/search/quick & getFeedRailSumm
 				['Deniz', 3],
 				['Ece', 2]
 			]);
+		});
+	});
+
+	describe('countSharesBySection()', () => {
+		it('counts live shares per section, silent ones included and deleted ones left out', async () => {
+			const author = await seedUser({ name: 'Sayan Üye', email: 'sayan@izgah.test' });
+			const [tasarim, bos] = await testDb
+				.insert(sections)
+				.values([
+					{ slug: 'tasarim', name: 'Tasarım', createdById: author.id },
+					{ slug: 'bos', name: 'Boş', createdById: author.id }
+				])
+				.returning({ id: sections.id });
+			await seedResourceAndShare({
+				authorId: author.id,
+				slug: 'a',
+				title: 'A',
+				sectionId: tasarim.id
+			});
+			await seedResourceAndShare({
+				authorId: author.id,
+				slug: 'b',
+				title: 'B',
+				sectionId: tasarim.id,
+				isFeedVisible: false
+			});
+			await seedResourceAndShare({
+				authorId: author.id,
+				slug: 'c',
+				title: 'C',
+				sectionId: tasarim.id,
+				deleted: true
+			});
+			await seedResourceAndShare({ authorId: author.id, slug: 'd', title: 'D' });
+
+			const counts = await countSharesBySection(testDb);
+			expect(counts.get(tasarim.id)).toBe(2);
+			expect(counts.has(bos.id)).toBe(false);
 		});
 	});
 });

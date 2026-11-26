@@ -737,6 +737,7 @@ export const en = {
 	'section.location': 'Section location',
 	'section.notFound': 'Section not found.',
 	'section.pagination': 'Section pagination',
+	'sections.count': '{count, plural, one {# link} other {# links}}',
 	'sections.emptyAdmin': 'Create sections in the admin panel to group the team’s posts by topic.',
 	'sections.emptyMember': 'Sections appear here when an admin adds them.',
 	'sections.emptyTitle': 'No sections yet.',

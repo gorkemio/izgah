@@ -743,6 +743,7 @@ export const tr: Record<MessageKey, string> = {
 	'section.location': 'Bölüm konumu',
 	'section.notFound': 'Bölüm bulunamadı.',
 	'section.pagination': 'Bölüm sayfalaması',
+	'sections.count': '{count, plural, other {# iz}}',
 	'sections.emptyAdmin':
 		'Ekibin paylaşımlarını konularına göre ayırmak için yönetim panelinden bölüm oluşturabilirsiniz.',
 	'sections.emptyMember': 'Yönetici yeni konu bölümleri eklediğinde burada listelenecek.',

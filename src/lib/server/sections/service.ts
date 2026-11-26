@@ -1,6 +1,6 @@
-import { asc, inArray } from 'drizzle-orm';
+import { asc, count, eq, inArray, isNull } from 'drizzle-orm';
 import { db, type Database } from '#lib/server/db/client.ts';
-import { sections } from '#lib/server/db/schema.ts';
+import { linkShareSections, linkShares, sections } from '#lib/server/db/schema.ts';
 
 export interface SectionListItem {
 	id: string;
@@ -26,6 +26,22 @@ export async function listSections(
 		})
 		.from(sections)
 		.orderBy(asc(sections.sortOrder), asc(sections.name));
+}
+
+/**
+ * Counts the live shares in each section, silent ones included, as the section page lists them
+ * (izgah-ui-v4 §5). Sections without shares are absent from the map.
+ */
+export async function countSharesBySection(
+	executor: Pick<Database, 'select'> = db
+): Promise<Map<string, number>> {
+	const rows = await executor
+		.select({ sectionId: linkShareSections.sectionId, value: count() })
+		.from(linkShareSections)
+		.innerJoin(linkShares, eq(linkShares.id, linkShareSections.shareId))
+		.where(isNull(linkShares.deletedAt))
+		.groupBy(linkShareSections.sectionId);
+	return new Map(rows.map((row) => [row.sectionId, Number(row.value)]));
 }
 
 /**
