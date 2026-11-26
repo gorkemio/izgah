@@ -804,7 +804,7 @@ describe('Milestone M6 — Shared likes, flat comments, bilingual search, and ta
 			expect(ownerRepoMatch.totalCount).toBe(1);
 			expect(ownerRepoMatch.items[0].resource.id).toBe(repoShare.share.resourceId);
 
-			// Section filter ("Bu Bölüm"): repoShare is only in Frontend, not Backend
+			// Section filter ("Bu bölüm"): repoShare is only in Frontend, not Backend
 			const scopedEmpty = await searchResources({
 				userId: alice.user.id,
 				query: 'sveltejs/kit',

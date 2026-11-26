@@ -282,7 +282,7 @@ test.describe('Review fixes — feed state, navigation and no-JS flows', () => {
 			page.waitForResponse(
 				(res) => res.url().includes('/login') && res.request().method() === 'POST'
 			),
-			page.getByRole('button', { name: 'Giriş Yap' }).click()
+			page.getByRole('button', { name: 'Giriş yap' }).click()
 		]);
 		expect(response.status()).toBeLessThan(500);
 		await expect(page.getByText('E-posta adresi veya parola hatalı.')).toBeVisible();
@@ -360,12 +360,12 @@ test.describe('Review fixes — feed state, navigation and no-JS flows', () => {
 			{ label: 'Parola', value: 'ErkenParola123' }
 		]);
 		await expectTypingSurvivesHydration(`/auth/accept-invite?token=${await tokenFor('invite')}`, [
-			{ label: 'Ad Soyad', value: 'Erken Yazan' },
-			{ label: 'Yeni Parola', value: 'ErkenParola123' }
+			{ label: 'Ad soyad', value: 'Erken Yazan' },
+			{ label: 'Yeni parola', value: 'ErkenParola123' }
 		]);
 		await expectTypingSurvivesHydration(
 			`/auth/reset-password?token=${await tokenFor('password_reset')}`,
-			[{ label: 'Yeni Parola', value: 'ErkenParola123' }]
+			[{ label: 'Yeni parola', value: 'ErkenParola123' }]
 		);
 	});
 
@@ -389,8 +389,8 @@ test.describe('Review fixes — feed state, navigation and no-JS flows', () => {
 		await attachSessionCookie(context, member.cookieValue);
 		const page = await context.newPage();
 		await page.goto('/settings/api-keys');
-		await page.getByRole('link', { name: 'İptal Et' }).click();
-		await page.getByRole('button', { name: 'Anahtarı İptal Et' }).click();
+		await page.getByRole('link', { name: 'İptal et' }).click();
+		await page.getByRole('button', { name: 'Anahtarı iptal et' }).click();
 		await page.waitForLoadState('load');
 
 		const [row] = await testDb

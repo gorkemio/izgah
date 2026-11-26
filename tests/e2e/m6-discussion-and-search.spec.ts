@@ -377,7 +377,7 @@ test.describe('Milestone M6 — Discussion, Bilingual Search & Notifications', (
 				page2.getByRole('heading', { level: 1, name: /sveltekit|sveltejs\/kit/i })
 			).toBeVisible();
 			await expect(
-				page2.getByRole('heading', { level: 2, name: 'Paylaşım Geçmişi' })
+				page2.getByRole('heading', { level: 2, name: 'Paylaşım geçmişi' })
 			).toBeVisible();
 			await expect(
 				page2.locator('section[aria-labelledby="resource-shares-heading"] .card-count')
@@ -482,7 +482,7 @@ test.describe('Milestone M6 — Discussion, Bilingual Search & Notifications', (
 		await expect(errorText).toBeHidden();
 
 		// Submitting invalid empty comment moves focus to textarea, toggles aria-invalid, and announces error
-		await page.getByRole('button', { name: 'Yorum Gönder' }).click();
+		await page.getByRole('button', { name: 'Yorum gönder' }).click();
 		await expect(textarea).toBeFocused();
 		await expect(textarea).toHaveAttribute('aria-invalid', 'true');
 		await expect(textarea).toHaveAttribute(
@@ -551,14 +551,14 @@ test.describe('Milestone M6 — Discussion, Bilingual Search & Notifications', (
 		await expectDialogOpenWithContain(page, '#delete-comment-dialog');
 		await page
 			.locator('#delete-comment-dialog')
-			.getByRole('button', { name: 'Yorumu Sil' })
+			.getByRole('button', { name: 'Yorumu sil' })
 			.click();
 		await expect(page.locator('#delete-comment-dialog')).toBeHidden();
 		await expect(page.getByRole('heading', { level: 2, name: 'Yorumlar (0)' })).toBeVisible();
 		await expect(page.getByText('Henüz yorum yok. İlk yorumu siz yazın.')).toBeVisible();
 	});
 
-	test('"Bu Bölüm" scoped search from section page, "Tüm İzgah" toggle & content type filter', async ({
+	test('"Bu bölüm" scoped search from section page, "Tüm İzgah" toggle & content type filter', async ({
 		page,
 		context
 	}) => {
@@ -601,7 +601,7 @@ test.describe('Milestone M6 — Discussion, Bilingual Search & Notifications', (
 		await gotoHydrated(page, '/sections/muhendislik');
 
 		const headerSearch = page.getByRole('search', { name: 'Site içi arama' });
-		const scopeCheckbox = headerSearch.getByLabel('Bu Bölüm');
+		const scopeCheckbox = headerSearch.getByLabel('Bu bölüm');
 		await expect(scopeCheckbox).toBeVisible();
 		await scopeCheckbox.check();
 		await headerSearch.getByLabel('İzgah içinde ara').fill('performans');

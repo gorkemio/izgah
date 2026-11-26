@@ -535,10 +535,10 @@ test.describe('Milestone M8 — Production Docker Smoke & Recovery', () => {
 			expect(setupUrl.startsWith(`${baseUrl}/auth/accept-invite?token=`)).toBe(true);
 
 			await page.goto(setupUrl);
-			await expect(page.getByRole('heading', { name: 'İzgah Davetini Kabul Et' })).toBeVisible();
-			await page.getByLabel('Ad Soyad').fill('Docker Admin');
-			await page.getByLabel('Yeni Parola').fill('DockerAdminParola123!');
-			await page.getByRole('button', { name: 'Daveti Kabul Et ve Giriş Yap' }).click();
+			await expect(page.getByRole('heading', { name: 'İzgah davetini kabul et' })).toBeVisible();
+			await page.getByLabel('Ad soyad').fill('Docker Admin');
+			await page.getByLabel('Yeni parola').fill('DockerAdminParola123!');
+			await page.getByRole('button', { name: 'Daveti kabul et ve giriş yap' }).click();
 
 			await page.waitForURL(`${baseUrl}/`);
 			await expect(page.getByRole('heading', { name: 'Ana Akış' })).toBeVisible();

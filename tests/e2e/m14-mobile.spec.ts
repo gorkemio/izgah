@@ -206,7 +206,7 @@ test.describe('UI v2 on phones @mobile', () => {
 		await textarea.tap();
 		await expect.poll(async () => (await textarea.boundingBox())!.height).toBeGreaterThan(60);
 		await textarea.fill('Telefondan yorum');
-		await page.getByRole('button', { name: 'Yorum Gönder' }).tap();
+		await page.getByRole('button', { name: 'Yorum gönder' }).tap();
 		await expect(page.locator('.comment-list')).toContainText('Telefondan yorum');
 	});
 });

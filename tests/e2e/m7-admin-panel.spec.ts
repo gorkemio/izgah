@@ -192,24 +192,24 @@ test.describe('Milestone M7 — Admin Panel, Audit Logs & SQL Metrics E2E', () =
 		await page.waitForURL('**/admin/users');
 		await expect(page.getByRole('button', { name: 'Link Paylaş' })).toBeVisible();
 		await expect(adminNavLink).toHaveAttribute('aria-current', 'page');
-		await expect(page.getByRole('heading', { name: 'Üye Yönetimi' })).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Üye yönetimi' })).toBeVisible();
 
 		// Invite new member via forms-compliant radio role controls
-		await page.getByLabel('Ad Soyad').fill('Zeynep Taslak');
+		await page.getByLabel('Ad soyad').fill('Zeynep Taslak');
 		await page.getByLabel('E-posta').fill('zeynep@izgah.test');
 		await page.getByLabel('Üye', { exact: true }).check();
-		await page.getByRole('button', { name: 'Davet Oluştur' }).click();
+		await page.getByRole('button', { name: 'Davet oluştur' }).click();
 
 		const linkDialog = page
 			.locator('dialog')
-			.filter({ hasText: 'Tek Kullanımlık Davet Bağlantısı' });
+			.filter({ hasText: 'Tek kullanımlık davet bağlantısı' });
 		await expectDialogOpenWithContain(linkDialog);
 
 		const inviteUrl = (await linkDialog.locator('#issued-link-value').inputValue()).trim();
 		expect(inviteUrl).toContain('/auth/accept-invite?token=');
 
 		// Click copy button (command="--copy") and assert opacity-based status bubble becomes visible
-		await linkDialog.getByRole('button', { name: 'Bağlantıyı Kopyala' }).click();
+		await linkDialog.getByRole('button', { name: 'Bağlantıyı kopyala' }).click();
 		const copyBubble = linkDialog.locator('.copy-bubble');
 		await expect(copyBubble).toHaveCSS('opacity', '1');
 		await expect(copyBubble).toHaveText(/Kopyalandı|Elle kopyalayın/);
@@ -226,21 +226,21 @@ test.describe('Milestone M7 — Admin Panel, Audit Logs & SQL Metrics E2E', () =
 		try {
 			await invitedPage.goto(inviteUrl, { waitUntil: 'networkidle' });
 			await expect(
-				invitedPage.getByRole('heading', { name: 'İzgah Davetini Kabul Et' })
+				invitedPage.getByRole('heading', { name: 'İzgah davetini kabul et' })
 			).toBeVisible();
-			const inviteNameInput = invitedPage.getByLabel('Ad Soyad');
+			const inviteNameInput = invitedPage.getByLabel('Ad soyad');
 			await inviteNameInput.fill('Zeynep Kaya');
 			await expect(inviteNameInput).toHaveValue('Zeynep Kaya');
-			await invitedPage.getByLabel('Yeni Parola').fill('CokGucluParola123!');
-			await invitedPage.getByRole('button', { name: 'Daveti Kabul Et ve Giriş Yap' }).click();
+			await invitedPage.getByLabel('Yeni parola').fill('CokGucluParola123!');
+			await invitedPage.getByRole('button', { name: 'Daveti kabul et ve giriş yap' }).click();
 			await invitedPage.waitForURL('**/');
 			await expect(invitedPage.getByRole('button', { name: 'Link Paylaş' })).toBeVisible();
 
 			await invitedPage.goto('/settings/api-keys', { waitUntil: 'networkidle' });
-			const apiKeyNameInput = invitedPage.getByLabel('Anahtar Adı');
+			const apiKeyNameInput = invitedPage.getByLabel('Anahtar adı');
 			await apiKeyNameInput.fill('CUJ6 Eklenti');
 			await expect(apiKeyNameInput).toHaveValue('CUJ6 Eklenti');
-			await invitedPage.getByRole('button', { name: 'Yeni API Anahtarı Üret' }).click();
+			await invitedPage.getByRole('button', { name: 'Yeni API anahtarı üret' }).click();
 			await expect(invitedPage.locator('#new-api-key-value')).toBeVisible();
 			const rawApiKey = (await invitedPage.locator('#new-api-key-value').textContent())!.trim();
 			expect(rawApiKey).toMatch(/^izk_/);
@@ -272,12 +272,12 @@ test.describe('Milestone M7 — Admin Panel, Audit Logs & SQL Metrics E2E', () =
 			await expect(zeynepRow).toContainText('Zeynep Kaya');
 
 			await zeynepRow.getByLabel('Zeynep Kaya için rol').selectOption('admin');
-			await zeynepRow.getByRole('button', { name: /Rolü Kaydet \(Zeynep Kaya\)/ }).click();
+			await zeynepRow.getByRole('button', { name: /Rolü kaydet \(Zeynep Kaya\)/ }).click();
 			await expect(page.locator('.banner-success')).toContainText('Yönetici olarak güncellendi');
 
 			// Test destructive disable confirmation <dialog> autofocus on "Vazgeç" and Esc cancel
 			await zeynepRow.getByRole('button', { name: /Pasifleştir \(Zeynep Kaya\)/ }).click();
-			const disableDialog = page.locator('dialog').filter({ hasText: 'Üyeyi Pasifleştir' });
+			const disableDialog = page.locator('dialog').filter({ hasText: 'Üyeyi pasifleştir' });
 			await expectDialogOpenWithContain(disableDialog);
 			await expect(disableDialog.getByRole('button', { name: 'Vazgeç' })).toBeFocused();
 
@@ -288,7 +288,7 @@ test.describe('Milestone M7 — Admin Panel, Audit Logs & SQL Metrics E2E', () =
 			// Now confirm disable
 			await zeynepRow.getByRole('button', { name: /Pasifleştir \(Zeynep Kaya\)/ }).click();
 			await expectDialogOpenWithContain(disableDialog);
-			await disableDialog.getByRole('button', { name: 'Evet, Pasifleştir' }).click();
+			await disableDialog.getByRole('button', { name: 'Evet, pasifleştir' }).click();
 			await expect(disableDialog).toBeHidden();
 			await expect(zeynepRow).toContainText('Pasif');
 
@@ -404,15 +404,15 @@ test.describe('Milestone M7 — Admin Panel, Audit Logs & SQL Metrics E2E', () =
 
 		await attachSessionCookie(context, admin.cookieValue);
 		await gotoHydrated(page, '/admin/sections');
-		await expect(page.getByRole('heading', { name: 'Bölüm Yönetimi' })).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Bölüm yönetimi' })).toBeVisible();
 
 		// Create section with Turkish chars and verify auto-generated slug preview
-		const createSectionPanel = page.getByRole('region', { name: 'Yeni Bölüm Ekle' });
-		await createSectionPanel.getByLabel('Bölüm Adı').fill('Çekirdek Öğrenme');
-		await expect(createSectionPanel.getByLabel('URL Kısa Adı (Slug)')).toHaveValue(
+		const createSectionPanel = page.getByRole('region', { name: 'Yeni bölüm ekle' });
+		await createSectionPanel.getByLabel('Bölüm adı').fill('Çekirdek Öğrenme');
+		await expect(createSectionPanel.getByLabel('URL kısa adı (slug)')).toHaveValue(
 			'cekirdek-ogrenme'
 		);
-		await createSectionPanel.getByRole('button', { name: 'Bölüm Ekle' }).click();
+		await createSectionPanel.getByRole('button', { name: 'Bölüm ekle' }).click();
 
 		const createdRow = page.locator('tbody tr').filter({ hasText: '/cekirdek-ogrenme' });
 		await expect(createdRow).toBeVisible();
@@ -457,17 +457,17 @@ test.describe('Milestone M7 — Admin Panel, Audit Logs & SQL Metrics E2E', () =
 		const deleteCandidateRow = page.locator(`tr[data-section-id="${secToDelete.id}"]`);
 		await deleteCandidateRow.getByRole('button', { name: /Sil \(Arşiv Adayı\)/ }).click();
 
-		const deleteDialog = page.locator('dialog').filter({ hasText: 'Bölümü Sil' });
+		const deleteDialog = page.locator('dialog').filter({ hasText: 'Bölümü sil' });
 		await expectDialogOpenWithContain(deleteDialog);
 		await expect(deleteDialog.getByRole('button', { name: 'Vazgeç' })).toBeFocused();
 		await expect(deleteDialog.locator('.conflict-box')).toContainText('1 sessiz paylaşım');
-		await expect(deleteDialog.getByRole('button', { name: 'Evet, Bölümü Sil' })).toBeDisabled();
+		await expect(deleteDialog.getByRole('button', { name: 'Evet, bölümü sil' })).toBeDisabled();
 
-		await deleteDialog.getByLabel('Hedef Bölüm').selectOption(secKeep.id);
-		await deleteDialog.getByRole('button', { name: 'Sessiz Paylaşımları Taşı' }).click();
+		await deleteDialog.getByLabel('Hedef bölüm').selectOption(secKeep.id);
+		await deleteDialog.getByRole('button', { name: 'Sessiz paylaşımları taşı' }).click();
 
-		await expect(deleteDialog.getByRole('button', { name: 'Evet, Bölümü Sil' })).toBeEnabled();
-		await deleteDialog.getByRole('button', { name: 'Evet, Bölümü Sil' }).click();
+		await expect(deleteDialog.getByRole('button', { name: 'Evet, bölümü sil' })).toBeEnabled();
+		await deleteDialog.getByRole('button', { name: 'Evet, bölümü sil' }).click();
 		await expect(deleteDialog).toBeHidden();
 		await expect(page.locator(`tr[data-section-id="${secToDelete.id}"]`)).toHaveCount(0);
 
@@ -479,29 +479,29 @@ test.describe('Milestone M7 — Admin Panel, Audit Logs & SQL Metrics E2E', () =
 
 		await page.getByRole('checkbox', { name: 'Tasarım', exact: true }).check();
 		await page.getByLabel(/Bölümsüz Makale paylaşımını seç/).check();
-		await page.getByRole('button', { name: 'Seçili Paylaşımları Bölümlere Ata' }).click();
+		await page.getByRole('button', { name: 'Seçili paylaşımları bölümlere ata' }).click();
 		await expect(page.getByText('Şu anda bölümü olmayan aktif bir paylaşım yok.')).toBeVisible();
 
 		// Dead unfurl job retry
-		await page.getByRole('link', { name: /Önizleme Kuyruğu/ }).click();
+		await page.getByRole('link', { name: /Önizleme kuyruğu/ }).click();
 		await page.waitForURL('**/admin/jobs');
 		await expect(page.getByRole('button', { name: 'Link Paylaş' })).toBeVisible();
 		await expect(page.getByText('https://hatali.example/sayfa')).toBeVisible();
 
-		await page.getByRole('button', { name: /Yeniden Dene \(hatali\.example\)/ }).click();
+		await page.getByRole('button', { name: /Yeniden dene \(hatali\.example\)/ }).click();
 		await expect(
 			page.getByText('Şu anda başarısız (dead) durumda önizleme işi yok.')
 		).toBeVisible();
 
 		// Audit log viewer + @container narrow viewport check
-		await page.getByRole('link', { name: 'Denetim Kaydı' }).click();
+		await page.getByRole('link', { name: 'Denetim kaydı' }).click();
 		await page.waitForURL('**/admin/audit');
 		await expect(page.getByRole('button', { name: 'Link Paylaş' })).toBeVisible();
 		await expect(
 			page.locator('.responsive-audit-table').getByText('admin.section_reordered').first()
 		).toBeVisible();
 
-		await page.getByLabel('İşlem Türü').selectOption('admin.unfurl_job_retried');
+		await page.getByLabel('İşlem türü').selectOption('admin.unfurl_job_retried');
 		await page.getByRole('button', { name: 'Filtrele' }).click();
 		await expect(page.locator('.responsive-audit-table tbody tr')).toHaveCount(1);
 
@@ -512,9 +512,9 @@ test.describe('Milestone M7 — Admin Panel, Audit Logs & SQL Metrics E2E', () =
 		await page.setViewportSize({ width: 1280, height: 800 });
 		await page.getByRole('link', { name: 'Ölçümler' }).click();
 		await page.waitForURL('**/admin/metrics');
-		await expect(page.getByRole('heading', { name: '1. Ay Kullanım Ölçümleri' })).toBeVisible();
-		await expect(page.getByRole('row', { name: /Toplam Arama/ })).toBeVisible();
-		await expect(page.getByRole('row', { name: /Web Kanalı Paylaşımları/ })).toBeVisible();
+		await expect(page.getByRole('heading', { name: '1. ay kullanım ölçümleri' })).toBeVisible();
+		await expect(page.getByRole('row', { name: /Toplam arama/ })).toBeVisible();
+		await expect(page.getByRole('row', { name: /Web kanalı paylaşımları/ })).toBeVisible();
 
 		// Check silent share moved into secKeep remained alive cleanly
 		const stillExists = await localDb.query.canonicalResources.findFirst({
