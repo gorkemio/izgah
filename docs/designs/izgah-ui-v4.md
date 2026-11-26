@@ -119,7 +119,7 @@ The accent colours (`teal`, `cobalt`, `terracotta`, `plum`) and the `dim` palett
 
 ## 9. Acceptance (prototype review)
 
-`docs/designs/prototypes/kunye/` holds static pages with realistic data: the feed with a reading pane (light and dark), a resource page, the share form with suggestions, `/admin/ai`, mobile, and izgah.com, with a font switch. The maintainer reviews them; the chosen font and any changes are recorded here before R3 starts.
+A set of static pages with realistic data (the feed with a reading pane in light and dark, a resource page, the share form with suggestions, `/admin/ai`, mobile, and izgah.com, with a font switch) was reviewed by the maintainer; the chosen font and any changes are recorded here. The prototype was removed once R3 shipped; it remains in the Git history of pull request #4.
 
 *   2026-11-26 — Font: Atkinson Hyperlegible Next (§2). Wordmark: "iz" + "gah" (§5). R3 can start.
 

@@ -89,7 +89,7 @@
 		feed.items.findIndex((item) => Boolean(item.resource.thumbnailAssetKey))
 	);
 
-	// Day groups come from the merged list, so they stay continuous after "Daha fazla yükle"
+	// Day groups come from the merged list, so they stay continuous after "Load more"
 	// (§8.3). Global indices drive content-visibility and the priority image, because
 	// :nth-child restarts in every group.
 	const dayGroups = $derived(groupByDay(feed.items, data.todayKey));

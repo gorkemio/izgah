@@ -69,7 +69,7 @@ function focusAndReveal(element: HTMLElement): void {
 
 /**
  * `j` / `k`: moves focus to the next / previous post. Without a focused post it starts at the
- * first post below the sticky bars. On the last post `j` focuses "Daha fazla yükle" and never
+ * first post below the sticky bars. On the last post `j` focuses "Load more" and never
  * loads by itself. Returns false when the page has no posts.
  */
 export function movePostFocus(direction: 1 | -1): boolean {

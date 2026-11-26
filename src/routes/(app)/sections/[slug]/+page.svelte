@@ -10,7 +10,7 @@
 
 	let view = $state<ReturnType<typeof FeedView>>();
 
-	// Back/Forward keeps pages loaded with "Daha fazla yükle" (izgah-ui-v2 §8.6).
+	// Back/Forward keeps pages loaded with "Load more" (izgah-ui-v2 §8.6).
 	snapshot<FeedSnapshot | null>({
 		id: 'section-feed',
 		capture: () => view?.captureSnapshot() ?? null,

@@ -86,7 +86,7 @@ export function contentTypeLabel(type: string): string {
 	return t(`contentType.${(known.includes(type) ? type : 'web') as ContentType}`);
 }
 
-/** Feed pages appended with "Daha fazla yükle", kept across Back/Forward via Kit snapshots. */
+/** Feed pages appended with "Load more", kept across Back/Forward via Kit snapshots. */
 export interface FeedSnapshot {
 	key: string;
 	appended: FeedShareItem[];

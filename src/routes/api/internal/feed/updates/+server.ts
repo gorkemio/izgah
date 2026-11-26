@@ -24,7 +24,7 @@ function errorResponse(status: number, code: string, message: string, requestId:
 
 /**
  * Counts shares newer than `afterId` in the current feed view (docs/designs/izgah-ui-v2.md §10).
- * Polled by the "yeni paylaşım" pill every 60s on visible tabs. The anchor's `(created_at, id)` is
+ * Polled by the "new posts" pill every 60s on visible tabs. The anchor's `(created_at, id)` is
  * read server-side (microsecond precision), never from a client timestamp.
  */
 export const GET: RequestHandler = async ({ locals, url }) => {

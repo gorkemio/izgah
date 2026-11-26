@@ -159,7 +159,7 @@
 		};
 	});
 
-	// An instance named after the software would read "İzgah, Izgah ile çalışır" (izgah-ui-v4 §10).
+	// An instance named after the software would read "Izgah runs on Izgah" (izgah-ui-v4 §10).
 	const runsOnItself = instanceName().replace(/^İ/, 'I').toLowerCase() === 'izgah';
 </script>
 

@@ -123,7 +123,7 @@
 	let noteOverflows = $state(false);
 	let noteExpanded = $state(false);
 
-	// "Devamını göster" only when the clamped note actually overflows (JS-off users see it in full).
+	// "Show more" only when the clamped note actually overflows (JS-off users see it in full).
 	$effect(() => {
 		if (!noteEl) {
 			return;
