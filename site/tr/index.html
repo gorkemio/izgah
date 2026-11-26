@@ -21,8 +21,8 @@
 			type="font/woff2"
 			crossorigin
 		/>
-		<link rel="stylesheet" href="../palette.css?v=2026-11-26-2" />
-		<link rel="stylesheet" href="../styles.css?v=2026-11-26-2" />
+		<link rel="stylesheet" href="../palette.css?v=2026-11-26-3" />
+		<link rel="stylesheet" href="../styles.css?v=2026-11-26-3" />
 		<meta property="og:title" content="İzgah — küçük ekipler için ortak link kütüphanesi" />
 		<meta
 			property="og:description"
@@ -32,6 +32,7 @@
 		<meta property="og:url" content="https://izgah.com/tr/" />
 		<meta property="og:locale" content="tr_TR" />
 		<meta name="twitter:card" content="summary_large_image" />
+		<script src="../specimen.js?v=2026-11-26-3" defer></script>
 	</head>
 	<body>
 		<a class="skip-link" href="#main">İçeriğe geç</a>
@@ -59,6 +60,138 @@
 					konteyner ve PostgreSQL.
 				</p>
 
+				<section class="specimen" aria-labelledby="specimen-title" data-specimen>
+					<div class="specimen-bar">
+						<p id="specimen-title" class="specimen-try">
+							<b>Dene.</b>
+							<span class="hint-keys"
+								><kbd>j</kbd> <kbd>k</kbd> gezinir · <kbd>Boşluk</kbd> tartışmayı açar · açtığınız
+								linkler solar</span
+							><span class="hint-touch">Tartışmayı açmak için yorumlara dokunun.</span>
+						</p>
+						<fieldset class="theme-switch">
+							<legend class="visually-hidden">Örneğin teması</legend>
+							<input type="radio" name="specimen-theme" id="specimen-light" value="light" />
+							<label for="specimen-light">Açık</label>
+							<input type="radio" name="specimen-theme" id="specimen-dark" value="dark" />
+							<label for="specimen-dark">Koyu</label>
+						</fieldset>
+					</div>
+
+					<div class="specimen-body">
+						<div class="specimen-board">
+							<div class="day">
+								<p class="day-heading">Bugün <span class="day-date">25 Kasım Çarşamba</span></p>
+								<p class="day-count">3 iz</p>
+							</div>
+
+							<article class="share-card" aria-labelledby="sp-title-1">
+								<p class="card-gutter">
+									<time datetime="2026-11-25T18:41">18:41</time> Deniz
+									<span class="unseen">yeni</span>
+								</p>
+								<div class="card-body">
+									<p class="share-note">
+										Yeni modelleri dizüstünde denedim; uzun PDF'lerde şaşırtıcı derecede hızlı.
+									</p>
+									<p id="sp-title-1" class="card-title">
+										<a href="https://github.com/ollama/ollama">ollama/ollama</a>
+									</p>
+									<div class="kunye">
+										<span>github.com</span><span>kod</span><span>Go</span
+										><span class="section-chip">YZ araçları</span>
+										<details class="thread">
+											<summary class="kunye-action">2 yorum</summary>
+											<ol class="comments">
+												<li><b>Mert</b> M2'de de öyle; 8B model tam kıvamında.</li>
+												<li><b>Elif</b> Kurulum adımlarını yazar mısın?</li>
+											</ol>
+										</details>
+										<span>4 beğeni</span>
+									</div>
+								</div>
+							</article>
+
+							<article class="share-card" aria-labelledby="sp-title-2" aria-current="true">
+								<p class="card-gutter"><time datetime="2026-11-25T17:02">17:02</time> Elif</p>
+								<div class="card-body">
+									<p class="share-note">Bununla tema medya sorgularımızın yarısını silebiliriz.</p>
+									<p id="sp-title-2" class="card-title">
+										<a href="https://web.dev/articles/light-dark"
+											>CSS color-scheme-dependent colors with light-dark()</a
+										><a class="note-ref" href="#note-1" aria-label="Not 1">1</a>
+									</p>
+									<div class="kunye">
+										<span>web.dev</span><span>makale</span><span class="section-chip">Frontend</span
+										><span>ilk: Can, 12 Kas</span>
+										<details class="thread">
+											<summary class="kunye-action">3 yorum</summary>
+											<ol class="comments">
+												<li><b>Can</b> Safari desteği geldi; buna dönelim.</li>
+												<li><b>Zeynep</b> Yüksek kontrast paleti de bununla çalışıyor.</li>
+												<li><b>Elif</b> Bu hafta token'larımızda deniyorum.</li>
+											</ol>
+										</details>
+										<button type="button" class="kunye-action is-idle" data-like hidden>
+											<span class="like-off">Beğen</span><span class="like-on">1 beğeni</span>
+										</button>
+									</div>
+								</div>
+							</article>
+
+							<article class="share-card" aria-labelledby="sp-title-3">
+								<p class="card-gutter"><time datetime="2026-11-25T15:27">15:27</time> Mert</p>
+								<div class="card-body">
+									<p class="share-note">
+										İzgah'ta açtığın linkler neden soluyor ve bu neden sende kalıyor.
+									</p>
+									<p id="sp-title-3" class="card-title">
+										<a href="https://developer.chrome.com/blog/visited-links"
+											>Making :visited more private</a
+										><a class="note-ref" href="#note-3" aria-label="Not 3">3</a>
+									</p>
+									<div class="kunye">
+										<span>developer.chrome.com</span><span>makale</span
+										><span class="section-chip">Frontend</span>
+									</div>
+									<p class="suggestion" data-suggestion>
+										Önerilen bölüm:
+										<span class="section-chip">Tasarım</span>
+										<span class="suggestion-why">(bu sitenin önceki linklerinden)</span
+										><a class="note-ref" href="#note-2" aria-label="Not 2">2</a>
+										<button type="button" class="kunye-action" data-suggestion-add hidden>
+											Ekle
+										</button>
+										<button type="button" class="kunye-action" data-suggestion-dismiss hidden>
+											Yoksay
+										</button>
+									</p>
+								</div>
+							</article>
+						</div>
+
+						<ol class="notes">
+							<li id="note-1">
+								<b>Bir link, tek tartışma</b> Önce Can paylaştı; Elif'in izi aynı tartışmaya
+								eklendi.
+							</li>
+							<li id="note-2">
+								<b>Kendini öneren bölümler</b> Ekibinizin bu siteyi daha önce nereye koyduğundan.
+								Yapay zekâ isteğe bağlı, varsayılan olarak kapalı.
+							</li>
+							<li id="note-3">
+								<b>Açılan linkler solar</b> Tarayıcınızın kendi geçmişi. İzgah hiçbir şey kaydetmez.
+							</li>
+						</ol>
+					</div>
+
+					<p class="specimen-cap">
+						Uygulamanın kendi yazı tipi ve renkleriyle dizildi. Ekran görüntüsü değil: metni
+						seçebilirsiniz.
+					</p>
+				</section>
+
+				<h2>Kendi sunucunuzda çalıştırın</h2>
 				<pre
 					class="install"
 					tabindex="0"
@@ -77,68 +210,8 @@ docker compose -f docker-compose.prod.yml exec app node build/cli.js create-admi
 					<a href="https://github.com/gorkemio/izgah/blob/main/docs/deploy/dokploy.md">Dokploy</a>.
 				</p>
 
-				<figure class="specimen" aria-labelledby="specimen-cap">
-					<div class="day">
-						<h2>Perşembe <span>26 Kasım</span></h2>
-						<span class="count">3 iz</span>
-					</div>
-					<article class="entry">
-						<p class="who"><time datetime="2026-11-26T18:41">18:41</time>Deniz</p>
-						<div>
-							<p class="note">
-								Yeni modelleri dizüstünde denedim; uzun PDF'lerde şaşırtıcı derecede hızlı.
-							</p>
-							<h3 class="title"><a href="https://github.com/ollama/ollama">ollama/ollama</a></h3>
-							<p class="kunye">
-								<span>github.com</span><span>kod</span><span>YZ araçları</span><span>2 yorum</span>
-							</p>
-						</div>
-					</article>
-					<article class="entry">
-						<p class="who"><time datetime="2026-11-26T17:02">17:02</time>Elif</p>
-						<div>
-							<p class="note">Bununla tema medya sorgularımızın yarısını silebiliriz.</p>
-							<h3 class="title">
-								<a href="https://web.dev/articles/light-dark"
-									>CSS color-scheme-dependent colors with light-dark()</a
-								>
-							</h3>
-							<p class="kunye">
-								<span>web.dev</span><span>makale</span><span>Frontend</span><span>3 yorum</span>
-							</p>
-						</div>
-					</article>
-					<article class="entry">
-						<p class="who"><time datetime="2026-11-26T15:27">15:27</time>Mert</p>
-						<div>
-							<p class="note">İzgah'ta açtığın linkler neden soluyor ve bu neden sende kalıyor.</p>
-							<h3 class="title">
-								<a href="https://developer.chrome.com/blog/visited-links"
-									>Making :visited more private</a
-								>
-							</h3>
-							<p class="kunye">
-								<span>developer.chrome.com</span><span>makale</span><span>Frontend</span>
-							</p>
-						</div>
-					</article>
-					<figcaption id="specimen-cap" class="specimen-cap">
-						Ekran görüntüsü değil; uygulamanın kendi yazı tipi ve renkleriyle dizildi. Açtığınız
-						linkler, uygulamada olduğu gibi burada da soluk görünür.
-					</figcaption>
-				</figure>
-
 				<h2>Ne yapar</h2>
 				<ul class="annotated">
-					<li>
-						<a href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-core.md"
-							>Bir link, bir tartışma</a
-						>
-						<p>
-							Daha önce paylaşılmış bir linki paylaşırsanız iki gönderi de aynı tartışmaya bağlanır;
-							ilk paylaşan anılır.
-						</p>
-					</li>
 					<li>
 						<a href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-core.md"
 							>Bölümler ve akışa düşmeyen linkler</a
