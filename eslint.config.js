@@ -39,8 +39,8 @@ export default tseslint.config(
 		}
 	},
 	{
-		// Static design prototypes (docs/designs/prototypes) run as plain browser scripts.
-		files: ['docs/designs/prototypes/**/*.js'],
+		// Static design prototypes and the izgah.com specimen run as plain browser scripts.
+		files: ['docs/designs/prototypes/**/*.js', 'site/**/*.js'],
 		languageOptions: {
 			globals: {
 				document: 'readonly',

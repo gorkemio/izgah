@@ -31,7 +31,11 @@
 
 :root {
 	color-scheme: light dark;
+}
 
+/* The specimen redeclares the aliases so its Light · Dark choice (palette.css) reaches them. */
+:root,
+.specimen {
 	/* Colours come from palette.css, generated from tokens/kunye.json with the app's (pnpm tokens). */
 	--paper: var(--color-bg);
 	--sunk: var(--color-surface-2);
@@ -42,10 +46,14 @@
 	--rule-strong: var(--color-line-strong);
 	--link: var(--color-link);
 	--visited: var(--color-visited);
+}
 
+:root {
 	--font: 'Atkinson Hyperlegible Next', system-ui, -apple-system, 'Segoe UI', sans-serif;
 	--mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
-	--gutter: 112px;
+	/* The app's entry gutter and note measure (izgah-ui-v4 §4, --entry-gutter and --measure). */
+	--gutter: 104px;
+	--measure: 68ch;
 	--dur: 120ms;
 }
 
@@ -62,7 +70,7 @@ html {
 
 body {
 	margin: 0;
-	font: 400 1rem / 1.55 var(--font);
+	font: 400 1rem / 1.5 var(--font);
 	color: var(--ink);
 	background: var(--paper);
 	-webkit-font-smoothing: antialiased;
@@ -128,6 +136,15 @@ kbd {
 	color: var(--ink-2);
 	border: 1px solid var(--rule-strong);
 	border-radius: 2px;
+}
+
+.visually-hidden {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
 }
 
 .skip-link {
@@ -227,12 +244,121 @@ kbd {
 	color: var(--ink-3);
 }
 
-/* -------------------------------------------- specimen (the app's register) */
+/* ------------------------------------- specimen (the app's feed entry, option A) */
 
 .specimen {
-	margin-block: 56px 8px;
-	padding: 4px 20px 12px;
-	border: 1px solid var(--rule-strong);
+	margin-block: 48px 0;
+	color: var(--ink);
+}
+
+.specimen-bar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 8px 24px;
+	padding-block-end: 8px;
+	font-size: 0.875rem;
+	color: var(--ink-3);
+	border-block-end: 1px solid var(--ink);
+}
+
+/* Key names are words ("Space", "Boşluk"); the page font keeps Turkish letters in one face. */
+.specimen-try kbd {
+	font-family: var(--font);
+}
+
+.specimen-try b {
+	font-weight: 600;
+	color: var(--ink);
+}
+
+/* The keyboard hint needs the script and a pointer; touch and no-JS read the tap hint. */
+.hint-keys {
+	display: none;
+}
+
+@media (hover: hover) {
+	.js .specimen .hint-keys {
+		display: inline;
+	}
+
+	.js .specimen .hint-touch {
+		display: none;
+	}
+}
+
+.theme-switch {
+	display: flex;
+	gap: 14px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.theme-switch input {
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.theme-switch label {
+	color: var(--ink-2);
+	text-decoration: underline;
+	text-decoration-color: var(--rule-strong);
+	text-underline-offset: 0.2em;
+	cursor: pointer;
+}
+
+/* The current scheme reads bold: the checked choice, or the system's while none is chosen. */
+.theme-switch input:checked + label {
+	font-weight: 600;
+	color: var(--ink);
+	text-decoration: none;
+}
+
+.theme-switch input:focus-visible + label {
+	outline: 2px solid var(--link);
+	outline-offset: 2px;
+}
+
+@media (prefers-color-scheme: light) {
+	.theme-switch:not(:has(:checked)) [for='specimen-light'] {
+		font-weight: 600;
+		color: var(--ink);
+		text-decoration: none;
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	.theme-switch:not(:has(:checked)) [for='specimen-dark'] {
+		font-weight: 600;
+		color: var(--ink);
+		text-decoration: none;
+	}
+}
+
+@supports not selector(:has(*)) {
+	.theme-switch {
+		display: none;
+	}
+}
+
+.specimen-body {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 13.75rem;
+	column-gap: 40px;
+}
+
+.specimen-board {
+	min-inline-size: 0;
+}
+
+/* A pinned scheme paints the whole specimen on its own paper. */
+.specimen:has(.theme-switch :checked) {
+	margin-inline: -16px;
+	padding: 12px 16px 4px;
+	background: var(--paper);
 }
 
 .day {
@@ -240,59 +366,68 @@ kbd {
 	align-items: baseline;
 	justify-content: space-between;
 	gap: 16px;
-	padding: 24px 0 6px;
+	padding-block: 18px 6px;
 	border-block-end: 1px solid var(--ink);
 }
 
-.day h2 {
-	font-size: 1rem;
+.day-heading {
 	font-weight: 600;
 }
 
-.day h2 span {
-	margin-inline-start: 6px;
+.day-date {
+	margin-inline-start: 8px;
 	font-weight: 400;
 	color: var(--ink-3);
 }
 
-.day .count {
-	font-size: 0.875rem;
-	font-variant-numeric: tabular-nums;
-	color: var(--ink-3);
-}
-
-.entry {
-	display: grid;
-	grid-template-columns: var(--gutter) minmax(0, 1fr);
-	column-gap: 16px;
-	padding-block: 14px 15px;
-	border-block-end: 1px solid var(--rule);
-}
-
-.entry:last-of-type {
-	border-block-end: 0;
-}
-
-.who {
-	padding-block-start: 2px;
-	font-size: 0.875rem;
-	line-height: 1.35;
-	color: var(--ink-2);
-}
-
-.who time {
-	display: block;
-	margin-block-end: 2px;
+.day-count {
 	font-size: 0.8125rem;
 	font-variant-numeric: tabular-nums;
 	color: var(--ink-3);
 }
 
-.note {
-	margin-block-end: 7px;
+.share-card {
+	display: grid;
+	grid-template-columns: var(--gutter) minmax(0, 1fr);
+	column-gap: 16px;
+	padding-block: 14px;
+	font-size: 0.875rem;
+	line-height: 1.45;
+	border-block-end: 1px solid var(--rule);
+	outline: none;
 }
 
-.title {
+.share-card[aria-current='true'] {
+	margin-inline: -12px;
+	padding-inline: 12px;
+	background: var(--sunk);
+}
+
+.card-gutter {
+	color: var(--ink-2);
+}
+
+.card-gutter time,
+.card-gutter .unseen {
+	display: block;
+	font-size: 0.8125rem;
+	font-variant-numeric: tabular-nums;
+	color: var(--ink-3);
+}
+
+.card-gutter .unseen {
+	color: var(--link);
+}
+
+.share-note {
+	max-inline-size: var(--measure);
+	margin-block-end: 6px;
+	font-size: 1rem;
+	line-height: 1.5;
+}
+
+.card-title {
+	margin-block-end: 4px;
 	font-size: 1rem;
 	font-weight: 500;
 	line-height: 1.4;
@@ -302,23 +437,180 @@ kbd {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: baseline;
-	margin-block-start: 4px;
-	font-size: 0.875rem;
-	line-height: 1.5;
 	color: var(--ink-3);
 }
 
-.kunye > * + *::before {
+.kunye > * + :not(details, .is-idle)::before,
+.kunye > * + details > summary::before {
 	content: '·';
 	display: inline-block;
 	margin-inline: 0.45em;
+	color: var(--ink-3);
+	text-decoration: none;
+}
+
+.section-chip {
+	color: inherit;
+	text-decoration: underline;
+	text-decoration-color: var(--rule-strong);
+	text-underline-offset: 0.2em;
+}
+
+.kunye-action {
+	padding: 0;
+	font: inherit;
+	color: var(--ink-2);
+	background: none;
+	border: 0;
+	text-decoration: underline;
+	text-decoration-color: var(--rule-strong);
+	text-underline-offset: 0.2em;
+	cursor: pointer;
+}
+
+.kunye-action:hover {
+	color: var(--ink);
+}
+
+.thread summary {
+	display: inline;
+	list-style: none;
+}
+
+.thread summary::-webkit-details-marker {
+	display: none;
+}
+
+.thread[open] {
+	flex-basis: 100%;
+}
+
+.comments {
+	margin: 8px 0 2px;
+	padding: 0;
+	list-style: none;
+	color: var(--ink);
+	border-inline-start: 1px solid var(--rule);
+}
+
+.comments li {
+	padding: 3px 0 3px 12px;
+}
+
+.comments b {
+	margin-inline-end: 6px;
+	font-weight: 600;
+}
+
+/* Actions with nothing to report wait at the end of the line, as in the app. */
+.is-idle {
+	margin-inline-start: 1em;
+	opacity: 0;
+}
+
+.share-card:is(:hover, :focus-within, [aria-current='true']) .is-idle {
+	opacity: 1;
+}
+
+@media (hover: none) {
+	.is-idle {
+		opacity: 1;
+	}
+}
+
+/* A like given stays in the line like any count. */
+.kunye > [aria-pressed='true'] {
+	margin-inline-start: 0;
+	opacity: 1;
+}
+
+.kunye > [aria-pressed='true']::before {
+	content: '·';
+	display: inline-block;
+	margin-inline: 0.45em;
+	color: var(--ink-3);
+}
+
+.like-on,
+[aria-pressed='true'] .like-off {
+	display: none;
+}
+
+[aria-pressed='true'] .like-on {
+	display: inline;
+	font-weight: 600;
+	color: var(--ink);
+}
+
+.suggestion {
+	margin-block-start: 6px;
+	color: var(--ink-2);
+}
+
+.suggestion-why {
+	color: var(--ink-3);
+}
+
+.suggestion .kunye-action {
+	margin-inline-start: 10px;
+}
+
+.note-ref {
+	margin-inline-start: 4px;
+	font-size: 0.75rem;
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+	vertical-align: super;
+	line-height: 0;
+	color: var(--ink-3);
+	text-decoration: none;
+}
+
+.notes {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	margin: 0;
+	padding: 18px 0 0;
+	list-style: none;
+	font-size: 0.875rem;
+	line-height: 1.45;
+	color: var(--ink-2);
+	counter-reset: note;
+}
+
+.notes li {
+	padding-block-start: 8px;
+	border-block-start: 1px solid var(--rule);
+	counter-increment: note;
+}
+
+.notes li::before {
+	content: counter(note);
+	margin-inline-end: 6px;
+	font-size: 0.75rem;
+	font-weight: 600;
+	color: var(--ink-3);
+}
+
+.notes b {
+	display: block;
+	font-weight: 600;
+	color: var(--ink);
+}
+
+.notes li:target {
+	background: var(--sunk);
 }
 
 .specimen-cap {
 	padding-block-start: 10px;
 	font-size: 0.875rem;
 	color: var(--ink-3);
-	border-block-start: 1px solid var(--rule);
+}
+
+.specimen + h2 + .install {
+	margin-block-start: 0;
 }
 
 /* --------------------------------------------------------------- sections */
@@ -405,21 +697,23 @@ main h2:not(.day h2) {
 /* ----------------------------------------------------------------- narrow */
 
 @media (max-width: 767px) {
-	.specimen {
-		padding-inline: 14px;
-	}
-
-	.entry {
+	.specimen-body,
+	.share-card {
 		grid-template-columns: minmax(0, 1fr);
 	}
 
-	.who {
+	.card-gutter {
 		margin-block-end: 4px;
 	}
 
-	.who time {
+	.card-gutter time,
+	.card-gutter .unseen {
 		display: inline;
 		margin-inline-end: 6px;
+	}
+
+	.card-gutter .unseen {
+		margin-inline: 6px 0;
 	}
 
 	.annotated li,
@@ -441,8 +735,19 @@ main h2:not(.day h2) {
 }
 
 @media (forced-colors: active) {
-	.specimen,
 	.install {
 		border-color: CanvasText;
+	}
+
+	.share-card[aria-current='true'] {
+		outline: 2px solid Highlight;
+	}
+
+	.specimen:has(.theme-switch :checked) {
+		border: 1px solid CanvasText;
+	}
+
+	.theme-switch input:checked + label {
+		color: Highlight;
 	}
 }

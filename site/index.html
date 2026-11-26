@@ -21,8 +21,8 @@
 			type="font/woff2"
 			crossorigin
 		/>
-		<link rel="stylesheet" href="./palette.css?v=2026-11-26-2" />
-		<link rel="stylesheet" href="./styles.css?v=2026-11-26-2" />
+		<link rel="stylesheet" href="./palette.css?v=2026-11-26-3" />
+		<link rel="stylesheet" href="./styles.css?v=2026-11-26-3" />
 		<meta property="og:title" content="Izgah — a shared link library for small teams" />
 		<meta
 			property="og:description"
@@ -31,6 +31,7 @@
 		<meta property="og:image" content="https://izgah.com/assets/og.png" />
 		<meta property="og:url" content="https://izgah.com/" />
 		<meta name="twitter:card" content="summary_large_image" />
+		<script src="./specimen.js?v=2026-11-26-3" defer></script>
 	</head>
 	<body>
 		<a class="skip-link" href="#main">Skip to content</a>
@@ -54,6 +55,137 @@
 					PostgreSQL.
 				</p>
 
+				<section class="specimen" aria-labelledby="specimen-title" data-specimen>
+					<div class="specimen-bar">
+						<p id="specimen-title" class="specimen-try">
+							<b>Try it.</b>
+							<span class="hint-keys"
+								><kbd>j</kbd> <kbd>k</kbd> move · <kbd>Space</kbd> opens the discussion · links you
+								open fade</span
+							><span class="hint-touch">Tap the comments to open the discussion.</span>
+						</p>
+						<fieldset class="theme-switch">
+							<legend class="visually-hidden">Specimen theme</legend>
+							<input type="radio" name="specimen-theme" id="specimen-light" value="light" />
+							<label for="specimen-light">Light</label>
+							<input type="radio" name="specimen-theme" id="specimen-dark" value="dark" />
+							<label for="specimen-dark">Dark</label>
+						</fieldset>
+					</div>
+
+					<div class="specimen-body">
+						<div class="specimen-board">
+							<div class="day">
+								<p class="day-heading">Today <span class="day-date">Wednesday 25 November</span></p>
+								<p class="day-count">3 links</p>
+							</div>
+
+							<article class="share-card" aria-labelledby="sp-title-1">
+								<p class="card-gutter">
+									<time datetime="2026-11-25T18:41">18:41</time> Deniz
+									<span class="unseen">new</span>
+								</p>
+								<div class="card-body">
+									<p class="share-note">
+										Tried the new models on a laptop; surprisingly fast on long PDFs.
+									</p>
+									<p id="sp-title-1" class="card-title">
+										<a href="https://github.com/ollama/ollama">ollama/ollama</a>
+									</p>
+									<div class="kunye">
+										<span>github.com</span><span>code</span><span>Go</span
+										><span class="section-chip">AI tools</span>
+										<details class="thread">
+											<summary class="kunye-action">2 comments</summary>
+											<ol class="comments">
+												<li><b>Mert</b> Same here on an M2; the 8B model was the sweet spot.</li>
+												<li><b>Elif</b> Could you write down the install steps?</li>
+											</ol>
+										</details>
+										<span>4 likes</span>
+									</div>
+								</div>
+							</article>
+
+							<article class="share-card" aria-labelledby="sp-title-2" aria-current="true">
+								<p class="card-gutter"><time datetime="2026-11-25T17:02">17:02</time> Elif</p>
+								<div class="card-body">
+									<p class="share-note">We can delete half of our theme media queries with this.</p>
+									<p id="sp-title-2" class="card-title">
+										<a href="https://web.dev/articles/light-dark"
+											>CSS color-scheme-dependent colors with light-dark()</a
+										><a class="note-ref" href="#note-1" aria-label="Note 1">1</a>
+									</p>
+									<div class="kunye">
+										<span>web.dev</span><span>article</span
+										><span class="section-chip">Frontend</span><span>first: Can, 12 Nov</span>
+										<details class="thread">
+											<summary class="kunye-action">3 comments</summary>
+											<ol class="comments">
+												<li><b>Can</b> Safari support is in; let's come back to this.</li>
+												<li><b>Zeynep</b> The high-contrast palette works with it too.</li>
+												<li><b>Elif</b> Trying it on our tokens this week.</li>
+											</ol>
+										</details>
+										<button type="button" class="kunye-action is-idle" data-like hidden>
+											<span class="like-off">Like</span><span class="like-on">1 like</span>
+										</button>
+									</div>
+								</div>
+							</article>
+
+							<article class="share-card" aria-labelledby="sp-title-3">
+								<p class="card-gutter"><time datetime="2026-11-25T15:27">15:27</time> Mert</p>
+								<div class="card-body">
+									<p class="share-note">
+										Why opened links fade in Izgah, and why that stays private.
+									</p>
+									<p id="sp-title-3" class="card-title">
+										<a href="https://developer.chrome.com/blog/visited-links"
+											>Making :visited more private</a
+										><a class="note-ref" href="#note-3" aria-label="Note 3">3</a>
+									</p>
+									<div class="kunye">
+										<span>developer.chrome.com</span><span>article</span
+										><span class="section-chip">Frontend</span>
+									</div>
+									<p class="suggestion" data-suggestion>
+										Suggested section:
+										<span class="section-chip">Design</span>
+										<span class="suggestion-why">(earlier links from this site)</span
+										><a class="note-ref" href="#note-2" aria-label="Note 2">2</a>
+										<button type="button" class="kunye-action" data-suggestion-add hidden>
+											Add
+										</button>
+										<button type="button" class="kunye-action" data-suggestion-dismiss hidden>
+											Dismiss
+										</button>
+									</p>
+								</div>
+							</article>
+						</div>
+
+						<ol class="notes">
+							<li id="note-1">
+								<b>One link, one conversation</b> Can shared it first; Elif's post joins the same
+								discussion.
+							</li>
+							<li id="note-2">
+								<b>Sections that suggest themselves</b> From how your team filed this site before.
+								Optional AI, off by default.
+							</li>
+							<li id="note-3">
+								<b>Opened links fade</b> Your browser's own history. Izgah records nothing.
+							</li>
+						</ol>
+					</div>
+
+					<p class="specimen-cap">
+						Set in the app's own type and colours. Not a screenshot: select the text.
+					</p>
+				</section>
+
+				<h2>Run it on your server</h2>
 				<pre
 					class="install"
 					tabindex="0"
@@ -72,66 +204,8 @@ docker compose -f docker-compose.prod.yml exec app node build/cli.js create-admi
 					<a href="https://github.com/gorkemio/izgah/blob/main/docs/deploy/dokploy.md">Dokploy</a>.
 				</p>
 
-				<figure class="specimen" aria-labelledby="specimen-cap">
-					<div class="day">
-						<h2>Thursday <span>26 November</span></h2>
-						<span class="count">3 links</span>
-					</div>
-					<article class="entry">
-						<p class="who"><time datetime="2026-11-26T18:41">18:41</time>Deniz</p>
-						<div>
-							<p class="note">Tried the new models on a laptop; surprisingly fast on long PDFs.</p>
-							<h3 class="title"><a href="https://github.com/ollama/ollama">ollama/ollama</a></h3>
-							<p class="kunye">
-								<span>github.com</span><span>code</span><span>AI tools</span><span>2 comments</span>
-							</p>
-						</div>
-					</article>
-					<article class="entry">
-						<p class="who"><time datetime="2026-11-26T17:02">17:02</time>Elif</p>
-						<div>
-							<p class="note">We can delete half of our theme media queries with this.</p>
-							<h3 class="title">
-								<a href="https://web.dev/articles/light-dark"
-									>CSS color-scheme-dependent colors with light-dark()</a
-								>
-							</h3>
-							<p class="kunye">
-								<span>web.dev</span><span>article</span><span>Frontend</span><span>3 comments</span>
-							</p>
-						</div>
-					</article>
-					<article class="entry">
-						<p class="who"><time datetime="2026-11-26T15:27">15:27</time>Mert</p>
-						<div>
-							<p class="note">Why opened links fade in Izgah, and why that stays private.</p>
-							<h3 class="title">
-								<a href="https://developer.chrome.com/blog/visited-links"
-									>Making :visited more private</a
-								>
-							</h3>
-							<p class="kunye">
-								<span>developer.chrome.com</span><span>article</span><span>Frontend</span>
-							</p>
-						</div>
-					</article>
-					<figcaption id="specimen-cap" class="specimen-cap">
-						Set in the app's own type and colours, not a screenshot. Links you have opened look
-						faded, here as in the app.
-					</figcaption>
-				</figure>
-
 				<h2>What it does</h2>
 				<ul class="annotated">
-					<li>
-						<a href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-core.md"
-							>One link, one conversation</a
-						>
-						<p>
-							Share a link someone already shared and both posts point to the same discussion, with
-							the first sharer credited.
-						</p>
-					</li>
 					<li>
 						<a href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-core.md"
 							>Sections, and links that stay out of the feed</a
