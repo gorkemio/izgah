@@ -1,108 +1,108 @@
-# İzgah Arayüz v3 — "İzgah Stüdyo"
+# Izgah UI v3 — "Izgah Studio"
 
 *   **Author:** Gorkem Inanc Ozdemir
-*   **Status:** Approved
+*   **Status:** Superseded by [izgah-ui-v4.md](./izgah-ui-v4.md) (2026-11-26); the command palette (§7), quick search, the context rail data (§5) and `SidePeekDialog` remain
 *   **Date:** 2026-11-24
 
-> **2026-11-26:** [izgah-ui-v4.md](./izgah-ui-v4.md) proposes replacing this visual language ("Künye"). Until it is approved after the prototype review, this document stays in force.
+> **2026-11-26:** [izgah-ui-v4.md](./izgah-ui-v4.md) ("Künye") replaced this visual language after the prototype review. The sections that code still cites stay valid where v4 does not override them.
 
 --------------------------------------------------------------------------------
 
 ## Overview
 
-Bu doküman, İzgah web arayüzünün ve Chrome/Firefox/Safari tarayıcı eklentisinin üçüncü sürümünü (**"İzgah Stüdyo"**) tanımlar. Önceki "Sinyal" görsel dilinin (`#C8F542` neon limon, sert siyah kenarlıklar, tekdüze ek kutuları ve boş sağ alan) yerini; **hassas araç kabuğu**, **editoryal başlık tipografisi ile sıcak yüzeyler** ve **3 sütunlu canlı akış ile zengin medya kartlarını** tek bir tutarlı tasarım sisteminde birleştiren görsel ve etkileşim mimarisi alır.
+This document defines the third version (**"Izgah Studio"**) of the Izgah web interface and of the Chrome/Firefox/Safari browser extension. It replaces the previous "Signal" visual language (`#C8F542` neon lime, hard black borders, uniform attachment boxes and an empty right-hand area) with a visual and interaction architecture that combines a **precise tool shell**, **editorial heading typography on warm surfaces** and a **three-column live feed with rich media cards** in one coherent design system.
 
-Bağlayıcı çekirdek kurallar korunur:
+The binding core rules remain:
 
-*   [izgah-ui-v2.md](./izgah-ui-v2.md) **§2** (Fontsource kendi sunucusundan sunum + `latin`/`latin-ext` ön yükleme mekanizması), **§9** (tema çerezleri + SSR flaşsız uygulama), **§11** (güvenlik başlıkları ve zorunlu CSP, satır içi betik yok) ve **§12** (sabit E2E kancaları ve erişilebilir adlar) geçerliliğini sürdürür.
-*   [izgah-themes.md](./izgah-themes.md) içindeki **mod + gündüz/gece paleti + vurgu** çerez ve `light-dark()` mekanizması aynen korunur; palet ve vurgu değerleri İzgah Stüdyo diline güncellenir.
-*   [izgah-core.md](./izgah-core.md) veri modeli, kimlik doğrulama, önizleme işçisi ve `/api/v1/*` sözleşmesi değişmez; **hiçbir veritabanı göçü (migration) gerekmez**.
+*   [izgah-ui-v2.md](./izgah-ui-v2.md) **§2** (self-hosted Fontsource fonts plus the `latin`/`latin-ext` preload mechanism), **§9** (theme cookies and flash-free SSR), **§11** (security headers and an enforced CSP, no inline scripts) and **§12** (fixed E2E hooks and accessible names) stay in force.
+*   The **mode + day/night palette + accent** cookie and `light-dark()` mechanism of [izgah-themes.md](./izgah-themes.md) stays as it is; the palette and accent values are updated to the Izgah Studio language.
+*   The data model, authentication, preview worker and `/api/v1/*` contract of [izgah-core.md](./izgah-core.md) do not change; **no database migration is needed**.
 
-**Görsel sentez:**
+**Visual synthesis:**
 
-*   **Kabuk, gezinme, `⌘K` komut paleti, ayarlar ve yönetim:** Tam yükseklikte (`100dvh`) yapışkan sol ray, ince üst bağlam çubuğu, saç çizgili ayar satırları, KPI şeritli sade yönetim tabloları.
-*   **Akış kartları, kaynak detayı ve başlık tipografisi:** Yalnız sayfa `h1`, gün `h2`, kaynak `h3` başlıkları ve marka kelime işaretinde serif (`Newsreader Variable`); sıcak alabaster (açık) ve sıcak grafit (koyu) yüzeyler.
-*   **Akış yerleşimi, medya önizlemeleri, paylaşım akışı ve etkileşim çubuğu:** Masaüstü ana akışta dengeli 3 sütun (sol ray + okuma sütunu + veritabanı sorgularıyla beslenen sağ bağlam rayı), kapak görselli medya kartları, görselsiz bağlantılarda kompakt/özel kartlar, avatar yığını.
-*   **Tarayıcı eklentisi:** Sıcak editoryal kaynak özeti + net bölüm çipleri; davranış ve `/api/v1/*` sözleşmesi değişmez.
+*   **Shell, navigation, `⌘K` command palette, settings and admin:** A full-height (`100dvh`) sticky left rail, a thin top context bar, hairline settings rows, plain admin tables with KPI strips.
+*   **Feed cards, resource details and heading typography:** A serif (`Newsreader Variable`) only for the page `h1`, day `h2`, resource `h3` headings and the wordmark; warm alabaster (light) and warm graphite (dark) surfaces.
+*   **Feed layout, media previews, share flow and action bar:** A balanced three-column desktop feed (left rail + reading column + a right context rail fed by database queries), media cards with cover images, compact or special cards for links without images, avatar stacks.
+*   **Browser extension:** A warm editorial resource summary and clear section chips; the behaviour and the `/api/v1/*` contract do not change.
 
-#### Temel Kavramlar
+#### Key Concepts
 
-*   **Üç Katmanlı Token Mimarisi:** `Primitive` (ham tonlar) → `Semantic` (`--color-*`, `light-dark()` yuvaları) → `Component` (`--card-*`, `--btn-*`, `--rail-*`). Bileşenler ham renk değeri kullanmaz.
-*   **Çift Kutuplu Vurgu (`--accent-light` / `--accent-dark`):** Her vurgu seçeneği açık ve koyu şemada ayrı kalibre edilir; böylece açık temada da metin, kenarlık, ikon ve dolgu olarak WCAG 2.2 AA (`≥ 4.5:1`) taşır.
-*   **Sağ Bağlam Rayı (`FeedContextRail`):** `≥ 1280px` masaüstünde **yalnız ana akış (`/`)** ekranında mevcut PostgreSQL tablolarından üretilen üç özet modülü: *Bugünün özeti*, *Çok konuşulanlar* (son 7 gün) ve *Bu hafta en çok paylaşanlar*.
-*   **Yandan Önizleme (`SidePeekDialog`):** Masaüstünde akıştan kopmadan bir kaynağın detaylarını ve yorumlarını sağdan açılan `<dialog>` içinde gösteren aşamalı geliştirme (JS kapalıyken doğrudan `/resources/[id]` bağlantısı).
-*   **Komut Paleti (`CommandPalette`):** `⌘K` / `Ctrl+K` ile açılan; bölümler, hızlı eylemler ve canlı arşiv aramasını tek yerde toplayan klavye-öncelikli modal `<dialog>`.
+*   **Three-layer token architecture:** `Primitive` (raw tones) → `Semantic` (`--color-*`, `light-dark()` slots) → `Component` (`--card-*`, `--btn-*`, `--rail-*`). Components never use raw colour values.
+*   **Bipolar accent (`--accent-light` / `--accent-dark`):** Each accent option is calibrated separately for the light and the dark scheme, so it meets WCAG 2.2 AA (`≥ 4.5:1`) as text, border, icon and fill in the light theme too.
+*   **Right context rail (`FeedContextRail`):** On desktops `≥ 1280px`, **on the feed (`/`) only**, three summary modules built from the existing PostgreSQL tables: *Today's summary*, *Most discussed* (last 7 days) and *Top sharers this week*.
+*   **Side peek (`SidePeekDialog`):** A progressive enhancement that shows a resource's details and comments in a `<dialog>` sliding in from the right on desktop, without leaving the feed (a plain `/resources/[id]` link without JavaScript).
+*   **Command palette (`CommandPalette`):** A keyboard-first modal `<dialog>`, opened with `⌘K` / `Ctrl+K`, that brings sections, quick actions and live archive search together.
 
 --------------------------------------------------------------------------------
 
 ## The Problem
 
-Önceki "Sinyal" arayüzü işlevsel olarak çalışsa da görsel ve yapısal açıdan beş temel sorunu çözememiştir:
+The previous "Signal" interface worked, but it left five visual and structural problems unsolved:
 
-1.  **Aşırı doygun neon limon blokları:** Aynı ekranda 3–4 ayrı `#C8F542` blok + siyah kenarlık + parıltı (ör. yönetim ekranında "Paylaş", "Yönetim", "Üyeler" ve "Davet Oluştur" aynı anda neon blok olarak yarışır).
-2.  **Masaüstünde ölü sağ boşluk:** `248px` sol ray + sola yaslı `680px` sütun, `1440px` ekranda sağda `~500px` boş alan bırakır.
-3.  **Tipografi ve yüzey yorgunluğu:** Form ipuçları ve ayar açıklamalarının `JetBrains Mono` ile dizilmesi, `800` ağırlıklı ağır başlıklar, tüm girdi ve kartlarda sert `#808080` kenarlıklar ve yapay `--surface-sheen` gradyanı.
-4.  **Tekdüze ek kutuları ve kalabalık yönetim satırları:** Görselsiz repo/web bağlantıları ile kapak görselli makale/videolar aynı dikdörtgen kutuda ezilir; yönetim tablosu her satırda 4 ayrı çerçeveli kontrol yığar.
-5.  **Eksik modern etkileşimler:** `⌘K` komut paleti, yandan önizleme (side peek), avatar yığını, düzenli tooltip ve tutarlı segmented control bulunmaz.
+1.  **Oversaturated neon lime blocks:** Three or four separate `#C8F542` blocks with black borders and glow on one screen (for example, "Share", "Admin", "Members" and "Create invite" competing as neon blocks on the admin screen at once).
+2.  **Dead space on the right on desktop:** A `248px` left rail plus a left-aligned `680px` column leaves `~500px` empty on the right of a `1440px` screen.
+3.  **Typography and surface fatigue:** Form hints and settings descriptions set in `JetBrains Mono`, heavy `800`-weight headings, hard `#808080` borders on every input and card, and an artificial `--surface-sheen` gradient.
+4.  **Uniform attachment boxes and crowded admin rows:** Repository or web links without images are squeezed into the same rectangle as articles and videos with covers; the admin table stacks four separately framed controls in every row.
+5.  **Missing modern interactions:** No `⌘K` command palette, side peek, avatar stack, consistent tooltip or segmented control.
 
 --------------------------------------------------------------------------------
 
 ## Goals
 
-*   **Seçkin ve Tutarlı Görsel Kimlik:** Sıcak alabaster (`#FAFAF8`) ve sıcak grafit (`#0D0E10`) yüzey hiyerarşisi, kontrollü orman/adaçayı teal vurgusu ve disiplinli tipografi ayrımı (`Newsreader` yalnız seçili başlıklarda; `Geist` arayüz/notlarda; `JetBrains Mono` yalnız teknik metada).
-*   **Tam WCAG 2.2 AA / Yüksek Kontrast AAA:** 5 palet (2 açık + 3 koyu) × 4 vurgu = 20 kombinasyonun tamamında metin `≥ 4.5:1`, kontrol sınırı ve odak `≥ 3:1`; yüksek kontrast paletlerinde metin/ikincil metin/tehlike `≥ 7:1` (AAA), `line ≥ 4.5:1`, sıfır gölge/ışıma/gradyan.
-*   **Gerçek Veriye Dayalı 3 Sütunlu Ana Akış:** Sağ bağlam rayı yalnız mevcut veritabanındaki gerçek verileri gösterir; ek şema göçü, önbellek katmanı veya yeni altyapı gerektirmez.
-*   **İçerik Türüne Duyarlı Akış Kartları:** Kapak görselli kaynaklarda zengin medya önizlemesi; görselsiz bağlantılarda repo/sosyal/kompakt şerit varyantları.
-*   **Dayanıklılık, Güvenlik ve JS'siz Çalışma:** Sıfır satır içi betik (zorunlu CSP uyumu), çerez + SSR ile flaşsız tema, JS kapalıyken tüm çekirdek akışlar (paylaşım, gezinme, arama, detay, tema, yönetim) eksiksiz çalışır; tüm yeni etkileşimler (`⌘K`, Side Peek) aşamalı geliştirmedir.
-*   **Korunan İşlevsellik ve E2E Sözleşmesi:** WebKit popover düzeltmesi, mobil üst boşluk, Türkçe 404, yönetim tablosu hizaları ve `izgah-ui-v2.md` §12 kancaları korunur.
+*   **A distinctive, consistent visual identity:** A warm alabaster (`#FAFAF8`) and warm graphite (`#0D0E10`) surface hierarchy, a restrained forest/sage teal accent and a disciplined split of typefaces (`Newsreader` only for selected headings; `Geist` for the interface and notes; `JetBrains Mono` only for technical metadata).
+*   **Full WCAG 2.2 AA / high-contrast AAA:** In all 20 combinations of 5 palettes (2 light + 3 dark) × 4 accents, text `≥ 4.5:1`, control boundaries and focus `≥ 3:1`; in the high-contrast palettes text, secondary text and danger `≥ 7:1` (AAA), `line ≥ 4.5:1`, and no shadows, glows or gradients.
+*   **A three-column feed built on real data:** The right context rail shows only real data from the existing database; it needs no schema migration, cache layer or new infrastructure.
+*   **Content-aware feed cards:** Rich media previews for resources with cover images; repository, social and compact strip variants for links without images.
+*   **Resilience, security and working without JavaScript:** No inline scripts (enforced CSP), flash-free themes through cookies and SSR, every core flow (sharing, navigation, search, details, themes, admin) works fully without JavaScript; every new interaction (`⌘K`, side peek) is a progressive enhancement.
+*   **Preserved functionality and E2E contract:** The WebKit popover fix, the mobile top spacing, the Turkish 404, the admin table alignment and the `izgah-ui-v2.md` §12 hooks are kept.
 
 --------------------------------------------------------------------------------
 
 ## Non-Goals
 
-*   **Çevrimiçi / Varlık Takibi ve Gerçek Zamanlı İtme:** "Çevrimiçi" göstergeleri, `"N çevrimiçi"` sayaçları, `"CANLI"` rozetleri ve WebSocket/SSE **yoktur** (mevcut 60 sn görünür sekme yoklaması korunur).
-*   **Okundu / Okuma Hedefi Takibi:** Haftalık okuma ilerleme çubuğu veya sunucu taraflı okundu/okunmadı kaydı **yoktur** (yalnız mevcut yerel `localStorage` son ziyaret ayırıcısı korunur).
-*   **Yazar Hover Kartı (`HoverCard`):** Sayfada bulunmayan ek yazar istatistikleri ve fazladan sorgu gerektirdiğinden kapsam dışıdır; yazar adı mevcut sade hâliyle kalır.
-*   **Eklenti Davranış Değişikliği ve Yeni `/api/v1/*` Uçları:** Eklenti popup'ında `"Kaydet / Son Kayıtlar"` sekmesi **yoktur**; mevcut popup/options akışı ve `/api/v1/*` sözleşmesi korunur, yalnızca İzgah Stüdyo görsel diline geçirilir.
-*   **Veritabanı Göçü (Migration):** Yeni tablo, sütun veya indeks göçü yapılmaz.
-*   **Ağır JS/CSS Çerçeveleri:** Tailwind, React/Vue port'ları, MUI/shadcn port'ları, ikon paketi veya polyfill eklenmez.
+*   **Online presence and real-time push:** **No** "online" indicators, "N online" counters, "LIVE" badges or WebSocket/SSE (the existing 60-second poll on visible tabs stays).
+*   **Read tracking or reading goals:** **No** weekly reading progress bar and no server-side read/unread record (only the existing local `localStorage` last-visit divider stays).
+*   **Author hover card (`HoverCard`):** Out of scope, because it would need author statistics that are not on the page and extra queries; the author name stays as plain as it is.
+*   **Extension behaviour changes and new `/api/v1/*` endpoints:** The extension popup gets **no** "Save / Recent" tab; the existing popup and options flow and the `/api/v1/*` contract stay, moved to the Izgah Studio visual language only.
+*   **Database migrations:** No new table, column or index migration.
+*   **Heavy JS/CSS frameworks:** No Tailwind, React/Vue ports, MUI/shadcn ports, icon packages or polyfills.
 
 --------------------------------------------------------------------------------
 
 ## Technical Plan (Architecture)
 
-### 1. Token Sistemi (Primitive → Semantic → Component)
+### 1. Token System (Primitive → Semantic → Component)
 
-Tüm belirteçler [`src/lib/styles/tokens.css`](../../src/lib/styles/tokens.css) içinde `@layer tokens` katmanında yaşar. Üç katman kesin biçimde ayrılır:
+All tokens live in [`src/lib/styles/tokens.css`](../../src/lib/styles/tokens.css) in the `@layer tokens` layer. The three layers are kept strictly apart:
 
-1.  **Primitive katman (`--p-*`):** Ham nötr ve vurgu basamakları (yalnız `tokens.css` içinde palet yuvalarına atanır; bileşenler doğrudan `--p-*` kullanmaz).
-2.  **Semantic katman (`--light-*`, `--dark-*`, `--accent-*` → `--color-*`):** [izgah-themes.md](./izgah-themes.md) §4'teki `light-dark()` ve `.theme-preview` kalıbı aynen korunur. Mod (`data-theme`) yalnızca `color-scheme` çevirir.
-3.  **Component katman:** Yüzey katmanları (`--color-surface-1`, `--color-surface-2`, `--color-surface-3`), gölge/üst ışık (`--shadow-xs/sm/lg`, `--specular-top`), köşe yarıçapları (`--radius-*`), kabuk ölçüleri (`--rail-w`, `--context-rail-w`, `--read-w`, `--topbar-h`).
+1.  **Primitive layer (`--p-*`):** Raw neutral and accent steps (assigned to palette slots inside `tokens.css` only; components never use `--p-*` directly).
+2.  **Semantic layer (`--light-*`, `--dark-*`, `--accent-*` → `--color-*`):** The `light-dark()` and `.theme-preview` pattern of [izgah-themes.md](./izgah-themes.md) §4 stays as it is. The mode (`data-theme`) only switches `color-scheme`.
+3.  **Component layer:** Surface layers (`--color-surface-1`, `--color-surface-2`, `--color-surface-3`), shadows and top highlight (`--shadow-xs/sm/lg`, `--specular-top`), corner radii (`--radius-*`), shell sizes (`--rail-w`, `--context-rail-w`, `--read-w`, `--topbar-h`).
 
-> **Geriye dönük uyumluluk takma adları:** Geçiş süresince `--color-surface` → `var(--color-surface-2)`, `--color-signal` → `var(--color-accent)` ve `--color-on-signal` → `var(--color-on-accent)` eşlemeleri korunur; tüm v3 bileşenleri doğrudan yeni `--color-*` adlarını kullanır.
+> **Backward-compatible aliases:** During the transition the mappings `--color-surface` → `var(--color-surface-2)`, `--color-signal` → `var(--color-accent)` and `--color-on-signal` → `var(--color-on-accent)` stay; every v3 component uses the new `--color-*` names directly.
 
-#### 1.1 Açık Paletler (`data-light-theme`)
+#### 1.1 Light Palettes (`data-light-theme`)
 
-| Token | Rol | Varsayılan (`default` — Sıcak Alabaster) | Kontrast (`default`) | Yüksek Kontrast (`contrast`) | Kontrast (`contrast`) |
+| Token | Role | Default (`default` — Warm Alabaster) | Contrast (`default`) | High Contrast (`contrast`) | Contrast (`contrast`) |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| `--light-bg` | Ana tuval | `#FAFAF8` | — | `#FFFFFF` | — |
-| `--light-surface-1` | Kartlar, yan ray, modal | `#FFFFFF` | `bg` 1.04 | `#FFFFFF` | — |
-| `--light-surface-2` | Hover, girdi, ikincil yüzey | `#F3F2EE` | `s1` 1.11 | `#F0EFEA` | `s1` 1.15 |
-| `--light-surface-3` | Aktif gezinme / basılı | `#E8E6DF` | `s1` 1.24 | `#E2E0D8` | `s1` 1.31 |
-| `--light-text` | Birincil metin | `#141413` | `bg` **17.64** · `s2` **16.46** ✓ | `#000000` | `bg` **21.00** · `s2` **18.24** (AAA ✓) |
-| `--light-text-secondary` | Ekip notu, açıklama | `#52514D` | `s1` **7.95** · `s2` **7.09** ✓ | `#262522` | `s1` **15.33** · `s2` **13.31** (AAA ✓) |
-| `--light-text-muted` | Meta, zaman, sayaç | `#63625C` | `bg` **5.85** · `s2` **5.46** ✓ | `#42413D` | `bg` **10.22** · `s2` **8.88** (AAA ✓) |
-| `--light-line` | Dekoratif `1px` ayraç | `#E6E4DD` | dekoratif (1.22) | `#73716A` | `bg` **4.88** (≥ 3:1 ✓) |
-| `--light-line-strong` | Etkileşimli kontrol sınırı | `#77756E` | `bg` **4.41** · `s2` **4.12** ✓ | `#1C1B19` | `bg` **17.21** · `s2` **14.95** ✓ |
-| `--light-danger` | Hata / yıkıcı metin | `#C81E1E` | `s1` **5.74** · `s2` **5.12** ✓ | `#961007` | `s1` **8.85** · `s2` **7.68** (AAA ✓) |
-| `--light-on-danger` | Tehlike dolgusu metni | `#FFFFFF` | `danger` **5.74** ✓ | `#FFFFFF` | `danger` **8.85** (AAA ✓) |
-| `--light-focus-inner` | Odak halkası iç çizgisi | `#141413` | `bg` **17.64** ✓ | `#000000` | `bg` **21.00** ✓ |
-| `--light-highlight-bg` / `-fg` | Arama eşleşmesi, yeni etiketi | `#FEF3C7` / `#141413` | **16.55** ✓ | `#FDE047` / `#000000` | **15.93** ✓ |
+| `--light-bg` | Main canvas | `#FAFAF8` | — | `#FFFFFF` | — |
+| `--light-surface-1` | Cards, side rail, modal | `#FFFFFF` | `bg` 1.04 | `#FFFFFF` | — |
+| `--light-surface-2` | Hover, inputs, secondary surface | `#F3F2EE` | `s1` 1.11 | `#F0EFEA` | `s1` 1.15 |
+| `--light-surface-3` | Active navigation / pressed | `#E8E6DF` | `s1` 1.24 | `#E2E0D8` | `s1` 1.31 |
+| `--light-text` | Primary text | `#141413` | `bg` **17.64** · `s2` **16.46** ✓ | `#000000` | `bg` **21.00** · `s2` **18.24** (AAA ✓) |
+| `--light-text-secondary` | Team note, description | `#52514D` | `s1` **7.95** · `s2` **7.09** ✓ | `#262522` | `s1` **15.33** · `s2` **13.31** (AAA ✓) |
+| `--light-text-muted` | Meta, time, counters | `#63625C` | `bg` **5.85** · `s2` **5.46** ✓ | `#42413D` | `bg` **10.22** · `s2` **8.88** (AAA ✓) |
+| `--light-line` | Decorative `1px` divider | `#E6E4DD` | decorative (1.22) | `#73716A` | `bg` **4.88** (≥ 3:1 ✓) |
+| `--light-line-strong` | Interactive control boundary | `#77756E` | `bg` **4.41** · `s2` **4.12** ✓ | `#1C1B19` | `bg` **17.21** · `s2` **14.95** ✓ |
+| `--light-danger` | Error / destructive text | `#C81E1E` | `s1` **5.74** · `s2` **5.12** ✓ | `#961007` | `s1` **8.85** · `s2` **7.68** (AAA ✓) |
+| `--light-on-danger` | Text on a danger fill | `#FFFFFF` | `danger` **5.74** ✓ | `#FFFFFF` | `danger` **8.85** (AAA ✓) |
+| `--light-focus-inner` | Inner line of the focus ring | `#141413` | `bg` **17.64** ✓ | `#000000` | `bg` **21.00** ✓ |
+| `--light-highlight-bg` / `-fg` | Search match, "new" label | `#FEF3C7` / `#141413` | **16.55** ✓ | `#FDE047` / `#000000` | **15.93** ✓ |
 | `--light-backdrop` | `dialog::backdrop` | `rgb(20 20 19 / 0.44)` | — | `rgb(0 0 0 / 0.65)` | — |
 
-#### 1.2 Koyu Paletler (`data-dark-theme`)
+#### 1.2 Dark Palettes (`data-dark-theme`)
 
-| Token | Varsayılan (`default` — Sıcak Grafit) | Kontrast (`default`) | Loş (`dim` — Loş Arduvaz) | Kontrast (`dim`) | Yüksek Kontrast (`contrast`) | Kontrast (`contrast`) |
+| Token | Default (`default` — Warm Graphite) | Contrast (`default`) | Dim (`dim` — Dim Slate) | Contrast (`dim`) | High Contrast (`contrast`) | Contrast (`contrast`) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | `--dark-bg` | `#0D0E10` | — | `#1A1C20` | — | `#000000` | — |
 | `--dark-surface-1` | `#141518` | `bg` 1.07 | `#22252B` | `bg` 1.09 | `#0E0F11` | `bg` 1.08 |
@@ -111,7 +111,7 @@ Tüm belirteçler [`src/lib/styles/tokens.css`](../../src/lib/styles/tokens.css)
 | `--dark-text` | `#F3F3F1` | `bg` **17.38** · `s2` **15.02** ✓ | `#EFEFED` | `bg` **14.82** · `s2` **11.66** ✓ | `#FFFFFF` | `bg` **21.00** · `s2` **17.42** (AAA ✓) |
 | `--dark-text-secondary` | `#A3A4A8` | `s1` **7.33** · `s2` **6.70** ✓ | `#B4B7BE` | `s1` **7.65** · `s2` **6.68** ✓ | `#E5E5E2` | `s1` **15.19** · `s2` **13.80** (AAA ✓) |
 | `--dark-text-muted` | `#8E9096` | `bg` **6.05** · `s2` **5.23** ✓ | `#9FA3AC` | `bg` **6.75** · `s2` **5.31** ✓ | `#CECEC9` | `bg` **13.30** · `s2` **11.03** (AAA ✓) |
-| `--dark-line` | `#26282F` | dekoratif (1.31) | `#353A44` | dekoratif (1.49) | `#808288` | `bg` **5.47** (≥ 3:1 ✓) |
+| `--dark-line` | `#26282F` | decorative (1.31) | `#353A44` | decorative (1.49) | `#808288` | `bg` **5.47** (≥ 3:1 ✓) |
 | `--dark-line-strong` | `#6C6F78` | `bg` **3.85** · `s2` **3.32** ✓ | `#808592` | `bg` **4.62** · `s2` **3.64** ✓ | `#C8CACF` | `bg` **12.81** · `s2` **10.62** ✓ |
 | `--dark-danger` | `#F87171` | `s1` **6.60** · `s2` **6.03** ✓ | `#FCA5A5` | `s1` **8.09** · `s2` **7.07** ✓ | `#FFA3A3` | `s1` **10.06** · `s2` **9.14** (AAA ✓) |
 | `--dark-on-danger` | `#0D0E10` | `danger` **6.98** ✓ | `#1A1C20` | `danger` **8.99** ✓ | `#000000` | `danger` **11.02** (AAA ✓) |
@@ -119,122 +119,122 @@ Tüm belirteçler [`src/lib/styles/tokens.css`](../../src/lib/styles/tokens.css)
 | `--dark-highlight-bg` / `-fg` | `#362D12` / `#FDE68A` | **10.94** ✓ | `#3E3314` / `#FEF08A` | **10.69** ✓ | `#4A3B08` / `#FEF08A` | **9.40** ✓ |
 | `--dark-backdrop` | `rgb(0 0 0 / 0.70)` | — | `rgb(0 0 0 / 0.65)` | — | `rgb(0 0 0 / 0.82)` | — |
 
-#### 1.3 Vurgu Renkleri (`data-accent`) — Açık ve Koyu Ayrı Kalibre Edilmiş 4 Seçenek
+#### 1.3 Accent Colours (`data-accent`) — Four Options, Calibrated Separately for Light and Dark
 
-Yeni beyaz liste: `teal` *(varsayılan)* | `cobalt` | `terracotta` | `plum`. Eski `izgah_accent` çerez değerleri (`lime`/`cyan`/`pink`/`blue`) beyaz liste dışındadır ve [izgah-themes.md](./izgah-themes.md) §3 kuralı gereği güvenli biçimde varsayılan `teal`'e düşer.
+The new allow-list: `teal` *(default)* | `cobalt` | `terracotta` | `plum`. Old `izgah_accent` cookie values (`lime`/`cyan`/`pink`/`blue`) are outside the allow-list and, by the rule in [izgah-themes.md](./izgah-themes.md) §3, fall back safely to the default `teal`.
 
-| Vurgu (`data-accent`) | Açık (`--accent-l` / `--on-l`) | Açık Kontrast (`on/acc` · `acc/bg` · `acc/s2` · `acc/hc-s2`) | Açık Yumuşak (`soft` / `text`) | Koyu (`--accent-d` / `--on-d`) | Koyu Kontrast (`on/acc` · `acc/bg` · `acc/dim-s2` · `acc/hc-s2`) | Koyu Yumuşak (`soft` / `text`) |
+| Accent (`data-accent`) | Light (`--accent-l` / `--on-l`) | Light contrast (`on/acc` · `acc/bg` · `acc/s2` · `acc/hc-s2`) | Light soft (`soft` / `text`) | Dark (`--accent-d` / `--on-d`) | Dark contrast (`on/acc` · `acc/bg` · `acc/dim-s2` · `acc/hc-s2`) | Dark soft (`soft` / `text`) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Orman Teal** (`teal`, varsayılan) | `#0F766E` / `#FFFFFF` | **5.47** · **5.24** · **4.89** · **4.75** ✓ | `#E6F4F1` / `#0D635C` (**6.28** ✓) | `#2DD4BF` / `#061A18` | **9.65** · **10.37** · **7.21** · **9.36** ✓ | `#122A28` / `#5EEAD4` (**10.23** ✓) |
-| **Kobalt** (`cobalt`) | `#1D4ED8` / `#FFFFFF` | **6.70** · **6.41** · **5.98** · **5.82** ✓ | `#EFF6FF` / `#1E40AF` (**8.01** ✓) | `#60A5FA` / `#071324` | **7.32** · **7.60** · **5.28** · **6.85** ✓ | `#142238` / `#93C5FD` (**8.85** ✓) |
-| **Kiremit** (`terracotta`) | `#9A3412` / `#FFFFFF` | **7.31** · **6.99** · **6.52** · **6.35** ✓ | `#FDECE3` / `#7C2D12` (**8.16** ✓) | `#FB923C` / `#1C0D03` | **8.37** · **8.53** · **5.93** · **7.70** ✓ | `#2E1D11` / `#FDBA74` (**9.58** ✓) |
-| **Erik** (`plum`) | `#6D28D9` / `#FFFFFF` | **7.10** · **6.80** · **6.34** · **6.17** ✓ | `#F3EEFF` / `#5B21B6` (**7.91** ✓) | `#C4B5FD` / `#180C2E` | **10.06** · **10.46** · **7.27** · **9.44** ✓ | `#231A38` / `#DDD6FE` (**11.85** ✓) |
+| **Forest Teal** (`teal`, default) | `#0F766E` / `#FFFFFF` | **5.47** · **5.24** · **4.89** · **4.75** ✓ | `#E6F4F1` / `#0D635C` (**6.28** ✓) | `#2DD4BF` / `#061A18` | **9.65** · **10.37** · **7.21** · **9.36** ✓ | `#122A28` / `#5EEAD4` (**10.23** ✓) |
+| **Cobalt** (`cobalt`) | `#1D4ED8` / `#FFFFFF` | **6.70** · **6.41** · **5.98** · **5.82** ✓ | `#EFF6FF` / `#1E40AF` (**8.01** ✓) | `#60A5FA` / `#071324` | **7.32** · **7.60** · **5.28** · **6.85** ✓ | `#142238` / `#93C5FD` (**8.85** ✓) |
+| **Terracotta** (`terracotta`) | `#9A3412` / `#FFFFFF` | **7.31** · **6.99** · **6.52** · **6.35** ✓ | `#FDECE3` / `#7C2D12` (**8.16** ✓) | `#FB923C` / `#1C0D03` | **8.37** · **8.53** · **5.93** · **7.70** ✓ | `#2E1D11` / `#FDBA74` (**9.58** ✓) |
+| **Plum** (`plum`) | `#6D28D9` / `#FFFFFF` | **7.10** · **6.80** · **6.34** · **6.17** ✓ | `#F3EEFF` / `#5B21B6` (**7.91** ✓) | `#C4B5FD` / `#180C2E` | **10.06** · **10.46** · **7.27** · **9.44** ✓ | `#231A38` / `#DDD6FE` (**11.85** ✓) |
 
-*   **Sonuç:** 5 palet × 4 vurgu = **20 kombinasyonun tamamı** metin (`≥ 4.5:1`), yumuşak dolgu içi metin (`≥ 4.5:1`), kontrol sınırı (`≥ 3:1`) ve odak halkası (`≥ 3:1`) koşullarını sağlar.
-*   **Yüksek kontrast kuralı:** `[data-light-theme='contrast']`, `[data-dark-theme='contrast']`, `@media (prefers-contrast: more)` ve `@media (forced-colors: active)` altında `--shadow-*`, `--specular-top` ve tüm odak/vurgu ışımaları `none` olur; yüzeyler tamamen düz, sınırlar yüksek kontrastlı kalır.
+*   **Result:** **All 20 combinations** of 5 palettes × 4 accents meet the thresholds for text (`≥ 4.5:1`), text inside a soft fill (`≥ 4.5:1`), control boundaries (`≥ 3:1`) and the focus ring (`≥ 3:1`).
+*   **High-contrast rule:** Under `[data-light-theme='contrast']`, `[data-dark-theme='contrast']`, `@media (prefers-contrast: more)` and `@media (forced-colors: active)`, `--shadow-*`, `--specular-top` and every focus or accent glow become `none`; surfaces stay completely flat and boundaries stay high-contrast.
 
 --------------------------------------------------------------------------------
 
-### 2. Tipografi, Fontsource Paketleri ve Kesin Serif Sınırı
+### 2. Typography, Fontsource Packages and a Strict Serif Boundary
 
-#### 2.1 Yeni ve Güncellenen `devDependencies` Paketleri
+#### 2.1 New and Updated `devDependencies`
 
-| Paket ve Sürüm | Lisans | Kapsam ve Gerekçe |
+| Package and version | License | Scope and reason |
 | :--- | :--- | :--- |
-| `@fontsource-variable/newsreader@^5.3.0` (`5.3.0`) | `OFL-1.1` | Editoryal serif başlık fontu (`latin` + `latin-ext`: `ı İ ş Ş ğ Ğ`, `wght` + `opsz`, normal + italic). Kendi sunucumuzdan sunulur, CDN yok. |
-| `@fontsource-variable/geist@^5.3.0` (`5.3.0`) | `OFL-1.1` | Arayüz ve ekip notları sans-serif fontu (`latin` + `latin-ext`, `wght` `400..700`). `@fontsource-variable/schibsted-grotesk@5.3.0` paketinin yerini alır. |
-| `@fontsource-variable/jetbrains-mono@5.3.0` *(mevcut)* | `OFL-1.1` | Teknik meta (`latin` + `latin-ext`, `tabular-nums`: saat, alan adı, repo yıldızı, sayaç, `kbd`). |
-| `@axe-core/playwright@^4.14.0` (`4.14.0`) | `MPL-2.0` | `tests/e2e/m15-a11y-tour.spec.ts` erişilebilirlik turunda gerçek tarayıcıda hesaplanmış stilleri **yalnız `color-contrast` kuralıyla** otomatik doğrulamak için geliştirme/test bağımlılığı (üretim derlemesine girmez). |
+| `@fontsource-variable/newsreader@^5.3.0` (`5.3.0`) | `OFL-1.1` | Editorial serif heading font (`latin` + `latin-ext`: `ı İ ş Ş ğ Ğ`, `wght` + `opsz`, normal + italic). Self-hosted, no CDN. |
+| `@fontsource-variable/geist@^5.3.0` (`5.3.0`) | `OFL-1.1` | Sans-serif for the interface and team notes (`latin` + `latin-ext`, `wght` `400..700`). Replaces `@fontsource-variable/schibsted-grotesk@5.3.0`. |
+| `@fontsource-variable/jetbrains-mono@5.3.0` *(existing)* | `OFL-1.1` | Technical metadata (`latin` + `latin-ext`, `tabular-nums`: time, domain, repository stars, counters, `kbd`). |
+| `@axe-core/playwright@^4.14.0` (`4.14.0`) | `MPL-2.0` | A development/test dependency that checks the computed styles in a real browser **with the `color-contrast` rule only** in the accessibility tour `tests/e2e/m15-a11y-tour.spec.ts` (not part of the production build). |
 
-*   **Kaldırılan paket:** `@fontsource-variable/schibsted-grotesk@5.3.0` kök projeden ve `extensions/package.json`'dan kaldırılır.
-*   **CSS aileleri:**
+*   **Removed package:** `@fontsource-variable/schibsted-grotesk@5.3.0` is removed from the root project and from `extensions/package.json`.
+*   **CSS families:**
     *   `--font-display: 'Newsreader Variable', Georgia, 'Iowan Old Style', serif`
     *   `--font-sans: 'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif`
     *   `--font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace`
-*   **Ön yükleme (`src/lib/server/http/theme.ts`):** `PRELOADED_FONT_PATTERN` güncellenir: `/geist-latin(?:-ext)?-wght-normal|newsreader-latin(?:-ext)?-opsz-normal/` eşleşen dosyalar ön yüklenir; mono ve italik `unicode-range` + `font-display: swap` ile talep üzerine yüklenir. `vite.config.ts` `.woff2` satır içine almama kuralı (`font-src 'self'`) aynen korunur.
+*   **Preloading (`src/lib/server/http/theme.ts`):** `PRELOADED_FONT_PATTERN` is updated: files matching `/geist-latin(?:-ext)?-wght-normal|newsreader-latin(?:-ext)?-opsz-normal/` are preloaded; mono and italic load on demand through `unicode-range` + `font-display: swap`. The `vite.config.ts` rule that never inlines `.woff2` files (`font-src 'self'`) stays as it is.
 
-#### 2.2 Serif Kullanım Sınırı
+#### 2.2 Serif Boundary
 
-*   **Serif (`--font-display`) YALNIZ şu dört yerde kullanılır:**
-    1. Sayfa başlıkları (`h1` — ör. "Ana Akış", bölüm adı, "Ayarlar", "Üye Yönetimi", giriş başlığı).
-    2. Akış gün başlıkları (`h2.day-heading` — "Bugün", "Dün", "Salı", italik `600`).
-    3. Akış kartı ve kaynak detayındaki kaynak başlıkları (`h3.attachment-title`, `h1.resource-title`, sağ ray "Çok konuşulanlar" başlıkları, eklenti başlık önizlemesi).
-    4. Sol ray ve giriş ekranındaki "İzgah" marka kelime işareti.
-*   **Gezinme, formlar, etiketler, ipuçları, ayar satırları, yönetim tabloları, ekip notları ve yorumlar** kesinlikle `--font-sans` (`Geist Variable`) kullanır.
-*   **`JetBrains Mono`** yalnız saat, tarih, alan adı, repo yıldızı/dili, sayaçlar, URL alanları ve `kbd` içindedir; form ipuçları ve açıklama paragrafları (`.field-hint`) asla monospace olmaz.
+*   **The serif (`--font-display`) is used ONLY in these four places:**
+    1. Page headings (`h1` — for example "Feed", the section name, "Settings", "Member management", the sign-in heading).
+    2. Feed day headings (`h2.day-heading` — "Today", "Yesterday", "Tuesday", italic `600`).
+    3. Resource titles on feed cards and resource details (`h3.attachment-title`, `h1.resource-title`, the "Most discussed" titles in the right rail, the extension's title preview).
+    4. The "Izgah" wordmark in the left rail and on the sign-in screen.
+*   **Navigation, forms, labels, hints, settings rows, admin tables, team notes and comments** always use `--font-sans` (`Geist Variable`).
+*   **`JetBrains Mono`** appears only in times, dates, domains, repository stars and language, counters, URL fields and `kbd`; form hints and description paragraphs (`.field-hint`) are never monospace.
 
-#### 2.3 Tipografi Ölçeği
+#### 2.3 Type Scale
 
-| Token | Boyut / Satır Yüksekliği | Ağırlık | Aile | İzleme | Kullanım |
+| Token | Size / line height | Weight | Family | Tracking | Use |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| `--text-display` | `clamp(1.625rem, 1.35rem + 1.1vw, 2rem)` / `1.15` | `600` | Serif | `-0.02em` | Sayfa `h1`, kaynak detay `h1` |
-| `--text-day` | `1.125rem` / `1.2` | `600` (italic) | Serif | `-0.01em` | Gün başlığı `h2` |
-| `--text-title` | `1.0625rem` / `1.32` | `600` | Serif | `-0.01em` | Bağlantı eki başlığı `h3` |
-| `--text-section` | `1rem` / `1.35` | `600` | Sans | `-0.01em` | Panel/bölüm alt başlıkları (`h2` ayarlar/yönetim) |
-| `--text-body` | `0.9375rem` (`15px`) / `1.6` | `400` | Sans | `0` | Ekip notları, yorumlar, form girdileri |
-| `--text-ui` | `0.84375rem` (`13.5px`) / `1.35` | `500` | Sans | `0` | Gezinme, düğmeler, etiketler, tablo hücreleri, yazar adı (`600`) |
-| `--text-hint` | `0.8125rem` (`13px`) / `1.45` | `400` | Sans | `0` | Form ipuçları, ayar açıklamaları |
-| `--text-meta` | `0.75rem` (`12px`) / `1.3` | `400` | Mono | `0` | Zaman, alan adı, sayaç, repo istatistiği (`tabular-nums`) |
-| `--text-micro` | `0.75rem` (`12px`) / `1.2` | `500` | Mono | `0.03em` | Rozet, tablo `th`, `kbd` |
+| `--text-display` | `clamp(1.625rem, 1.35rem + 1.1vw, 2rem)` / `1.15` | `600` | Serif | `-0.02em` | Page `h1`, resource detail `h1` |
+| `--text-day` | `1.125rem` / `1.2` | `600` (italic) | Serif | `-0.01em` | Day heading `h2` |
+| `--text-title` | `1.0625rem` / `1.32` | `600` | Serif | `-0.01em` | Link attachment title `h3` |
+| `--text-section` | `1rem` / `1.35` | `600` | Sans | `-0.01em` | Panel and section subheadings (`h2` in settings and admin) |
+| `--text-body` | `0.9375rem` (`15px`) / `1.6` | `400` | Sans | `0` | Team notes, comments, form inputs |
+| `--text-ui` | `0.84375rem` (`13.5px`) / `1.35` | `500` | Sans | `0` | Navigation, buttons, labels, table cells, author name (`600`) |
+| `--text-hint` | `0.8125rem` (`13px`) / `1.45` | `400` | Sans | `0` | Form hints, settings descriptions |
+| `--text-meta` | `0.75rem` (`12px`) / `1.3` | `400` | Mono | `0` | Time, domain, counters, repository statistics (`tabular-nums`) |
+| `--text-micro` | `0.75rem` (`12px`) / `1.2` | `500` | Mono | `0.03em` | Badges, table `th`, `kbd` |
 
 --------------------------------------------------------------------------------
 
-### 3. Aralık, Köşe, Yüzey Katmanları ve Odak Halkası
+### 3. Spacing, Corners, Surface Layers and the Focus Ring
 
-*   **Aralık ızgarası (`4px`):** `--space-1` (`4px`), `--space-2` (`8px`), `--space-3` (`12px`), `--space-4` (`16px`), `--space-5` (`24px`), `--space-6` (`32px`), `--space-7` (`48px`), `--space-8` (`64px`).
-*   **Köşe yarıçapları:** `--radius-xs: 5px` (`kbd`, küçük rozet), `--radius-sm: 7px` (düğme, girdi, gezinme öğesi), `--radius-md: 11px` (ek kutusu, yan ray kartı, tablo), `--radius-lg: 14px` (gönderi kartı, modal `<dialog>`, `⌘K`), `--radius-pill: 9999px` (avatar, durum hapı, bölüm çipleri).
-*   **Yüzey ve derinlik:**
-    *   **Açık (`default`):** `bg` (`#FAFAF8`) üzerinde `surface-1` (`#FFFFFF`) kartlar + `1px solid var(--color-line)` + hafif katmanlı gölge (`0 1px 2px rgb(20 20 19 / 0.04), 0 4px 14px rgb(20 20 19 / 0.03)`).
-    *   **Koyu (`default`, `dim`):** Düşme gölgesi yerine yüzey açıklık adımı (`bg → surface-1 → surface-2`) + `1px solid var(--color-line)` + üst `1px` yansıma (`inset 0 1px 0 rgb(255 255 255 / 0.05)`).
-    *   **Yüksek kontrast & `forced-colors`:** Gölge ve üst yansıma `none`.
-*   **Odak halkası (`:focus-visible`):** İki katmanlı keskin halka (`2px` `var(--color-bg)` ayırıcı + `2px` `var(--color-accent)` — tüm vurgular her temada `≥ 4.75:1` kontrastlı olduğundan WCAG 1.4.11'i doğrudan taşır; `outline: 2px solid transparent; outline-offset: 2px;` Windows Yüksek Kontrastta görünürlüğü garanti eder).
+*   **Spacing grid (`4px`):** `--space-1` (`4px`), `--space-2` (`8px`), `--space-3` (`12px`), `--space-4` (`16px`), `--space-5` (`24px`), `--space-6` (`32px`), `--space-7` (`48px`), `--space-8` (`64px`).
+*   **Corner radii:** `--radius-xs: 5px` (`kbd`, small badges), `--radius-sm: 7px` (buttons, inputs, navigation items), `--radius-md: 11px` (attachment boxes, side rail cards, tables), `--radius-lg: 14px` (post cards, modal `<dialog>`, `⌘K`), `--radius-pill: 9999px` (avatars, status pills, section chips).
+*   **Surface and depth:**
+    *   **Light (`default`):** `surface-1` (`#FFFFFF`) cards on `bg` (`#FAFAF8`) + `1px solid var(--color-line)` + a light layered shadow (`0 1px 2px rgb(20 20 19 / 0.04), 0 4px 14px rgb(20 20 19 / 0.03)`).
+    *   **Dark (`default`, `dim`):** Instead of a drop shadow, a step in surface lightness (`bg → surface-1 → surface-2`) + `1px solid var(--color-line)` + a `1px` top highlight (`inset 0 1px 0 rgb(255 255 255 / 0.05)`).
+    *   **High contrast and `forced-colors`:** Shadow and top highlight are `none`.
+*   **Focus ring (`:focus-visible`):** A sharp two-layer ring (a `2px` `var(--color-bg)` separator + `2px` `var(--color-accent)`; since every accent has `≥ 4.75:1` contrast in every theme, it meets WCAG 1.4.11 directly; `outline: 2px solid transparent; outline-offset: 2px;` guarantees visibility in Windows High Contrast).
 
 --------------------------------------------------------------------------------
 
-### 4. Uygulama Kabuğu ve Yerleşim Kırılımları
+### 4. App Shell and Layout Breakpoints
 
-| Genişlik | Sol Ray | Üst Çubuk | Orta Sütun | Sağ Bağlam Rayı |
+| Width | Left rail | Top bar | Centre column | Right context rail |
 | :--- | :--- | :--- | :--- | :--- |
-| `≥ 1280px` | Tam ray (`238px`), `position: sticky; inset-block-start: 0; block-size: 100dvh; align-self: start;` | İnce `48px` yapışkan bağlam çubuğu (konum + `⌘K` tetikleyici + bildirim özeti) | Ana akışta `≤ 672px`; bölüm/ayarlar/yönetimde `≤ 1000px` | **Yalnız ana akışta (`/`)** `280px` (`Bugünün özeti`, `Çok konuşulanlar`, `Bu hafta en çok paylaşanlar`); `/sections/[slug]` ve diğer rotalarda yok |
-| `1024–1279px` | Tam ray (`238px`, tam `100dvh`) | `48px` üst çubuk | `≤ 680px` (ortalanmış) | Gizli (`display: none`) |
-| `768–1023px` | İkon-ray (`68px`, tam `100dvh`; erişilebilir adlar korunur) | `48px` üst çubuk | `≤ 680px` | Gizli |
-| `< 768px` | Üst çubuğa dönüşür (`54px`: marka + bildirim zili) + sabit alt sekme çubuğu (`62px`, `viewport-fit=cover`, metin odağında gizlenir) | — | Tam genişlik, `16px` yan boşluk | Gizli |
+| `≥ 1280px` | Full rail (`238px`), `position: sticky; inset-block-start: 0; block-size: 100dvh; align-self: start;` | A thin `48px` sticky context bar (location + `⌘K` trigger + notification summary) | `≤ 672px` on the feed; `≤ 1000px` on sections, settings and admin | **On the feed (`/`) only**, `280px` (`Today's summary`, `Most discussed`, `Top sharers this week`); absent on `/sections/[slug]` and other routes |
+| `1024–1279px` | Full rail (`238px`, full `100dvh`) | `48px` top bar | `≤ 680px` (centred) | Hidden (`display: none`) |
+| `768–1023px` | Icon rail (`68px`, full `100dvh`; accessible names kept) | `48px` top bar | `≤ 680px` | Hidden |
+| `< 768px` | Becomes a top bar (`54px`: wordmark + notification bell) plus a fixed bottom tab bar (`62px`, `viewport-fit=cover`, hidden while a text field has focus) | — | Full width, `16px` side padding | Hidden |
 
-*   **Sol ray tam yükseklik garantisi:** `.app-shell` ızgarasında `<header class="site-header">` masaüstünde her zaman `position: sticky; inset-block-start: 0; block-size: 100dvh; align-self: start; overflow-y: auto;` özelliklerini taşır; içerik uzunluğundan bağımsız olarak görünüm yüksekliğini eksiksiz kaplar ve profil bloğu `margin-block-start: auto` ile alt kenara oturur.
-*   **Aktif gezinme stili:** Sol rayda aktif öğe tam neon blok değildir; `var(--color-surface-2)` zemin + `1px` `var(--color-line)` + sol kenarda `3px` `var(--color-accent)` dikey şerit ile sakin ve net biçimde ayrışır.
+*   **Full-height left rail:** In the `.app-shell` grid, `<header class="site-header">` always carries `position: sticky; inset-block-start: 0; block-size: 100dvh; align-self: start; overflow-y: auto;` on desktop; it fills the viewport height regardless of content length, and the profile block sits at the bottom edge through `margin-block-start: auto`.
+*   **Active navigation style:** The active item in the left rail is not a full neon block; it stands out calmly and clearly with a `var(--color-surface-2)` background + `1px` `var(--color-line)` + a `3px` vertical `var(--color-accent)` stripe on the left edge.
 
 --------------------------------------------------------------------------------
 
-### 5. Sağ Bağlam Rayı — Sorgular, İndeksler ve Performans
+### 5. Right Context Rail — Queries, Indexes and Performance
 
-Sağ ray (`src/lib/components/feed/FeedContextRail.svelte`) **yalnız ana akış (`/`)** sayfasında (`≥ 1280px`) gösterilir; `/sections/[slug]` ve diğer rotalarda yer almaz. Tüm veriler mevcut PostgreSQL tablolarından ([`src/lib/server/db/schema.ts`](../../src/lib/server/db/schema.ts)) doğrudan okunur; çevrimiçi göstergesi, canlı rozet veya okundu takibi yoktur.
+The right rail (`src/lib/components/feed/FeedContextRail.svelte`) is shown **on the feed (`/`) only** (`≥ 1280px`); it does not appear on `/sections/[slug]` or other routes. All data is read directly from the existing PostgreSQL tables ([`src/lib/server/db/schema.ts`](../../src/lib/server/db/schema.ts)); there is no online indicator, live badge or read tracking.
 
-Veri yükleyici modülü: `src/lib/server/feed/rail-summary.ts` (`getFeedRailSummary()`).
+Data loader module: `src/lib/server/feed/rail-summary.ts` (`getFeedRailSummary()`).
 
-#### 5.1 Bugünün Özeti (`todayShares`, `todayComments`)
+#### 5.1 Today's Summary (`todayShares`, `todayComments`)
 
-Gün başlangıcı yeni bir saat dilimi kodu yazılmadan doğrudan [`src/lib/format/date.ts`](../../src/lib/format/date.ts) içindeki **`APP_TIME_ZONE`** (`'Europe/Istanbul'`) sabiti kullanılarak PostgreSQL tarafında hesaplanır (`date_trunc('day', now() AT TIME ZONE ${APP_TIME_ZONE}) AT TIME ZONE ${APP_TIME_ZONE}`):
+The start of the day is computed in PostgreSQL without new time zone code, using the **`APP_TIME_ZONE`** constant (`'Europe/Istanbul'`) in [`src/lib/format/date.ts`](../../src/lib/format/date.ts) (`date_trunc('day', now() AT TIME ZONE ${APP_TIME_ZONE}) AT TIME ZONE ${APP_TIME_ZONE}`). *(Since [izgah-i18n-oss.md](./izgah-i18n-oss.md), `APP_TIME_ZONE` is a runtime setting that defaults to `UTC`.)*
 
 ```sql
--- 1a. Bugünkü ana akış paylaşımları
+-- 1a. Today's feed shares
 SELECT count(*)::int AS share_count
 FROM link_shares
 WHERE deleted_at IS NULL
   AND is_feed_visible = true
   AND created_at >= (date_trunc('day', now() AT TIME ZONE $tz) AT TIME ZONE $tz);
 
--- 1b. Bugünkü yorumlar
+-- 1b. Today's comments
 SELECT count(*)::int AS comment_count
 FROM resource_comments
 WHERE deleted_at IS NULL
   AND created_at >= (date_trunc('day', now() AT TIME ZONE $tz) AT TIME ZONE $tz);
 ```
 
-*   **İndeks kullanımı:**
-    *   `1a`: Mevcut kısmi bileşik indeks `link_shares_feed_cursor_idx (is_feed_visible, created_at DESC, id DESC) WHERE deleted_at IS NULL` üzerinden doğrudan **Index-Only Scan** (`< 0.2 ms`).
-    *   `1b`: `resource_comments` tablosunda yalnız `(resource_id, created_at ASC)` indeksi vardır. 10–15 kişilik ekipte tablo küçük olduğundan tarama `< 0.5 ms` sürer; yeni göç gerektirmez.
+*   **Index use:**
+    *   `1a`: A direct **index-only scan** over the existing partial composite index `link_shares_feed_cursor_idx (is_feed_visible, created_at DESC, id DESC) WHERE deleted_at IS NULL` (`< 0.2 ms`).
+    *   `1b`: `resource_comments` only has a `(resource_id, created_at ASC)` index. For a team of 10–15 people the table is small and the scan takes `< 0.5 ms`; no new migration is needed.
 
-#### 5.2 Çok Konuşulanlar (Son 7 Günde En Çok Yorum Alan İlk 3 Kaynak)
+#### 5.2 Most Discussed (Top 3 Resources by Comments in the Last 7 Days)
 
 ```sql
 SELECT
@@ -259,9 +259,9 @@ ORDER BY recent_comment_count DESC, cr.like_count DESC, cr.created_at DESC
 LIMIT 3;
 ```
 
-*   **İndeks kullanımı:** Son 7 günün yorumları dar alt küme üretir; `canonical_resources` birincil anahtarından (`id`) eşleşir; `EXISTS` alt sorgusu mevcut `link_shares_resource_history_idx (resource_id, created_at ASC)` indeksini kullanır ve silinmiş veya yalnız sessiz eklenmiş kaynakların ana akış sağ rayına sızmasını önler (`< 0.8 ms`).
+*   **Index use:** The last 7 days of comments form a narrow subset; it joins on the `canonical_resources` primary key (`id`); the `EXISTS` subquery uses the existing `link_shares_resource_history_idx (resource_id, created_at ASC)` index and keeps deleted or silent-only resources out of the feed's right rail (`< 0.8 ms`).
 
-#### 5.3 Bu Hafta En Çok Paylaşanlar (Son 7 Günde İlk 5 Aktif Üye)
+#### 5.3 Top Sharers This Week (Top 5 Active Members in the Last 7 Days)
 
 ```sql
 SELECT
@@ -279,191 +279,191 @@ ORDER BY share_count DESC, u.name ASC
 LIMIT 5;
 ```
 
-*   **İndeks kullanımı:** Mevcut kısmi indeks `link_shares_feed_cursor_idx (is_feed_visible, created_at DESC, id DESC) WHERE deleted_at IS NULL` üzerinden son 7 günün satır aralığı taranır, `users` PK ile birleştirilir (`< 0.4 ms`).
+*   **Index use:** The row range of the last 7 days is scanned through the existing partial index `link_shares_feed_cursor_idx (is_feed_visible, created_at DESC, id DESC) WHERE deleted_at IS NULL` and joined with the `users` primary key (`< 0.4 ms`).
 
-#### 5.4 Önbellek ve Performans Kararı
+#### 5.4 Caching and Performance Decision
 
-*   Üç sorgu yalnızca `src/routes/(app)/+page.server.ts` içinde ana akış sayfa sorgusuyla birlikte `Promise.all` olarak paralel yürütülür.
-*   **Önbellek yoktur:** 10–15 kişilik kapalı ekipte üç sorgunun toplam yürütme süresi `< 2 ms` olduğundan bellek içi TTL önbelleği veya geçersiz kılma (invalidation) mekanizması kurulmaz. Böylece her istekte güncel veri döner ve eksik geçersiz kılma noktalarından doğacak bayat veri riski tamamen ortadan kalkar.
-*   İlgili liste boş döndüğünde (ör. son 7 günde yorum yoksa) kart temiz bir boş durum metni gösterir ("Son 7 günde tartışma başlamadı").
-
---------------------------------------------------------------------------------
-
-### 6. Kart Anatomisi ve İçerik Türüne Duyarlı Bağlantı Ekleri
-
-`PostCard` kök öğesi (`<article class="share-card" id="share-{id}" tabindex="-1">`) ve [izgah-ui-v2.md](./izgah-ui-v2.md) §12 erişilebilirlik kancaları korunur. Gönderiler `surface-1` üzerinde `14px` köşeli, `1px` kenarlıklı sakin kartlardır.
-
-*   **Bağlantı eki varyantları (`LinkAttachment.svelte`):**
-    1.  **Kapak görselli medya kartı (yalnız `thumbnailAssetKey` mevcut ve görsel yüklendiyse):**
-        *   `video`: Üstte tam genişlikte `1200/630` yuvarlatılmış kapak + sağ altta oynatma ikonu rozeti; altta mono alan adı/tür + serif `h3` başlık + 2 satır açıklama.
-        *   `article` / `web` (görselli): Kapsayıcı `≥ 480px` iken solda serif `h3` başlık + mono meta + 2 satır açıklama, sağda `186px` `1200/630` kapak (dar alanda üstte tam genişlik).
-    2.  **Görselsiz Repo kartı (`contentType === 'repo'` ve görsel yok):** Mono `owner/repo` başlığı + git ikonu, altında 2 satır açıklama, sağda/altta renkli dil noktası + mono yıldız sayısı (`★ 19,8B`).
-    3.  **Görselsiz Sosyal / Alıntı kartı (`contentType === 'social'` ve görsel yok):** Yazar/kaynak üst satırı + sade metin özeti, boş kapak sütunu ayrılmaz.
-    4.  **Görselsiz Kompakt Web / Makale kartı (diğer görselsiz veya önizlemesi başarısız bağlantılar):** Tek satırlı/kompakt şerit — solda 2 harfli alan adı rozeti (`domain-badge`), ortada serif `h3` başlık + mono alan adı/tür, sağda dış bağlantı ikonu. Yarım kalmış veya boş gri kutu asla gösterilmez.
-*   **Etkileşim çubuğu (`PostActions.svelte`):** Sol tarafta yalın sayısal beğeni düğmesi (`aria-label="{count} beğeni — {title}"` korunur, görünür metin sade `{count}`), yorum sayacı linki, tooltip'li kopyala ve dış sekmede aç ikonları; sağ tarafta "İlk paylaşan" / çoklu paylaşım bağlamı ve varsa `AvatarStack`.
+*   The three queries run in parallel with the feed page query through `Promise.all`, only in `src/routes/(app)/+page.server.ts`.
+*   **No cache:** For a closed team of 10–15 people the three queries take `< 2 ms` in total, so there is no in-memory TTL cache or invalidation mechanism. Every request returns current data, and the risk of stale data from a missed invalidation point disappears.
+*   When a list comes back empty (for example, no comments in the last 7 days), the card shows a clean empty state ("No discussions in the last 7 days").
 
 --------------------------------------------------------------------------------
 
-### 7. Bileşen Envanteri ve Yeni Modern Bileşenler
+### 6. Card Anatomy and Content-Aware Link Attachments
 
-#### 7.1 Temel ve Mevcut Bileşen Durum Matrisi
+The `PostCard` root element (`<article class="share-card" id="share-{id}" tabindex="-1">`) and the accessibility hooks of [izgah-ui-v2.md](./izgah-ui-v2.md) §12 are kept. Posts are calm cards on `surface-1` with `14px` corners and a `1px` border.
 
-| Bileşen / Sınıf | Dosya | Durumlar |
+*   **Link attachment variants (`LinkAttachment.svelte`):**
+    1.  **Media card with a cover image (only when `thumbnailAssetKey` exists and the image has loaded):**
+        *   `video`: A full-width rounded `1200/630` cover on top with a play icon badge in the bottom right; below it the mono domain/type, the serif `h3` title and a two-line description.
+        *   `article` / `web` (with an image): When the container is `≥ 480px`, the serif `h3` title, mono meta and a two-line description on the left and a `186px` `1200/630` cover on the right (full width on top in narrow containers).
+    2.  **Repository card without an image (`contentType === 'repo'` and no image):** A mono `owner/repo` title with a git icon, a two-line description below it, and a coloured language dot plus a mono star count (`★ 19.8k`) on the right or below.
+    3.  **Social / quote card without an image (`contentType === 'social'` and no image):** An author/source line on top and a plain text summary; no empty cover column is reserved.
+    4.  **Compact web / article card without an image (other links without images or with failed previews):** A single-line compact strip: a two-letter domain badge (`domain-badge`) on the left, the serif `h3` title with the mono domain/type in the middle and an external-link icon on the right. A half-finished or empty grey box is never shown.
+*   **Action bar (`PostActions.svelte`):** On the left a plain numeric like button (`aria-label="{count} likes — {title}"` is kept; the visible text is just `{count}`), a comment counter link, and copy and open-in-new-tab icons with tooltips; on the right the "First shared by" or multiple-share context and an `AvatarStack` when there is one.
+
+--------------------------------------------------------------------------------
+
+### 7. Component Inventory and New Modern Components
+
+#### 7.1 State Matrix of Base and Existing Components
+
+| Component / class | File | States |
 | :--- | :--- | :--- |
 | `.btn` (`primary`, `subtle`, `ghost`, `outline`, `danger`, `danger-soft`, `icon`) | `src/lib/styles/components.css` | `default`, `hover`, `active` (`scale: 0.98`), `focus-visible`, `disabled`/`aria-disabled`, `loading` (`aria-busy`), `forced-colors` |
 | `.field`, `.input`, `.textarea`, `.select` | `src/lib/styles/components.css` | `default`, `hover`, `focus-visible`, `invalid` (`:user-invalid`), `disabled`, `readonly` |
-| `.tag`, `.badge`, `.status-pill`, `.kbd` | `src/lib/styles/components.css` | `default`, `hover` (linkse), `accent`, `active`/`pending`/`passive`, `forced-colors` |
-| `Icon` (~32 Lucide çizgi yolu, `1.5px`, paketsiz ISC) | `src/lib/components/ui/Icon.svelte`, `icons.ts` | `default`, `filled` (aktif kalp), `size` (`14/16/18/20`) |
-| `Avatar` | `src/lib/components/ui/Avatar.svelte` | `default` (yazar adına göre deterministik 4 yumuşak nötr ton), `self` (vurgu yumuşak ton), `size` (`22/26/30/34`), `aria-hidden` |
-| `Dialog`, `PopoverPanel` | `src/lib/components/ui/` | `closed`, `open` (`@starting-style`), `focus-trap`, `dirty-guard`, WebKit popover konumu korunur |
-| `SiteHeader`, `BottomTabBar`, `TopContextBar` | `src/lib/components/shell/` | `default`, `hover`, `aria-current="page"`, `icon-rail` (`768–1023px`), `mobile` (`< 768px`), klavye açıkken alt çubuk gizli |
-| `FeedView`, `PostCard`, `LinkAttachment`, `PostActions`, `FeedContextRail` | `src/lib/components/feed/` | `default`, `unseen`, `hover`, `focus-visible` (`j`/`k`), `loading` (skeleton / daha fazla yükle), `empty` (süzgeçli / boş arşiv), `error` |
+| `.tag`, `.badge`, `.status-pill`, `.kbd` | `src/lib/styles/components.css` | `default`, `hover` (when a link), `accent`, `active`/`pending`/`passive`, `forced-colors` |
+| `Icon` (~32 Lucide line paths, `1.5px`, copied without a package, ISC) | `src/lib/components/ui/Icon.svelte`, `icons.ts` | `default`, `filled` (active heart), `size` (`14/16/18/20`) |
+| `Avatar` | `src/lib/components/ui/Avatar.svelte` | `default` (four soft neutral tones chosen deterministically from the author name), `self` (soft accent tone), `size` (`22/26/30/34`), `aria-hidden` |
+| `Dialog`, `PopoverPanel` | `src/lib/components/ui/` | `closed`, `open` (`@starting-style`), `focus-trap`, `dirty-guard`; the WebKit popover position fix is kept |
+| `SiteHeader`, `BottomTabBar`, `TopContextBar` | `src/lib/components/shell/` | `default`, `hover`, `aria-current="page"`, `icon-rail` (`768–1023px`), `mobile` (`< 768px`); the bottom bar hides while the keyboard is open |
+| `FeedView`, `PostCard`, `LinkAttachment`, `PostActions`, `FeedContextRail` | `src/lib/components/feed/` | `default`, `unseen`, `hover`, `focus-visible` (`j`/`k`), `loading` (skeleton / load more), `empty` (filtered / empty archive), `error` |
 | `ShareComposerDialog` (`feed` & `dialog`) | `src/lib/components/feed/ShareComposerDialog.svelte` | `collapsed`, `expanded`, `checking-duplicate`, `duplicate-found`, `submitting`, `field-error`, `no-js` |
 | `NotificationBell` | `src/lib/components/notifications/NotificationBell.svelte` | `idle`, `unread-badge`, `open`, `loading`, `empty`, `error` |
 
-#### 7.2 Yeni Modern Bileşenler — Gerekçe, Durumlar ve JS'siz Davranış
+#### 7.2 New Modern Components — Reasons, States and Behaviour Without JavaScript
 
-| Bileşen | Dosya | Neden Gerekli? | Durumlar | JS'siz Davranışı |
+| Component | File | Why it is needed | States | Without JavaScript |
 | :--- | :--- | :--- | :--- | :--- |
-| **`⌘K` Komut Paleti** (`CommandPalette`) | `src/lib/components/shell/CommandPalette.svelte` + `src/routes/api/internal/search/quick/+server.ts` | "Arşivde saniyede bul" vaadini tek kısayola (`⌘K` / `Ctrl+K`) indirger; kapsam sekmeleri (`Tümü`, `Bağlantılar`, `Bölümler`, `Eylemler`), canlı eşleşmeler ve klavye gezinmesi (`↑↓ ↵ Esc`) sunar. | `closed`, `open`, `idle` (bölümler + eylemler), `searching` (skeleton), `results` (`<mark>` vurgulu), `empty` ("Aramayı temizle"), `error` | Sol rayda `<search aria-label="Site içi arama">` formu (`GET /search`) mevcuttur; `⌘K` tetikleyicisi hidrasyon öncesi `/search` bağlantısı olarak çalışır. |
-| **Yandan Önizleme** (`SidePeekDialog`) | `src/lib/components/feed/SidePeekDialog.svelte` | Akışta kaydırma konumunu kaybetmeden bir kaynağın önizlemesini, paylaşım geçmişini ve yorumlarını sağdan açılan çekmecede (`480px`) incelemeyi sağlar. | `closed`, `loading` (skeleton), `ready` (önizleme + geçmiş + yorumlar + "Tam sayfada aç ↗"), `error` (doğrudan bağlantı yedeği) | Karttaki "Önizle" öğesi gerçek bir `<a href="/resources/{id}">` bağlantısıdır; JS kapalıyken doğrudan kaynak detay sayfasını açar. |
-| **Toast** (`Toaster`, yenilenmiş) | `src/lib/components/ui/Toaster.svelte` | Kopyalama, paylaşım, beğeni hatası ve ayar kaydı için düzeni kaydırmayan, tonlu (`neutral`, `success`, `error`) ve isteğe bağlı eylemli ("Göster") canlı bölge bildirimi. | `hidden`, `entering`, `visible`, `dismissed`; tek `role="status"` + hata için `role="alert"` | Sunucu eylemleri sonrası sayfa içi `<p role="status">` / `<div role="alert">` afişleri gösterilir; `Toaster` boş canlı bölge olarak zararsız kalır. |
-| **Tooltip** (`Tooltip`) | `src/lib/components/ui/Tooltip.svelte` | İkon düğmelerinin (kopyala, dış sekmede aç, önizle) ve kısayol ipuçlarının ne yaptığını görsel olarak açıklar. Masaüstünde (`hover: hover`) görünür, `pointer: coarse` altında kapalıdır. | `hidden`, `visible` (`:hover` / `:focus-visible`, `Esc` ile kapanır; destekleyen tarayıcılarda `popover="hint"` aşamalı) | Salt CSS `:hover` / `:focus-visible` ile çalışır; ekran okuyucular tetikleyicideki `aria-label` metnini her zaman okur. |
-| **Skeleton** (`Skeleton` / `.skeleton`) | `src/lib/components/ui/Skeleton.svelte` | Önizleme işlenirken (`unfurlStatus: queued/running`), Side Peek ve `⌘K` yüklenirken düzen kaymasını (CLS) önler. | `pulsing` (yumuşak opaklık `0.55 ↔ 0.85`, gradyan yok), `static` (`prefers-reduced-motion` ve yüksek kontrastta) | SSR sırasında yalnız `unfurlStatus` bekleyen kartlarda durağan yer tutucu blok olarak çizilir. |
-| **Avatar Yığını** (`AvatarStack`) | `src/lib/components/ui/AvatarStack.svelte` | Aynı kaynağı paylaşan veya tartışan ekip üyelerini kompakt örtüşen monogramlarla gösterir (`+N` taşma rozeti). | `default`, `overflow` (`+N`) | Saf HTML/CSS; JS gerektirmez, yanında ekran okuyucu/metin özeti bulunur. |
-| **Segmented Control** (`SegmentedControl` / `.segmented`) | `src/lib/components/ui/SegmentedControl.svelte` | İçerik türü süzgeci, renk modu seçicisi (`Sistem / Açık / Koyu`) ve arama kapsamı için tek satırlı dokunsal seçici. | `default`, `hover`, `active`/`checked`, `focus-visible`, `disabled` | Gezinme varyantı `<a href>` bağlantıları, form varyantı yerel `<input type="radio">` + `<label>` grubudur; JS'siz tam çalışır. |
+| **`⌘K` command palette** (`CommandPalette`) | `src/lib/components/shell/CommandPalette.svelte` + `src/routes/api/internal/search/quick/+server.ts` | Reduces the promise "find it in the archive in seconds" to one shortcut (`⌘K` / `Ctrl+K`); offers scope tabs (`All`, `Links`, `Sections`, `Actions`), live matches and keyboard navigation (`↑↓ ↵ Esc`). | `closed`, `open`, `idle` (sections + actions), `searching` (skeleton), `results` (highlighted with `<mark>`), `empty` ("Clear search"), `error` | The left rail has a `<search aria-label="Site search">` form (`GET /search`); before hydration the `⌘K` trigger works as a link to `/search`. |
+| **Side peek** (`SidePeekDialog`) | `src/lib/components/feed/SidePeekDialog.svelte` | Lets a member inspect a resource's preview, share history and comments in a drawer from the right (`480px`) without losing the scroll position in the feed. | `closed`, `loading` (skeleton), `ready` (preview + history + comments + "Open full page ↗"), `error` (direct link fallback) | The "Preview" item on the card is a real `<a href="/resources/{id}">` link; without JavaScript it opens the resource page directly. |
+| **Toast** (`Toaster`, renewed) | `src/lib/components/ui/Toaster.svelte` | A live-region notice that does not shift the layout, with tones (`neutral`, `success`, `error`) and an optional action ("Show"), for copying, sharing, like errors and saved settings. | `hidden`, `entering`, `visible`, `dismissed`; one `role="status"` plus `role="alert"` for errors | After server actions, in-page `<p role="status">` / `<div role="alert">` banners appear; `Toaster` stays a harmless empty live region. |
+| **Tooltip** (`Tooltip`) | `src/lib/components/ui/Tooltip.svelte` | Explains visually what icon buttons (copy, open in a new tab, preview) and shortcut hints do. Visible on desktop (`hover: hover`), off under `pointer: coarse`. | `hidden`, `visible` (`:hover` / `:focus-visible`, closes with `Esc`; progressive `popover="hint"` in supporting browsers) | Works with plain CSS `:hover` / `:focus-visible`; screen readers always read the trigger's `aria-label`. |
+| **Skeleton** (`Skeleton` / `.skeleton`) | `src/lib/components/ui/Skeleton.svelte` | Prevents layout shift (CLS) while a preview is processed (`unfurlStatus: queued/running`) and while the side peek and `⌘K` load. | `pulsing` (soft opacity `0.55 ↔ 0.85`, no gradient), `static` (under `prefers-reduced-motion` and in high contrast) | During SSR it is drawn as a still placeholder only on cards whose `unfurlStatus` is pending. |
+| **Avatar stack** (`AvatarStack`) | `src/lib/components/ui/AvatarStack.svelte` | Shows the members who shared or discussed the same resource as compact overlapping monograms (with a `+N` overflow badge). | `default`, `overflow` (`+N`) | Plain HTML/CSS; needs no JavaScript and comes with a text summary for screen readers. |
+| **Segmented control** (`SegmentedControl` / `.segmented`) | `src/lib/components/ui/SegmentedControl.svelte` | A single-row tactile picker for the content type filter, the colour mode (`System / Light / Dark`) and the search scope. | `default`, `hover`, `active`/`checked`, `focus-visible`, `disabled` | The navigation variant is a group of `<a href>` links, the form variant a group of native `<input type="radio">` + `<label>`; both work fully without JavaScript. |
 
-#### 7.3 `GET /api/internal/search/quick` ve `searchResources` Log Kuralı
+#### 7.3 `GET /api/internal/search/quick` and the `searchResources` Logging Rule
 
-*   [`src/lib/server/search/service.ts`](../../src/lib/server/search/service.ts) içindeki `searchResources` işlevine varsayılan değeri `true` olan **`recordLog?: boolean`** seçeneği eklenir (`recordLog: false` verildiğinde `search_logs` tablosuna satır yazılmaz).
-*   `GET /api/internal/search/quick` ucu çerez oturumu + `Origin`/`Sec-Fetch-Site: same-origin` koruması (`GET /api/internal/feed/updates` ile aynı) altında `searchResources({ ..., limit: 6, recordLog: false })` çağırır ve `Cache-Control: no-store` ile döner.
-*   Böylece `⌘K` içinde her tuş vuruşu (200ms debounce) `search_logs` metriklerini kirletmez; kullanıcı `⌘K` içinde Enter ile tam arama sayfasına (`/search?q=...`) gittiğinde mevcut `recordLog: true` davranışı aynen çalışır.
+*   The `searchResources` function in [`src/lib/server/search/service.ts`](../../src/lib/server/search/service.ts) gets a **`recordLog?: boolean`** option that defaults to `true` (with `recordLog: false` no row is written to `search_logs`).
+*   The `GET /api/internal/search/quick` endpoint calls `searchResources({ ..., limit: 6, recordLog: false })` behind the cookie session and the `Origin`/`Sec-Fetch-Site: same-origin` guard (the same as `GET /api/internal/feed/updates`) and responds with `Cache-Control: no-store`.
+*   So keystrokes in `⌘K` (debounced by 200 ms) do not pollute the `search_logs` metrics; when the member presses Enter in `⌘K` to go to the full search page (`/search?q=...`), the existing `recordLog: true` behaviour applies unchanged.
 
 --------------------------------------------------------------------------------
 
-### 8. Hareket Kuralları
+### 8. Motion Rules
 
-| Token / Etkileşim | Süre | Easing | Animasyon | `prefers-reduced-motion: reduce` |
+| Token / interaction | Duration | Easing | Animation | `prefers-reduced-motion: reduce` |
 | :--- | :--- | :--- | :--- | :--- |
-| `--dur-fast` (hover, renk, kenarlık) | `120ms` | `cubic-bezier(0.2, 0, 0, 1)` | `background-color`, `border-color`, `color`, `opacity` | `0ms` |
-| `--dur-base` (dialog, `⌘K`, popover) | `180ms` | `cubic-bezier(0.2, 0, 0, 1)` | `@starting-style` opaklık + `scale(0.98)` | `0ms`, `scale` yok |
-| `--dur-panel` (`SidePeekDialog` çekmecesi) | `220ms` | `cubic-bezier(0.2, 0, 0, 1)` | Sağdan `translateX(16px → 0)` + opaklık | `0ms`, kayma yok |
-| Düğme basma (`:active`) | `90ms` | `cubic-bezier(0.2, 0, 0, 1)` | `scale: 0.98` | Kapalı |
-| Beğeni kalbi (`aria-pressed="true"`) | `280ms` | `ease-out` | Hafif `1 → 1.2 → 1` nabız | Kapalı |
-| Skeleton yükleyici | `1400ms` | `ease-in-out` | Yalnız `opacity: 0.55 ↔ 0.85` (gradyan yok) | Sabit durağan blok |
-| Kart ↔ Detay View Transition | `180ms` | `cubic-bezier(0.2, 0, 0, 1)` | Aşamalı `startViewTransition` | Tamamen devre dışı |
+| `--dur-fast` (hover, colour, border) | `120ms` | `cubic-bezier(0.2, 0, 0, 1)` | `background-color`, `border-color`, `color`, `opacity` | `0ms` |
+| `--dur-base` (dialog, `⌘K`, popover) | `180ms` | `cubic-bezier(0.2, 0, 0, 1)` | `@starting-style` opacity + `scale(0.98)` | `0ms`, no `scale` |
+| `--dur-panel` (`SidePeekDialog` drawer) | `220ms` | `cubic-bezier(0.2, 0, 0, 1)` | `translateX(16px → 0)` from the right + opacity | `0ms`, no slide |
+| Button press (`:active`) | `90ms` | `cubic-bezier(0.2, 0, 0, 1)` | `scale: 0.98` | Off |
+| Like heart (`aria-pressed="true"`) | `280ms` | `ease-out` | A light `1 → 1.2 → 1` pulse | Off |
+| Skeleton loader | `1400ms` | `ease-in-out` | Only `opacity: 0.55 ↔ 0.85` (no gradient) | A still block |
+| Card ↔ detail View Transition | `180ms` | `cubic-bezier(0.2, 0, 0, 1)` | Progressive `startViewTransition` | Disabled entirely |
 
-*   Hover'da kart yükselmesi (`translateY`) veya zıplama **yoktur** (yoğun akışta görsel titreşimi önler).
-
---------------------------------------------------------------------------------
-
-### 9. Ekran Bazlı Yeniden Tasarım Özeti
-
-*   **Ana Akış (`/`):** 3 sütun (tam yükseklik sol ray + üst `48px` bağlam çubuğu + akış sütunu + sağ bağlam rayı), `SegmentedControl` içerik türü süzgeci, avatarlı satır içi paylaşım kartı, serif italik gün ayırıcıları, içerik türüne duyarlı kartlar, `SidePeekDialog` "Önizle" bağlantısı.
-*   **Bölüm Akışı (`/sections/[slug]`):** Sol ray + üst `48px` bağlam çubuğu + tek okuma sütunu (sağ bağlam rayı yoktur), aynı içerik türü süzgeci, satır içi paylaşım ve kart sistemi.
-*   **Kaynak Detayı (`/resources/[id]`):** Geniş kapak + serif `h1` başlık + sakin aksiyon şeridi (teal birincil "Kaynağa git", beğeni, kopyala, `AvatarStack`), altında temiz yorum dizisi ve sağda dikey çizgili paylaşım geçmişi zaman çizelgesi + bölüm çipleri.
-*   **Ayarlar (`/settings`, `/settings/api-keys`):** Saç çizgili satır düzeni (etiket+açıklama solda, kontrol sağda); `Sistem / Açık / Koyu` segmented control; gerçekçi mini arayüz önizleme kartları (2 açık + 3 koyu palet); 4 vurgu renk hapı (`Orman Teal`, `Kobalt`, `Kiremit`, `Erik`); tek tuşlu kısayollar anahtarı.
-*   **Yönetim (`/admin/*`):** Alt çizgili sade yönetim sekmeleri (neon blok yok); üstte 3'lü tabular KPI şeridi (`Üyeler` ve `Ölçümler`de); sadeleştirilmiş tablo satırları (durum noktalı haplar, kompakt rol seçici, `btn-ghost` + `btn-danger-soft` satır eylemleri); tüm mevcut JS'siz onay yedekleri korunur.
-*   **Giriş, Davet, Parola Sıfırlama (`/login`, `/auth/*`) ve Hata Sayfaları:** Sıcak koyu grafit sol kolofon paneli (serif başlık + örnek ekip kartı önizlemesi) ve alabaster/grafit form kartı; Türkçe 404 ve hata sayfaları aynı İzgah Stüdyo dilinde.
-*   **Tarayıcı Eklentisi (`extensions/src/**`):**
-    *   Popup (`420px` genişlik): Üstte serif `İzgah` kelime işareti + ayarlar ikonu (**"Kaydet / Son Kayıtlar" sekmesi yoktur**, mevcut popup/options davranışı ve `/api/v1/*` akışı aynen korunur); yakalanan sayfa için sıcak yüzeyli önizleme kutusu (alan adı + tür + başlık); not alanı + karakter sayacı; yuvarlatılmış bölüm seçim çipleri; içerik türü seçicisi; **yalnız `user.role === 'admin'` iken görünen** `"Ana akışta yayınlama (yalnızca seçili bölümlere sessiz ekle)"` satırı; tam genişlikte teal birincil "Paylaş" düğmesi.
-    *   `extensions/src/styles/tokens.css`: İzgah Stüdyo açık/koyu (`prefers-color-scheme`) token'larına ve `Geist Variable` + `Newsreader Variable` (`latin` + `latin-ext`) yazı tiplerine hizalanır; `OFL.txt` güncellenir.
+*   There is **no** card lift (`translateY`) or bounce on hover (it avoids visual jitter in a dense feed).
 
 --------------------------------------------------------------------------------
 
-### 10. Korunan Sabit E2E Kancaları ve Değişiklik Politikası
+### 9. Screen-by-Screen Redesign Summary
 
-[izgah-ui-v2.md](./izgah-ui-v2.md) §12'deki tüm sabit CSS/DOM kancaları (`article.share-card`, `#share-composer-dialog`, `#main-content h1`, `#notification-bell-popover`, `.notification-badge`, `.inline-card-panel`, `.conflict-box`, `.comment-list`, `#delete-comment-dialog`, `.search-summary`, `#new-api-key-value`) ve erişilebilir adlar (`"Link Paylaş"`, `"Ana gezinme"`, `"Paylaşım işlemleri"`, `"Daha fazla yükle"`, `"İçerik türü süzgeci"`, `"Site içi arama"`, `"İzgah içinde ara"`, `"Bildirimler"`, `"Yönetim"`, `"Ana Akış"`) **korunur**.
-
-*   **Bilinçli güncellenen testler:**
-    *   `tests/unit/tokens-contrast.test.ts`: Yeni 5 palet (`default`/`contrast` açık, `default`/`dim`/`contrast` koyu) × 4 çift kutuplu vurgu (`teal`/`cobalt`/`terracotta`/`plum`) yapısına ve tüm vurguların hem açıkta hem koyuda `≥ 4.5:1` kontrast sağlaması kuralına uyarlanır.
-    *   `tests/integration/m10-ui-v2.test.ts` ve `tests/e2e/m12-ui-v2-shell.spec.ts` / `m15-a11y-tour.spec.ts`: Eski vurgu adları (`lime`/`cyan`/`pink`/`blue` → `teal`/`cobalt`/`terracotta`/`plum`) ve font ön yükleme deseni (`schibsted-grotesk` → `geist` + `newsreader`) aynı commit içinde güncellenir.
+*   **Feed (`/`):** Three columns (full-height left rail + `48px` top context bar + feed column + right context rail), a `SegmentedControl` content type filter, an inline share card with the member's avatar, serif italic day dividers, content-aware cards and a `SidePeekDialog` "Preview" link.
+*   **Section feed (`/sections/[slug]`):** Left rail + `48px` top context bar + a single reading column (no right context rail), with the same content type filter, inline sharing and card system.
+*   **Resource details (`/resources/[id]`):** A wide cover, a serif `h1` title and a calm action strip (teal primary "Open link", like, copy, `AvatarStack`), a clean comment thread below and, on the right, a share history timeline with a vertical rule and section chips.
+*   **Settings (`/settings`, `/settings/api-keys`):** Hairline rows (label and description on the left, control on the right); a `System / Light / Dark` segmented control; realistic mini interface preview cards (2 light + 3 dark palettes); four accent colour pills (`Forest Teal`, `Cobalt`, `Terracotta`, `Plum`); the single-key shortcuts switch.
+*   **Admin (`/admin/*`):** Plain underlined admin tabs (no neon blocks); a strip of three tabular KPIs on top (on `Members` and `Metrics`); simplified table rows (pills with status dots, a compact role picker, `btn-ghost` + `btn-danger-soft` row actions); every existing no-JS confirmation fallback is kept.
+*   **Sign-in, invite, password reset (`/login`, `/auth/*`) and error pages:** A warm dark graphite colophon panel on the left (serif heading and a sample team card preview) and an alabaster or graphite form card; the Turkish 404 and error pages in the same Izgah Studio language.
+*   **Browser extension (`extensions/src/**`):**
+    *   Popup (`420px` wide): A serif `Izgah` wordmark and a settings icon on top (**no "Save / Recent" tab**; the existing popup/options behaviour and `/api/v1/*` flow stay as they are); a warm preview box for the captured page (domain + type + title); the note field with a character counter; rounded section chips; a content type picker; the row "Don't post to the feed (add silently to the selected sections only)", **visible only when `user.role === 'admin'`**; a full-width teal primary "Share" button.
+    *   `extensions/src/styles/tokens.css`: Aligned with the Izgah Studio light and dark (`prefers-color-scheme`) tokens and the `Geist Variable` + `Newsreader Variable` (`latin` + `latin-ext`) fonts; `OFL.txt` is updated.
 
 --------------------------------------------------------------------------------
 
-### 11. Uygulama Planı (Dosya Sahipliği)
+### 10. Preserved Fixed E2E Hooks and Change Policy
 
-Her uygulama alanı ön yüz bileşeni, form, animasyon veya erişilebilirlik çalışmasından önce `npx modern-web-guidance@latest search "<ihtiyaç>"` çalıştırır, uygun rehberi `retrieve` eder ve uyar.
+All fixed CSS/DOM hooks of [izgah-ui-v2.md](./izgah-ui-v2.md) §12 (`article.share-card`, `#share-composer-dialog`, `#main-content h1`, `#notification-bell-popover`, `.notification-badge`, `.inline-card-panel`, `.conflict-box`, `.comment-list`, `#delete-comment-dialog`, `.search-summary`, `#new-api-key-value`) and accessible names (`"Link Paylaş"`, `"Ana gezinme"`, `"Paylaşım işlemleri"`, `"Daha fazla yükle"`, `"İçerik türü süzgeci"`, `"Site içi arama"`, `"İzgah içinde ara"`, `"Bildirimler"`, `"Yönetim"`, `"Ana Akış"`) **are kept**. These names are the Turkish-locale contract; see the i18n note at the end of this document.
 
-| Alan | Sorumluluk | Dosya Sahipliği | Sıra / Bağımlılık |
+*   **Tests updated on purpose:**
+    *   `tests/unit/tokens-contrast.test.ts`: Adapted to the new structure of 5 palettes (`default`/`contrast` light, `default`/`dim`/`contrast` dark) × 4 bipolar accents (`teal`/`cobalt`/`terracotta`/`plum`) and the rule that every accent reaches `≥ 4.5:1` in both light and dark.
+    *   `tests/integration/m10-ui-v2.test.ts` and `tests/e2e/m12-ui-v2-shell.spec.ts` / `m15-a11y-tour.spec.ts`: The old accent names (`lime`/`cyan`/`pink`/`blue` → `teal`/`cobalt`/`terracotta`/`plum`) and the font preload pattern (`schibsted-grotesk` → `geist` + `newsreader`) are updated in the same commit.
+
+--------------------------------------------------------------------------------
+
+### 11. Implementation Plan (File Ownership)
+
+Before any front-end component, form, animation or accessibility work, each area runs `npx modern-web-guidance@latest search "<need>"`, retrieves the matching guide and follows it.
+
+| Area | Responsibility | File ownership | Order / dependency |
 | :--- | :--- | :--- | :--- |
-| **A1** | Tasarım sistemi, fontlar & temel UI | `package.json`, `pnpm-lock.yaml`, `src/routes/+layout.svelte`, `src/lib/types/appearance.ts`, `src/lib/server/http/theme.ts`, `src/lib/styles/**`, `src/lib/components/ui/**` (`Tooltip`, `Skeleton`, `AvatarStack`, `SegmentedControl`, `Avatar`, `Icon`, `Toaster`, `Dialog`, `PopoverPanel`) | **Önce çalışır**, commit'ler |
-| **A2** | Akış, sağ bağlam rayı & Side Peek | `src/lib/server/feed/rail-summary.ts`, `src/routes/(app)/+page.server.ts`, `src/lib/components/feed/**` (`FeedView`, `PostCard`, `LinkAttachment`, `PostActions`, `ShareComposerDialog`, `FeedFilterBar`, `NewPostsPill`, `FeedContextRail`, `SidePeekDialog`) | A1 sonrası |
-| **A3** | Kabuk, üst çubuk & `⌘K` | `src/routes/(app)/+layout.svelte`, `src/lib/components/shell/**`, `src/lib/components/notifications/**`, `src/lib/server/search/service.ts` (`recordLog`), `src/routes/api/internal/search/quick/+server.ts`, `CommandPalette.svelte` | A1 sonrası |
-| **A4** | İçerik ekranları | `src/routes/(app)/{resources,search,sections,settings}/**`, `src/lib/components/resource/**` | A1 sonrası |
-| **A5** | Yönetim | `src/routes/(app)/admin/**` | A1 sonrası |
-| **A6** | Giriş, hata & eklenti | `src/routes/{login,auth}/**`, `src/lib/components/auth/**`, `src/routes/+error.svelte`, `src/routes/(app)/+error.svelte`, `src/lib/components/ErrorContent.svelte`, `extensions/**` | A1 sonrası |
-| **A7** | Testler & doğrulama | `tests/unit/tokens-contrast.test.ts`, `rail-summary` / `quick-search` (`search_logs` yazmadığı dahil) entegrasyon ve birim testleri, E2E uyarlamaları + `m15` `@axe-core/playwright` (`color-contrast`) | A1–A6 sonrası |
+| **A1** | Design system, fonts and base UI | `package.json`, `pnpm-lock.yaml`, `src/routes/+layout.svelte`, `src/lib/types/appearance.ts`, `src/lib/server/http/theme.ts`, `src/lib/styles/**`, `src/lib/components/ui/**` (`Tooltip`, `Skeleton`, `AvatarStack`, `SegmentedControl`, `Avatar`, `Icon`, `Toaster`, `Dialog`, `PopoverPanel`) | **Runs first** and commits |
+| **A2** | Feed, right context rail and side peek | `src/lib/server/feed/rail-summary.ts`, `src/routes/(app)/+page.server.ts`, `src/lib/components/feed/**` (`FeedView`, `PostCard`, `LinkAttachment`, `PostActions`, `ShareComposerDialog`, `FeedFilterBar`, `NewPostsPill`, `FeedContextRail`, `SidePeekDialog`) | After A1 |
+| **A3** | Shell, top bar and `⌘K` | `src/routes/(app)/+layout.svelte`, `src/lib/components/shell/**`, `src/lib/components/notifications/**`, `src/lib/server/search/service.ts` (`recordLog`), `src/routes/api/internal/search/quick/+server.ts`, `CommandPalette.svelte` | After A1 |
+| **A4** | Content screens | `src/routes/(app)/{resources,search,sections,settings}/**`, `src/lib/components/resource/**` | After A1 |
+| **A5** | Admin | `src/routes/(app)/admin/**` | After A1 |
+| **A6** | Sign-in, errors and extension | `src/routes/{login,auth}/**`, `src/lib/components/auth/**`, `src/routes/+error.svelte`, `src/routes/(app)/+error.svelte`, `src/lib/components/ErrorContent.svelte`, `extensions/**` | After A1 |
+| **A7** | Tests and verification | `tests/unit/tokens-contrast.test.ts`, integration and unit tests for `rail-summary` and `quick-search` (including that it writes nothing to `search_logs`), E2E adaptations + `m15` with `@axe-core/playwright` (`color-contrast`) | After A1–A6 |
 
 --------------------------------------------------------------------------------
 
 ## Alternatives Considered
 
-### Alternatif A: Saf Karanlık Araç Çizgisi (Yalnız Sans + Obsidyen)
-Yüksek teknik hassasiyet sunar; ancak yalnızca sans-serif başlıklar ve soğuk obsidyen/platin tonlar uzun Türkçe ekip notları ve makaleler için fazla steril kalır. Kabuk, ayarlar, yönetim ve `⌘K` katmanı alınarak editoryal okuma ve sosyal akış öğeleriyle dengelendi.
+### Alternative A: A Pure Dark Tool Line (Sans Only + Obsidian)
+It offers high technical precision, but sans-serif-only headings and cold obsidian and platinum tones stay too sterile for long Turkish team notes and articles. Its shell, settings, admin and `⌘K` layer were taken and balanced with editorial reading and social feed elements.
 
-### Alternatif B: Saf Editoryal Kütüphane Çizgisi (Tek Sütun)
-Okuma sakinliği yüksektir; ancak tek sütunlu yapı yoğun yönetim, ayarlar ve hızlı ekip akışı akışkanlığını yavaşlatır. Başlık tipografisi ve sıcak nötr yüzey ilkeleri alınarak 3 sütunlu akışla birleştirildi.
+### Alternative B: A Pure Editorial Library Line (Single Column)
+Reading is very calm, but a single-column structure slows down dense admin and settings work and the flow of a fast team feed. Its heading typography and warm neutral surfaces were taken and combined with the three-column feed.
 
-### Alternatif C: Sağ Ray İçin 30 Saniyelik Bellek İçi TTL Önbelleği
-Tekrarlayan ana sayfa isteklerinde 3 kısa sorguyu atlardı; ancak paylaşım, yorum, silme ve üye pasifleştirme gibi tüm yazma noktalarında geçersiz kılma (invalidation) unutulması hâlinde bayat veri riski doğurur. 10–15 kişilik ekipte sorguların toplamı `< 2 ms` olduğundan önbellek reddedildi.
+### Alternative C: A 30-Second In-Memory TTL Cache for the Right Rail
+It would skip three short queries on repeated feed requests, but a forgotten invalidation at any write point (sharing, commenting, deleting, deactivating a member) would risk stale data. For a team of 10–15 people the queries total `< 2 ms`, so the cache was rejected.
 
-### Alternatif D: Eklentide "Kaydet / Son Kayıtlar" Sekmesi Eklemek
-Mevcut `/api/v1/*` sözleşmesine yeni okuma ucu eklemeyi ve eklenti davranışını değiştirmeyi gerektirir. Kapsam dışına alındı.
+### Alternative D: A "Save / Recent" Tab in the Extension
+It would need a new read endpoint in the existing `/api/v1/*` contract and a change in extension behaviour. Left out of scope.
 
 --------------------------------------------------------------------------------
 
 ## Risks & Mitigations
 
-| Risk | Etki | Önlem / Azaltma |
+| Risk | Impact | Mitigation |
 | :--- | :--- | :--- |
-| Yeni Fontsource paketlerinin (`newsreader`, `geist`) `.woff2` dosyaları CSP `font-src 'self'` ile çakışır veya ön yükleme kaçırılır | FOUT / CSP ihlali | `vite.config.ts` `assetsInlineLimit` `.woff2`'yi satır içine almaz; `theme.ts` ön yükleme deseni birim testiyle ve `pnpm test:docker` CSP duman testiyle doğrulanır. |
-| Eski `izgah_accent=lime` çerezine sahip kullanıcılar v3'e geçer | Geçersiz vurgu özniteliği | `pickAllowed(ACCENT_VALUES, raw, 'teal')` beyaz liste dışındaki eski değerleri sessizce `teal`'e düşürür. |
-| `⌘K` canlı araması `search_logs` ölçümlerini şişirir | Yanlış arama ve sıfır-sonuç oranları | `searchResources` `recordLog: false` seçeneği ile çağrılır; entegrasyon testi `GET /api/internal/search/quick` çağrısının `search_logs`'a satır eklemediğini doğrular. |
-| `SidePeekDialog` veya `⌘K` odak yönetimini veya `j`/`k` kısayollarını bozar | Klavye erişilebilirliği gerilemesi | Her ikisi yerel `<dialog>` (`showModal()`) kullanır; `+layout.svelte` `overlayOpen()` kontrolü açık `dialog:modal` varken tek tuş kısayollarını otomatik durdurur. |
-| `resource_comments` üzerinde yalnız `created_at` indeksi yok | Çok büyüyen arşivde tarama süresi | 10–15 kişilik ekipte `< 0.5 ms`; büyüme eşiğinde geriye dönük uyumlu tek kısmi indeks göçüyle kolayca hızlandırılır. |
-| Eklenti paket boyutunun iki fontla artması | Büyük `.zip`/`.xpi` | Eklenti yalnızca `latin` + `latin-ext` `wght-normal` (`geist`) ve `opsz-normal` (`newsreader`) dosyalarını paketler; `pnpm verify:manifests` ile doğrulanır. |
+| The `.woff2` files of the new Fontsource packages (`newsreader`, `geist`) clash with the CSP `font-src 'self'`, or a preload is missed | FOUT / CSP violation | `vite.config.ts` `assetsInlineLimit` never inlines `.woff2`; the `theme.ts` preload pattern is checked by a unit test and the `pnpm test:docker` CSP smoke test. |
+| Members with an old `izgah_accent=lime` cookie move to v3 | Invalid accent attribute | `pickAllowed(ACCENT_VALUES, raw, 'teal')` silently drops old values outside the allow-list to `teal`. |
+| `⌘K` live search inflates the `search_logs` metrics | Wrong search and zero-result rates | `searchResources` is called with `recordLog: false`; an integration test checks that `GET /api/internal/search/quick` adds no row to `search_logs`. |
+| `SidePeekDialog` or `⌘K` breaks focus management or the `j`/`k` shortcuts | Keyboard accessibility regression | Both use the native `<dialog>` (`showModal()`); the `overlayOpen()` check in `+layout.svelte` pauses single-key shortcuts while a `dialog:modal` is open. |
+| `resource_comments` has no index on `created_at` alone | Scan time in a very large archive | `< 0.5 ms` for a team of 10–15 people; at a growth threshold, one backward-compatible partial index migration speeds it up. |
+| The extension package grows with two fonts | A large `.zip`/`.xpi` | The extension packages only the `latin` + `latin-ext` `wght-normal` (`geist`) and `opsz-normal` (`newsreader`) files; checked by `pnpm verify:manifests`. |
 
 --------------------------------------------------------------------------------
 
 ## Verification Plan
 
-*   **Birim testleri (`pnpm test`):**
-    *   `tests/unit/tokens-contrast.test.ts`: 5 palet × 4 vurgu = 20 kombinasyonun tamamı (`4.5:1` metin ve vurgu metni, `3:1` kontrol/odak, yüksek kontrastta `7:1` AAA ve `line ≥ 4.5:1`, yüksek kontrastta gölge/ışıma yok).
-    *   `theme.ts` birim testleri: yeni `ACCENT_VALUES`, eski `lime` çerezinin `teal`'e düşmesi, yeni font ön yükleme deseni (`geist` + `newsreader`).
-    *   Yeni `CommandPalette` filtreleme/kısayol ve `SidePeek` yardımcı testleri.
-*   **Entegrasyon testleri (`pnpm test` + PostgreSQL):**
-    *   `GET /api/internal/search/quick`: oturum/origin doğrulaması (`401`/`403`), en fazla `6` sonuç, ve **`search_logs` tablosuna satır eklemediğinin** doğrulanması (aynı sorgu `/search` üzerinden `recordLog: true` ile satır eklemeye devam eder).
-    *   `getFeedRailSummary`: `APP_TIME_ZONE` gün sınırı, son 7 gün yorum sıralaması (sessiz/silinmiş hariç), son 7 gün paylaşanlar (pasif üye hariç).
-*   **Statik denetim:** `pnpm lint && pnpm check`.
-*   **Uçtan uca (`pnpm test:e2e`):** Tüm mevcut E2E senaryoları (`m5`–`m15`, Chromium/Firefox/WebKit + mobil) + `⌘K`, Side Peek (JS'li çekmece, JS'siz `/resources/[id]`), yeni tema/vurgu kalıcılığı ve `m15-a11y-tour.spec.ts` içinde `@axe-core/playwright` **yalnız `color-contrast` kuralı** taraması (açık, koyu, loş ve yüksek kontrast paletlerinde).
-*   **Üretim imajı ve CSP (`pnpm test:docker`):** Sıfır `securitypolicyviolation`, tüm rotalarda yeni fontların `'self'` üzerinden sorunsuz yüklenmesi.
-*   **Eklenti (`cd extensions`):** `pnpm lint && pnpm check && pnpm test && pnpm verify:manifests`.
-*   **Görsel kalite kapısı:** `SHOTS_DIR=./.local-data/shots-v3 pnpm exec playwright test -c .local-data/report-kit/playwright.config.ts` ile tüm ekran görüntüleri alınıp Yön D prototipiyle birebir kıyaslanır.
+*   **Unit tests (`pnpm test`):**
+    *   `tests/unit/tokens-contrast.test.ts`: All 20 combinations of 5 palettes × 4 accents (`4.5:1` text and accent text, `3:1` controls and focus, `7:1` AAA and `line ≥ 4.5:1` in high contrast, no shadows or glows in high contrast).
+    *   `theme.ts` unit tests: the new `ACCENT_VALUES`, an old `lime` cookie falling back to `teal`, the new font preload pattern (`geist` + `newsreader`).
+    *   New tests for `CommandPalette` filtering and shortcuts and the side peek helpers.
+*   **Integration tests (`pnpm test` + PostgreSQL):**
+    *   `GET /api/internal/search/quick`: session and origin checks (`401`/`403`), at most `6` results, and **no row added to `search_logs`** (the same query through `/search` with `recordLog: true` still adds one).
+    *   `getFeedRailSummary`: the `APP_TIME_ZONE` day boundary, the ranking of comments in the last 7 days (silent and deleted excluded), the sharers of the last 7 days (inactive members excluded).
+*   **Static checks:** `pnpm lint && pnpm check`.
+*   **End to end (`pnpm test:e2e`):** All existing E2E scenarios (`m5`–`m15`, Chromium/Firefox/WebKit + mobile) plus `⌘K`, the side peek (a drawer with JavaScript, `/resources/[id]` without), persistence of the new themes and accents, and a scan with `@axe-core/playwright` **using only the `color-contrast` rule** in `m15-a11y-tour.spec.ts` (in the light, dark, dim and high-contrast palettes).
+*   **Production image and CSP (`pnpm test:docker`):** Zero `securitypolicyviolation` events; the new fonts load from `'self'` on every route.
+*   **Extension (`cd extensions`):** `pnpm lint && pnpm check && pnpm test && pnpm verify:manifests`.
+*   **Visual quality gate:** Screenshots of every screen are taken with Playwright and compared one to one with the Direction D prototype.
 
 --------------------------------------------------------------------------------
 
-## Uygulama Notları — 2026-11-25 Denetimi
+## Implementation Notes — 2026-11-25 Audit
 
-v3 uygulaması (`f39855e..7525156`) bu dokümana karşı denetlendi. Aşağıdakiler düzeltildi; kalan farklar bilinçli olarak listelenir.
+The v3 implementation (`f39855e..7525156`) was audited against this document. The items below were fixed; the remaining differences are listed on purpose.
 
-**Düzeltilenler**
+**Fixed**
 
-*   **§1 / WCAG 1.4.11:** Sol ray arama kutusu ve `⌘K` tetikleyicisi etkileşimli kontrol olduğu için `--color-line` yerine `--color-line-strong` kenarlık kullanır.
-*   **§2.2:** Sürükle-bırak katmanındaki serif başlık sans (`--text-section`) oldu.
-*   **§2.3:** `12px` altındaki tüm yazı boyutları (`0.6875rem`, `0.71875rem`) en küçük ölçek olan `0.75rem`'e çıkarıldı.
-*   **§4:** Okuma sütunu `1280px` altında `680px`, ayarlar ekranları `--wide-w` (`1000px`).
-*   **§4 üst çubuk:** Konum izi `<nav aria-label="Sayfa konumu">` + `<ol>` yapısına geçti (ayraçlar CSS ile, `aria-current="page"`); var olmayan `/admin/invites` eşlemesi kaldırıldı; yardım düğmesi `title` yerine `Tooltip` kullanır; `⌘K` ipucu platforma göre `Ctrl+K` gösterir.
-*   **§7.1 durum matrisi:** Akışta "Daha fazla yükle" için `error` durumu (satır içi hata + "Tekrar dene"); tema/palet kaydı başarısız olursa hata toast'ı.
-*   **§7.2 Toast:** Fareyle üzerine gelme ve klavye odağı ayrı tutulur; odaktaki toast kendiliğinden kapanmaz (WCAG 2.2.1).
-*   **§9 eklenti:** Popup başlığı serif `İzgah` kelime işareti + ikonlu ayarlar düğmesi.
-*   **Tekrarlar:** `.banner`, `.kpi-strip`, `.page-header h1` / `.page-lead` sayfa sayfa kopyalanmak yerine `components.css`'te tek tanım; `CONTENT_TYPE_LABELS` tek kaynak; kullanılmayan `.btn-lg`, `.btn-quiet`, `.btn-danger-outline`, `.badge-count` ve `signal-pop` kaldırıldı; `select` oku temaya uyar.
+*   **§1 / WCAG 1.4.11:** The left rail search box and the `⌘K` trigger are interactive controls, so they use a `--color-line-strong` border instead of `--color-line`.
+*   **§2.2:** The serif heading in the drag-and-drop layer became sans (`--text-section`).
+*   **§2.3:** Every font size below `12px` (`0.6875rem`, `0.71875rem`) was raised to the smallest step, `0.75rem`.
+*   **§4:** The reading column is `680px` below `1280px`; settings screens use `--wide-w` (`1000px`).
+*   **§4 top bar:** The breadcrumb became `<nav aria-label="Page location">` + `<ol>` (separators in CSS, `aria-current="page"`); the mapping for the non-existent `/admin/invites` was removed; the help button uses `Tooltip` instead of `title`; the `⌘K` hint shows `Ctrl+K` depending on the platform.
+*   **§7.1 state matrix:** An `error` state for "Load more" in the feed (an inline error + "Try again"); an error toast when saving a theme or palette fails.
+*   **§7.2 Toast:** Mouse hover and keyboard focus are tracked separately; a focused toast never closes by itself (WCAG 2.2.1).
+*   **§9 extension:** The popup header has the serif `Izgah` wordmark and a settings button with an icon.
+*   **Duplication:** `.banner`, `.kpi-strip`, `.page-header h1` / `.page-lead` are defined once in `components.css` instead of being copied page by page; `CONTENT_TYPE_LABELS` has one source; the unused `.btn-lg`, `.btn-quiet`, `.btn-danger-outline`, `.badge-count` and `signal-pop` were removed; the `select` arrow follows the theme.
 
-**Bilinçli olarak açık bırakılanlar**
+**Deliberately left open**
 
-*   **§4 üst çubukta bildirim özeti:** Zil sol rayda kalıyor. Üst çubuğa taşımak için iki ayrı `NotificationBell` örneğinin ortak bir istemci deposunu paylaşması gerekir (aksi hâlde çift yoklama ve ayrışan okundu durumu); ayrı bir iş olarak ele alınacak.
-*   **Tek `SegmentedControl`:** `ThemeForm` ve arama kapsamı hâlâ kendi işaretlemesini kullanır (JS'siz form/bağlantı davranışları farklı); görsel ölçüler hizalandı, bileşen birleştirmesi ayrı iş.
-*   **Yönetim tablosu / boş durum / dialog başlığı stilleri:** Hâlâ sayfa bazlı; ortak sınıflara taşınması planlı.
-*   **Boşluk ızgarası:** Bileşenlerde `4px` ızgarası dışında kalan (`5px`, `6px`, `9px` vb.) değerler kademeli olarak `--space-*` token'larına taşınacak.
+*   **Notification summary in the §4 top bar:** The bell stays in the left rail. Moving it to the top bar would need two `NotificationBell` instances to share one client store (otherwise there would be double polling and diverging read state); it will be a separate task.
+*   **One `SegmentedControl`:** `ThemeForm` and the search scope still use their own markup (their no-JS form and link behaviours differ); the visual sizes were aligned, merging the components is a separate task.
+*   **Admin table, empty state and dialog title styles:** Still per page; moving them to shared classes is planned.
+*   **Spacing grid:** Values outside the `4px` grid in components (`5px`, `6px`, `9px` and so on) will move to the `--space-*` tokens step by step.
 
-> **2026-11-25 — i18n:** Arayüz artık İngilizce temelli, Türkçe tam çeviriyle çalışır ([izgah-i18n-oss.md](./izgah-i18n-oss.md)). §10'daki sabit erişilebilir adlar Türkçe yerel ayarın (`DEFAULT_LOCALE=tr`) sözleşmesidir; E2E testleri bu ayarla çalışır, İngilizce karşılıkları `src/lib/i18n/messages/en.ts` içindedir.
+> **2026-11-25 — i18n:** The interface is now English-first with a full Turkish translation ([izgah-i18n-oss.md](./izgah-i18n-oss.md)). The fixed accessible names in §10 are the contract of the Turkish locale (`DEFAULT_LOCALE=tr`); the E2E tests run with that setting, and the English equivalents are in `src/lib/i18n/messages/en.ts`.

@@ -1,78 +1,78 @@
-# İzgah — Site Haritası
+# Izgah — Sitemap
 
-## Tasarım Dokümanları
+## Design Documents
 
-| Doküman | Tarih | Yazar | Bileşenler | Açıklama |
+| Document | Date | Author | Components | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| [izgah-core.md](./izgah-core.md) | 2026-11-14 | Gorkem Inanc Ozdemir | PostgreSQL / Drizzle ORM, Auth & API Keys, Unfurl Worker & Media Cache, SvelteKit Web UI, `/api/v1/*` HTTP API, Admin & Telemetry, Docker / Dokploy | İzgah çekirdek platformunun veri modeli, kimlik doğrulama ve kişisel API anahtarları, SSRF korumalı arka plan önizleme servisi, yerel platform arayüz kuralları, eklenti API sözleşmesi ve Dokploy yayın mimarisi. |
-| [izgah-extensions.md](./izgah-extensions.md) | 2026-11-19 | Gorkem Inanc Ozdemir | WXT + TypeScript (Manifest V3), Chrome / Firefox / Safari Web Extensions, `popup` & `options` UI, `contextMenus` & `Alt+Shift+I`, `/api/v1/*` HTTP Client, Safari Xcode Converter | İzgah masaüstü tarayıcı eklentilerinin yalıtılmış `extensions/` paket mimarisi, en dar izin sınırı, çift paylaşım ve admin sessiz ekleme açılır penceresi, sağ tık ve klavye kısayolu tetikleyicileri, Türkçe hata eşlemesi ve Chrome/Firefox/Safari dağıtım planı. |
-| [izgah-ui-v2.md](./izgah-ui-v2.md) | 2026-11-20 | Gorkem Inanc Ozdemir | App Shell, `FeedView` & `PostCard`, Inline Composer & Paste-to-Share, Keyboard Shortcuts, `izgah_theme` Cookie, Security Headers & CSP, `/api/internal/feed/updates`, Sabit E2E Kancaları | Web arayüzü v2: §2 (font yükleme mekanizması), §9 (tema çerezi), §11 (zorunlu CSP) ve §12 (sabit E2E kancaları) bağlayıcı kalır; görsel dil, palet ve bileşen katmanı [izgah-ui-v3.md](./izgah-ui-v3.md) ile güncellenmiştir. |
-| [izgah-themes.md](./izgah-themes.md) | 2026-11-22 | Gorkem Inanc Ozdemir | Light / Dark Palettes (Default, High Contrast), `light-dark()` Token Slots, `izgah_theme_light` / `izgah_theme_dark` Cookies, `/settings?/setPalette` | Mod + gündüz/gece paleti mekanizması, `light-dark()` CSS yuvaları ve çerez/SSR uygulaması korunur. Vurgu renkleri ve Dim paleti [izgah-ui-v4.md](./izgah-ui-v4.md) §8 ile kaldırıldı (eski çerez değerleri varsayılana düşer); renk değerleri `tokens/kunye.json` dosyasından üretilir (v4 §11). |
-| [izgah-i18n-oss.md](./izgah-i18n-oss.md) | 2026-11-25 | Gorkem Inanc Ozdemir | `src/lib/i18n` (en/tr catalogs, ICU subset, AsyncLocalStorage locale), `izgah_locale` Cookie & `DEFAULT_LOCALE`, `APP_TIME_ZONE` / `INSTANCE_NAME` / `SOURCE_URL`, English Search Stemming, Extension `_locales` & Store Build | İngilizce temel dil + tam Türkçe çeviri, çalışma zamanı örnek ayarları ve tek mağaza eklentisi ile açık kaynak (AGPL-3.0) self-host modeli. |
+| [izgah-core.md](./izgah-core.md) | 2026-11-14 | Gorkem Inanc Ozdemir | PostgreSQL / Drizzle ORM, Auth & API Keys, Unfurl Worker & Media Cache, SvelteKit Web UI, `/api/v1/*` HTTP API, Admin & Telemetry, Docker / Dokploy | The core platform: data model, authentication and personal API keys, the SSRF-guarded background preview service, native-platform UI rules, the extension API contract and the single-container deployment. |
+| [izgah-extensions.md](./izgah-extensions.md) | 2026-11-19 | Gorkem Inanc Ozdemir | WXT + TypeScript (Manifest V3), Chrome / Firefox / Safari Web Extensions, `popup` & `options` UI, `contextMenus` & `Alt+Shift+I`, `/api/v1/*` HTTP Client, Safari Xcode Converter | The desktop browser extensions: the isolated `extensions/` package, the narrowest permission set, the share popup with duplicate detection and admin silent adds, right-click and keyboard-shortcut triggers, error mapping and the Chrome / Firefox / Safari distribution plan. |
+| [izgah-ui-v2.md](./izgah-ui-v2.md) | 2026-11-20 | Gorkem Inanc Ozdemir | App Shell, `FeedView` & `PostCard`, Inline Composer & Paste-to-Share, Keyboard Shortcuts, `izgah_theme` Cookie, Security Headers & CSP, `/api/internal/feed/updates`, Fixed E2E Hooks | Web UI v2: §2 (font loading), §9 (theme cookie), §11 (enforced CSP) and §12 (fixed E2E hooks) remain binding; the visual language, palettes and component layer were replaced by [izgah-ui-v3.md](./izgah-ui-v3.md) and then [izgah-ui-v4.md](./izgah-ui-v4.md). |
+| [izgah-themes.md](./izgah-themes.md) | 2026-11-22 | Gorkem Inanc Ozdemir | Light / Dark Palettes (Default, High Contrast), `light-dark()` Token Slots, `izgah_theme_light` / `izgah_theme_dark` Cookies, `/settings?/setPalette` | The mode plus day/night palette mechanism, the `light-dark()` CSS slots and the cookie/SSR implementation remain. Accent colours and the Dim palette were removed in [izgah-ui-v4.md](./izgah-ui-v4.md) §8 (old cookie values fall back to the default); colour values are generated from `tokens/kunye.json` (v4 §11). |
+| [izgah-i18n-oss.md](./izgah-i18n-oss.md) | 2026-11-25 | Gorkem Inanc Ozdemir | `src/lib/i18n` (en/tr catalogs, ICU subset, AsyncLocalStorage locale), `izgah_locale` Cookie & `DEFAULT_LOCALE`, `APP_TIME_ZONE` / `INSTANCE_NAME` / `SOURCE_URL`, English Search Stemming, Extension `_locales` & Store Build | English as the base language with a full Turkish translation, runtime instance settings and one store extension: the open-source (AGPL-3.0) self-hosting model. |
 | [izgah-roadmap.md](./izgah-roadmap.md) | 2026-11-26 | Gorkem Inanc Ozdemir | Positioning, Moat, Must-haves, Removals, Phases R0–R10 | Product direction after the open-source release; revisits the AI, read-later, mobile share, SMTP and OAuth non-goals of izgah-core. |
 | [izgah-smart-capture.md](./izgah-smart-capture.md) | 2026-11-26 | Gorkem Inanc Ozdemir | `#section` Hashtags, History Suggestions, Page Text Search, `enrichment_jobs`, OpenRouter / Anthropic / OpenAI / Gemini / Custom Providers, `/admin/ai`, `instance_settings` | Section suggestions and optional, admin-enabled AI enrichment (summary, keywords, sections) that never slows down sharing. |
 | [izgah-ui-v4.md](./izgah-ui-v4.md) | 2026-11-26 | Gorkem Inanc Ozdemir | "Künye" Tokens, One Type Family, Index · Register · Reading Pane, `:visited` Trace, izgah.com | The current visual language, replacing v3: implemented in R3 and refined on 2026-11-26 (§11: one colour source in `tokens/kunye.json`, no icons, feed entry option A, izgah.com specimen). |
-| [izgah-ui-v3.md](./izgah-ui-v3.md) | 2026-11-24 | Gorkem Inanc Ozdemir | İzgah Stüdyo Design System (Primitive/Semantic/Component Tokens, 5 Palet × 4 Çift Kutuplu Vurgu), `Newsreader` + `Geist` + `JetBrains Mono`, 3 Sütunlu Ana Akış + Sağ Bağlam Rayı (`rail-summary.ts`), `⌘K` Komut Paleti (`/api/internal/search/quick`), `SidePeekDialog`, `Tooltip`, `Skeleton`, `AvatarStack`, `SegmentedControl`, Eklenti v3 Hizalaması | Onaylı v3 ("İzgah Stüdyo") görsel ve etkileşim sistemi: hassas kabuk/ayarlar/yönetim + editoryal serif başlıklar ve sıcak alabaster/grafit yüzeyler + 3 sütunlu ana akış ve içerik türüne duyarlı medya kartları; 20 palet×vurgu kombinasyonunda WCAG 2.2 AA/AAA kontrast tablosu. |
-| [extensions/README.md](../../extensions/README.md) | 2026-11-20 | Gorkem Inanc Ozdemir | Eklenti Kurulumu, CWS / AMO İzin Gerekçeleri, Dağıtım Kanalları | Yalıtılmış `extensions/` geliştirme komutları, Playwright E2E önkoşulu, CWS & Firefox AMO izin/gizlilik beyanları ve Chrome `Unlisted` / Firefox `.xpi` / macOS Safari Xcode dağıtım adımları. |
-| [README.md](../../README.md) | 2026-11-25 | Gorkem Inanc Ozdemir | Overview, Quick Start, Self-hosting, Environment | İngilizce proje tanıtımı, yerel geliştirme, ortam değişkenleri ve self-host özeti ([README.tr.md](../../README.tr.md) Türkçe). |
-| [docs/deploy/](../deploy/) | 2026-11-25 | Gorkem Inanc Ozdemir | Docker Compose + Caddy, Dokploy, Backups | Adım adım self-host kılavuzları, yedekleme ve `N -> N-1` geri alma. |
+| [izgah-ui-v3.md](./izgah-ui-v3.md) | 2026-11-24 | Gorkem Inanc Ozdemir | "Izgah Studio" Design System (Primitive/Semantic/Component Tokens, 5 Palettes × 4 Bipolar Accents), `Newsreader` + `Geist` + `JetBrains Mono`, Three-Column Feed + Right Context Rail (`rail-summary.ts`), `⌘K` Command Palette (`/api/internal/search/quick`), `SidePeekDialog`, `Tooltip`, `Skeleton`, `AvatarStack`, `SegmentedControl`, Extension v3 Alignment | Superseded by v4. The v3 ("Izgah Studio") visual and interaction system: a precise shell, settings and admin, editorial serif headings on warm alabaster and graphite surfaces, a three-column feed with content-aware media cards, and a WCAG 2.2 AA/AAA contrast table for all 20 palette × accent combinations. The command palette, quick search and `SidePeekDialog` remain. |
+| [extensions/README.md](../../extensions/README.md) | 2026-11-20 | Gorkem Inanc Ozdemir | Extension Setup, CWS / AMO Permission Justifications, Distribution Channels | Development commands for the isolated `extensions/` package, the Playwright E2E prerequisite, CWS and Firefox AMO permission and privacy statements, and the store, Firefox `.xpi` and macOS Safari Xcode distribution steps. |
+| [README.md](../../README.md) | 2026-11-26 | Gorkem Inanc Ozdemir | Overview, Self-hosting, Environment, Development | Project introduction, self-hosting summary, environment variables and local development ([README.tr.md](../../README.tr.md) in Turkish). |
+| [docs/deploy/](../deploy/) | 2026-11-25 | Gorkem Inanc Ozdemir | Docker Compose + Caddy, Dokploy, Backups | Step-by-step self-hosting guides, backups and `N -> N-1` rollback. |
 
-## Uygulama ve API Rotaları (izgah-core)
+## Application and API Routes (izgah-core)
 
-### Web Arayüzü Rotaları
+### Web UI Routes
 
-*   `/` ([src/routes/(app)/+page.svelte](../../src/routes/(app)/+page.svelte)) — Ters kronolojik ana akış, içerik türü süzgeci, imleçli sayfalama ve paylaşım penceresi
-*   `/sections` ([src/routes/(app)/sections/+page.svelte](../../src/routes/(app)/sections/+page.svelte)) — Konu bölümleri dizini (JS'siz ve mobil alt sekme çubuğu hedefi)
-*   `/sections/[slug]` ([src/routes/(app)/sections/[slug]/+page.svelte](../../src/routes/(app)/sections/[slug]/+page.svelte)) — Konu bölümü akışı (normal ve sessiz kaynaklar)
-*   `/resources/[id]` ([src/routes/(app)/resources/[id]/+page.svelte](../../src/routes/(app)/resources/[id]/+page.svelte)) — Kanonik kaynak detayları, paylaşım geçmişi, ortak beğeni ve yorum dizisi
-*   `/search` ([src/routes/(app)/search/+page.svelte](../../src/routes/(app)/search/+page.svelte)) — Türkçe + İngilizce + URL parçası araması (`Tüm İzgah` / `Bu Bölüm` kapsam seçimi)
-*   `/login` ([src/routes/login/+page.svelte](../../src/routes/login/+page.svelte)) — E-posta ve parola ile giriş ekranı
-*   `/auth/accept-invite` ([src/routes/auth/accept-invite/+page.svelte](../../src/routes/auth/accept-invite/+page.svelte)) — 24 saat geçerli tek kullanımlık üye davet kabul ve parola belirleme ekranı
-*   `/auth/reset-password` ([src/routes/auth/reset-password/+page.svelte](../../src/routes/auth/reset-password/+page.svelte)) — 24 saat geçerli tek kullanımlık parola sıfırlama ekranı
-*   `/settings` ([src/routes/(app)/settings/+page.svelte](../../src/routes/(app)/settings/+page.svelte)) — Üye hesap bilgileri, görünüm (mod, palet, vurgu), tek tuş kısayolları ve parola değiştirme ekranı
-*   `/settings/api-keys` ([src/routes/(app)/settings/api-keys/+page.svelte](../../src/routes/(app)/settings/api-keys/+page.svelte)) — Kişisel API anahtarı üretme ve iptal etme ekranı
-*   `/admin/users` ([src/routes/(app)/admin/users/+page.svelte](../../src/routes/(app)/admin/users/+page.svelte)) — Üye yönetimi, davet/sıfırlama bağlantısı üretimi, rol ve pasifleştirme
-*   `/admin/sections` ([src/routes/(app)/admin/sections/+page.svelte](../../src/routes/(app)/admin/sections/+page.svelte)) — Konu bölümü oluşturma, yeniden adlandırma, sıralama ve silme
-*   `/admin/unassigned` ([src/routes/(app)/admin/unassigned/+page.svelte](../../src/routes/(app)/admin/unassigned/+page.svelte)) — Herhangi bir bölüme atanmamış paylaşımları listeleme ve toplu bölümlendirme
-*   `/admin/jobs` ([src/routes/(app)/admin/jobs/+page.svelte](../../src/routes/(app)/admin/jobs/+page.svelte)) — Hatalı (`dead`) önizleme işlerini inceleme ve yeniden kuyruğa alma
-*   `/admin/audit` ([src/routes/(app)/admin/audit/+page.svelte](../../src/routes/(app)/admin/audit/+page.svelte)) — Admin işlem ve güvenlik denetim kayıtları (`audit_logs`)
-*   `/admin/metrics` ([src/routes/(app)/admin/metrics/+page.svelte](../../src/routes/(app)/admin/metrics/+page.svelte)) — 1. ay aktif paylaşan/arayan üye, kanal dağılımı ve sıfır sonuç oranı ölçüm ekranı
+*   `/` ([src/routes/(app)/+page.svelte](../../src/routes/(app)/+page.svelte)) — Reverse-chronological feed, content type filter, cursor pagination and the share form
+*   `/sections` ([src/routes/(app)/sections/+page.svelte](../../src/routes/(app)/sections/+page.svelte)) — Section index (the no-JS and mobile tab bar target)
+*   `/sections/[slug]` ([src/routes/(app)/sections/[slug]/+page.svelte](../../src/routes/(app)/sections/[slug]/+page.svelte)) — Section feed (regular and silent resources)
+*   `/resources/[id]` ([src/routes/(app)/resources/[id]/+page.svelte](../../src/routes/(app)/resources/[id]/+page.svelte)) — Canonical resource details, share history, shared likes and comment thread
+*   `/search` ([src/routes/(app)/search/+page.svelte](../../src/routes/(app)/search/+page.svelte)) — Turkish, English and URL-fragment search (scope: the whole instance or this section)
+*   `/login` ([src/routes/login/+page.svelte](../../src/routes/login/+page.svelte)) — Sign-in with e-mail and password
+*   `/auth/accept-invite` ([src/routes/auth/accept-invite/+page.svelte](../../src/routes/auth/accept-invite/+page.svelte)) — Accept a one-time member invite (valid for 24 hours) and set a password
+*   `/auth/reset-password` ([src/routes/auth/reset-password/+page.svelte](../../src/routes/auth/reset-password/+page.svelte)) — One-time password reset (valid for 24 hours)
+*   `/settings` ([src/routes/(app)/settings/+page.svelte](../../src/routes/(app)/settings/+page.svelte)) — Account details, language, appearance (mode and palettes), single-key shortcuts and password change
+*   `/settings/api-keys` ([src/routes/(app)/settings/api-keys/+page.svelte](../../src/routes/(app)/settings/api-keys/+page.svelte)) — Create and revoke personal API keys
+*   `/admin/users` ([src/routes/(app)/admin/users/+page.svelte](../../src/routes/(app)/admin/users/+page.svelte)) — Member management, invite and reset links, roles and deactivation
+*   `/admin/sections` ([src/routes/(app)/admin/sections/+page.svelte](../../src/routes/(app)/admin/sections/+page.svelte)) — Create, rename, reorder and delete sections
+*   `/admin/unassigned` ([src/routes/(app)/admin/unassigned/+page.svelte](../../src/routes/(app)/admin/unassigned/+page.svelte)) — List shares without a section and file them in bulk
+*   `/admin/jobs` ([src/routes/(app)/admin/jobs/+page.svelte](../../src/routes/(app)/admin/jobs/+page.svelte)) — Inspect failed (`dead`) preview jobs and requeue them
+*   `/admin/audit` ([src/routes/(app)/admin/audit/+page.svelte](../../src/routes/(app)/admin/audit/+page.svelte)) — Admin action and security audit log (`audit_logs`)
+*   `/admin/metrics` ([src/routes/(app)/admin/metrics/+page.svelte](../../src/routes/(app)/admin/metrics/+page.svelte)) — Active sharing and searching members, channel mix and zero-result rate
 *   `/admin/ai` ([src/routes/(app)/admin/ai/+page.svelte](../../src/routes/(app)/admin/ai/+page.svelte)) — Smart capture: history suggestions, optional AI provider, key, model, features, privacy, limits and the enrichment queue ([izgah-smart-capture.md](./izgah-smart-capture.md))
 
-### HTTP API ve Sistem Uçları
+### HTTP API and System Endpoints
 
-*   `GET /api/v1/me` ([src/routes/api/v1/me/+server.ts](../../src/routes/api/v1/me/+server.ts)) — Bearer API anahtarı ile aktif kullanıcı ve rol doğrulaması
-*   `GET /api/v1/sections` ([src/routes/api/v1/sections/+server.ts](../../src/routes/api/v1/sections/+server.ts)) — Sıralı konu bölümleri listesi
-*   `GET /api/v1/links/check` ([src/routes/api/v1/links/check/+server.ts](../../src/routes/api/v1/links/check/+server.ts)) — Kanonik URL çözümleme ve erken çift kayıt kontrolü
-*   `POST /api/v1/links` ([src/routes/api/v1/links/+server.ts](../../src/routes/api/v1/links/+server.ts)) — Bağlantı paylaşımı oluşturma ve önizleme işini kuyruğa ekleme
-*   `OPTIONS /api/v1/*` ([src/hooks.server.ts](../../src/hooks.server.ts)) — Tarayıcı eklentileri için CORS öndenetim yanıtları
-*   `ALL /api/auth/[...all]` ([src/routes/api/auth/[...all]/+server.ts](../../src/routes/api/auth/[...all]/+server.ts)) — Better Auth oturum uç noktaları (`sign-in/email`, `sign-out`, `get-session`)
-*   `POST /logout` ([src/routes/logout/+server.ts](../../src/routes/logout/+server.ts)) — Çerez oturumunu sonlandırma ve `/login` yönlendirmesi
-*   `GET /api/internal/links/check` ([src/routes/api/internal/links/check/+server.ts](../../src/routes/api/internal/links/check/+server.ts)) — Web paylaşım penceresi için çerez ve `Origin` korumalı erken çift kayıt kontrolü
-*   `GET /api/internal/feed/updates` ([src/routes/api/internal/feed/updates/+server.ts](../../src/routes/api/internal/feed/updates/+server.ts)) — Görünür sekmede `afterId` sonrası yeni paylaşım sayısı (`{ newCount }`, en fazla `100`)
-*   `GET /api/internal/search/quick` ([src/routes/api/internal/search/quick/+server.ts](../../src/routes/api/internal/search/quick/+server.ts)) — `⌘K` komut paleti için `searchResources(..., { recordLog: false })` üzerine kurulu çerez + `Origin` korumalı hızlı arama ucu (en fazla `6` sonuç, `search_logs`'a yazmaz, oturum başına dakikada `120` istek sınırı)
-*   `GET / POST /api/internal/notifications` ([src/routes/api/internal/notifications/+server.ts](../../src/routes/api/internal/notifications/+server.ts)) — Görünür sekme duyarlı okunmamış bildirim sorgusu ve okundu işaretleme
-*   `GET /media/thumbnails/[assetKey]` ([src/routes/media/thumbnails/[assetKey]/+server.ts](../../src/routes/media/thumbnails/[assetKey]/+server.ts)) — Oturum/anahtar doğrulamalı yerel WebP kapak görseli sunumu
-*   `GET /healthz` ([src/routes/healthz/+server.ts](../../src/routes/healthz/+server.ts)) — Uygulama süreç canlılık kontrolü ([Dockerfile](../../Dockerfile) `HEALTHCHECK` hedefi)
-*   `GET /readyz` ([src/routes/readyz/+server.ts](../../src/routes/readyz/+server.ts)) — PostgreSQL, göç durumu ve `MEDIA_STORAGE_DIR` (`/data/thumbnails`) hacim yazma hazırlık kontrolü
+*   `GET /api/v1/me` ([src/routes/api/v1/me/+server.ts](../../src/routes/api/v1/me/+server.ts)) — Current user and role for a Bearer API key
+*   `GET /api/v1/sections` ([src/routes/api/v1/sections/+server.ts](../../src/routes/api/v1/sections/+server.ts)) — Ordered section list
+*   `GET /api/v1/links/check` ([src/routes/api/v1/links/check/+server.ts](../../src/routes/api/v1/links/check/+server.ts)) — Canonical URL resolution and early duplicate check
+*   `POST /api/v1/links` ([src/routes/api/v1/links/+server.ts](../../src/routes/api/v1/links/+server.ts)) — Create a share and queue its preview job
+*   `OPTIONS /api/v1/*` ([src/hooks.server.ts](../../src/hooks.server.ts)) — CORS preflight responses for the browser extensions
+*   `ALL /api/auth/[...all]` ([src/routes/api/auth/[...all]/+server.ts](../../src/routes/api/auth/[...all]/+server.ts)) — Better Auth session endpoints (`sign-in/email`, `sign-out`, `get-session`)
+*   `POST /logout` ([src/routes/logout/+server.ts](../../src/routes/logout/+server.ts)) — End the cookie session and redirect to `/login`
+*   `GET /api/internal/links/check` ([src/routes/api/internal/links/check/+server.ts](../../src/routes/api/internal/links/check/+server.ts)) — Cookie- and `Origin`-guarded early duplicate check for the web share form
+*   `GET /api/internal/feed/updates` ([src/routes/api/internal/feed/updates/+server.ts](../../src/routes/api/internal/feed/updates/+server.ts)) — Number of new shares after `afterId` for visible tabs (`{ newCount }`, at most `100`)
+*   `GET /api/internal/search/quick` ([src/routes/api/internal/search/quick/+server.ts](../../src/routes/api/internal/search/quick/+server.ts)) — Cookie- and `Origin`-guarded quick search for the `⌘K` command palette, built on `searchResources(..., { recordLog: false })` (at most `6` results, nothing written to `search_logs`, `120` requests per minute per session)
+*   `GET / POST /api/internal/notifications` ([src/routes/api/internal/notifications/+server.ts](../../src/routes/api/internal/notifications/+server.ts)) — Unread notifications for visible tabs and marking them read
+*   `GET /media/thumbnails/[assetKey]` ([src/routes/media/thumbnails/[assetKey]/+server.ts](../../src/routes/media/thumbnails/[assetKey]/+server.ts)) — Local WebP thumbnails for authenticated sessions or API keys
+*   `GET /healthz` ([src/routes/healthz/+server.ts](../../src/routes/healthz/+server.ts)) — Process liveness (the [Dockerfile](../../Dockerfile) `HEALTHCHECK` target)
+*   `GET /readyz` ([src/routes/readyz/+server.ts](../../src/routes/readyz/+server.ts)) — Readiness: PostgreSQL, migration state and a writable `MEDIA_STORAGE_DIR` (`/data/thumbnails`)
 
-### İşletim, Göç ve Yedekleme Giriş Noktaları
+### Operations, Migration and Backup Entry Points
 
-*   `node build/index.js` ([src/hooks.server.ts](../../src/hooks.server.ts)) — Üretim HTTP sunucusu ve süreç içi önizleme işçisi ([scripts/docker-entrypoint.sh](../../scripts/docker-entrypoint.sh) üzerinden `exec` ile PID 1)
-*   `node build/migrate.js` ([src/lib/server/db/migrate.ts](../../src/lib/server/db/migrate.ts)) — `pg_advisory_lock(74829104)` altında tekil bağlantılı `drizzle/` göç çalıştırıcısı
-*   `node build/cli.js` ([src/cli.ts](../../src/cli.ts)) — İlk admin ve parola sıfırlama kurtarma CLI aracı (`create-admin`, `reset-admin`)
-*   [scripts/docker-entrypoint.sh](../../scripts/docker-entrypoint.sh) — Konteyner başlangıç doğrulaması, göç çalıştırma ve sunucu devri
-*   [scripts/pre-deploy-backup.sh](../../scripts/pre-deploy-backup.sh) — Şema göçü içeren yayınlar öncesi ana sunucuda elle çalıştırılan `pg_dump -Fc` yedek betiği
-*   [scripts/offbox-backup.sh](../../scripts/offbox-backup.sh) — Ana sunucuda günlük zamanlanan `pg_dump -Fc` + `/data/thumbnails` sunucu dışı S3 yedekleme betiği
+*   `node build/index.js` ([src/hooks.server.ts](../../src/hooks.server.ts)) — Production HTTP server and in-process preview worker (PID 1 via `exec` in [scripts/docker-entrypoint.sh](../../scripts/docker-entrypoint.sh))
+*   `node build/migrate.js` ([src/lib/server/db/migrate.ts](../../src/lib/server/db/migrate.ts)) — Single-connection `drizzle/` migration runner under `pg_advisory_lock(74829104)`
+*   `node build/cli.js` ([src/cli.ts](../../src/cli.ts)) — Recovery CLI for the first admin and password resets (`create-admin`, `reset-admin`)
+*   [scripts/docker-entrypoint.sh](../../scripts/docker-entrypoint.sh) — Container start-up checks, migrations and hand-over to the server
+*   [scripts/pre-deploy-backup.sh](../../scripts/pre-deploy-backup.sh) — Manual `pg_dump -Fc` backup on the host before releases with schema migrations
+*   [scripts/offbox-backup.sh](../../scripts/offbox-backup.sh) — Daily `pg_dump -Fc` plus `/data/thumbnails` backup to off-site S3-compatible storage
 
-## Tarayıcı Eklentileri (`extensions/`)
+## Browser Extensions (`extensions/`)
 
-*   [extensions/wxt.config.ts](../../extensions/wxt.config.ts) — WXT MV3 manifest üreticisi (Chrome/Firefox/Safari, en dar izinler, `Alt+Shift+I`, Gecko ayarları)
-*   [extensions/src/entrypoints/background.ts](../../extensions/src/entrypoints/background.ts) — Sağ tık `"İzgah'a paylaş"` menüsü, `action.openPopup()` + standalone pencere yedeği ve oturum bağlam devri
-*   [extensions/src/entrypoints/popup/main.ts](../../extensions/src/entrypoints/popup/main.ts) — Paylaşım açılır penceresi kontrolcüsü (canlı çift kontrol, bölüm/içerik türü, admin sessiz ekleme, hata eşlemesi)
-*   [extensions/src/entrypoints/options/main.ts](../../extensions/src/entrypoints/options/main.ts) — Ayarlar sayfası kontrolcüsü (sunucu kökeni normalizasyonu, API anahtarı doğrulama, `/api/v1/me` testi)
-*   [extensions/src/lib/api-client.ts](../../extensions/src/lib/api-client.ts) — `X-Client-Name`, `X-Client-Version` ve 10 sn zaman aşımı destekli `/api/v1/*` HTTP istemcisi
-*   [extensions/scripts/verify-manifests.mjs](../../extensions/scripts/verify-manifests.mjs) — Chrome/Firefox/Safari MV3 manifest, portsuz köken (`--require-https-origin`) ve PNG IHDR doğrulama betiği
-*   [extensions/scripts/build-safari.mjs](../../extensions/scripts/build-safari.mjs) — WXT Safari derlemesi ve `xcrun safari-web-extension-converter` (`--require-xcode`) sarmalayıcı betiği
-*   [extensions/tests/e2e/extension-popup-and-options.spec.ts](../../extensions/tests/e2e/extension-popup-and-options.spec.ts) — Chromium unpacked MV3 eklenti E2E test paketi (`CUJ 1`–`CUJ 5`)
-*   [extensions/README.md](../../extensions/README.md) — Geliştirici kurulumu, izin/gizlilik gerekçeleri ve üç tarayıcı dağıtım kılavuzu
+*   [extensions/wxt.config.ts](../../extensions/wxt.config.ts) — WXT MV3 manifest generator (Chrome / Firefox / Safari, narrowest permissions, `Alt+Shift+I`, Gecko settings)
+*   [extensions/src/entrypoints/background.ts](../../extensions/src/entrypoints/background.ts) — The "Add to Izgah" context menu, `action.openPopup()` with a standalone window fallback, and the hand-over of session context
+*   [extensions/src/entrypoints/popup/main.ts](../../extensions/src/entrypoints/popup/main.ts) — Share popup controller (live duplicate check, sections and content type, admin silent adds, error mapping)
+*   [extensions/src/entrypoints/options/main.ts](../../extensions/src/entrypoints/options/main.ts) — Options page controller (server origin normalisation, API key validation, `/api/v1/me` test)
+*   [extensions/src/lib/api-client.ts](../../extensions/src/lib/api-client.ts) — `/api/v1/*` HTTP client with `X-Client-Name`, `X-Client-Version` and a 10-second timeout
+*   [extensions/scripts/verify-manifests.mjs](../../extensions/scripts/verify-manifests.mjs) — Checks the Chrome / Firefox / Safari MV3 manifests, port-less origins (`--require-https-origin`) and PNG IHDR headers
+*   [extensions/scripts/build-safari.mjs](../../extensions/scripts/build-safari.mjs) — WXT Safari build and `xcrun safari-web-extension-converter` (`--require-xcode`) wrapper
+*   [extensions/tests/e2e/extension-popup-and-options.spec.ts](../../extensions/tests/e2e/extension-popup-and-options.spec.ts) — End-to-end tests of the unpacked MV3 extension in Chromium (`CUJ 1`–`CUJ 5`)
+*   [extensions/README.md](../../extensions/README.md) — Developer setup, permission and privacy justifications, and distribution guides for the three browsers
