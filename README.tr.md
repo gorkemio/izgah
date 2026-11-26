@@ -23,7 +23,7 @@
 - **Akıllı ekleme** — notta `#bölüm` yazmak bağlantıyı o bölüme koyar; bölümler ekibin geçmişine göre önerilir. Yöneticiler isteğe bağlı olarak OpenRouter, Anthropic, OpenAI, Gemini ya da yerel, OpenAI uyumlu bir modeli bağlayıp kısa özet, arama anahtar kelimesi ve bölüm önerisi alabilir. Yapay zekâ, yapılandırılana kadar kapalıdır.
 - **Bağlantı önizlemeleri** — SSRF korumalı, süreç içi bir işçi başlık, açıklama ve kapak görsellerini çeker; küçültülmüş WebP görselleri yerelde saklar.
 - **Tarayıcı eklentileri** — Chrome, Firefox ve Safari eklentileri açık sekmeyi ya da sağ tıklanan bağlantıyı kişisel API anahtarıyla paylaşır.
-- **JavaScript olmadan çalışır** — paylaşım, gezinme, arama, tartışma, tema ve yönetim önce düz form ve bağlantıdır; JavaScript yalnızca iyileştirir.
+- **Sunucuda çizilir, hızlı açılır** — her sayfa sunucuda oluşturulur, her değişiklik sunucudaki bir form işleminden geçer; arayüz bunun üzerine ikonlar, önizlemeler ve hareket ekler, efektleri azaltma ayarı da vardır.
 - **Baştan erişilebilir** — açık ve koyu tema, her biri standart ve yüksek kontrast paletle; hepsi WCAG 2.2 AA (yüksek kontrastta AAA). Açtığınız bağlantılar tarayıcının kendi `:visited` geçmişiyle solar; sunucu hiçbir şey kaydetmez.
 - **İngilizce ve Türkçe** — her üye dilini seçer; varsayılanı örnek belirler.
 - **Küçük ayak izi** — tek Node.js konteyneri ve PostgreSQL. Harici e-posta, kuyruk veya önbellek servisi yok.

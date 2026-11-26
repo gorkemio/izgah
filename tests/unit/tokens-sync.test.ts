@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { OUTPUTS, readTokens, renderAll } from '../../scripts/tokens/build';
+import { OUTPUTS, readTokens, renderAll, standaloneRoles } from '../../scripts/tokens/build';
 
 const tokens = readTokens();
 const rendered = renderAll(tokens);
@@ -25,16 +25,19 @@ describe('Künye tokens come from one source (tokens/izgah.json)', () => {
 		);
 	});
 
-	it('gives the extension and the site the same light palette as the app', () => {
-		const light = tokens.palettes.light.default;
+	it('gives the extension and the site the v5 default light palette (izgah-ui-v5 §11, §12)', () => {
+		const light = standaloneRoles(tokens, 'light', 'default');
 		for (const key of ['extension', 'site'] as const) {
 			const root = topLevelRoot(rendered[key]);
 			for (const role of ['bg', 'text', 'text-secondary', 'text-muted', 'line', 'link', 'danger']) {
 				// The extension and the site keep the unprefixed semantic names (no Tailwind there).
 				expect(root[`--color-${role}`], `${key} --color-${role}`).toBe(light[role]);
 			}
-			expect(root['--color-accent']).toBe(light.link);
+			expect(root['--color-accent']).toBe(light.accent);
 		}
+		const v5 = tokens.v5.themes[tokens.v5.default].light;
+		expect(light.bg).toBe(v5.background);
+		expect(light.accent).toBe(v5.primary);
 	});
 
 	it('defines the same roles in every palette', () => {

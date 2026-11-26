@@ -1,28 +1,25 @@
 /*
- * izgah.com in the Künye style (docs/designs/izgah-ui-v4.md §6): the app's own type and colours,
- * ink on paper, link blue as the only accent, rules instead of boxes. No build step. The latin font
- * file is the plain-zero copy from scripts/fonts/plain-zero.py.
+ * izgah.com in the UI v5 style (docs/designs/izgah-ui-v5.md §12): the app's Jade colours and Geist
+ * type, solid surfaces with hairline borders, no decorative gradients. No build step.
  */
 
 @font-face {
-	font-family: 'Atkinson Hyperlegible Next';
+	font-family: 'Geist';
 	font-style: normal;
 	font-display: swap;
-	font-weight: 200 800;
-	src: url('./assets/fonts/atkinson-hyperlegible-next-latin-wght-normal.woff2')
-		format('woff2-variations');
+	font-weight: 100 900;
+	src: url('./assets/fonts/geist-latin-wght-normal.woff2') format('woff2-variations');
 	unicode-range:
 		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
 		U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
-	font-family: 'Atkinson Hyperlegible Next';
+	font-family: 'Geist';
 	font-style: normal;
 	font-display: swap;
-	font-weight: 200 800;
-	src: url('./assets/fonts/atkinson-hyperlegible-next-latin-ext-wght-normal.woff2')
-		format('woff2-variations');
+	font-weight: 100 900;
+	src: url('./assets/fonts/geist-latin-ext-wght-normal.woff2') format('woff2-variations');
 	unicode-range:
 		U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
 		U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
@@ -46,10 +43,12 @@
 	--rule-strong: var(--color-line-strong);
 	--link: var(--color-link);
 	--visited: var(--color-visited);
+	--card: var(--color-surface-1);
+	--accent: var(--color-accent);
 }
 
 :root {
-	--font: 'Atkinson Hyperlegible Next', system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--font: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
 	--mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 	/* The app's entry gutter and note measure (izgah-ui-v4 §4, --entry-gutter and --measure). */
 	--gutter: 104px;
@@ -750,4 +749,76 @@ main h2:not(.day h2) {
 	.theme-switch input:checked + label {
 		color: Highlight;
 	}
+}
+
+/* ---------------------------------------------------------------- UI v5 (izgah-ui-v5.md §12) */
+
+.statement {
+	letter-spacing: -0.035em;
+}
+
+.lede {
+	letter-spacing: -0.006em;
+}
+
+kbd {
+	border-color: var(--rule);
+	border-radius: 6px;
+}
+
+.install {
+	border-radius: 12px;
+	background: var(--card);
+}
+
+.day {
+	border-block-end-color: var(--rule);
+}
+
+.day-heading {
+	font-size: 0.8125rem;
+	font-weight: 500;
+}
+
+/* The specimen's entries are the app's v5 cards. */
+.share-card {
+	grid-template-columns: minmax(0, 1fr);
+	row-gap: 4px;
+	margin-block-start: 12px;
+	padding: 16px;
+	background: var(--card);
+	border: 1px solid var(--rule);
+	border-radius: 12px;
+	box-shadow: 0 1px 2px rgb(0 0 0 / 0.04);
+}
+
+.share-card[aria-current='true'] {
+	margin-inline: 0;
+	padding-inline: 16px;
+	background: var(--card);
+	border-color: color-mix(in oklab, var(--accent) 45%, transparent);
+}
+
+.card-gutter {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 4px 10px;
+	font-weight: 500;
+	color: var(--ink);
+}
+
+.card-gutter time,
+.card-gutter .unseen {
+	display: inline;
+}
+
+.card-gutter .unseen {
+	color: var(--accent);
+}
+
+.section-chip {
+	padding-inline: 8px;
+	border: 1px solid var(--rule);
+	border-radius: 9999px;
 }
