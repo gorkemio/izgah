@@ -57,7 +57,7 @@
 	.sections-index {
 		display: grid;
 		gap: var(--space-5);
-		max-inline-size: var(--wide-w);
+		max-inline-size: var(--read-w);
 	}
 
 	.page-head {
@@ -89,7 +89,6 @@
 		list-style: none;
 		margin: 0;
 		padding: 0;
-		max-inline-size: var(--read-w);
 		border-block-start: 1px solid var(--color-text);
 	}
 
