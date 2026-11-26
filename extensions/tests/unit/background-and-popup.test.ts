@@ -128,7 +128,7 @@ describe('background service worker and popup UI (CUJ 2–5)', () => {
 		expect(spies.contextMenusMock.removeAll).toHaveBeenCalledTimes(1);
 		expect(spies.contextMenusMock.create).toHaveBeenCalledWith({
 			id: CONTEXT_MENU_SHARE_ID,
-			title: "İzgah'a paylaş",
+			title: "İzgah'ta iz bırak",
 			contexts: ['page', 'link']
 		});
 
@@ -291,7 +291,7 @@ describe('background service worker and popup UI (CUJ 2–5)', () => {
 			'https://example.com/deep-link'
 		);
 		expect((document.getElementById('share-source-badge') as HTMLElement).textContent).toBe(
-			'Sağ tık: Bağlantı'
+			'Sağ tık: bağlantı'
 		);
 		expect((document.getElementById('share-title-preview') as HTMLElement).hidden).toBe(true);
 		expect(
@@ -549,7 +549,7 @@ describe('background service worker and popup UI (CUJ 2–5)', () => {
 		});
 		expect(closeWindowSpy).not.toHaveBeenCalled();
 
-		// Verify Yeni paylaşım & Kapat controls
+		// Verify Yeni iz & Kapat controls
 		(document.getElementById('popup-close-btn') as HTMLButtonElement).click();
 		expect(closeWindowSpy).toHaveBeenCalledTimes(1);
 
@@ -797,7 +797,7 @@ describe('background service worker and popup UI (CUJ 2–5)', () => {
 			expect((document.getElementById('popup-success-panel') as HTMLElement).hidden).toBe(false);
 		});
 		expect((document.getElementById('popup-success-heading') as HTMLElement).textContent).toBe(
-			"Bağlantı İzgah'a paylaşıldı"
+			'İz bırakıldı'
 		);
 	});
 

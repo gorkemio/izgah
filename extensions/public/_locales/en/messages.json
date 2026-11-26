@@ -1,6 +1,6 @@
 {
 	"actionTitle": {
-		"message": "Share to Izgah"
+		"message": "Add a link to Izgah"
 	},
 	"addedSilently": {
 		"message": "The link was added silently to the selected sections only."
@@ -63,7 +63,7 @@
 		"message": "The right-click context expired, so the tab address could not be read; paste the http:// or https:// address you want to share."
 	},
 	"contextMenuShare": {
-		"message": "Share to Izgah"
+		"message": "Add to Izgah"
 	},
 	"copied": {
 		"message": "Copied"
@@ -149,8 +149,11 @@
 	"loadedSavedTest": {
 		"message": "Saved settings loaded. You can test the connection."
 	},
+	"localeCode": {
+		"message": "en"
+	},
 	"newShare": {
-		"message": "New share"
+		"message": "Add another"
 	},
 	"noSectionInfo": {
 		"message": "no section info"
@@ -166,6 +169,9 @@
 	},
 	"notePlaceholder": {
 		"message": "Why is it worth sharing? (Cmd/Ctrl+Enter to send)"
+	},
+	"noteTooLong": {
+		"message": "A note can be at most $1 characters."
 	},
 	"openApiKeys": {
 		"message": "Open /settings/api-keys"
@@ -195,10 +201,10 @@
 		"message": "The server address must use https://, or http:// for local development."
 	},
 	"popupTitle": {
-		"message": "Share to Izgah"
+		"message": "Add a link to Izgah"
 	},
 	"popupWordmarkSuffix": {
-		"message": ": share a link"
+		"message": ": add a link"
 	},
 	"publishedToFeed": {
 		"message": "The link was posted to the feed."
@@ -258,19 +264,19 @@
 		"message": "Before sharing, set your Izgah server address and personal API key in the extension settings."
 	},
 	"share": {
-		"message": "Share"
+		"message": "Add a link"
 	},
 	"shareUnexpected": {
 		"message": "Something went wrong while sharing."
 	},
 	"sharedHeading": {
-		"message": "Link shared to Izgah"
+		"message": "Link added to Izgah"
 	},
 	"sharedToIzgah": {
-		"message": "The link was shared to Izgah."
+		"message": "The link was added to Izgah."
 	},
 	"sharing": {
-		"message": "Sharing…"
+		"message": "Adding…"
 	},
 	"show": {
 		"message": "Show"

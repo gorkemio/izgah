@@ -1,10 +1,34 @@
 import http from 'node:http';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { chromium, expect, test, type BrowserContext, type Worker } from '@playwright/test';
 
 const EXTENSION_PATH = path.resolve(import.meta.dirname, '../../.output/chrome-mv3');
+
+// Chromium shows the extension in the OS language (macOS ignores --lang), so expected texts come
+// from the catalog the browser picked rather than from Turkish literals.
+type Catalog = Record<string, { message: string }>;
+function readCatalog(locale: string): Catalog {
+	return JSON.parse(
+		readFileSync(
+			path.resolve(import.meta.dirname, `../../public/_locales/${locale}/messages.json`),
+			'utf8'
+		)
+	) as Catalog;
+}
+const CATALOGS: { en: Catalog; tr: Catalog } = { en: readCatalog('en'), tr: readCatalog('tr') };
+let uiCatalog: Catalog = CATALOGS.tr;
+function m(key: string, ...substitutions: string[]): string {
+	const entry = uiCatalog[key] ?? CATALOGS.en[key];
+	if (!entry) {
+		throw new Error(`Unknown message key: ${key}`);
+	}
+	return entry.message.replace(
+		/\$(\d)/g,
+		(match, index: string) => substitutions[Number(index) - 1] ?? match
+	);
+}
 const ADMIN_TOKEN = 'izk_admin_valid_token_e2e';
 const MEMBER_TOKEN = 'izk_member_valid_token_e2e';
 
@@ -382,6 +406,12 @@ test.describe('Izgah Browser Extension E2E (CUJ 1 - CUJ 5)', () => {
 
 		serviceWorker = await resolveExtensionWorker(context);
 		extensionId = new URL(serviceWorker.url()).hostname;
+		const uiLanguage = await serviceWorker.evaluate(() =>
+			(
+				globalThis as unknown as { chrome: { i18n: { getUILanguage(): string } } }
+			).chrome.i18n.getUILanguage()
+		);
+		uiCatalog = uiLanguage.startsWith('tr') ? CATALOGS.tr : CATALOGS.en;
 		await context.grantPermissions(['clipboard-read', 'clipboard-write']);
 	});
 
@@ -411,9 +441,13 @@ test.describe('Izgah Browser Extension E2E (CUJ 1 - CUJ 5)', () => {
 					serviceWorker.evaluate(async () => {
 						const chromeApi = (globalThis as unknown as { chrome: ChromeWorkerApi }).chrome;
 						return new Promise<string | null>((resolve) => {
-							chromeApi.contextMenus.update('share-to-izgah', { title: "İzgah'a paylaş" }, () => {
-								resolve(chromeApi.runtime.lastError?.message ?? null);
-							});
+							chromeApi.contextMenus.update(
+								'share-to-izgah',
+								{ title: "İzgah'ta iz bırak" },
+								() => {
+									resolve(chromeApi.runtime.lastError?.message ?? null);
+								}
+							);
 						});
 					}),
 				{ timeout: 5_000 }
@@ -439,10 +473,12 @@ test.describe('Izgah Browser Extension E2E (CUJ 1 - CUJ 5)', () => {
 
 		await optionsFromSetup.click('#test-connection-btn');
 		await expect(optionsFromSetup.locator('#options-user-summary')).toContainText('İzgah Admin');
-		await expect(optionsFromSetup.locator('#options-user-summary')).toContainText('Yönetici');
+		await expect(optionsFromSetup.locator('#options-user-summary')).toContainText(m('roleAdmin'));
 
 		await optionsFromSetup.click('#save-settings-btn');
-		await expect(optionsFromSetup.locator('#options-status-text')).toContainText('kaydedildi');
+		await expect(optionsFromSetup.locator('#options-status-text')).toContainText(
+			m('savedAndVerified')
+		);
 
 		await optionsFromSetup.reload();
 		await expect(optionsFromSetup.locator('#server-origin')).toHaveValue(mockServer.customOrigin);
@@ -472,10 +508,10 @@ test.describe('Izgah Browser Extension E2E (CUJ 1 - CUJ 5)', () => {
 		await expect(page.locator('#share-url')).toHaveValue(
 			'https://example.com/duplicate-post#heading-2'
 		);
-		await expect(page.locator('#share-source-badge')).toHaveText('Sağ tık: Bağlantı');
+		await expect(page.locator('#share-source-badge')).toHaveText(m('sourceContextLink'));
 		await expect(page.locator('#duplicate-banner')).toBeVisible();
 		await expect(page.locator('#duplicate-primary-text')).toContainText('Ayşe Yılmaz');
-		await expect(page.locator('#duplicate-meta-text')).toContainText('Toplam 2 paylaşım');
+		await expect(page.locator('#duplicate-meta-text')).toContainText(m('dupTotal', '2'));
 
 		// Verify pending share was consumed one-shot
 		const pendingAfterConsume = await serviceWorker.evaluate(async () => {
@@ -488,15 +524,13 @@ test.describe('Izgah Browser Extension E2E (CUJ 1 - CUJ 5)', () => {
 		// Admin silent mode enforces >= 1 section before POST
 		await expect(page.locator('#admin-silent-row')).toBeVisible();
 		await page.check('#share-silent-mode');
-		await expect(page.locator('#sections-legend')).toContainText('zorunlu');
+		await expect(page.locator('#sections-legend')).toContainText(m('sectionsRequired'));
 
 		const postCountBeforeBlockedSubmit = mockServer.requests.filter(
 			(r) => r.method === 'POST' && r.path === '/api/v1/links'
 		).length;
 		await page.click('#popup-submit-btn');
-		await expect(page.locator('#sections-error')).toContainText(
-			'Sessiz kaynak için en az bir konu bölümü seçmelisiniz.'
-		);
+		await expect(page.locator('#sections-error')).toContainText(m('silentNeedsSection'));
 		const postCountAfterBlockedSubmit = mockServer.requests.filter(
 			(r) => r.method === 'POST' && r.path === '/api/v1/links'
 		).length;
@@ -507,10 +541,8 @@ test.describe('Izgah Browser Extension E2E (CUJ 1 - CUJ 5)', () => {
 		await page.click('#popup-submit-btn');
 
 		await expect(page.locator('#popup-success-panel')).toBeVisible();
-		await expect(page.locator('#popup-success-heading')).toContainText(
-			"Bağlantı İzgah'a paylaşıldı"
-		);
-		await expect(page.locator('#popup-success-summary')).toContainText('sessiz kaynak');
+		await expect(page.locator('#popup-success-heading')).toContainText(m('sharedHeading'));
+		await expect(page.locator('#popup-success-summary')).toContainText(m('addedSilently'));
 
 		const silentPost = mockServer.requests
 			.filter((r) => r.method === 'POST' && r.path === '/api/v1/links')
@@ -537,7 +569,7 @@ test.describe('Izgah Browser Extension E2E (CUJ 1 - CUJ 5)', () => {
 		await page.fill('#server-origin', mockServer.localhostOrigin);
 		await page.fill('#api-key', ADMIN_TOKEN);
 		await page.click('#save-settings-btn');
-		await expect(page.locator('#options-status-text')).toContainText('kaydedildi');
+		await expect(page.locator('#options-status-text')).toContainText(m('savedAndVerified'));
 
 		// Silent-resource duplicate check via right-click page handoff
 		await serviceWorker.evaluate(async () => {
@@ -553,12 +585,12 @@ test.describe('Izgah Browser Extension E2E (CUJ 1 - CUJ 5)', () => {
 		});
 
 		await page.goto(`${popupUrl}?mode=standalone`);
-		await expect(page.locator('#share-source-badge')).toHaveText('Sağ tık: Sayfa');
+		await expect(page.locator('#share-source-badge')).toHaveText(m('sourceContextPage'));
 		await expect(page.locator('#share-title-text')).toHaveText('Sessiz Kaynak Rehberi');
 		await expect(page.locator('#duplicate-banner')).toBeVisible();
 		await expect(page.locator('#duplicate-primary-text')).toContainText('İzgah Admin');
 		await expect(page.locator('#duplicate-meta-text')).toContainText(
-			'Yalnızca sessiz kaynak olarak kayıtlı (Web Standartları); normal paylaşım yaparsanız ana akışa da eklenir.'
+			m('dupSilent', 'Web Standartları')
 		);
 
 		// CUJ 4: 422 field error + requestId clipboard copy
@@ -585,7 +617,7 @@ test.describe('Izgah Browser Extension E2E (CUJ 1 - CUJ 5)', () => {
 		await expect(page.locator('#share-url')).toHaveAttribute('aria-invalid', 'true');
 
 		await page.click('#popup-copy-btn');
-		await expect(page.locator('#popup-copy-feedback')).toContainText('Kopyalandı');
+		await expect(page.locator('#popup-copy-feedback')).toContainText(m('copied'));
 		const copiedClipboardText = await page.evaluate(() => navigator.clipboard.readText());
 		expect(copiedClipboardText).toBe('req-e2e-422');
 
@@ -603,7 +635,7 @@ test.describe('Izgah Browser Extension E2E (CUJ 1 - CUJ 5)', () => {
 			}
 		});
 		await page.click('#popup-submit-btn');
-		await expect(page.locator('#popup-error-message')).toContainText('45 saniye');
+		await expect(page.locator('#popup-error-message')).toContainText(m('errRetryAfter', '45'));
 		await expect(page.locator('#popup-request-id')).toHaveText('req-e2e-429');
 
 		// 401 unauthorized response reveals options button
@@ -619,7 +651,9 @@ test.describe('Izgah Browser Extension E2E (CUJ 1 - CUJ 5)', () => {
 			}
 		});
 		await page.click('#popup-submit-btn');
-		await expect(page.locator('#popup-error-message')).toContainText('API anahtarınız');
+		await expect(page.locator('#popup-error-message')).toContainText(
+			m('errUnauthorized').split('. ')[0] ?? ''
+		);
 		await expect(page.locator('#popup-auth-action-row')).toBeVisible();
 
 		// CUJ 5: Update revoked key in Options with a member token and retry share cleanly
@@ -630,7 +664,9 @@ test.describe('Izgah Browser Extension E2E (CUJ 1 - CUJ 5)', () => {
 		await optionsFromAuthError.waitForLoadState('domcontentloaded');
 		await optionsFromAuthError.fill('#api-key', MEMBER_TOKEN);
 		await optionsFromAuthError.click('#save-settings-btn');
-		await expect(optionsFromAuthError.locator('#options-user-summary')).toContainText('Üye');
+		await expect(optionsFromAuthError.locator('#options-user-summary')).toContainText(
+			m('roleMember')
+		);
 		await optionsFromAuthError.close();
 
 		// Reopen popup fresh with member role and share a regular feed link
@@ -640,8 +676,6 @@ test.describe('Izgah Browser Extension E2E (CUJ 1 - CUJ 5)', () => {
 		await page.click('#popup-submit-btn');
 
 		await expect(page.locator('#popup-success-panel')).toBeVisible();
-		await expect(page.locator('#popup-success-summary')).toContainText(
-			'Bağlantı ana akışta yayınlandı.'
-		);
+		await expect(page.locator('#popup-success-summary')).toContainText(m('publishedToFeed'));
 	});
 });

@@ -4,14 +4,14 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="color-scheme" content="light dark" />
-		<title data-i18n-title="popupTitle">Share to Izgah</title>
+		<title data-i18n-title="popupTitle">Add a link to Izgah</title>
 		<link rel="stylesheet" href="../../styles/tokens.css" />
 		<link rel="stylesheet" href="./popup.css" />
 	</head>
 	<body>
 		<main class="popup-main">
 			<div id="popup-setup-panel" class="setup-panel" hidden>
-				<h1 data-i18n="popupTitle">Share to Izgah</h1>
+				<h1 data-i18n="popupTitle">Add a link to Izgah</h1>
 				<p class="setup-description" data-i18n="setupDescription">
 					Before sharing, set your Izgah server address and personal API key in the extension
 					settings.
@@ -35,30 +35,8 @@
 						</h1>
 						<p id="popup-user-badge" class="user-badge" hidden></p>
 					</div>
-					<button
-						id="popup-header-options-btn"
-						type="button"
-						class="btn btn-secondary btn-sm"
-						aria-label="Settings"
-						title="Settings"
-						data-i18n-attr="aria-label:settings title:settings"
-					>
-						<svg
-							aria-hidden="true"
-							width="16"
-							height="16"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="1.5"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						>
-							<path
-								d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
-							/>
-							<circle cx="12" cy="12" r="3" />
-						</svg>
+					<button id="popup-header-options-btn" type="button" class="text-btn" data-i18n="settings">
+						Settings
 					</button>
 				</header>
 
@@ -86,8 +64,9 @@
 							<p id="share-url-notice-text" class="banner-message"></p>
 						</div>
 						<p id="share-title-preview" class="title-preview" hidden>
-							<span class="title-preview-label" data-i18n="titleLabel">Title:</span>
+							<span class="title-preview-label visually-hidden" data-i18n="titleLabel">Title:</span>
 							<span id="share-title-text" class="title-preview-text"></span>
+							<span id="share-title-domain" class="title-preview-domain"></span>
 						</p>
 					</div>
 
@@ -95,7 +74,7 @@
 						<p id="link-check-loading" class="field-hint" data-i18n="checkingLink" hidden>
 							Checking the link…
 						</p>
-						<div id="duplicate-banner" class="banner banner-warn" hidden>
+						<div id="duplicate-banner" class="banner banner-note" hidden>
 							<p id="duplicate-primary-text" class="banner-message"></p>
 							<p id="duplicate-meta-text" class="duplicate-meta" hidden></p>
 						</div>
@@ -230,7 +209,7 @@
 							class="btn btn-primary submit-btn"
 							data-i18n="share"
 						>
-							Share
+							Add a link
 						</button>
 					</div>
 				</form>
@@ -248,7 +227,7 @@
 						class="btn btn-secondary"
 						data-i18n="newShare"
 					>
-						New share
+						Add another
 					</button>
 					<button id="popup-close-btn" type="button" class="btn btn-primary" data-i18n="close">
 						Close
