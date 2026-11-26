@@ -10,7 +10,7 @@ Static pages for the review gate in [izgah-ui-v4.md](../../izgah-ui-v4.md) §9. 
 | [admin-ai.html](./admin-ai.html) | `/admin/ai` ("Smart capture") |
 | [site.html](./site.html) | izgah.com, built from the same stylesheet |
 
-The yellow panel in the corner switches the theme, the font (A: Ysabeau Office, B: Atkinson Hyperlegible Next) and the wordmark variant. Settings live in the URL (`?theme=dark&font=b&mark=2`); `&shot=1` hides the panel for screenshots.
+The yellow panel in the corner switches the theme, the font (A: Ysabeau Office, B: Atkinson Hyperlegible Next, the chosen one and the default) and the wordmark variant (2, "iz" + "gah", is the chosen one and the default). Settings live in the URL (`?theme=dark&font=b&mark=2`); `&shot=1` hides the panel for screenshots.
 
 View it with any static server, for example:
 

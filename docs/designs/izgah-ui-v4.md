@@ -45,10 +45,9 @@ Palettes shrink to Light, Dark and High contrast (light and dark variants); the 
 
 ## 2. Typography
 
-One variable family with italics and `latin-ext`, self-hosted from Fontsource. Two candidates are prototyped and chosen by eye:
+One variable family with italics and `latin-ext`, self-hosted from Fontsource: **Atkinson Hyperlegible Next** (`@fontsource-variable/atkinson-hyperlegible-next`, SIL OFL 1.1). It was designed for legibility and keeps `I l 1` and `O 0` apart in URLs and API keys. The base size is 16 px.
 
-*   **Ysabeau Office:** a humanist sans on a Garamond skeleton; bookish without a serif.
-*   **Atkinson Hyperlegible Next:** designed for legibility; unambiguous `I l 1` and `O 0` in URLs and API keys.
+*Decision, 2026-11-26:* chosen by the maintainer after the prototype review over **Ysabeau Office** (a humanist sans on a Garamond skeleton). Its default zero is slashed; R3 checks whether a plain-zero alternate is available for times and counts, and keeps the slashed zero where telling `0` from `O` matters (URLs, keys, code).
 
 Excluded on purpose, because they are model defaults: Inter, Geist, Space Grotesk, IBM Plex, Newsreader, Fraunces, Instrument Serif, JetBrains Mono.
 
@@ -89,7 +88,7 @@ No top bar, no breadcrumb, no right-rail dashboard.
 
 ## 5. Language
 
-Turkish uses the name's metaphor: sharing is **"İz bırak"** ("leave a trace") and the unit is **"iz"**. English stays plain: "Add a link", "links". The wordmark is the word `izgah` underlined like a link; the prototype tries a few variants.
+Turkish uses the name's metaphor: sharing is **"İz bırak"** ("leave a trace") and the unit is **"iz"**. English stays plain: "Add a link", "links". The wordmark is `izgah` set in the UI family with **"iz" in ink at weight 600 and "gah" in tertiary ink at weight 400**, no underline: it puts the trace (*iz*) first. It is plain text in the markup (`iz<span>gah</span>`), so the accessible name stays "izgah" and forced-colors mode keeps it readable. *Decision, 2026-11-26:* chosen by the maintainer over an underlined and an italic variant.
 
 ## 6. izgah.com
 
@@ -120,6 +119,8 @@ The accent colours (`teal`, `cobalt`, `terracotta`, `plum`) and the `dim` palett
 ## 9. Acceptance (prototype review)
 
 `docs/designs/prototypes/kunye/` holds static pages with realistic data: the feed with a reading pane (light and dark), a resource page, the share form with suggestions, `/admin/ai`, mobile, and izgah.com, with a font switch. The maintainer reviews them; the chosen font and any changes are recorded here before R3 starts.
+
+*   2026-11-26 — Font: Atkinson Hyperlegible Next (§2). Wordmark: "iz" + "gah" (§5). R3 can start.
 
 ## Alternatives considered
 

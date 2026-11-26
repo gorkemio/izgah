@@ -4,8 +4,8 @@ const root = document.documentElement;
 const params = new URLSearchParams(window.location.search);
 const state = {
 	theme: params.get('theme') ?? 'auto',
-	font: params.get('font') ?? 'a',
-	mark: params.get('mark') ?? '1'
+	font: params.get('font') ?? 'b',
+	mark: params.get('mark') ?? '2'
 };
 
 function apply() {
