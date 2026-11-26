@@ -1,116 +1,116 @@
-# İzgah Temaları — Loş, Yüksek Kontrast ve Vurgu Rengi
+# Izgah Themes — Dim, High Contrast and Accent Colour
 
 *   **Author:** Gorkem Inanc Ozdemir
-*   **Status:** Mechanism Active — Vurgu renkleri ve Dim paleti [izgah-ui-v4.md](./izgah-ui-v4.md) §8 ile kaldırıldı
+*   **Status:** Mechanism Active — accent colours and the Dim palette were removed in [izgah-ui-v4.md](./izgah-ui-v4.md) §8
 *   **Date:** 2026-11-22
 
-> **UI v4 Notu (2026-11-26):** Künye ile vurgu renkleri ve Dim paleti kaldırıldı ([izgah-ui-v4.md](./izgah-ui-v4.md) §8); eski `izgah_accent` ve `dim` çerez değerleri beyaz liste üzerinden varsayılana düşer. Kalan dört paletin (açık ve koyu × standart ve yüksek kontrast) renkleri `tokens/kunye.json` dosyasından `pnpm tokens` ile üretilir (v4 §11). Aşağıdaki §1 ve §2 tarihsel kayıttır.
+> **UI v4 note (2026-11-26):** Künye removed the accent colours and the Dim palette ([izgah-ui-v4.md](./izgah-ui-v4.md) §8); old `izgah_accent` and `dim` cookie values fall back to the default through the allow-list. The colours of the four remaining palettes (light and dark × standard and high contrast) are generated from `tokens/kunye.json` with `pnpm tokens` (v4 §11). §1 and §2 below are a historical record.
 
-> **UI v3 Geçiş Notu (2026-11-24):** Bu dokümandaki **mod + gündüz/gece paleti + vurgu** mimarisi, çerez/SSR sözleşmesi (§3), `light-dark()` + `.theme-preview` CSS katmanı (§4) ve `/settings` önizlemeli ayar akışı (§5) aynen korunur. **§1 (Paletler)** ve **§2 (Vurgu Renkleri — `lime`/`cyan`/`pink`/`blue` → `teal`/`cobalt`/`terracotta`/`plum`)** değerleri [izgah-ui-v3.md](./izgah-ui-v3.md#1-token-sistemi-primitive--semantic--component) ile güncellenmiştir.
+> **UI v3 transition note (2026-11-24):** The **mode + day/night palette + accent** architecture of this document, the cookie/SSR contract (§3), the `light-dark()` + `.theme-preview` CSS layer (§4) and the `/settings` flow with previews (§5) stay as they are. The values in **§1 (Palettes)** and **§2 (Accent Colours — `lime`/`cyan`/`pink`/`blue` → `teal`/`cobalt`/`terracotta`/`plum`)** were updated by [izgah-ui-v3.md](./izgah-ui-v3.md#1-token-system-primitive--semantic--component).
 
 --------------------------------------------------------------------------------
 
 ## Overview
 
-Bu doküman [izgah-ui-v2.md](./izgah-ui-v2.md) "Sinyal" görsel dilinin üzerine adlandırılmış ek temalar getirir. Mevcut Sistem / Açık / Koyu **mod** seçimi aynen korunur; kullanıcı buna ek olarak `/settings` "Görünüm" bölümünde bir **açık tema**, bir **koyu tema** ve bir **vurgu rengi** seçer (GitHub'ın "gündüz teması / gece teması" modeli). Sistem modunda işletim sistemi açıksa seçilen açık tema, koyuysa seçilen koyu tema uygulanır.
+This document adds named themes on top of the "Signal" visual language of [izgah-ui-v2.md](./izgah-ui-v2.md). The existing System / Light / Dark **mode** choice stays as it is; in addition, the member picks a **light theme**, a **dark theme** and an **accent colour** in the "Appearance" section of `/settings` (GitHub's "day theme / night theme" model). In System mode, the chosen light theme applies when the operating system is light and the chosen dark theme when it is dark.
 
-Bu doküman `izgah-ui-v2.md` içindeki "Özel Tema ve Renk Seçimi" kapsam dışı maddesini ve Alternative F'deki "`light-dark()` kullanılmaz" kararını değiştirir; ilgili bölümler bu dokümana bağlanır. Veri modeli, eklenti davranışı ve CSP değişmez.
+This document changes the "Custom themes and colour choice" non-goal of `izgah-ui-v2.md` and the "`light-dark()` is not used" decision in its Alternative F; those sections link here. The data model, the extension behaviour and the CSP do not change.
 
-#### Temel Kavramlar
+#### Key Concepts
 
-*   **Mod (`data-theme`):** `system` | `light` | `dark`. Hangi renk şemasının (açık/koyu) etkin olduğunu belirler; değerleri ve çerezi `izgah-ui-v2.md` §9'daki gibidir.
-*   **Açık Tema (`data-light-theme`):** Açık şema etkinken kullanılan palet: `default` (Varsayılan) | `contrast` (Yüksek kontrast).
-*   **Koyu Tema (`data-dark-theme`):** Koyu şema etkinken kullanılan palet: `default` (Varsayılan) | `dim` (Loş) | `contrast` (Yüksek kontrast).
-*   **Vurgu Rengi (`data-accent`):** `--color-signal` ve `--color-focus-outer` değeri: `lime` (Kireç, varsayılan) | `cyan` (Camgöbeği) | `pink` (Pembe) | `blue` (Mavi).
+*   **Mode (`data-theme`):** `system` | `light` | `dark`. Decides which colour scheme (light or dark) is active; its values and cookie are as in `izgah-ui-v2.md` §9.
+*   **Light theme (`data-light-theme`):** The palette used while the light scheme is active: `default` | `contrast` (high contrast).
+*   **Dark theme (`data-dark-theme`):** The palette used while the dark scheme is active: `default` | `dim` | `contrast` (high contrast).
+*   **Accent colour (`data-accent`):** The value of `--color-signal` and `--color-focus-outer`: `lime` (default) | `cyan` | `pink` | `blue`.
 
 ## The Problem
 
-*   Koyu tema tek ve neredeyse siyahtır (`#0A0A0A`); uzun okumada daha yumuşak bir koyu zemin isteyen üyeler için seçenek yoktur (X'in "Loş" temasına benzer ihtiyaç).
-*   Az gören veya parlak ortamda çalışan üyeler için AAA düzeyinde metin kontrastı ve belirgin kontrol sınırları sunan bir tema yoktur.
-*   Ekipte limon vurguyu yorucu bulan üyeler, marka dilini bozmayan bir alternatif seçemez.
+*   There is one dark theme and it is nearly black (`#0A0A0A`); members who want a softer dark background for long reading have no option (a need similar to X's "Dim" theme).
+*   Members with low vision, or who work in bright surroundings, have no theme with AAA text contrast and clearly visible control boundaries.
+*   Members who find the lime accent tiring cannot pick an alternative that keeps the brand language.
 
 ## Goals
 
-*   Her açık × koyu × vurgu kombinasyonunda WCAG 2.2 AA (metin `4.5:1`, kontrol sınırı ve odak `3:1`); yüksek kontrast paletlerinde metin ve ikincil metin `7:1` (AAA).
-*   İlk boyamada tema parlaması olmaması ve JS'siz çalışma (`izgah-ui-v2.md` §9 ile aynı garanti).
-*   Yeni bağımlılık, satır içi betik, CSP istisnası veya veritabanı sütunu olmaması.
+*   WCAG 2.2 AA in every light × dark × accent combination (text `4.5:1`, control boundaries and focus `3:1`); text and secondary text at `7:1` (AAA) in the high-contrast palettes.
+*   No theme flash on first paint, and working without JavaScript (the same guarantee as `izgah-ui-v2.md` §9).
+*   No new dependency, inline script, CSP exception or database column.
 
 ## Non-Goals
 
-*   **Cihazlar Arası Eşitleme:** Tercihler çerezde kalır, cihaz başınadır.
-*   **Eklenti:** Eklenti sistem temasını, varsayılan paletleri ve limon vurguyu izlemeye devam eder (`izgah-ui-v2.md` §14).
-*   **Serbest Renk Seçimi ve Yoğunluk:** Yalnız aşağıdaki hazır paletler vardır; renk seçici, yoğunluk veya yazı boyutu ayarı yoktur.
-*   **Animasyonlu Geçiş, `prefers-contrast` ile Otomatik Seçim, `theme-color`:** Bu sürümde yoktur.
+*   **Cross-device sync:** Preferences stay in cookies, per device.
+*   **Extension:** The extension keeps following the system theme, the default palettes and the lime accent (`izgah-ui-v2.md` §14).
+*   **Free colour choice and density:** Only the ready-made palettes below exist; there is no colour picker, density or font size setting.
+*   **Animated transitions, automatic choice through `prefers-contrast`, `theme-color`:** Not in this version.
 
 ## Technical Plan (Architecture)
 
-### 1. Paletler
+### 1. Palettes
 
-Değerler [`src/lib/styles/tokens.css`](../../src/lib/styles/tokens.css) içindedir; oranlar WCAG 2.x göreli parlaklık formülüyle hesaplanmış ve [`tests/unit/tokens-contrast.test.ts`](../../tests/unit/tokens-contrast.test.ts) tarafından token dosyasından yeniden doğrulanır. Varsayılan açık ve koyu paletler `izgah-ui-v2.md` §1 tablosundaki değerlerdir.
+The values live in [`src/lib/styles/tokens.css`](../../src/lib/styles/tokens.css); the ratios were computed with the WCAG 2.x relative luminance formula and are re-checked from the token file by [`tests/unit/tokens-contrast.test.ts`](../../tests/unit/tokens-contrast.test.ts). The default light and dark palettes are the values in the table in `izgah-ui-v2.md` §1.
 
-| Token | Açık YK (`contrast`) | Loş (`dim`) | Koyu YK (`contrast`) |
+| Token | Light HC (`contrast`) | Dim (`dim`) | Dark HC (`contrast`) |
 | :--- | :--- | :--- | :--- |
 | `bg` / `surface` | `#FFFFFF` / `#F0F0F0` | `#1C1C1C` / `#262626` | `#000000` / `#121212` |
 | `text` | `#000000` (`bg` 21 · `surface` 18.43) | `#EDEDED` (14.56 · 12.93) | `#FFFFFF` (21 · 18.73) |
 | `text-muted` | `#3D3D3D` (10.86 · 9.53) | `#A8A8A8` (7.17 · 6.36) | `#D0D0D0` (13.62 · 12.15) |
-| `line` | `#767676` (4.54) | `#3A3A3A` (dekoratif) | `#7A7A7A` (4.89) |
+| `line` | `#767676` (4.54) | `#3A3A3A` (decorative) | `#7A7A7A` (4.89) |
 | `line-strong` | `#1F1F1F` (16.48) | `#7F7F7F` (4.26) | `#C4C4C4` (12.04) |
 | `danger` / `on-danger` | `#A3150B` (7.87) / `#FFFFFF` (7.87) | `#FF8A80` (7.47) / `#0A0A0A` (8.67) | `#FFA3A3` (11.02) / `#000000` (11.02) |
 | `focus-inner` | `#000000` | `#EDEDED` | `#FFFFFF` |
 | `backdrop` | `rgb(0 0 0 / 0.6)` | `rgb(0 0 0 / 0.6)` | `rgb(0 0 0 / 0.8)` |
 
-Yüksek kontrast paletlerinde `line` de `3:1`'i geçer; bu yüzden ayraçlar ve ek kutusu kenarları da algılanabilir sınır olur. Gri skala nötr kalır; krem/sepya zemin, turuncu, mor ve gradyan yasağı (`izgah-ui-v2.md` §4) geçerlidir.
+In the high-contrast palettes `line` also passes `3:1`, so dividers and attachment box borders become perceivable boundaries too. The grey scale stays neutral; the ban on cream/sepia backgrounds, orange, purple and gradients (`izgah-ui-v2.md` §4) applies.
 
-### 2. Vurgu Renkleri
+### 2. Accent Colours
 
-`--color-on-signal` her vurguda `#0A0A0A`'dır.
+`--color-on-signal` is `#0A0A0A` for every accent.
 
-| Vurgu | Değer | `on-signal` üzerinde | Koyu zemin (`#0A0A0A` / Loş `#1C1C1C`) | Beyaz üzerinde |
+| Accent | Value | On `on-signal` | Dark background (`#0A0A0A` / Dim `#1C1C1C`) | On white |
 | :--- | :--- | :--- | :--- | :--- |
-| Kireç (`lime`) | `#C8F542` | 15.65 | 15.65 / 13.47 | 1.27 |
-| Camgöbeği (`cyan`) | `#4FDDE6` | 12.08 | 12.08 / 10.40 | 1.64 |
-| Pembe (`pink`) | `#FF8FD0` | 9.51 | 9.51 / 8.19 | 2.08 |
-| Mavi (`blue`) | `#8FC4FF` | 10.85 | 10.85 / 9.34 | 1.82 |
+| Lime (`lime`) | `#C8F542` | 15.65 | 15.65 / 13.47 | 1.27 |
+| Cyan (`cyan`) | `#4FDDE6` | 12.08 | 12.08 / 10.40 | 1.64 |
+| Pink (`pink`) | `#FF8FD0` | 9.51 | 9.51 / 8.19 | 2.08 |
+| Blue (`blue`) | `#8FC4FF` | 10.85 | 10.85 / 9.34 | 1.82 |
 
-Hiçbir vurgu beyaz üzerinde `3:1`'i geçmez; bu nedenle `izgah-ui-v2.md` §1 "Limonun İzinli Kullanımları" tablosu her vurgu için aynen geçerlidir (açık temada yalnız dolgu + mürekkep metin, koyu temada metin olarak da kullanılabilir).
+No accent passes `3:1` on white, so the "Permitted uses of lime" table in `izgah-ui-v2.md` §1 applies unchanged to every accent (in the light theme only as a fill with ink text; in the dark theme also as text).
 
-### 3. Çerezler, Sunucu ve Eylem
+### 3. Cookies, Server and Action
 
-*   **Çerezler:** `izgah_theme` (mod, değişmez), `izgah_theme_light`, `izgah_theme_dark`, `izgah_accent`. Bayraklar `izgah_theme` ile aynıdır: `Path=/; Max-Age=31536000; SameSite=Lax; HttpOnly; Secure` (koşullu). Değer yoksa veya geçersizse varsayılan (`default`, `default`, `lime`) kullanılır; HTML'e yalnız beyaz listedeki değerler yazılır.
-*   **Sunucu:** [`src/app.html`](../../src/app.html) kök öğesi `<html lang="tr" data-theme="%izgah.theme%" data-light-theme="%izgah.lightTheme%" data-dark-theme="%izgah.darkTheme%" data-accent="%izgah.accent%">` olur; [`src/hooks.server.ts`](../../src/hooks.server.ts) mevcut `transformPageChunk` sarmalayıcısında dört yer tutucuyu doldurur. `<head>` içindeki `<meta name="color-scheme" content="%izgah.colorScheme%">` moda göre `light dark` / `light` / `dark` olur; tarayıcı tuvali CSS yüklenmeden doğru renkte boyar ve JS'li geçişte istemci aynı değeri günceller.
-*   **Eylem:** `/settings?/setPalette` (`lightTheme`, `darkTheme`, `accent`, `returnTo`). Doğrulama, `303` yönlendirmesi, `x-sveltekit-action` dalı ve `sanitizeInternalPath` `?/setTheme` ile aynıdır.
+*   **Cookies:** `izgah_theme` (mode, unchanged), `izgah_theme_light`, `izgah_theme_dark`, `izgah_accent`. The flags are the same as for `izgah_theme`: `Path=/; Max-Age=31536000; SameSite=Lax; HttpOnly; Secure` (conditional). A missing or invalid value falls back to the default (`default`, `default`, `lime`); only allow-listed values are written into the HTML.
+*   **Server:** The root element in [`src/app.html`](../../src/app.html) becomes `<html lang="tr" data-theme="%izgah.theme%" data-light-theme="%izgah.lightTheme%" data-dark-theme="%izgah.darkTheme%" data-accent="%izgah.accent%">`; [`src/hooks.server.ts`](../../src/hooks.server.ts) fills the four placeholders in the existing `transformPageChunk` wrapper. `<meta name="color-scheme" content="%izgah.colorScheme%">` in `<head>` becomes `light dark` / `light` / `dark` depending on the mode; the browser paints the canvas in the right colour before the CSS loads, and the client updates the same value on a JavaScript switch.
+*   **Action:** `/settings?/setPalette` (`lightTheme`, `darkTheme`, `accent`, `returnTo`). Validation, the `303` redirect, the `x-sveltekit-action` branch and `sanitizeInternalPath` are the same as for `?/setTheme`.
 
-### 4. CSS Mimarisi
+### 4. CSS Architecture
 
-*   **Palet yuvaları:** `--light-*` ve `--dark-*` özellikleri her paletin ham değerlerini, `--accent` vurgu değerini taşır.
-*   **Semantik token'lar:** `--color-bg: light-dark(var(--light-bg), var(--dark-bg))` biçiminde tanımlanır; bileşenler yalnız `--color-*` adlarını kullanır.
-*   **Mod:** `:root { color-scheme: light dark }`, `:root[data-theme='light'] { color-scheme: light }`, `:root[data-theme='dark'] { color-scheme: dark }`. Koyu değerleri tekrar eden `@media (prefers-color-scheme: dark)` bloğu kalkar.
-*   **Palet seçicileri:** `:root` öneki olmadan (`[data-dark-theme='dim']` vb.) yazılır; yuvalar ve semantik eşleme `:root, .theme-preview` üzerinde tanımlandığından ayarlar sayfasındaki önizleme kartları kendi paletini gösterir.
-*   `light-dark()` 2026-11-13 itibarıyla Baseline "widely available"dır (Chrome 123, Firefox 120, Safari 17.5); hedef tarayıcıların tamamı destekler.
+*   **Palette slots:** The `--light-*` and `--dark-*` properties carry each palette's raw values; `--accent` carries the accent value.
+*   **Semantic tokens:** Defined as `--color-bg: light-dark(var(--light-bg), var(--dark-bg))`; components only use the `--color-*` names.
+*   **Mode:** `:root { color-scheme: light dark }`, `:root[data-theme='light'] { color-scheme: light }`, `:root[data-theme='dark'] { color-scheme: dark }`. The `@media (prefers-color-scheme: dark)` block that repeated the dark values is removed.
+*   **Palette selectors:** Written without the `:root` prefix (`[data-dark-theme='dim']` and so on); because the slots and the semantic mapping are defined on `:root, .theme-preview`, the preview cards on the settings page show their own palette.
+*   `light-dark()` is Baseline "widely available" as of 2026-11-13 (Chrome 123, Firefox 120, Safari 17.5); every target browser supports it.
 
-### 5. Ayarlar Arayüzü
+### 5. Settings UI
 
-*   `/settings` "Görünüm": mevcut mod seçicisinin altında üç `<fieldset>` ("Açık tema", "Koyu tema", "Vurgu rengi"). Her seçenek görünür native radio + önizleme kartıdır; seçim değişince form gönderilir (`use:enhance`, sayfa yeniden yüklenmez), JS'siz kullanıcıda "Uygula" düğmesi görünür.
-*   Seçili seçenek renkten bağımsız olarak kalın çerçeve ve onay işaretiyle belirtilir; `forced-colors` altında sistem renkleri kullanılır.
-*   Hesap menüsündeki seçici yalnız modu değiştirir.
+*   `/settings` "Appearance": three `<fieldset>`s under the existing mode picker ("Light theme", "Dark theme", "Accent colour"). Each option is a visible native radio plus a preview card; changing the choice submits the form (`use:enhance`, no page reload), and users without JavaScript see an "Apply" button.
+*   The selected option is marked by a thick border and a check mark, independent of colour; `forced-colors` uses the system colours.
+*   The picker in the account menu only changes the mode.
 
 ## Alternatives Considered
 
-### Alternative A: Tek Düz Tema Listesi
+### Alternative A: One Flat Theme List
 
-X modeli (Sistem / Açık / Loş / Koyu / …) daha basittir; ancak "Sistem" seçeneği her zaman varsayılan paletleri kullanmak zorunda kalır ve Loş veya yüksek kontrast isteyen üye işletim sistemi eşitlemesinden vazgeçer. Kullanıcı tarafından seçilmedi.
+The X model (System / Light / Dim / Dark / …) is simpler, but the "System" option would always have to use the default palettes, and a member who wants Dim or high contrast would give up following the operating system. Not chosen by the user.
 
-### Alternative B: `light-dark()` Olmadan Seçicilerle
+### Alternative B: Selectors Without `light-dark()`
 
-Her koyu palet `[data-theme='dark']` ve `@media (prefers-color-scheme: dark)` altında iki kez yazılırdı (üç koyu palet için altı blok). `light-dark()` artık widely available olduğundan reddedildi.
+Each dark palette would be written twice, under `[data-theme='dark']` and under `@media (prefers-color-scheme: dark)` (six blocks for three dark palettes). Rejected because `light-dark()` is now widely available.
 
-### Alternative C: Tercihleri Kullanıcı Profilinde Saklamak
+### Alternative C: Storing Preferences in the User Profile
 
-Cihazlar arası eşitleme sağlardı; ancak yeni sütun ve göç gerektirir ve ilk boyama için yine çereze yansıtılması gerekirdi. 10–15 kişilik ekipte cihaz başına tercih yeterli görüldü.
+This would give cross-device sync, but it needs a new column and a migration, and the value would still have to be mirrored into a cookie for the first paint. Per-device preferences were judged enough for a team of 10–15 people.
 
 ## Verification Plan
 
-*   `tests/unit/tokens-contrast.test.ts`: tüm palet ve vurgu kombinasyonları için §1–§2 eşikleri.
-*   `tests/integration/m10-ui-v2.test.ts`: çerez → `<html>` öznitelikleri, geçersiz değer, `?/setPalette` doğrulama, `303` ve enhanced dallar.
-*   `tests/e2e/m12-ui-v2-shell.spec.ts` ve `tests/e2e/m15-a11y-tour.spec.ts`: ayarlarda seçim ve kalıcılık; Loş ve yüksek kontrast paletlerinde axe taraması.
-*   `pnpm test:docker`: `app.html`, hook ve global stil değişikliği sonrası sıfır CSP ihlali.
+*   `tests/unit/tokens-contrast.test.ts`: the §1–§2 thresholds for every palette and accent combination.
+*   `tests/integration/m10-ui-v2.test.ts`: cookie → `<html>` attributes, invalid values, `?/setPalette` validation, the `303` and enhanced branches.
+*   `tests/e2e/m12-ui-v2-shell.spec.ts` and `tests/e2e/m15-a11y-tour.spec.ts`: choosing and persisting in settings; axe scans in the Dim and high-contrast palettes.
+*   `pnpm test:docker`: zero CSP violations after changes to `app.html`, the hook and global styles.

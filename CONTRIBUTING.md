@@ -10,7 +10,7 @@ Thanks for helping! Izgah is a small project, so the process is light.
 
 ## Development setup
 
-See the [quick start in the README](./README.md#quick-start-development). In short: `pnpm install`, `cp .env.example .env`, `docker compose up -d`, `pnpm db:migrate`, `pnpm dev`.
+See the [development section of the README](./README.md#development). In short: `pnpm install`, `cp .env.example .env`, `docker compose up -d`, `pnpm db:migrate`, `pnpm dev`.
 
 The browser extensions are a separate package: `pnpm --dir extensions install`.
 
