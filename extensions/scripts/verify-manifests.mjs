@@ -1,5 +1,6 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
+import { deflateRawSync, gzipSync } from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
@@ -9,6 +10,13 @@ const OUTPUT_ROOT = path.join(EXTENSIONS_ROOT, '.output');
 const REQUIRED_PERMISSIONS = ['activeTab', 'contextMenus', 'storage'];
 const REQUIRED_ICON_SIZES = ['16', '32', '48', '128'];
 const HOST_PERMISSION_RE = /^(https|http):\/\/(\[[0-9a-fA-F:]+\]|[^/:*]+)\/api\/v1\/\*$/;
+// Size budget, measured the way the stores count it (docs/designs/izgah-extensions.md): the zip a
+// user downloads and the gzip-compressed JS and CSS. Source maps are not shipped in store builds.
+const BUDGET_ZIP_BYTES = 150 * 1024;
+const BUDGET_CODE_GZIP_BYTES = 30 * 1024;
+const ZIP_LOCAL_HEADER = 30;
+const ZIP_CENTRAL_HEADER = 46;
+const ZIP_END_RECORD = 22;
 const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 
 const TARGET_DIRS = {
@@ -318,6 +326,47 @@ function verifyTargetManifest(target, { requireHttpsOrigin, storeBuild }) {
 	return { target, hostPermission, errors };
 }
 
+function listFiles(dir, base = dir) {
+	return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+		const full = path.join(dir, entry.name);
+		return entry.isDirectory() ? listFiles(full, base) : [path.relative(base, full)];
+	});
+}
+
+/** Zip size from deflate-compressed entries plus zip headers; JS+CSS size after gzip. */
+export function measurePackage(outputDir) {
+	let zipBytes = ZIP_END_RECORD;
+	let codeGzipBytes = 0;
+	for (const relPath of listFiles(outputDir)) {
+		if (relPath.endsWith('.map')) {
+			continue;
+		}
+		const data = readFileSync(path.join(outputDir, relPath));
+		const name = Buffer.byteLength(relPath.split(path.sep).join('/'));
+		const stored = Math.min(data.length, deflateRawSync(data, { level: 9 }).length);
+		zipBytes += stored + ZIP_LOCAL_HEADER + ZIP_CENTRAL_HEADER + 2 * name;
+		if (/\.(js|css)$/.test(relPath)) {
+			codeGzipBytes += gzipSync(data, { level: 9 }).length;
+		}
+	}
+	return { zipBytes, codeGzipBytes };
+}
+
+function checkSizeBudget(target) {
+	const { zipBytes, codeGzipBytes } = measurePackage(path.join(OUTPUT_ROOT, TARGET_DIRS[target]));
+	const kb = (bytes) => `${(bytes / 1024).toFixed(1)} KB`;
+	const errors = [];
+	if (zipBytes > BUDGET_ZIP_BYTES) {
+		errors.push(`size: zip ${kb(zipBytes)} is over the ${kb(BUDGET_ZIP_BYTES)} budget`);
+	}
+	if (codeGzipBytes > BUDGET_CODE_GZIP_BYTES) {
+		errors.push(
+			`size: JS+CSS gzip ${kb(codeGzipBytes)} is over the ${kb(BUDGET_CODE_GZIP_BYTES)} budget`
+		);
+	}
+	return { summary: `zip ${kb(zipBytes)}, JS+CSS gzip ${kb(codeGzipBytes)}`, errors };
+}
+
 function main() {
 	const flags = parseCliFlags(process.argv.slice(2));
 	const targets = flags.onlyTarget
@@ -330,7 +379,11 @@ function main() {
 					: [])
 			];
 
-	const results = targets.map((target) => verifyTargetManifest(target, flags));
+	const results = targets.map((target) => {
+		const result = verifyTargetManifest(target, flags);
+		const size = checkSizeBudget(target);
+		return { ...result, size: size.summary, errors: [...result.errors, ...size.errors] };
+	});
 	const hostPermissionsSeen = new Set(
 		results.map((r) => r.hostPermission).filter((value) => typeof value === 'string')
 	);
@@ -345,7 +398,7 @@ function main() {
 			}
 		} else {
 			console.log(
-				`[verify-manifests] OK ${result.target} (${TARGET_DIRS[result.target]}/manifest.json -> ${result.hostPermission})`
+				`[verify-manifests] OK ${result.target} (${TARGET_DIRS[result.target]}/manifest.json -> ${result.hostPermission}; ${result.size})`
 			);
 		}
 	}
