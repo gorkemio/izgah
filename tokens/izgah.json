@@ -140,7 +140,7 @@
 	},
 	"v5": {
 		"$comment": "UI v5 \"Fener\" (docs/designs/izgah-ui-v5.md §2, §3). One neutral system with hairline borders; themes differ only in their accent and analogous gradient. \"default\" is the theme the app ships.",
-		"default": "lantern",
+		"default": "jade",
 		"themes": {
 			"lantern": {
 				"dark": {

@@ -8,7 +8,7 @@
 
 ## Overview
 
-A *fener* is a lantern or a lighthouse. v5 gives Izgah a premium, elegant interface: a calm neutral base in dark and light, one warm accent, solid surfaces with hairline borders, icons, faces, site icons and considered motion. It is built on Tailwind CSS v4, shadcn-svelte and Bits UI, with themes and interactions adapted from the 21st.dev catalogue.
+A *fener* is a lantern or a lighthouse. v5 gives Izgah a premium, elegant interface: a calm neutral base in dark and light, one jade accent, solid surfaces with hairline borders, icons, faces, site icons and considered motion. It is built on Tailwind CSS v4, shadcn-svelte and Bits UI, with themes and interactions adapted from the 21st.dev catalogue.
 
 v5 keeps what works underneath: server rendering and SvelteKit form actions, the single token source and its generated palettes, the theme cookies, the enforced CSP, self-hosted fonts, English and Turkish parity, the accessibility targets and the stable E2E hooks.
 
@@ -47,7 +47,7 @@ Screen-by-screen feedback from the team is collected during the review of this d
 7.  **Effects are adjustable.** "Full" and "Reduced" levels; reduced applies by itself under reduced motion, reduced transparency, high contrast and forced colours.
 8.  **The server is the source of truth.** Server rendering, form actions and server validation stay; the client adds optimistic feedback on top.
 9.  **Accessible by default.** WCAG 2.2 AA (text at 7:1 in the high contrast palettes), full keyboard use, visible focus, stable E2E hooks and accessible names.
-10. **Own the look.** The 21st.dev catalogue supplies parts, not an identity. The warm Lantern accent, Geist and the trail line keep Izgah recognisable.
+10. **Own the look.** The 21st.dev catalogue supplies parts, not an identity. The Jade accent, Geist and the trail line keep Izgah recognisable.
 
 ## 1. Toolkit
 
@@ -158,7 +158,7 @@ Not used, because they read as generated: decorative gradients of any kind (back
 *   **Accent (per theme).** Lab candidates, with the choice recorded in §16:
     *   **Lantern:** warm amber `#f2b867` (dark) / `#9a5a0e` (light). The *fener* itself: a warm light in the dark.
     *   **Indigo night:** `#8e94f8`; the quiet register of Linear and Mercury.
-    *   **Jade:** `#55d0a6`.
+    *   **Jade (chosen):** `#55d0a6` (dark) / `#0f7a5c` (light); fresh and calm.
 *   **Where colour goes:** the active rail indicator (a 2 px accent line), the focus `halo`, the selected entry's accent border, liked hearts, unread counts, links and the mark. Everything else is neutral. The `brand-*` roles stay in the tokens for izgah.com and illustrations but are not used in the app.
 *   Link titles in the feed use `foreground`; the `:visited` reading trace stays as the `visited` colour.
 
@@ -457,6 +457,7 @@ Work happens on the `feat/ui-v5` branch; `main` receives v5 in one step after M1
 *   **2026-11-27 (M1 theme lab, maintainer):** **Lantern** (warm amber `#f2b867` dark / `#9a5a0e` light, amber → apricot → rose) on the shared neutral system, set in **Geist** for both body and display. Indigo night and Jade stay in the lab file only. Geist replaces Atkinson Hyperlegible Next in the app at once (the extension and izgah.com follow in M9 and M10); the plain-zero Atkinson build is no longer needed by the app and goes in M11.
 *   **2026-11-27 (maintainer, after the second lab):** gradients still read as generated; keep the new direction but with minimal or no gradients, in dark and light. The `lantern`, `mesh`, `sheen`, `bg-brand`, `text-brand`, `ring-brand` and `shimmer` utilities were removed; the primary button is solid ink, the selected entry has a solid accent border, loading uses a solid accent bar and pulsing placeholders.
 *   **2026-11-27 (M2):** the rail, the mobile top bar, the tab bar, the account menu and the notification panel are rebuilt in Lantern with icons and labels (shadcn-svelte Popover for the menus). A migration bridge in `src/lib/styles/tokens.css` maps the Künye `--k-*` colours, radii and shadows to v5 roles, so screens that M3–M6 have not rebuilt yet keep their layout but share the Lantern palette; the bridge goes with the `--k-*` variables in M11. The Künye 3 px radius test was retired in favour of the v5 radius scale.
+*   **2026-11-27 (maintainer):** the default theme is **Jade** (`#55d0a6` dark / `#0f7a5c` light), not Lantern; Lantern and Indigo night stay in the lab file only. Geist and the no-gradient rule are unchanged.
 
 ## 17. Open questions
 
@@ -486,7 +487,7 @@ Work happens on the `feat/ui-v5` branch; `main` receives v5 in one step after M1
 | :--- | :--- |
 | v4 shipped a day earlier; a second large change follows within days | This document records the reasons; `main` receives v5 in one step |
 | Bold effects tire or slow down a tool used every day | The effect level setting, the performance and readability rules, and continuous motion only for the trail |
-| The common 21st.dev look makes Izgah resemble other apps | No decorative gradients, the Lantern accent and Geist; a deliberate choice in the theme lab |
+| The common 21st.dev look makes Izgah resemble other apps | No decorative gradients, the Jade accent and Geist; a deliberate choice in the theme lab |
 | Requiring JavaScript reduces resilience on poor connections | Server rendering stays, forms post to the same actions, and a `<noscript>` banner explains the requirement |
 | Tailwind or shadcn-svelte do not fit SvelteKit 3, Vite 8 or the `#lib` alias | The compatibility check is the first step of M1; the work stops there and goes back to the maintainer if it fails |
 | Preflight changes how unmigrated screens look | Before and after screenshots in M1, and the E2E suite |

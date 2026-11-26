@@ -1,7 +1,7 @@
 <!--
 	App rail (≥ 768px) and mobile top bar (< 768px), docs/designs/izgah-ui-v5.md §4.
 
-	Lantern: solid surfaces and hairlines, icons with labels, the accent only on the active item and
+	Jade: solid surfaces and hairlines, icons with labels, the accent only on the active item and
 	counts. Accessible names and E2E hooks follow izgah-ui-v2.md §12 (one "Ana gezinme" landmark at
 	every width: below 768px the rail navigation is display:none and BottomTabBar takes over).
 -->
