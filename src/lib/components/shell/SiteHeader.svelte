@@ -3,7 +3,7 @@
 	import { instanceName } from '#lib/instance.ts';
 	import { page } from '$app/state';
 	import NotificationBell from '#lib/components/notifications/NotificationBell.svelte';
-	import PopoverPanel from '#lib/components/ui/PopoverPanel.svelte';
+	import PopoverPanel from '#lib/components/legacy/PopoverPanel.svelte';
 	import ThemeForm from '#lib/components/shell/ThemeForm.svelte';
 
 	interface SectionLink {

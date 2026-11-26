@@ -5,7 +5,7 @@
 	import { onMount } from 'svelte';
 	import { enhance } from '$app/forms';
 	import type { AdminUserItem } from '#lib/server/admin/service.ts';
-	import Dialog from '#lib/components/ui/Dialog.svelte';
+	import Dialog from '#lib/components/legacy/Dialog.svelte';
 	import type { ActionData, PageData } from './$types';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();

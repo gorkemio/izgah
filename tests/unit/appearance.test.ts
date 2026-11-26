@@ -73,13 +73,13 @@ describe('appearance whitelists & font preload (docs/designs/izgah-ui-v4.md ยง1โ
 		);
 	});
 
-	it('preloads Atkinson Hyperlegible Next normal latin/latin-ext fonts and skips italics and old fonts', () => {
+	it('preloads Geist normal latin/latin-ext fonts and skips italics and old fonts', () => {
 		const font = (file: string) =>
 			shouldPreload({ type: 'font', path: `/_app/immutable/assets/${file}.abc.woff2` });
-		expect(font('atkinson-hyperlegible-next-latin-wght-normal')).toBe(true);
-		expect(font('atkinson-hyperlegible-next-latin-ext-wght-normal')).toBe(true);
-		expect(font('atkinson-hyperlegible-next-latin-wght-italic')).toBe(false);
-		expect(font('geist-latin-wght-normal')).toBe(false);
+		expect(font('geist-latin-wght-normal')).toBe(true);
+		expect(font('geist-latin-ext-wght-normal')).toBe(true);
+		expect(font('geist-latin-wght-italic')).toBe(false);
+		expect(font('atkinson-hyperlegible-next-latin-wght-normal')).toBe(false);
 		expect(font('newsreader-latin-opsz-normal')).toBe(false);
 		expect(shouldPreload({ type: 'js', path: '/_app/immutable/entry/start.js' })).toBe(true);
 		expect(shouldPreload({ type: 'css', path: '/_app/immutable/assets/0.css' })).toBe(true);

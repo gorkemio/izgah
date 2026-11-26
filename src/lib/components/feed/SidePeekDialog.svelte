@@ -4,7 +4,7 @@
 	import { MediaQuery } from 'svelte/reactivity';
 	import { watchImageError } from '#lib/client/image-error.ts';
 	import { toasts } from '#lib/client/toast.svelte.ts';
-	import Skeleton from '#lib/components/ui/Skeleton.svelte';
+	import Skeleton from '#lib/components/legacy/Skeleton.svelte';
 	import { formatWhen } from '#lib/format/date.ts';
 	import type { ContentType, ProviderMeta, UnfurlStatus } from '#lib/types/domain.ts';
 	import { resourceFacts } from '#lib/format/kunye.ts';

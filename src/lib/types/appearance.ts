@@ -30,6 +30,14 @@ export const DEFAULT_PALETTE: Palette = {
 	darkTheme: 'default'
 };
 
+/**
+ * Effect level (docs/designs/izgah-ui-v5.md §7): "reduced" turns off glass, glow, particles and
+ * motion. System settings (reduced motion, transparency, contrast) reduce effects regardless.
+ */
+export const EFFECT_VALUES = ['full', 'reduced'] as const;
+export type EffectLevel = (typeof EFFECT_VALUES)[number];
+export const DEFAULT_EFFECTS: EffectLevel = 'full';
+
 /** Returns `raw` when it is one of `values`, otherwise `fallback`. */
 export function pickAllowed<T extends string>(values: readonly T[], raw: unknown, fallback: T): T {
 	return typeof raw === 'string' && (values as readonly string[]).includes(raw)

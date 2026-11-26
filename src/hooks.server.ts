@@ -27,7 +27,9 @@ import { closeDb, db } from '#lib/server/db/client.ts';
 import { sessions, users, type UserRole } from '#lib/server/db/schema.ts';
 import { env } from '#lib/server/env.ts';
 import {
+	EFFECTS_COOKIE,
 	fillAppearancePlaceholders,
+	parseEffectLevel,
 	parsePalette,
 	parseThemePreference,
 	shouldPreload,
@@ -423,7 +425,8 @@ function fillInstancePlaceholders(html: string, locale: Locale): string {
 		.replace('%izgah.lang%', () => locale)
 		.replace('%izgah.timeZone%', () => escapeAttribute(appTimeZone()))
 		.replace('%izgah.sourceUrl%', () => escapeAttribute(sourceUrl()))
-		.replace('%izgah.instanceName%', () => escapeAttribute(instanceName()));
+		.replace('%izgah.instanceName%', () => escapeAttribute(instanceName()))
+		.replace('%izgah.noscript%', () => escapeAttribute(t('app.noscript')));
 }
 
 /** Runs every request in its member's locale (docs/designs/izgah-i18n-oss.md §2). */
@@ -440,6 +443,7 @@ async function handleRequest(
 	// attribute and font preloads. `sequence()` is avoided: integration tests call `handle` directly.
 	const theme = parseThemePreference(event.cookies.get(THEME_COOKIE));
 	const palette = parsePalette((name) => event.cookies.get(name));
+	const effects = parseEffectLevel(event.cookies.get(EFFECTS_COOKIE));
 	const resolve: typeof kitResolve = (resolveEvent, options) =>
 		kitResolve(resolveEvent, {
 			preload: shouldPreload,
@@ -448,7 +452,10 @@ async function handleRequest(
 				const html = options?.transformPageChunk
 					? ((await options.transformPageChunk(input)) ?? input.html)
 					: input.html;
-				return fillInstancePlaceholders(fillAppearancePlaceholders(html, theme, palette), locale);
+				return fillInstancePlaceholders(
+					fillAppearancePlaceholders(html, theme, palette, effects),
+					locale
+				);
 			}
 		});
 

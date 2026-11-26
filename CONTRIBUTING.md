@@ -12,6 +12,8 @@ Thanks for helping! Izgah is a small project, so the process is light.
 
 See the [development section of the README](./README.md#development). In short: `pnpm install`, `cp .env.example .env`, `docker compose up -d`, `pnpm db:migrate`, `pnpm dev`.
 
+`pnpm seed:demo` fills a local database with realistic members, sections, shares, thumbnails, comments and likes (it refuses to run against anything but localhost). The development-only theme lab at `/dev/theme-lab` shows the UI v5 theme candidates side by side.
+
 The browser extensions are a separate package: `pnpm --dir extensions install`.
 
 ## Definition of done

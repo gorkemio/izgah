@@ -89,8 +89,7 @@
 		color-scheme: light dark;
 
 		/* One family (§2). Display is an alias; mono is the system stack for code, URLs and keys. */
-		--font-sans:
-			'Atkinson Hyperlegible Next Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+		--font-sans: 'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
 		--font-display: var(--font-sans);
 		--font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
@@ -227,11 +226,6 @@
 			var(--v5-light-popover-foreground),
 			var(--v5-dark-popover-foreground)
 		);
-		--primary: light-dark(var(--v5-light-primary), var(--v5-dark-primary));
-		--primary-foreground: light-dark(
-			var(--v5-light-primary-foreground),
-			var(--v5-dark-primary-foreground)
-		);
 		--secondary: light-dark(var(--v5-light-secondary), var(--v5-dark-secondary));
 		--secondary-foreground: light-dark(
 			var(--v5-light-secondary-foreground),
@@ -254,16 +248,10 @@
 		);
 		--border: light-dark(var(--v5-light-border), var(--v5-dark-border));
 		--input: light-dark(var(--v5-light-input), var(--v5-dark-input));
-		--ring: light-dark(var(--v5-light-ring), var(--v5-dark-ring));
 		--sidebar: light-dark(var(--v5-light-sidebar), var(--v5-dark-sidebar));
 		--sidebar-foreground: light-dark(
 			var(--v5-light-sidebar-foreground),
 			var(--v5-dark-sidebar-foreground)
-		);
-		--sidebar-primary: light-dark(var(--v5-light-sidebar-primary), var(--v5-dark-sidebar-primary));
-		--sidebar-primary-foreground: light-dark(
-			var(--v5-light-sidebar-primary-foreground),
-			var(--v5-dark-sidebar-primary-foreground)
 		);
 		--sidebar-accent: light-dark(var(--v5-light-sidebar-accent), var(--v5-dark-sidebar-accent));
 		--sidebar-accent-foreground: light-dark(
@@ -271,6 +259,24 @@
 			var(--v5-dark-sidebar-accent-foreground)
 		);
 		--sidebar-border: light-dark(var(--v5-light-sidebar-border), var(--v5-dark-sidebar-border));
+		--surface-raised: light-dark(var(--v5-light-surface-raised), var(--v5-dark-surface-raised));
+		--overlay: light-dark(var(--v5-light-overlay), var(--v5-dark-overlay));
+		--glass: light-dark(var(--v5-light-glass), var(--v5-dark-glass));
+		--glass-border: light-dark(var(--v5-light-glass-border), var(--v5-dark-glass-border));
+		--backdrop: light-dark(var(--v5-light-backdrop), var(--v5-dark-backdrop));
+		--hairline: light-dark(var(--v5-light-hairline), var(--v5-dark-hairline));
+		--sheen: light-dark(var(--v5-light-sheen), var(--v5-dark-sheen));
+		--primary: light-dark(var(--v5-light-primary), var(--v5-dark-primary));
+		--primary-foreground: light-dark(
+			var(--v5-light-primary-foreground),
+			var(--v5-dark-primary-foreground)
+		);
+		--ring: light-dark(var(--v5-light-ring), var(--v5-dark-ring));
+		--sidebar-primary: light-dark(var(--v5-light-sidebar-primary), var(--v5-dark-sidebar-primary));
+		--sidebar-primary-foreground: light-dark(
+			var(--v5-light-sidebar-primary-foreground),
+			var(--v5-dark-sidebar-primary-foreground)
+		);
 		--sidebar-ring: light-dark(var(--v5-light-sidebar-ring), var(--v5-dark-sidebar-ring));
 		--brand-1: light-dark(var(--v5-light-brand-1), var(--v5-dark-brand-1));
 		--brand-2: light-dark(var(--v5-light-brand-2), var(--v5-dark-brand-2));
@@ -287,11 +293,6 @@
 			var(--v5-light-highlight-foreground),
 			var(--v5-dark-highlight-foreground)
 		);
-		--surface-raised: light-dark(var(--v5-light-surface-raised), var(--v5-dark-surface-raised));
-		--overlay: light-dark(var(--v5-light-overlay), var(--v5-dark-overlay));
-		--glass: light-dark(var(--v5-light-glass), var(--v5-dark-glass));
-		--glass-border: light-dark(var(--v5-light-glass-border), var(--v5-dark-glass-border));
-		--backdrop: light-dark(var(--v5-light-backdrop), var(--v5-dark-backdrop));
 
 		/* Elevation (§3.4); light-dark() accepts only colours, so shadows switch below. */
 		--elevation-sm: var(--v5-light-shadow-sm);

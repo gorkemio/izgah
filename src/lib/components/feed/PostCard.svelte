@@ -8,9 +8,9 @@
 	import { toasts } from '#lib/client/toast.svelte.ts';
 	import { enhance, type SubmitFunction } from '$app/forms';
 	import { goto, invalidate } from '$app/navigation';
-	import Dialog from '#lib/components/ui/Dialog.svelte';
+	import Dialog from '#lib/components/legacy/Dialog.svelte';
 	import Highlight from '#lib/components/ui/Highlight.svelte';
-	import PopoverPanel from '#lib/components/ui/PopoverPanel.svelte';
+	import PopoverPanel from '#lib/components/legacy/PopoverPanel.svelte';
 	import type { SectionListItem } from '#lib/server/sections/service.ts';
 	import type { ContentType } from '#lib/types/domain.ts';
 	import type {

@@ -10,7 +10,7 @@
 	import CommandPalette from '#lib/components/shell/CommandPalette.svelte';
 	import KeyboardHelpDialog from '#lib/components/shell/KeyboardHelpDialog.svelte';
 	import SiteHeader from '#lib/components/shell/SiteHeader.svelte';
-	import Toaster from '#lib/components/ui/Toaster.svelte';
+	import Toaster from '#lib/components/legacy/Toaster.svelte';
 	import {
 		ComposerController,
 		setComposerController

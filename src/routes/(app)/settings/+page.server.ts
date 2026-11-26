@@ -9,7 +9,13 @@ import { checkPasswordChangeRateLimit } from '#lib/server/auth/rate-limit.ts';
 import { isLocale, LOCALE_COOKIE, t } from '#lib/i18n/index.ts';
 import { setHeadersOnce } from '#lib/server/http/headers.ts';
 import { sanitizeInternalPath } from '#lib/server/http/safe-path.ts';
-import { PALETTE_COOKIES, THEME_COOKIE, THEME_VALUES } from '#lib/server/http/theme.ts';
+import {
+	EFFECT_VALUES,
+	EFFECTS_COOKIE,
+	PALETTE_COOKIES,
+	THEME_COOKIE,
+	THEME_VALUES
+} from '#lib/server/http/theme.ts';
 import {
 	DARK_THEME_VALUES,
 	LIGHT_THEME_VALUES,
@@ -59,6 +65,26 @@ export const actions: Actions = {
 		setAppearanceCookie(cookies, THEME_COOKIE, theme);
 		if (request.headers.has('x-sveltekit-action')) {
 			return { formType: 'setTheme' as const, theme };
+		}
+		redirect(303, sanitizeInternalPath(formData.get('returnTo'), { fallback: '/settings' }));
+	},
+
+	/**
+	 * Stores the effect level in the `izgah_effects` cookie (docs/designs/izgah-ui-v5.md §7); the
+	 * client has already applied it to `<html data-effects>`.
+	 */
+	setEffects: async ({ locals, request, cookies }) => {
+		if (!locals.user) {
+			error(401, t('auth.signInRequired'), { requestId: locals.requestId });
+		}
+		const formData = await request.formData();
+		const effects = parseAllowed(EFFECT_VALUES, formData.get('effects'));
+		if (!effects) {
+			return fail(400, { formType: 'setEffects' as const, error: t('settings.invalidEffects') });
+		}
+		setAppearanceCookie(cookies, EFFECTS_COOKIE, effects);
+		if (request.headers.has('x-sveltekit-action')) {
+			return { formType: 'setEffects' as const, effects };
 		}
 		redirect(303, sanitizeInternalPath(formData.get('returnTo'), { fallback: '/settings' }));
 	},
