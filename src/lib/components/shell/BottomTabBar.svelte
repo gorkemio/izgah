@@ -143,12 +143,7 @@
 			transition:
 				background-color var(--dur-fast) var(--ease),
 				color var(--dur-fast) var(--ease),
-				opacity var(--dur-fast) var(--ease),
-				scale 90ms var(--ease);
-		}
-
-		.tab:active {
-			scale: 0.96;
+				opacity var(--dur-fast) var(--ease);
 		}
 	}
 

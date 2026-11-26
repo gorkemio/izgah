@@ -2,7 +2,6 @@
 	import { t } from '#lib/i18n/index.ts';
 	import { instanceName, pageTitle } from '#lib/instance.ts';
 	import AuthLayout from '#lib/components/auth/AuthLayout.svelte';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import { enhance } from '$app/forms';
 	import type { ActionData, PageData } from './$types';
 
@@ -166,14 +165,12 @@
 
 		{#if data.resetSuccess}
 			<p class="banner banner-success" role="status">
-				<Icon name="check" size={16} />
 				<span>{t('login.passwordUpdated')}</span>
 			</p>
 		{/if}
 
 		{#if form?.error}
 			<div class="banner banner-error" role="alert">
-				<Icon name="alert" size={16} />
 				<span>{form.error}</span>
 			</div>
 		{/if}
@@ -209,7 +206,6 @@
 					bind:value={email}
 				/>
 				<p id="email-error" class="error-msg" data-message={t('admin.emailInvalid')}>
-					<Icon name="alert" size={16} />
 					<span>{t('admin.emailInvalid')}</span>
 				</p>
 			</div>
@@ -237,12 +233,10 @@
 						aria-controls="password"
 						onclick={() => (showPassword = !showPassword)}
 					>
-						<Icon name={showPassword ? 'eyeOff' : 'eye'} size={16} />
 						<span>{showPassword ? t('common.hide') : t('common.show')}</span>
 					</button>
 				</div>
 				<p id="password-error" class="error-msg" data-message={t('login.passwordRequired')}>
-					<Icon name="alert" size={16} />
 					<span>{t('login.passwordRequired')}</span>
 				</p>
 			</div>

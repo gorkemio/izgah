@@ -5,7 +5,6 @@
 	import { page } from '$app/state';
 	import PaletteForm from '#lib/components/shell/PaletteForm.svelte';
 	import ThemeForm from '#lib/components/shell/ThemeForm.svelte';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import { getShortcutPreference } from '#lib/client/shortcuts.svelte.ts';
 	import type { ThemeChoice } from '#lib/client/theme.svelte.ts';
 	import { DEFAULT_PALETTE, type Palette } from '#lib/types/appearance.ts';
@@ -317,14 +316,12 @@
 				<div class="settings-row-control password-column">
 					{#if form?.passwordChanged}
 						<p class="banner banner-success" role="status">
-							<Icon name="check" size={16} />
 							<span>{form.message}</span>
 						</p>
 					{/if}
 
 					{#if form?.error}
 						<p class="banner banner-error" role="alert">
-							<Icon name="alert" size={16} />
 							<span>{form.error}</span>
 						</p>
 					{/if}
@@ -381,7 +378,6 @@
 									aria-controls="currentPassword"
 									onclick={() => (showCurrentPassword = !showCurrentPassword)}
 								>
-									<Icon name={showCurrentPassword ? 'eyeOff' : 'eye'} size={15} />
 									<span>{showCurrentPassword ? t('common.hide') : t('common.show')}</span>
 								</button>
 							</div>
@@ -421,7 +417,6 @@
 									aria-controls="newPassword"
 									onclick={() => (showNewPassword = !showNewPassword)}
 								>
-									<Icon name={showNewPassword ? 'eyeOff' : 'eye'} size={15} />
 									<span>{showNewPassword ? t('common.hide') : t('common.show')}</span>
 								</button>
 							</div>
@@ -459,13 +454,11 @@
 				<div class="settings-row-control session-actions">
 					{#if data.user.role === 'admin'}
 						<a href="/admin/users" class="btn btn-subtle">
-							<Icon name="shield" size={15} />
 							<span>{t('settings.adminPanel')}</span>
 						</a>
 					{/if}
 					<form method="POST" action="/logout">
 						<button type="submit" class="btn btn-danger-soft">
-							<Icon name="logout" size={15} />
 							<span>{t('settings.signOut')}</span>
 						</button>
 					</form>
@@ -484,7 +477,6 @@
 				</div>
 				<div class="settings-row-control">
 					<a href={sourceUrl()} class="btn btn-subtle" rel="noopener noreferrer" target="_blank">
-						<Icon name="external" size={15} />
 						<span>{t('settings.sourceCode')}</span>
 					</a>
 				</div>
@@ -680,7 +672,6 @@
 		block-size: 16px;
 		border-radius: var(--radius-pill);
 		background: var(--color-surface-1);
-		box-shadow: var(--shadow-xs);
 		transition: translate var(--dur-fast) var(--ease);
 	}
 

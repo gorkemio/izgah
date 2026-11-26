@@ -2,7 +2,6 @@
 	import { t } from '#lib/i18n/index.ts';
 	import { pageTitle } from '#lib/instance.ts';
 	import { page } from '$app/state';
-	import Icon from '#lib/components/ui/Icon.svelte';
 
 	interface Props {
 		/** Where the "home" link points; signed-out visitors go to /login. */
@@ -80,7 +79,6 @@
 				{t('error.requestId')} <code id="error-request-id">{page.error.requestId}</code>
 			</p>
 			<button type="button" class="btn btn-subtle btn-sm" onclick={copyRequestId}>
-				<Icon name="copy" size={14} />
 				<span>{t('common.copy')}</span>
 			</button>
 			<span class="copy-status" role="status">{copyStatus}</span>
@@ -88,7 +86,6 @@
 	{/if}
 	<p class="error-actions">
 		<a href={homeHref} class="btn btn-primary">
-			<Icon name="arrowLeft" size={16} />
 			<span>{homeLabel}</span>
 		</a>
 	</p>
@@ -104,7 +101,6 @@
 		background: var(--color-surface-1);
 		border: 1px solid var(--color-line);
 		border-radius: var(--radius-lg);
-		box-shadow: var(--shadow-sm);
 	}
 
 	.error-code {

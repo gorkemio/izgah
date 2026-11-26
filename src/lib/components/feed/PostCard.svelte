@@ -9,7 +9,6 @@
 	import { goto, invalidate } from '$app/navigation';
 	import Dialog from '#lib/components/ui/Dialog.svelte';
 	import Highlight from '#lib/components/ui/Highlight.svelte';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import PopoverPanel from '#lib/components/ui/PopoverPanel.svelte';
 	import type { SectionListItem } from '#lib/server/sections/service.ts';
 	import type { ContentType } from '#lib/types/domain.ts';
@@ -586,11 +585,11 @@
 					<h3 id={editTitleId} class="dialog-title">{t('share.editTitle')}</h3>
 					<button
 						type="button"
-						class="btn btn-ghost btn-icon btn-sm"
+						class="btn btn-ghost btn-sm"
 						aria-label={t('share.closeEdit')}
 						onclick={() => requestClose('cancel')}
 					>
-						<Icon name="close" size={16} />
+						{t('common.close')}
 					</button>
 				</header>
 
@@ -996,7 +995,6 @@
 		border: 1px solid var(--color-line-strong);
 		border-radius: var(--radius-lg);
 		background: var(--color-surface-1);
-		box-shadow: var(--shadow-sm);
 	}
 
 	.inline-card-panel.is-danger {

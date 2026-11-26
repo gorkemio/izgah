@@ -3,7 +3,6 @@
 	import { enhance, type SubmitFunction } from '$app/forms';
 	import { toasts } from '#lib/client/toast.svelte.ts';
 	import { page } from '$app/state';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import { getThemeState, type ThemeChoice } from '#lib/client/theme.svelte.ts';
 
 	interface Props {
@@ -20,9 +19,9 @@
 	const returnTo = $derived(`${page.url.pathname}${page.url.search}`);
 
 	const options = [
-		['system', t('theme.system'), 'monitor'],
-		['light', t('theme.light'), 'sun'],
-		['dark', t('theme.dark'), 'moon']
+		['system', t('theme.system')],
+		['light', t('theme.light')],
+		['dark', t('theme.dark')]
 	] as const;
 
 	// Works without JS (POST + 303); with JS the page is not reloaded (izgah-ui-v2 §9).
@@ -48,7 +47,7 @@
 	<fieldset>
 		<legend>{legend}</legend>
 		<div class="theme-options">
-			{#each options as [value, label, icon] (value)}
+			{#each options as [value, label] (value)}
 				<label class="theme-option">
 					<input
 						type="radio"
@@ -57,7 +56,6 @@
 						checked={current === value}
 						onchange={(event) => event.currentTarget.form?.requestSubmit()}
 					/>
-					<Icon name={icon} size={15} />
 					<span>{label}</span>
 				</label>
 			{/each}
@@ -168,7 +166,6 @@
 		color: var(--color-text);
 		border-color: var(--color-line);
 		font-weight: 600;
-		box-shadow: var(--shadow-xs);
 	}
 
 	.is-segmented .theme-option:has(input:focus-visible) {

@@ -396,13 +396,7 @@
 			transition:
 				background-color var(--dur-fast) var(--ease),
 				border-color var(--dur-fast) var(--ease),
-				opacity var(--dur-fast) var(--ease),
-				scale 90ms var(--ease);
-		}
-
-		.auth-main :global(.toggle-btn:active:not(:disabled)),
-		.auth-main :global(.primary-btn:active:not(:disabled)) {
-			scale: 0.98;
+				opacity var(--dur-fast) var(--ease);
 		}
 	}
 

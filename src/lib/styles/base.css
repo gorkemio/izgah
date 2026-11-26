@@ -191,19 +191,6 @@
 		transform: translateY(0);
 	}
 
-	/* Like heart pulse (§8: 280ms ease-out, 1 -> 1.2 -> 1) */
-	@keyframes like-pop {
-		0% {
-			scale: 1;
-		}
-		45% {
-			scale: 1.2;
-		}
-		100% {
-			scale: 1;
-		}
-	}
-
 	@keyframes izgah-vt-out {
 		from {
 			opacity: 1;

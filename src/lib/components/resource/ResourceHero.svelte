@@ -3,7 +3,6 @@
 	import { watchImageError } from '#lib/client/image-error.ts';
 	import { enhance, type SubmitFunction } from '$app/forms';
 	import { goto } from '$app/navigation';
-	import Tooltip from '#lib/components/ui/Tooltip.svelte';
 	import { toasts } from '#lib/client/toast.svelte.ts';
 	import { contentTypeLabel, type FeedShareItem } from '#lib/types/feed.ts';
 
@@ -214,18 +213,14 @@
 				</button>
 			</form>
 
-			<Tooltip text={copied ? t('resource.copied') : t('resource.copyTooltip')}>
-				{#snippet children()}
-					<button
-						type="button"
-						class="btn btn-ghost hero-copy-btn"
-						aria-label={t('link.copyLabel', { title: resource.title || resource.domain })}
-						onclick={copyResourceUrl}
-					>
-						<span>{copied ? t('resource.copied') : t('resource.copy')}</span>
-					</button>
-				{/snippet}
-			</Tooltip>
+			<button
+				type="button"
+				class="btn btn-ghost hero-copy-btn"
+				aria-label={t('link.copyLabel', { title: resource.title || resource.domain })}
+				onclick={copyResourceUrl}
+			>
+				<span>{copied ? t('resource.copied') : t('resource.copy')}</span>
+			</button>
 
 			<a href="#comments" class="btn btn-ghost hero-comment-count">
 				<span>{t('common.commentCount', { count: resource.commentCount })}</span>
@@ -322,12 +317,6 @@
 		background: var(--color-accent-soft);
 		border-color: var(--color-accent);
 		color: var(--color-accent-text);
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.hero-like-btn[aria-pressed='true'] :global(svg) {
-			animation: like-pop 280ms ease-out;
-		}
 	}
 
 	.hero-comment-count {

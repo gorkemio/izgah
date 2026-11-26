@@ -235,8 +235,7 @@ describe('Künye token contrast (docs/designs/izgah-ui-v4.md §1)', () => {
 		expect(resolvedRoot['--dark-bg']).toBe('#0f0f10');
 		expect(resolvedRoot['--light-link']).toBe('#1f3fd0');
 		expect(resolvedRoot['--dark-link']).toBe('#9db7ff');
-		expect(resolvedRoot['--shadow-sm']).toBe('none');
-		expect(resolvedRoot['--shadow-xs']).toBe('none');
+		expect(resolvedRoot['--shadow-sm']).toBeUndefined();
 	});
 
 	it('keeps every corner radius at 3px or less', () => {

@@ -2,7 +2,6 @@
 	import { t } from '#lib/i18n/index.ts';
 	import { instanceName, pageTitle } from '#lib/instance.ts';
 	import AuthLayout from '#lib/components/auth/AuthLayout.svelte';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import { enhance } from '$app/forms';
 	import type { ActionData, PageData } from './$types';
 
@@ -169,12 +168,10 @@
 				<h1 id="invite-heading">{t('invite.invalidHeading')}</h1>
 			</header>
 			<div class="banner banner-error" role="alert">
-				<Icon name="alert" size={16} />
 				<span>{form?.error ?? t('invite.invalid')}</span>
 			</div>
 			<p class="link-row">
 				<a href="/login" class="btn btn-subtle">
-					<Icon name="arrowLeft" size={16} />
 					<span>{t('auth.backToSignIn')}</span>
 				</a>
 			</p>
@@ -186,7 +183,6 @@
 
 			{#if form?.error}
 				<div class="banner banner-error" role="alert">
-					<Icon name="alert" size={16} />
 					<span>{form.error}</span>
 				</div>
 			{/if}
@@ -236,7 +232,6 @@
 						bind:value={name}
 					/>
 					<p id="name-error" class="error-msg" data-message={t('auth.nameEmpty')}>
-						<Icon name="alert" size={16} />
 						<span>{t('auth.nameEmpty')}</span>
 					</p>
 				</div>
@@ -268,12 +263,10 @@
 							aria-controls="password"
 							onclick={() => (showPassword = !showPassword)}
 						>
-							<Icon name={showPassword ? 'eyeOff' : 'eye'} size={16} />
 							<span>{showPassword ? t('common.hide') : t('common.show')}</span>
 						</button>
 					</div>
 					<p id="password-error" class="error-msg" data-message={t('auth.passwordLength')}>
-						<Icon name="alert" size={16} />
 						<span>{t('auth.passwordLength')}</span>
 					</p>
 				</div>

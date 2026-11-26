@@ -2,7 +2,6 @@
 	import { t } from '#lib/i18n/index.ts';
 	import { toasts } from '#lib/client/toast.svelte.ts';
 	import { startVisibilityPoller, type PollOutcome } from '#lib/client/visibility-poller.ts';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import type { ContentType } from '#lib/types/domain.ts';
 
 	interface Props {
@@ -110,7 +109,6 @@
 			disabled={loading}
 			aria-busy={loading}
 		>
-			<Icon name="arrowUp" size={14} />
 			<span>{label}</span>
 		</button>
 	</div>
@@ -158,34 +156,6 @@
 		opacity: 0.65;
 		box-shadow: none;
 		cursor: progress;
-	}
-
-	@keyframes pill-enter {
-		from {
-			opacity: 0;
-			scale: 0.96;
-			translate: 0 -6px;
-		}
-		to {
-			opacity: 1;
-			scale: 1;
-			translate: 0 0;
-		}
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.new-posts-pill {
-			animation: pill-enter var(--dur-base) var(--ease) backwards;
-			transition:
-				background-color var(--dur-fast) var(--ease),
-				border-color var(--dur-fast) var(--ease),
-				opacity var(--dur-fast) var(--ease),
-				scale 90ms var(--ease);
-		}
-
-		.new-posts-pill:active:not(:disabled) {
-			scale: 0.98;
-		}
 	}
 
 	@media (forced-colors: active) {

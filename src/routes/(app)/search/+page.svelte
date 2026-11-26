@@ -4,7 +4,6 @@
 	import { untrack } from 'svelte';
 	import FeedFilterBar from '#lib/components/feed/FeedFilterBar.svelte';
 	import PostCard from '#lib/components/feed/PostCard.svelte';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import { highlightTerms } from '#lib/search/highlight.ts';
 	import type { ShareCardFormError } from '#lib/types/feed.ts';
 	import type { ContentType } from '#lib/types/domain.ts';
@@ -155,9 +154,7 @@
 			<div class="search-input-row">
 				<label for="search-page-q" class="visually-hidden">{t('search.termLabel')}</label>
 				<div class="search-input-wrap">
-					<span class="search-input-icon" aria-hidden="true">
-						<Icon name="search" size={16} />
-					</span>
+					<span class="search-input-icon" aria-hidden="true"> </span>
 					<input
 						id="search-page-q"
 						type="search"
@@ -365,7 +362,6 @@
 		background: var(--color-surface-1);
 		border: 1px solid var(--color-line);
 		border-radius: var(--radius-lg);
-		box-shadow: var(--shadow-sm);
 	}
 
 	.search-form {

@@ -55,15 +55,7 @@
 		--color-highlight-fg: light-dark(var(--light-highlight-fg), var(--dark-highlight-fg));
 		--color-backdrop: light-dark(var(--light-backdrop), var(--dark-backdrop));
 
-		/* Avatar tones: kept for the Avatar components until they are removed (§7). */
-		--color-avatar-1-bg: var(--color-surface-2);
-		--color-avatar-2-bg: var(--color-surface-2);
-		--color-avatar-3-bg: var(--color-surface-2);
-		--color-avatar-4-bg: var(--color-surface-2);
-
 		/* Depth: only dialogs and popovers cast a shadow (light-dark() accepts only <color>). */
-		--shadow-xs: none;
-		--shadow-sm: none;
 		--shadow-lg: var(--light-shadow-lg);
 
 		/* Component layer: rules, not boxes; primary actions are ink. */

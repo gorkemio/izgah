@@ -3,7 +3,6 @@
 	import { pageTitle } from '#lib/instance.ts';
 	import { formatDateTime } from '#lib/format/date.ts';
 	import { enhance } from '$app/forms';
-	import Icon from '#lib/components/ui/Icon.svelte';
 	import type { ActionData, PageData } from './$types';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -64,7 +63,6 @@
 
 	{#if form?.error}
 		<div class="banner banner-error" role="alert">
-			<Icon name="alert" size={16} />
 			<span>{form.error}</span>
 		</div>
 	{/if}
@@ -281,7 +279,6 @@
 		background: var(--color-surface-1);
 		border: 1px solid var(--color-line);
 		border-radius: var(--radius-md);
-		box-shadow: var(--shadow-sm);
 		padding: var(--space-5);
 		display: flex;
 		flex-direction: column;
