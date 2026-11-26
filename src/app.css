@@ -1,5 +1,6 @@
 @layer reset, tokens, base, components, utilities;
 
+@import './lib/styles/palette.css';
 @import './lib/styles/tokens.css';
 @import './lib/styles/base.css';
 @import './lib/styles/components.css';

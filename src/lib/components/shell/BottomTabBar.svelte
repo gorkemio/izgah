@@ -123,7 +123,7 @@
 	/* Künye: words only; the current tab is bold and underlined, "İz bırak" is bold ink. */
 	.tab[aria-current='page'] {
 		color: var(--color-text);
-		font-weight: 650;
+		font-weight: 600;
 		text-decoration: underline;
 		text-decoration-thickness: 2px;
 		text-underline-offset: 0.35em;
@@ -131,7 +131,7 @@
 
 	.tab-compose {
 		color: var(--color-text);
-		font-weight: 650;
+		font-weight: 600;
 	}
 
 	.tab-compose:hover {
