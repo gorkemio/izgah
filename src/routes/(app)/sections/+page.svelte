@@ -38,14 +38,12 @@
 			{/if}
 		</div>
 	{:else}
+		<!-- A ruled index, not a card grid (izgah-ui-v4 §5): name, description, count. -->
 		<ul class="section-list" role="list">
 			{#each data.sections as section (section.id)}
-				<li class="section-card">
-					<div class="section-card-head">
-						<a class="section-link" href="/sections/{section.slug}">
-							<span class="section-name">{section.name}</span>
-						</a>
-					</div>
+				<li class="section-row">
+					<a class="section-link" href="/sections/{section.slug}">{section.name}</a>
+					<span class="section-count">{t('sections.count', { count: section.shareCount })}</span>
 					{#if section.description}
 						<p class="section-desc">{section.description}</p>
 					{/if}
@@ -91,63 +89,28 @@
 		list-style: none;
 		margin: 0;
 		padding: 0;
-		display: grid;
-		grid-template-columns: minmax(0, 1fr);
-		gap: var(--space-3);
+		max-inline-size: var(--read-w);
+		border-block-start: 1px solid var(--color-text);
 	}
 
-	@media (min-width: 640px) {
-		.section-list {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-			gap: var(--space-4);
-		}
-	}
-
-	.section-card {
+	.section-row {
 		position: relative;
 		display: grid;
-		align-content: start;
-		gap: var(--space-2);
-		padding: 18px 20px;
-		background: var(--color-surface-1);
-		border: 1px solid var(--color-line);
-		border-radius: var(--radius-lg);
-		transition:
-			background-color var(--dur-fast) var(--ease),
-			border-color var(--dur-fast) var(--ease);
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: baseline;
+		gap: 2px var(--space-4);
+		padding-block: var(--space-3);
+		border-block-end: 1px solid var(--color-line);
 	}
 
-	.section-card:hover,
-	.section-card:focus-within {
-		border-color: var(--color-line-strong);
-	}
-
-	.section-card:has(.section-link:focus-visible) {
-		outline: 2px solid transparent;
-		outline-offset: 2px;
-		box-shadow:
-			0 0 0 2px var(--color-bg),
-			0 0 0 4px var(--color-accent);
-	}
-
-	.section-card-head {
-		display: flex;
-		align-items: center;
-		gap: var(--space-3);
-		min-inline-size: 0;
-	}
-
-	/* Strict serif boundary: section card titles use --font-sans weight 600. */
 	.section-link {
 		min-inline-size: 0;
-		font-family: var(--font-sans);
-		font-size: 0.96875rem;
-		font-weight: 600;
-		line-height: 1.35;
-		color: var(--color-text);
+		font: var(--text-title);
+		color: var(--color-link);
 		text-decoration: none;
 	}
 
+	/* The whole row opens the section; the link keeps its own focus ring. */
 	.section-link::after {
 		content: '';
 		position: absolute;
@@ -155,17 +118,19 @@
 	}
 
 	.section-link:hover {
-		color: var(--color-accent-text);
-		text-decoration: none;
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
 	}
 
-	.section-link:focus-visible {
-		outline: none;
-		box-shadow: none;
+	.section-count {
+		font: var(--text-meta);
+		font-variant-numeric: tabular-nums;
+		color: var(--color-text-muted);
 	}
 
 	.section-desc {
-		padding-inline-start: calc(32px + var(--space-3));
+		grid-column: 1 / -1;
+		max-inline-size: var(--measure);
 		font: var(--text-hint);
 		color: var(--color-text-secondary);
 	}
@@ -178,17 +143,5 @@
 	.empty-desc {
 		font: var(--text-hint);
 		color: var(--color-text-secondary);
-	}
-
-	@media (forced-colors: active) {
-		.section-card {
-			box-shadow: none;
-		}
-
-		.section-card:has(.section-link:focus-visible) {
-			outline: 2px solid CanvasText;
-			outline-offset: 2px;
-			box-shadow: none;
-		}
 	}
 </style>
