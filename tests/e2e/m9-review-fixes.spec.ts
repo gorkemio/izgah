@@ -6,7 +6,6 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import * as schema from '../../src/lib/server/db/schema';
 import {
-	apiKeys,
 	canonicalResources,
 	inviteTokens,
 	linkShares,
@@ -367,37 +366,5 @@ test.describe('Review fixes — feed state, navigation and no-JS flows', () => {
 			`/auth/reset-password?token=${await tokenFor('password_reset')}`,
 			[{ label: 'Yeni parola', value: 'ErkenParola123' }]
 		);
-	});
-
-	test('an API key can be revoked without JavaScript', async ({ browser }) => {
-		const member = await seedUserWithSession({
-			name: 'Anahtar Sahibi',
-			email: 'anahtar@izgah.test'
-		});
-		const [key] = await testDb
-			.insert(apiKeys)
-			.values({
-				keyHash: crypto.randomBytes(32).toString('hex'),
-				userId: member.id,
-				name: 'Sızan anahtar',
-				keyPrefix: 'izk_abcd',
-				authVersionAtCreation: 1
-			})
-			.returning({ id: apiKeys.id });
-
-		const context = await browser.newContext({ javaScriptEnabled: false });
-		await attachSessionCookie(context, member.cookieValue);
-		const page = await context.newPage();
-		await page.goto('/settings/api-keys');
-		await page.getByRole('link', { name: 'İptal et' }).click();
-		await page.getByRole('button', { name: 'Anahtarı iptal et' }).click();
-		await page.waitForLoadState('load');
-
-		const [row] = await testDb
-			.select({ revokedAt: apiKeys.revokedAt })
-			.from(apiKeys)
-			.where(eq(apiKeys.id, key.id));
-		expect(row.revokedAt).not.toBeNull();
-		await context.close();
 	});
 });

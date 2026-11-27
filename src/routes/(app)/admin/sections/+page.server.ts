@@ -12,17 +12,12 @@ import {
 import type { PageServerLoad } from './$types';
 import { t } from '#lib/i18n/index.ts';
 
-export const load: PageServerLoad = async ({ depends, locals, url }) => {
+export const load: PageServerLoad = async ({ depends, locals }) => {
 	depends('izgah:admin:sections');
 	requireAdmin(locals);
 	const sections = await listAdminSections();
 
-	return {
-		sections,
-		// `?edit=<id>` / `?delete=<id>` are the no-JS steps for editing and deleting (F8).
-		editSectionId: url.searchParams.get('edit') || null,
-		deleteSectionId: url.searchParams.get('delete') || null
-	};
+	return { sections };
 };
 
 function readText(data: FormData, key: string): string {

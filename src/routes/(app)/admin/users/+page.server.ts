@@ -15,16 +15,14 @@ import type { UserRole } from '#lib/server/db/schema.ts';
 import type { PageServerLoad } from './$types';
 import { t } from '#lib/i18n/index.ts';
 
-export const load: PageServerLoad = async ({ depends, locals, url }) => {
+export const load: PageServerLoad = async ({ depends, locals }) => {
 	depends('izgah:admin:users');
 	const admin = requireAdmin(locals);
 	const users = await listAdminUsers();
 
 	return {
 		users,
-		currentAdminId: admin.id,
-		// `?disable=<id>` is the no-JS confirmation step for deactivation (F8).
-		disableUserId: url.searchParams.get('disable') || null
+		currentAdminId: admin.id
 	};
 };
 

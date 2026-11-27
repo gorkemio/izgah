@@ -9,7 +9,7 @@
 	import { untrack } from 'svelte';
 	import { freshShare } from '#lib/client/fresh-share.svelte.ts';
 	import { toasts } from '#lib/client/toast.svelte.ts';
-	import Dialog from '#lib/components/legacy/Dialog.svelte';
+	import Dialog from '#lib/components/platform/Dialog.svelte';
 	import { extractFirstUrlFromText } from '#lib/links/parse-url.ts';
 	import type { SectionListItem } from '#lib/server/sections/service.ts';
 	import { getComposerController } from '#lib/share/composer-controller.svelte.ts';

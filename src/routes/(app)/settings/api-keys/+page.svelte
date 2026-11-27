@@ -4,7 +4,7 @@
 	import { page } from '$app/state';
 	import { formatWhen } from '#lib/format/date.ts';
 	import { enhance } from '$app/forms';
-	import Dialog from '#lib/components/legacy/Dialog.svelte';
+	import Dialog from '#lib/components/platform/Dialog.svelte';
 	import type { ActionData, PageData } from './$types';
 
 	interface CommandLikeEvent extends Event {
@@ -36,26 +36,6 @@
 
 	let revokeDialogOpen = $state(false);
 	let pendingRevoke = $state<PendingRevokeKey | null>(null);
-	let hydrated = $state(false);
-	let handledRevokeParam = false;
-
-	const revokeFallbackKey = $derived(
-		data.revokeKeyId ? (data.apiKeys.find((key) => key.id === data.revokeKeyId) ?? null) : null
-	);
-
-	$effect(() => {
-		hydrated = true;
-		// A `?revoke=<id>` URL opened with JS enabled shows the regular confirmation dialog.
-		if (!handledRevokeParam && revokeFallbackKey) {
-			handledRevokeParam = true;
-			openRevokeDialog({
-				id: revokeFallbackKey.id,
-				name: revokeFallbackKey.name,
-				keyPrefix: revokeFallbackKey.keyPrefix
-			});
-		}
-	});
-
 	const atKeyLimit = $derived(data.apiKeys.length >= data.maxKeys);
 
 	function formatDate(value: Date | string | null): string {
@@ -441,25 +421,6 @@
 		</div>
 	</section>
 
-	{#if !hydrated && revokeFallbackKey}
-		<section class="revoke-fallback" aria-labelledby="revoke-fallback-heading">
-			<h2 id="revoke-fallback-heading" class="section-title-plain">{t('apiKeys.revokeTitle')}</h2>
-			<p class="dialog-body">
-				{t('apiKeys.revokeConfirm', {
-					name: revokeFallbackKey.name,
-					prefix: revokeFallbackKey.keyPrefix
-				})}
-			</p>
-			<form method="POST" action="?/revoke">
-				<input type="hidden" name="keyId" value={revokeFallbackKey.id} />
-				<div class="dialog-actions">
-					<a href="/settings/api-keys" class="btn btn-subtle btn-sm">{t('common.cancel')}</a>
-					<button type="submit" class="btn btn-danger btn-sm">{t('apiKeys.revokeKey')}</button>
-				</div>
-			</form>
-		</section>
-	{/if}
-
 	<section class="table-card" aria-labelledby="active-keys-heading">
 		<header class="table-toolbar">
 			<h2 id="active-keys-heading" class="section-title-plain">{t('apiKeys.active')}</h2>
@@ -488,24 +449,18 @@
 								})}
 							</p>
 						</div>
-						{#if hydrated}
-							<button
-								type="button"
-								class="btn btn-danger-soft btn-sm"
-								onclick={() =>
-									openRevokeDialog({
-										id: key.id,
-										name: key.name,
-										keyPrefix: key.keyPrefix
-									})}
-							>
-								{t('apiKeys.revoke')}
-							</button>
-						{:else}
-							<a href="?revoke={encodeURIComponent(key.id)}" class="btn btn-danger-soft btn-sm">
-								{t('apiKeys.revoke')}
-							</a>
-						{/if}
+						<button
+							type="button"
+							class="btn btn-danger-soft btn-sm"
+							onclick={() =>
+								openRevokeDialog({
+									id: key.id,
+									name: key.name,
+									keyPrefix: key.keyPrefix
+								})}
+						>
+							{t('apiKeys.revoke')}
+						</button>
 					</li>
 				{/each}
 			</ul>
@@ -793,15 +748,6 @@
 	.field:has(:is(:user-invalid, :global(.user-invalid-fallback))) .error-msg,
 	.field.is-invalid .error-msg {
 		display: flex;
-	}
-
-	.revoke-fallback {
-		display: grid;
-		gap: var(--space-3);
-		padding: var(--space-4);
-		background: color-mix(in oklab, var(--destructive) 10%, transparent);
-		border: 1px solid color-mix(in oklab, var(--destructive) 40%, transparent);
-		border-radius: 8px;
 	}
 
 	/* Studio table-card for active API keys. */

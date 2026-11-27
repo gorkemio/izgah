@@ -6,12 +6,11 @@
 	import { onMount } from 'svelte';
 	import { enhance } from '$app/forms';
 	import type { AdminUserItem } from '#lib/server/admin/service.ts';
-	import Dialog from '#lib/components/legacy/Dialog.svelte';
+	import Dialog from '#lib/components/platform/Dialog.svelte';
 	import type { ActionData, PageData } from './$types';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
-	let hydrated = $state(false);
 	let busy = $state(false);
 
 	type IssuedLinkPayload = {
@@ -68,7 +67,6 @@
 	});
 
 	onMount(() => {
-		hydrated = true;
 		return () => {
 			if (copyHideTimer !== null) {
 				window.clearTimeout(copyHideTimer);
@@ -77,9 +75,6 @@
 	});
 
 	$effect(() => {
-		if (!hydrated) {
-			return;
-		}
 		const issued = form?.issuedLink as IssuedLinkPayload | undefined;
 		if (issued && issued.url && issued.url !== lastHandledLinkUrl) {
 			lastHandledLinkUrl = issued.url;
@@ -165,21 +160,6 @@
 		return () => {
 			root.removeEventListener('click', handleFallbackClick);
 		};
-	});
-
-	const disableFallbackUser = $derived(
-		data.disableUserId
-			? (data.users.find((user) => user.id === data.disableUserId && !user.disabledAt) ?? null)
-			: null
-	);
-	let handledDisableParam = false;
-	$effect(() => {
-		// A `?disable=<id>` URL opened with JS shows the regular confirmation dialog.
-		if (hydrated && !handledDisableParam && disableFallbackUser) {
-			handledDisableParam = true;
-			disableTarget = disableFallbackUser;
-			disableDialogOpen = true;
-		}
 	});
 
 	function openDisableDialog(user: AdminUserItem, event: MouseEvent) {
@@ -275,47 +255,6 @@
 		<div class="banner banner-error" role="alert">
 			<span>{form.error}</span>
 		</div>
-	{/if}
-
-	{#if !hydrated && form?.issuedLink}
-		<section class="panel issued-inline-panel" aria-labelledby="inline-link-heading">
-			<h2 id="inline-link-heading">
-				{form.issuedLink.kind === 'invite' ? t('users.inviteLinkTitle') : t('users.resetLinkTitle')}
-			</h2>
-			<p class="panel-desc">
-				{t('users.issuedFor', { name: form.issuedLink.userName, email: form.issuedLink.userEmail })}
-				<time class="mono-inline" datetime={form.issuedLink.expiresAt}>
-					{formatDate(form.issuedLink.expiresAt)}
-				</time>.
-			</p>
-			<div class="field">
-				<label for="inline-issued-link-input">{t('users.link')}</label>
-				<input
-					id="inline-issued-link-input"
-					type="url"
-					readonly
-					value={form.issuedLink.url}
-					class="readonly-url-input"
-				/>
-			</div>
-		</section>
-	{/if}
-
-	{#if !hydrated && disableFallbackUser}
-		<section class="panel" aria-labelledby="disable-fallback-heading">
-			<h2 id="disable-fallback-heading">{t('users.disableTitle')}</h2>
-			<p class="panel-desc">
-				{t('users.disableFallback', {
-					name: disableFallbackUser.name,
-					email: disableFallbackUser.email
-				})}
-			</p>
-			<form method="POST" action="?/disable" class="fallback-actions">
-				<input type="hidden" name="userId" value={disableFallbackUser.id} />
-				<a href="/admin/users" class="btn btn-outline">{t('common.cancel')}</a>
-				<button type="submit" class="btn btn-danger">{t('users.disableConfirm')}</button>
-			</form>
-		</section>
 	{/if}
 
 	<section class="panel" aria-labelledby="invite-heading">
@@ -565,23 +504,14 @@
 											</form>
 										{/if}
 
-										{#if hydrated}
-											<button
-												type="button"
-												class="btn btn-danger-soft btn-sm"
-												disabled={busy}
-												onclick={(event) => openDisableDialog(user, event)}
-											>
-												{t('users.disable')} <span class="visually-hidden">({user.name})</span>
-											</button>
-										{:else}
-											<a
-												href="?disable={encodeURIComponent(user.id)}"
-												class="btn btn-danger-soft btn-sm"
-											>
-												{t('users.disable')} <span class="visually-hidden">({user.name})</span>
-											</a>
-										{/if}
+										<button
+											type="button"
+											class="btn btn-danger-soft btn-sm"
+											disabled={busy}
+											onclick={(event) => openDisableDialog(user, event)}
+										>
+											{t('users.disable')} <span class="visually-hidden">({user.name})</span>
+										</button>
 									</div>
 								{:else}
 									<div class="row-actions">
@@ -728,12 +658,6 @@
 </Dialog>
 
 <style>
-	.fallback-actions {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--space-2);
-	}
-
 	.admin-page {
 		display: flex;
 		flex-direction: column;

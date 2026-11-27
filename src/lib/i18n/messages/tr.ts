@@ -340,7 +340,6 @@ export const tr: Record<MessageKey, string> = {
 	'comment.countLabel': '{count} yorum — {title}',
 	'comment.deleteBy': '{name} yorumunu sil ({index})',
 	'comment.deleteConfirm': '{name} tarafından yazılan yorumu silmek istediğinizden emin misiniz?',
-	'comment.deleteConfirmShort': 'Bu yorumu silmek istediğinizden emin misiniz?',
 	'comment.deleteFailed': 'Yorum silinemedi.',
 	'comment.deleteTitle': 'Yorumu sil',
 	'comment.deleteUnexpected': 'Yorum silinirken beklenmeyen bir hata oluştu.',
@@ -773,22 +772,16 @@ export const tr: Record<MessageKey, string> = {
 	'sectionsAdmin.colSection': 'Bölüm',
 	'sectionsAdmin.create': 'Yeni bölüm ekle',
 	'sectionsAdmin.deleteConfirm': 'Evet, bölümü sil',
-	'sectionsAdmin.deleteEffect':
-		'Silindiğinde bu bölüme bağlı paylaşımların bölüm ilişkisi kaldırılır; başka bölümü olmayanlar bölümsüzler listesine düşer.',
 	'sectionsAdmin.deleteEffectNamed':
 		'{name} silindiğinde bu bölüme bağlı ana akış paylaşımlarının bölüm ilişkisi kaldırılır; yalnızca bu bölüme bağlı başka bölümü olmayan paylaşımlar bölümsüzler listesine düşer.',
-	'sectionsAdmin.deleteNamed': 'Bölümü sil: {name}',
 	'sectionsAdmin.deleteTitle': 'Bölümü sil',
 	'sectionsAdmin.description': 'Açıklama',
 	'sectionsAdmin.descriptionOptional': 'Açıklama (isteğe bağlı)',
 	'sectionsAdmin.descriptionPlaceholder': 'Bu bölümde paylaşılan bağlantıların kapsamı',
 	'sectionsAdmin.down': 'Aşağı',
-	'sectionsAdmin.editNamed': 'Bölümü düzenle: {name}',
 	'sectionsAdmin.editTitle': 'Bölümü düzenle',
 	'sectionsAdmin.exclusiveDialog':
 		'{name} bölümünde yalnızca bu bölüme bağlı {count} sessiz paylaşım bulunuyor. Bölümü silmeden önce bu paylaşımları başka bir bölüme taşıyın veya ana akışta görünür yapın.',
-	'sectionsAdmin.exclusiveFallback':
-		'Bu bölümde yalnızca ona bağlı {count} sessiz paylaşım var. Silmeden önce bunları başka bir bölüme taşıyın ya da ana akışta görünür yapın.',
 	'sectionsAdmin.lead':
 		'Ekip içi konu bölümlerini ekleyin, ad ve URL kısa adlarını düzenleyin, sıralayın veya güvenle silin.',
 	'sectionsAdmin.moveSilent': 'Sessiz paylaşımları taşı',
@@ -1000,8 +993,6 @@ export const tr: Record<MessageKey, string> = {
 	'users.disableConfirm': 'Evet, pasifleştir',
 	'users.disableDialog':
 		'{name} ({email}) pasifleştirildiğinde web oturumları ve tüm kişisel API anahtarları anında geçersiz kılınır. Daha önce paylaştığı bağlantılar ve yorumlar arşivde kalmaya devam eder.',
-	'users.disableFallback':
-		'{name} ({email}) pasifleştirildiğinde web oturumları ve tüm kişisel API anahtarları anında geçersiz kılınır. Paylaşımları ve yorumları arşivde kalır.',
 	'users.disableTitle': 'Üyeyi pasifleştir',
 	'users.disabledAt': 'Pasif ({date})',
 	'users.disabling': 'Pasifleştiriliyor…',
@@ -1010,7 +1001,6 @@ export const tr: Record<MessageKey, string> = {
 		'Yeni üyeye yalnızca bu ekranda bir kez gösterilen tek kullanımlık davet bağlantısı üretilir.',
 	'users.inviteLinkTitle': 'Tek kullanımlık davet bağlantısı',
 	'users.inviteTitle': 'Yeni üye davet et',
-	'users.issuedFor': '{name} ({email}) için oluşturuldu. Son geçerlilik:',
 	'users.kpiAccounts': '{count} kayıtlı hesap',
 	'users.kpiActive': 'Aktif üye',
 	'users.kpiAdmins': '{count} yönetici',

@@ -398,58 +398,6 @@ test.describe('UI v2 shell — rail, bottom tab bar, /sections and theme cookie'
 		await expect(pagination.getByRole('link', { name: 'Önceki sayfa' })).toBeVisible();
 	});
 
-	test('admin without JavaScript: deactivate a member, rename and delete a section (F8)', async ({
-		browser
-	}) => {
-		const admin = await seedUserWithSession({
-			name: 'Yönetici Kişi',
-			email: 'yonetici@izgah.test'
-		});
-		await localSql`UPDATE public.users SET role = 'admin' WHERE id = ${admin.id}`;
-		const member = await seedUserWithSession({ name: 'Ayrılan Üye', email: 'ayrilan@izgah.test' });
-		await testDb.insert(schema.sections).values({
-			slug: 'gecici',
-			name: 'Geçici Bölüm',
-			createdById: admin.id
-		});
-
-		const context = await browser.newContext({ javaScriptEnabled: false });
-		await attachSessionCookie(context, admin.cookieValue);
-		const page = await context.newPage();
-
-		await page.goto('/admin/users');
-		const memberRow = page.getByRole('row').filter({ hasText: 'ayrilan@izgah.test' });
-		await memberRow.getByRole('link', { name: /Pasifleştir/ }).click();
-		await expect(page).toHaveURL(new RegExp(`disable=${member.id}`));
-		const confirm = page.getByRole('region', { name: 'Üyeyi pasifleştir' });
-		await expect(confirm).toContainText('Ayrılan Üye');
-		await confirm.getByRole('button', { name: 'Evet, pasifleştir' }).click();
-		await expect(page.getByRole('row').filter({ hasText: 'ayrilan@izgah.test' })).toContainText(
-			'Pasif'
-		);
-
-		await page.goto('/admin/sections');
-		const sectionRow = page.getByRole('row').filter({ hasText: 'Geçici Bölüm' });
-		await sectionRow.getByRole('link', { name: /Düzenle/ }).click();
-		const editPanel = page.getByRole('region', { name: /Bölümü düzenle/ });
-		await editPanel.getByLabel('Bölüm adı').fill('Kalıcı Bölüm');
-		await editPanel.getByRole('button', { name: 'Değişiklikleri kaydet' }).click();
-		await expect(page.getByRole('row').filter({ hasText: 'Kalıcı Bölüm' })).toHaveCount(1);
-
-		await page.goto('/admin/sections');
-		await page
-			.getByRole('row')
-			.filter({ hasText: 'Kalıcı Bölüm' })
-			.getByRole('link', { name: /Sil/ })
-			.click();
-		await page
-			.getByRole('region', { name: /Bölümü sil/ })
-			.getByRole('button', { name: 'Evet, bölümü sil' })
-			.click();
-		await expect(page.getByRole('row').filter({ hasText: 'Kalıcı Bölüm' })).toHaveCount(0);
-		await context.close();
-	});
-
 	test('⌘K CommandPalette: opens via shortcut, filters sections/actions, live-searches without logging, closes on Esc', async ({
 		page,
 		context

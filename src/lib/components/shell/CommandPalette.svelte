@@ -7,7 +7,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import Highlight from '#lib/components/ui/Highlight.svelte';
-	import Skeleton from '#lib/components/legacy/Skeleton.svelte';
+	import { Skeleton } from '#lib/components/ui/skeleton/index.ts';
 	import { getThemeState, type ThemeChoice } from '#lib/client/theme.svelte.ts';
 	import { toasts } from '#lib/client/toast.svelte.ts';
 	import { highlightTerms } from '#lib/search/highlight.ts';
@@ -620,17 +620,17 @@
 					<div class="cmdk-group-label">{t('palette.group.links')}</div>
 					<div class="cmdk-skeleton-list" aria-hidden="true">
 						<div class="cmdk-skeleton-row">
-							<Skeleton variant="rect" width="28px" height="28px" />
+							<Skeleton class="size-7 shrink-0 rounded-md" />
 							<div class="cmdk-skeleton-text">
-								<Skeleton variant="line" width="76%" />
-								<Skeleton variant="line" width="48%" height="0.7rem" />
+								<Skeleton class="h-3.5 w-[76%]" />
+								<Skeleton class="h-2.5 w-[48%]" />
 							</div>
 						</div>
 						<div class="cmdk-skeleton-row">
-							<Skeleton variant="rect" width="28px" height="28px" />
+							<Skeleton class="size-7 shrink-0 rounded-md" />
 							<div class="cmdk-skeleton-text">
-								<Skeleton variant="line" width="64%" />
-								<Skeleton variant="line" width="40%" height="0.7rem" />
+								<Skeleton class="h-3.5 w-[64%]" />
+								<Skeleton class="h-2.5 w-[40%]" />
 							</div>
 						</div>
 					</div>
