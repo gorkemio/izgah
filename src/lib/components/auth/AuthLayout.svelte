@@ -301,44 +301,6 @@
 		color: var(--muted-foreground);
 	}
 
-	.auth-main :global(input:not([type='hidden'])) {
-		inline-size: 100%;
-		min-block-size: 40px;
-		padding: 8px 12px;
-		font: var(--type-body);
-		font-size: max(1rem, 1em);
-		color: var(--foreground);
-		background: var(--background);
-		border: 1px solid var(--input);
-		border-radius: 8px;
-		box-shadow: var(--elevation-sm);
-		transition:
-			border-color var(--dur-fast) var(--ease),
-			box-shadow var(--dur-fast) var(--ease),
-			background-color var(--dur-fast) var(--ease);
-	}
-
-	.auth-main :global(input:not([type='hidden']):hover:not(:disabled, :read-only)) {
-		border-color: color-mix(in oklab, var(--foreground) 22%, transparent);
-	}
-
-	.auth-main :global(input:not([type='hidden']):focus-visible) {
-		border-color: var(--ring);
-		outline: none;
-		box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring) 50%, transparent);
-	}
-
-	.auth-main :global(input[readonly]) {
-		background: var(--muted);
-		color: var(--muted-foreground);
-		border-color: var(--border);
-	}
-
-	.auth-main
-		:global(.field input:is(:user-invalid, .user-invalid-fallback, [aria-invalid='true'])) {
-		border-color: var(--destructive);
-	}
-
 	.auth-main :global(.error-msg) {
 		display: none;
 		align-items: center;
@@ -365,7 +327,7 @@
 		align-items: center;
 		justify-content: center;
 		gap: 6px;
-		min-block-size: 40px;
+		min-block-size: 36px;
 		min-inline-size: 44px;
 		padding: 0 var(--space-3);
 		font: var(--type-ui);
@@ -397,10 +359,9 @@
 		justify-content: center;
 		gap: var(--space-2);
 		inline-size: 100%;
-		min-block-size: 40px;
+		min-block-size: 36px;
 		padding: 0 var(--space-4);
 		font: var(--type-ui);
-		font-size: 0.9375rem;
 		color: var(--primary-foreground);
 		background: var(--primary);
 		border: 1px solid transparent;

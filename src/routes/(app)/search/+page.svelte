@@ -154,7 +154,7 @@
 						autocapitalize="none"
 						spellcheck={false}
 						enterkeyhint="search"
-						class="search-input h-11 w-full min-w-0 rounded-lg border border-input bg-card ps-9 pe-3 text-[15px] shadow-xs transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
+						class="search-input h-11 ps-9 pointer-fine:text-[15px]"
 					/>
 				</div>
 				<button type="submit" class="search-submit {buttonVariants({ size: 'lg' })} h-11 px-4">
@@ -213,7 +213,7 @@
 								selectedSectionId = event.currentTarget.value;
 								scopeMode = 'section';
 							}}
-							class="section-select h-9 rounded-lg border border-input bg-card px-2.5 text-[13px] outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30 pointer-coarse:h-11"
+							class="section-select w-auto min-w-40 pointer-fine:text-[13px]"
 						>
 							{#each data.sections as section (section.id)}
 								<option value={section.id}>{section.name}</option>

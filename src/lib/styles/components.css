@@ -157,7 +157,11 @@
 		}
 	}
 
-	/* Form fields (§2.2, §7.1) ------------------------------------------- */
+	/*
+	 * Form fields (izgah-ui-v5.md §4): one look for every text field, search box, textarea and
+	 * dropdown, the same as shadcn-svelte's Input and Select. The element selectors sit in :where()
+	 * so they carry no specificity: a utility class or a scoped style can still adjust one field.
+	 */
 	.field {
 		display: grid;
 		gap: 6px;
@@ -166,7 +170,6 @@
 	.field > label,
 	.field-label {
 		font: var(--type-ui);
-		font-weight: 600;
 		color: var(--foreground);
 	}
 
@@ -176,18 +179,30 @@
 		color: var(--muted-foreground);
 	}
 
-	.field input:where(:not([type='checkbox'], [type='radio'])),
-	.field textarea,
-	.field select,
-	.input,
-	.textarea,
-	.select {
+	:where(
+		input:not(
+			[type='checkbox'],
+			[type='radio'],
+			[type='range'],
+			[type='file'],
+			[type='color'],
+			[type='hidden'],
+			[type='submit'],
+			[type='button'],
+			[type='reset'],
+			[type='image']
+		),
+		textarea,
+		select
+	) {
+		box-sizing: border-box;
 		inline-size: 100%;
 		min-block-size: 36px;
 		padding: 6px 10px;
 		font: 400 0.875rem / 1.45 var(--font-sans);
 		color: var(--foreground);
-		background: var(--card);
+		/* Dark: a slightly lifted well, so a field still reads as one on a card (shadcn's input/30). */
+		background-color: light-dark(var(--card), color-mix(in oklab, var(--input) 30%, var(--card)));
 		border: 1px solid var(--input);
 		border-radius: 8px;
 		box-shadow: var(--elevation-sm);
@@ -197,60 +212,67 @@
 			background-color var(--dur-fast) var(--ease);
 	}
 
-	.field input::placeholder,
-	.field textarea::placeholder,
-	.input::placeholder,
-	.textarea::placeholder {
+	:where(input, textarea)::placeholder {
 		color: var(--muted-foreground);
+		opacity: 1;
 	}
 
-	.field input:where(:not([type='checkbox'], [type='radio'])):hover:not(:disabled, :read-only),
-	.field textarea:hover:not(:disabled, :read-only),
-	.field select:hover:not(:disabled),
-	.input:hover:not(:disabled, :read-only),
-	.textarea:hover:not(:disabled, :read-only),
-	.select:hover:not(:disabled) {
+	:where(
+			input:not([type='checkbox'], [type='radio'], [type='range'], [type='file']),
+			textarea,
+			select
+		):hover:where(:not(:disabled, :read-only, :focus-visible)) {
 		border-color: color-mix(in oklab, var(--foreground) 22%, transparent);
 	}
 
-	.field input:where(:not([type='checkbox'], [type='radio'])):focus-visible,
-	.field textarea:focus-visible,
-	.field select:focus-visible,
-	.input:focus-visible,
-	.textarea:focus-visible,
-	.select:focus-visible {
+	:where(
+		input:not([type='checkbox'], [type='radio'], [type='range'], [type='file']),
+		textarea,
+		select
+	):focus-visible {
 		border-color: var(--ring);
-		outline: none;
-		box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring) 50%, transparent);
+		outline: 2px solid transparent;
+		box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring) 45%, transparent);
 	}
 
-	.field input:where(:not([type='checkbox'], [type='radio'])):disabled,
-	.field textarea:disabled,
-	.field select:disabled,
-	.input:disabled,
-	.textarea:disabled,
-	.select:disabled {
-		background: var(--muted);
-		color: var(--muted-foreground);
-		border-color: var(--border);
+	:where(input, textarea, select):disabled {
 		cursor: not-allowed;
+		opacity: 0.55;
 	}
 
-	.field input:where(:not([type='checkbox'], [type='radio'])):read-only,
-	.field textarea:read-only,
-	.input:read-only,
-	.textarea:read-only {
-		background: var(--muted);
+	:where(input:not([type='checkbox'], [type='radio']), textarea):read-only {
+		background-color: var(--muted);
+		color: var(--muted-foreground);
+		box-shadow: none;
 	}
 
-	.field select,
-	select.input,
-	.select {
+	/* Errors only after the user has interacted (:user-invalid), or when the app says so. */
+	:where(input, textarea, select):where(
+		:user-invalid,
+		[aria-invalid='true'],
+		.user-invalid-fallback
+	) {
+		border-color: var(--destructive);
+	}
+
+	:where(input, textarea, select):where(:user-invalid, [aria-invalid='true']):focus-visible {
+		box-shadow: 0 0 0 3px color-mix(in oklab, var(--destructive) 25%, transparent);
+	}
+
+	:where(textarea) {
+		min-block-size: 84px;
+		resize: vertical;
+	}
+
+	:where(input[type='search'])::-webkit-search-decoration {
 		appearance: none;
-		padding-inline: var(--space-3) 2rem;
-		line-height: 1.3;
+	}
+
+	/* Dropdowns: a native <select> with a chevron that follows the theme colour. */
+	:where(select) {
+		appearance: none;
+		padding-inline-end: 2rem;
 		cursor: pointer;
-		/* Chevron drawn with two gradients so it follows the theme's muted text colour. */
 		background-image:
 			linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
 			linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
@@ -261,10 +283,104 @@
 		background-size: 5px 5px;
 	}
 
-	.field textarea,
-	.textarea {
-		min-block-size: 84px;
-		resize: vertical;
+	:where(select[multiple], select[size]:not([size='1'])) {
+		padding-inline-end: 10px;
+		background-image: none;
+	}
+
+	/*
+	 * Customizable select (progressive enhancement, Chrome 135+ and Safari 27): the picker takes
+	 * the popover look. Limited to fine pointers so phones keep their native picker.
+	 */
+	@supports (appearance: base-select) {
+		@media (pointer: fine) {
+			:where(select:not([multiple], [size]:not([size='1']))),
+			:where(select:not([multiple], [size]:not([size='1'])))::picker(select) {
+				appearance: base-select;
+			}
+
+			:where(select:not([multiple], [size]:not([size='1']))) {
+				align-items: center;
+				gap: 10px;
+				padding-inline-end: 12px;
+				background-image: none;
+			}
+
+			/* A thin chevron instead of the default triangle, in the icon set's stroke weight. */
+			:where(select)::picker-icon {
+				content: '';
+				align-self: center;
+				inline-size: 6px;
+				block-size: 6px;
+				margin-inline-start: auto;
+				color: var(--muted-foreground);
+				border: solid currentColor;
+				border-width: 0 1.5px 1.5px 0;
+				rotate: 45deg;
+				translate: 0 -1px;
+				transition:
+					rotate var(--dur-fast) var(--ease),
+					translate var(--dur-fast) var(--ease);
+			}
+
+			:where(select):open::picker-icon {
+				rotate: 225deg;
+				translate: 0 1px;
+			}
+
+			:where(select)::picker(select) {
+				margin-block: 4px;
+				padding: 4px;
+				font: 400 0.875rem / 1.45 var(--font-sans);
+				color: var(--popover-foreground);
+				background: var(--popover);
+				border: 1px solid var(--border);
+				border-radius: 10px;
+				box-shadow: var(--elevation-lg);
+			}
+
+			:where(select) option {
+				padding: 6px 8px;
+				border-radius: 6px;
+				cursor: pointer;
+			}
+
+			:where(select) option:is(:hover, :focus-visible) {
+				background: var(--accent);
+				color: var(--accent-foreground);
+				outline: none;
+				box-shadow: none;
+			}
+
+			:where(select) option:checked {
+				font-weight: 500;
+			}
+
+			:where(select) option::checkmark {
+				color: var(--primary);
+			}
+		}
+	}
+
+	/* Touch screens: 16px text so iOS does not zoom on focus, and 44px targets. */
+	@media (pointer: coarse) {
+		:where(
+			input:not([type='checkbox'], [type='radio'], [type='range'], [type='file'], [type='hidden']),
+			textarea,
+			select
+		) {
+			min-block-size: 44px;
+			font-size: max(1rem, 1em);
+		}
+	}
+
+	/* Checkboxes and radios stay native and take the theme colour (accent-color on :root). */
+	:where(input[type='checkbox'], input[type='radio']) {
+		inline-size: 16px;
+		block-size: 16px;
+		margin: 0;
+		flex: none;
+		cursor: pointer;
 	}
 
 	.field-error {
@@ -273,15 +389,18 @@
 		color: var(--destructive);
 	}
 
-	.field :user-invalid,
-	.input:user-invalid,
-	.textarea:user-invalid,
-	.select:user-invalid,
-	.field [aria-invalid='true'],
-	.input[aria-invalid='true'],
-	.textarea[aria-invalid='true'],
-	.select[aria-invalid='true'] {
-		border-color: var(--destructive);
+	/* A field drawn by its container (the rail search, the command palette, the inline composer):
+	   the container carries the border and the focus ring. */
+	.field-bare,
+	.field-bare:hover,
+	.field-bare:focus-visible {
+		min-block-size: 0;
+		padding: 0;
+		background: transparent;
+		border: 0;
+		border-radius: 0;
+		box-shadow: none;
+		outline: none;
 	}
 
 	/* Tags, badges and states (izgah-ui-v5.md §4): small pills; state words keep their meaning in
@@ -698,12 +817,15 @@
 			color: MarkText;
 		}
 
-		.field select,
-		select.input,
-		.select {
+		:where(select) {
 			appearance: auto;
 			background-image: none;
 			padding-inline-end: var(--space-6);
+		}
+
+		:where(input, textarea, select) {
+			border-color: CanvasText;
+			box-shadow: none;
 		}
 
 		.empty-state-box {

@@ -911,7 +911,6 @@
 		inline-size: 1rem;
 		block-size: 1rem;
 		flex-shrink: 0;
-		accent-color: var(--primary);
 	}
 
 	.silent-checkbox {

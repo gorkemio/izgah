@@ -117,12 +117,13 @@
 						<Search class="size-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
 						<input
 							id="rail-search-input"
-							class="peer min-w-0 flex-1 bg-transparent text-[13px] outline-none placeholder:text-muted-foreground"
+							class="field-bare peer min-w-0 flex-1 pointer-fine:text-[13px]"
 							type="search"
 							name="q"
 							value={headerQuery}
 							oninput={(event) => onQueryInput(event.currentTarget.value)}
 							placeholder={t('search.placeholderShort')}
+							autocorrect="off"
 							autocapitalize="none"
 							spellcheck={false}
 						/>

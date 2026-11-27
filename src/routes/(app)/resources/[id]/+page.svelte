@@ -399,7 +399,7 @@
 	const formatTrDateTime = formatWhen;
 
 	const textareaClass =
-		'comment-textarea flex field-sizing-content min-h-20 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-[14px] leading-relaxed transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30';
+		'comment-textarea field-sizing-content min-h-20 leading-relaxed pointer-fine:text-[14px]';
 </script>
 
 <svelte:head>

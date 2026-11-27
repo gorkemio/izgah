@@ -146,7 +146,6 @@
 
 	.palette-choice input {
 		margin: 0;
-		accent-color: var(--foreground);
 	}
 
 	.palette-hint {
