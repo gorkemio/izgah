@@ -13,6 +13,8 @@ declare global {
 				email: string;
 				role: 'member' | 'admin';
 				authVersion: number;
+				/** Profile photo (izgah-ui-v5.md §10.2); loaded for cookie sessions only. */
+				avatarAssetKey?: string | null;
 			} | null;
 			session: {
 				id: string;

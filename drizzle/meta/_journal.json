@@ -22,6 +22,13 @@
 			"when": 1795655640250,
 			"tag": "0002_smart_capture",
 			"breakpoints": true
+		},
+		{
+			"idx": 3,
+			"version": "7",
+			"when": 1795736516301,
+			"tag": "0003_ui_v5_icons_avatars",
+			"breakpoints": true
 		}
 	]
 }

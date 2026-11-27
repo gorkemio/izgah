@@ -23,7 +23,7 @@
 	import NotificationBell from '#lib/components/notifications/NotificationBell.svelte';
 	import ThemeForm from '#lib/components/shell/ThemeForm.svelte';
 	import * as Popover from '#lib/components/ui/popover/index.ts';
-	import { avatarTone, initials } from '#lib/format/avatar.ts';
+	import MemberAvatar from '#lib/components/member/MemberAvatar.svelte';
 
 	interface SectionLink {
 		id: string;
@@ -32,7 +32,7 @@
 	}
 
 	interface Props {
-		user: { id: string; name: string; role: 'member' | 'admin' };
+		user: { id: string; name: string; role: 'member' | 'admin'; avatarAssetKey?: string | null };
 		sections: SectionLink[];
 		theme: 'light' | 'dark' | 'system';
 		activeSection: SectionLink | null;
@@ -234,13 +234,7 @@
 					class="flex w-full items-center gap-2.5 rounded-lg p-1.5 text-left transition-colors hover:bg-sidebar-accent/70 data-open:bg-sidebar-accent"
 					aria-label={t('nav.accountMenu', { name: user.name })}
 				>
-					<span
-						class="grid size-7 shrink-0 place-items-center rounded-full text-[11px] font-semibold text-avatar-foreground"
-						style="background: var(--avatar-{avatarTone(user.id)})"
-						aria-hidden="true"
-					>
-						{initials(user.name)}
-					</span>
+					<MemberAvatar id={user.id} name={user.name} avatarAssetKey={user.avatarAssetKey} />
 					<span class="min-w-0 flex-1 leading-tight">
 						<span class="block truncate text-[13px] font-medium">{user.name}</span>
 						<span class="block text-[11px] text-muted-foreground">

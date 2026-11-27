@@ -71,6 +71,7 @@ export async function resetTestDb(): Promise<void> {
 			public.link_shares,
 			public.unfurl_jobs,
 			public.canonical_resources,
+			public.site_icons,
 			public.media_assets,
 			public.sections,
 			public.api_keys,

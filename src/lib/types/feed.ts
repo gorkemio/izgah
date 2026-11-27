@@ -30,6 +30,7 @@ export interface FeedShareItem {
 	author: {
 		id: string;
 		name: string;
+		avatarAssetKey?: string | null;
 	};
 	resource: {
 		id: string;
@@ -43,6 +44,7 @@ export interface FeedShareItem {
 		siteName: string | null;
 		providerMeta: ProviderMeta | null;
 		thumbnailAssetKey: string | null;
+		siteIconAssetKey?: string | null;
 		thumbnailWidth: number | null;
 		thumbnailHeight: number | null;
 		likeCount: number;

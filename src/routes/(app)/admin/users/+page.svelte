@@ -1,4 +1,5 @@
 <script lang="ts">
+	import MemberAvatar from '#lib/components/member/MemberAvatar.svelte';
 	import { cssText, t } from '#lib/i18n/index.ts';
 	import { pageTitle } from '#lib/instance.ts';
 	import { formatWhen } from '#lib/format/date.ts';
@@ -440,6 +441,12 @@
 						<tr class:is-disabled={!user.isActive}>
 							<th scope="row" class="user-cell">
 								<div class="member-cell">
+									<MemberAvatar
+										id={user.id}
+										name={user.name}
+										avatarAssetKey={user.avatarAssetKey}
+										class="size-8 text-[11px]"
+									/>
 									<div class="member-meta">
 										<span class="user-name">{user.name}</span>
 										<span class="user-email">{user.email}</span>
@@ -530,6 +537,30 @@
 												<button type="submit" class="btn btn-ghost btn-sm" disabled={busy}>
 													{t('users.resetPassword')}
 													<span class="visually-hidden">({user.name})</span>
+												</button>
+											</form>
+										{/if}
+
+										{#if user.avatarAssetKey}
+											<form
+												method="POST"
+												action="?/removeAvatar"
+												use:enhance={() => {
+													busy = true;
+													return async ({ update }) => {
+														await update();
+														busy = false;
+													};
+												}}
+											>
+												<input type="hidden" name="userId" value={user.id} />
+												<button
+													type="submit"
+													class="btn btn-ghost btn-sm"
+													disabled={busy}
+													aria-label={t('admin.avatarRemoveLabel', { name: user.name })}
+												>
+													{t('admin.avatarRemove')}
 												</button>
 											</form>
 										{/if}

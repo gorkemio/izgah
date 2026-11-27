@@ -7,6 +7,7 @@ import {
 	linkShareSections,
 	linkShares,
 	mediaAssets,
+	siteIcons,
 	searchLogs,
 	sections,
 	users,
@@ -72,6 +73,7 @@ export interface SearchShareItem {
 	author: {
 		id: string;
 		name: string;
+		avatarAssetKey?: string | null;
 	};
 	resource: {
 		id: string;
@@ -85,6 +87,7 @@ export interface SearchShareItem {
 		siteName: string | null;
 		providerMeta: ProviderMeta | null;
 		thumbnailAssetKey: string | null;
+		siteIconAssetKey?: string | null;
 		thumbnailWidth: number | null;
 		thumbnailHeight: number | null;
 		likeCount: number;
@@ -387,6 +390,7 @@ export async function searchResources(input: {
 			createdAt: linkShares.createdAt,
 			authorId: users.id,
 			authorName: users.name,
+			authorAvatarAssetKey: users.avatarAssetKey,
 			noteMatched: shareNoteMatchedExpr,
 			canonicalUrl: canonicalResources.canonicalUrl,
 			domain: canonicalResources.domain,
@@ -398,6 +402,7 @@ export async function searchResources(input: {
 			siteName: canonicalResources.siteName,
 			providerMeta: canonicalResources.providerMeta,
 			thumbnailAssetKey: canonicalResources.thumbnailAssetKey,
+			siteIconAssetKey: siteIcons.assetKey,
 			thumbnailWidth: mediaAssets.width,
 			thumbnailHeight: mediaAssets.height,
 			likeCount: canonicalResources.likeCount,
@@ -407,6 +412,7 @@ export async function searchResources(input: {
 		.innerJoin(canonicalResources, eq(linkShares.resourceId, canonicalResources.id))
 		.innerJoin(users, eq(linkShares.authorId, users.id))
 		.leftJoin(mediaAssets, eq(canonicalResources.thumbnailAssetKey, mediaAssets.assetKey))
+		.leftJoin(siteIcons, eq(siteIcons.domain, canonicalResources.domain))
 		.where(and(...shareScopeConditions))
 		.orderBy(
 			desc(shareNoteMatchedExpr),
@@ -481,7 +487,8 @@ export async function searchResources(input: {
 			createdAt: row.createdAt.toISOString(),
 			author: {
 				id: row.authorId,
-				name: row.authorName
+				name: row.authorName,
+				avatarAssetKey: row.authorAvatarAssetKey
 			},
 			resource: {
 				id: row.resourceId,
@@ -495,6 +502,7 @@ export async function searchResources(input: {
 				siteName: row.siteName,
 				providerMeta: row.providerMeta,
 				thumbnailAssetKey: row.thumbnailAssetKey,
+				siteIconAssetKey: row.siteIconAssetKey,
 				thumbnailWidth: row.thumbnailWidth,
 				thumbnailHeight: row.thumbnailHeight,
 				likeCount: row.likeCount,

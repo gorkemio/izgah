@@ -186,14 +186,51 @@ export async function hasSufficientMediaDiskSpace(options: MediaDiskCheckOptions
 	return { ok, freeBytes, totalBytes, freeRatio };
 }
 
+/** Output size and fit of a stored WebP image. */
+export interface ImageShape {
+	width: number;
+	height: number;
+	fit: 'inside' | 'cover';
+	withoutEnlargement: boolean;
+	quality: number;
+}
+
+/** Link preview covers: at most 1200×630, never enlarged. */
+export const THUMBNAIL_SHAPE: ImageShape = {
+	width: THUMBNAIL_MAX_WIDTH,
+	height: THUMBNAIL_MAX_HEIGHT,
+	fit: 'inside',
+	withoutEnlargement: true,
+	quality: THUMBNAIL_WEBP_QUALITY
+};
+
+/** Site icons (izgah-ui-v5.md §10.1): at most 64×64, small icons are not blown up. */
+export const SITE_ICON_SHAPE: ImageShape = {
+	width: 64,
+	height: 64,
+	fit: 'inside',
+	withoutEnlargement: true,
+	quality: 90
+};
+
+/** Profile photos (izgah-ui-v5.md §10.2): a centre-cropped 256×256 square. */
+export const AVATAR_SHAPE: ImageShape = {
+	width: 256,
+	height: 256,
+	fit: 'cover',
+	withoutEnlargement: false,
+	quality: 85
+};
+
 /**
- * Validates raster magic bytes, checks disk free-space guards, converts to WebP
- * (<=1200x630, EXIF orientation applied and EXIF metadata stripped), and atomically
+ * Validates raster magic bytes, checks disk free-space guards, converts to WebP in the given shape
+ * (EXIF orientation applied and EXIF metadata stripped), and atomically
  * writes the content-addressed file to MEDIA_STORAGE_DIR/<2-hex>/<sha256>.webp.
  */
 export async function processAndWriteThumbnailToDisk(
 	rawBytes: Uint8Array,
-	options: MediaDiskCheckOptions = {}
+	options: MediaDiskCheckOptions = {},
+	shape: ImageShape = THUMBNAIL_SHAPE
 ): Promise<ThumbnailWriteResult> {
 	const detected = detectRasterFormat(rawBytes);
 	if (!detected) {
@@ -222,12 +259,12 @@ export async function processAndWriteThumbnailToDisk(
 	const { data, info } = await sharp(input, sharpOptions)
 		.rotate()
 		.resize({
-			width: THUMBNAIL_MAX_WIDTH,
-			height: THUMBNAIL_MAX_HEIGHT,
-			fit: 'inside',
-			withoutEnlargement: true
+			width: shape.width,
+			height: shape.height,
+			fit: shape.fit,
+			withoutEnlargement: shape.withoutEnlargement
 		})
-		.webp({ quality: THUMBNAIL_WEBP_QUALITY })
+		.webp({ quality: shape.quality })
 		.toBuffer({ resolveWithObject: true });
 
 	if (!info.width || !info.height || !info.size) {

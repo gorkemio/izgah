@@ -5,6 +5,7 @@ import {
 	linkShareSections,
 	linkShares,
 	mediaAssets,
+	siteIcons,
 	notifications,
 	resourceComments,
 	resourceLikes,
@@ -66,6 +67,7 @@ export interface ResourceCommentItem {
 	author: {
 		id: string;
 		name: string;
+		avatarAssetKey?: string | null;
 	};
 }
 
@@ -113,6 +115,7 @@ export interface ResourceDiscussionShareItem {
 	author: {
 		id: string;
 		name: string;
+		avatarAssetKey?: string | null;
 	};
 	resource: {
 		id: string;
@@ -126,6 +129,7 @@ export interface ResourceDiscussionShareItem {
 		siteName: string | null;
 		providerMeta: ProviderMeta | null;
 		thumbnailAssetKey: string | null;
+		siteIconAssetKey?: string | null;
 		thumbnailWidth: number | null;
 		thumbnailHeight: number | null;
 		likeCount: number;
@@ -153,6 +157,7 @@ export interface ResourceDiscussionData {
 		siteName: string | null;
 		providerMeta: ProviderMeta | null;
 		thumbnailAssetKey: string | null;
+		siteIconAssetKey?: string | null;
 		thumbnailWidth: number | null;
 		thumbnailHeight: number | null;
 		likeCount: number;
@@ -478,7 +483,7 @@ export async function addResourceComment(input: {
 			.returning({ commentCount: canonicalResources.commentCount });
 
 		const [authorRow] = await tx
-			.select({ id: users.id, name: users.name })
+			.select({ id: users.id, name: users.name, avatarAssetKey: users.avatarAssetKey })
 			.from(users)
 			.where(eq(users.id, inserted.authorId))
 			.limit(1);
@@ -499,7 +504,8 @@ export async function addResourceComment(input: {
 				updatedAt: inserted.updatedAt.toISOString(),
 				author: {
 					id: inserted.authorId,
-					name: authorRow?.name ?? t('role.member')
+					name: authorRow?.name ?? t('role.member'),
+					avatarAssetKey: authorRow?.avatarAssetKey ?? null
 				}
 			},
 			commentCount: updatedResource.commentCount
@@ -567,7 +573,7 @@ export async function updateResourceComment(input: {
 			});
 
 		const [authorRow] = await tx
-			.select({ id: users.id, name: users.name })
+			.select({ id: users.id, name: users.name, avatarAssetKey: users.avatarAssetKey })
 			.from(users)
 			.where(eq(users.id, updated.authorId))
 			.limit(1);
@@ -580,7 +586,8 @@ export async function updateResourceComment(input: {
 			updatedAt: updated.updatedAt.toISOString(),
 			author: {
 				id: updated.authorId,
-				name: authorRow?.name ?? t('role.member')
+				name: authorRow?.name ?? t('role.member'),
+				avatarAssetKey: authorRow?.avatarAssetKey ?? null
 			}
 		};
 	});
@@ -823,6 +830,7 @@ export async function getResourceDiscussion(input: {
 			siteName: canonicalResources.siteName,
 			providerMeta: canonicalResources.providerMeta,
 			thumbnailAssetKey: canonicalResources.thumbnailAssetKey,
+			siteIconAssetKey: siteIcons.assetKey,
 			thumbnailWidth: mediaAssets.width,
 			thumbnailHeight: mediaAssets.height,
 			likeCount: canonicalResources.likeCount,
@@ -831,6 +839,7 @@ export async function getResourceDiscussion(input: {
 		})
 		.from(canonicalResources)
 		.leftJoin(mediaAssets, eq(canonicalResources.thumbnailAssetKey, mediaAssets.assetKey))
+		.leftJoin(siteIcons, eq(siteIcons.domain, canonicalResources.domain))
 		.where(eq(canonicalResources.id, input.resourceId))
 		.limit(1);
 
@@ -848,7 +857,8 @@ export async function getResourceDiscussion(input: {
 				sourceChannel: linkShares.sourceChannel,
 				createdAt: linkShares.createdAt,
 				authorId: users.id,
-				authorName: users.name
+				authorName: users.name,
+				authorAvatarAssetKey: users.avatarAssetKey
 			})
 			.from(linkShares)
 			.innerJoin(users, eq(users.id, linkShares.authorId))
@@ -872,7 +882,8 @@ export async function getResourceDiscussion(input: {
 				createdAt: resourceComments.createdAt,
 				updatedAt: resourceComments.updatedAt,
 				authorId: users.id,
-				authorName: users.name
+				authorName: users.name,
+				authorAvatarAssetKey: users.avatarAssetKey
 			})
 			.from(resourceComments)
 			.innerJoin(users, eq(users.id, resourceComments.authorId))
@@ -935,7 +946,8 @@ export async function getResourceDiscussion(input: {
 			createdAt: row.createdAt.toISOString(),
 			author: {
 				id: row.authorId,
-				name: row.authorName
+				name: row.authorName,
+				avatarAssetKey: row.authorAvatarAssetKey
 			},
 			resource: {
 				id: resourceRow.id,
@@ -949,6 +961,7 @@ export async function getResourceDiscussion(input: {
 				siteName: resourceRow.siteName,
 				providerMeta: resourceRow.providerMeta,
 				thumbnailAssetKey: resourceRow.thumbnailAssetKey,
+				siteIconAssetKey: resourceRow.siteIconAssetKey,
 				thumbnailWidth: resourceRow.thumbnailWidth,
 				thumbnailHeight: resourceRow.thumbnailHeight,
 				likeCount: resourceRow.likeCount,
@@ -973,6 +986,7 @@ export async function getResourceDiscussion(input: {
 			siteName: resourceRow.siteName,
 			providerMeta: resourceRow.providerMeta,
 			thumbnailAssetKey: resourceRow.thumbnailAssetKey,
+			siteIconAssetKey: resourceRow.siteIconAssetKey,
 			thumbnailWidth: resourceRow.thumbnailWidth,
 			thumbnailHeight: resourceRow.thumbnailHeight,
 			likeCount: resourceRow.likeCount,
@@ -990,7 +1004,8 @@ export async function getResourceDiscussion(input: {
 			updatedAt: row.updatedAt.toISOString(),
 			author: {
 				id: row.authorId,
-				name: row.authorName
+				name: row.authorName,
+				avatarAssetKey: row.authorAvatarAssetKey
 			}
 		}))
 	};

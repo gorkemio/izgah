@@ -15,6 +15,8 @@ export const AUTH_TOKEN_POST_MAX_ATTEMPTS = 10;
 export const AUTH_TOKEN_IP_MAX_ATTEMPTS = 30;
 export const PASSWORD_CHANGE_WINDOW_MS = 15 * 60 * 1000;
 export const PASSWORD_CHANGE_MAX_ATTEMPTS = 10;
+export const AVATAR_UPLOAD_WINDOW_MS = 15 * 60 * 1000;
+export const AVATAR_UPLOAD_MAX_ATTEMPTS = 10;
 export const SEARCH_WINDOW_MS = 60 * 1000;
 export const SEARCH_MAX_REQUESTS = 60;
 /** ⌘K typeahead fires roughly once per debounced keystroke, so it gets its own, larger bucket. */
@@ -326,6 +328,9 @@ const authTokenStore = new PrefixScopedWindowStore(RATE_LIMIT_MAX_KEYS);
 const passwordChangeStore = new BoundedSlidingWindowStore(RATE_LIMIT_MAX_KEYS, {
 	evictActive: false
 });
+const avatarUploadStore = new BoundedSlidingWindowStore(RATE_LIMIT_MAX_KEYS, {
+	evictActive: false
+});
 const searchStore = new BoundedSlidingWindowStore(RATE_LIMIT_MAX_KEYS);
 const apiStore = new BoundedSlidingWindowStore(RATE_LIMIT_MAX_KEYS);
 const allStores = [
@@ -333,6 +338,7 @@ const allStores = [
 	loginAccountStore,
 	authTokenStore,
 	passwordChangeStore,
+	avatarUploadStore,
 	searchStore,
 	apiStore
 ];
@@ -510,6 +516,16 @@ export function checkPasswordChangeRateLimit(userId: string, now = Date.now()): 
 		`password_change:${userId}`,
 		PASSWORD_CHANGE_MAX_ATTEMPTS,
 		PASSWORD_CHANGE_WINDOW_MS,
+		now
+	);
+}
+
+/** Profile photo uploads and removals (izgah-ui-v5.md §10.2): 10 per member per 15 minutes. */
+export function checkAvatarUploadRateLimit(userId: string, now = Date.now()): RateLimitResult {
+	return avatarUploadStore.consume(
+		`avatar_upload:${userId}`,
+		AVATAR_UPLOAD_MAX_ATTEMPTS,
+		AVATAR_UPLOAD_WINDOW_MS,
 		now
 	);
 }
