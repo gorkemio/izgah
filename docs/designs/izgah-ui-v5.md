@@ -398,7 +398,7 @@ Integration tests follow the patterns of `tests/integration/m4-unfurl-worker-and
 
 ## 11. Browser extensions
 
-*   The popup and options pages get the v5 tokens (from the generated palette), rounded controls, the solid ink primary button and CSS-only motion. They stay plain TypeScript; Bits UI is not used there.
+*   The popup and options pages get the v5 tokens (from the generated palette), the app's field, button and notice styles rewritten in plain CSS, the brand mark, Lucide icons inlined as SVG, and CSS-only motion. The popup has a header bar with the mark and an icon button for settings, the captured page as a link card, sections as toggle chips and a footer that keeps the share button in view; the options page puts the connection status in a soft notice with a state dot and the form in one card. They stay plain TypeScript; Bits UI is not used there.
 *   The store budget stays: zip at most 150 KB, JavaScript and CSS at most 30 KB gzip, enforced by `extensions/scripts/verify-manifests.mjs`. The display font is not bundled. The popup follows the system theme and contrast, as today.
 *   Done when `pnpm lint`, `pnpm check`, `pnpm test` and `pnpm test:e2e` pass in `extensions/`.
 
@@ -510,3 +510,4 @@ Work happens on the `feat/ui-v5` branch; `main` receives v5 in one step after M1
 | The extension size budget | CSS-only changes and no new font in the extension |
 
 *   **2026-11-27 (M10 redone, maintainer):** the first M10 only swapped the site's type and colours and left the Künye page; the maintainer asked for a real redesign. izgah.com now uses real screenshots of the app on the demo data (`site/assets/shots/`, English and Turkish, light and dark, WebP) instead of the hand-set specimen, which is gone with `specimen.js` and the specimen's scheme-pinning selectors in `scripts/tokens/build.ts`. The READMEs use the same screenshots, and the link preview images were retaken.
+*   **2026-11-27 (M9 redone, maintainer):** the first M9 only swapped the extension's font, colours and radii and kept the Künye layouts (notices as text between rules, Settings as an underlined word). The popup and options page are now rebuilt as described in §11, and the toolbar icons use the Jade mark. Store build after the change: zip 90 KB, JavaScript and CSS 28.3 KB gzip.

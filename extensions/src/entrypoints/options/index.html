@@ -12,10 +12,13 @@
 	<body>
 		<main class="options-main">
 			<header class="options-header">
-				<h1 data-i18n="optionsTitle">Izgah extension settings</h1>
-				<p class="options-subtitle" data-i18n="optionsSubtitle">
-					Connect the browser extension to your team’s server and your personal API key.
-				</p>
+				<span class="brand-mark" aria-hidden="true"></span>
+				<div>
+					<h1 data-i18n="optionsTitle">Izgah extension settings</h1>
+					<p class="options-subtitle" data-i18n="optionsSubtitle">
+						Connect the browser extension to your team’s server and your personal API key.
+					</p>
+				</div>
 			</header>
 
 			<div id="options-status-card" class="banner banner-info status-card">
@@ -31,7 +34,7 @@
 				</p>
 			</div>
 
-			<form id="options-form" novalidate>
+			<form id="options-form" class="options-card" novalidate>
 				<div class="form-field">
 					<label for="server-origin" class="form-label" data-i18n="serverOrigin"
 						>Your Izgah server address</label
