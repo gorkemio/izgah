@@ -68,13 +68,13 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 6px;
-		font: var(--k-text-ui);
-		color: var(--k-color-text-muted);
+		font: var(--type-ui);
+		color: var(--muted-foreground);
 		text-decoration: none;
 	}
 
 	.back-link:hover {
-		color: var(--k-color-text);
+		color: var(--foreground);
 		text-decoration: none;
 	}
 </style>

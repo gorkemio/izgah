@@ -12,7 +12,7 @@ browser / extension ──HTTPS──▶ reverse proxy ──▶ SvelteKit app (
 ## Request flow
 
 - [`src/hooks.server.ts`](./src/hooks.server.ts) is the front door: request IDs, security headers and CSP, locale and theme resolution, session lookup, CSRF/origin checks for `/api/internal/*`, Bearer API keys and CORS for `/api/v1/*`, admin gating and rate limits.
-- Pages live under [`src/routes/(app)`](<./src/routes/(app)>) and are server-rendered. Every mutation is a SvelteKit form action, so it works without JavaScript; `use:enhance` upgrades it.
+- Pages live under [`src/routes/(app)`](<./src/routes/(app)>) and are server-rendered. Every mutation is a SvelteKit form action submitted with `use:enhance` and validated on the server. JavaScript is required ([izgah-ui-v5.md](./docs/designs/izgah-ui-v5.md) §8); a `<noscript>` banner says so.
 - `/api/internal/*` serves the enhanced web UI (feed updates, quick search, notifications) with cookie sessions and same-origin checks.
 - `/api/v1/*` is the stable contract for the browser extensions and other clients: personal API keys (`izk_…`), no cookies.
 
@@ -25,6 +25,7 @@ browser / extension ──HTTPS──▶ reverse proxy ──▶ SvelteKit app (
 - **sections**, **resource_comments**, **resource_likes**, **notifications**, **search_logs**, **audit_logs**.
 - **users**, **sessions**, **accounts**, **api_keys**, **invite_tokens** (invites and password resets; no e-mail is sent).
 - **unfurl_jobs** — the preview queue.
+- **site_icons** — one stored icon per domain, refreshed at most every 30 days; **users.avatar_asset_key** points at a member's profile photo.
 - **enrichment_jobs**, **resource_enrichments**, **instance_settings** — smart capture: page text, optional AI summaries and section suggestions, and the encrypted provider settings.
 
 ## Link previews
@@ -41,8 +42,9 @@ Trigger-maintained `tsvector` columns combine the `simple`, `english` and `turki
 
 ## UI
 
-- Svelte 5 runes, no UI framework. Native `<dialog>`, `popover`, View Transitions and container queries.
-- The "Künye" visual language ([izgah-ui-v4.md](./docs/designs/izgah-ui-v4.md)): one type family, rules instead of boxes, words instead of icons. Colours for the app, the extensions and izgah.com come from one source, [`tokens/izgah.json`](./tokens/izgah.json) (`pnpm tokens` writes the palette CSS); [`src/lib/styles/tokens.css`](./src/lib/styles/tokens.css) maps them to semantic `light-dark()` tokens in four palettes (light and dark, standard and high contrast).
+- Svelte 5 runes with the UI v5 "Fener" toolkit ([izgah-ui-v5.md](./docs/designs/izgah-ui-v5.md)): shadcn-svelte components copied into [`src/lib/components/ui`](./src/lib/components/ui) on Bits UI, Tailwind CSS v4 utilities, `@lucide/svelte` icons and Svelte's own motion APIs ([`src/lib/motion`](./src/lib/motion)). Native `<dialog>` for confirmations and the reading pane, View Transitions and container queries stay.
+- One neutral near-black/off-white look with hairline borders, light and dark, the Jade theme by default and the Geist typeface. Colours for the app, the extensions and izgah.com come from one source, [`tokens/izgah.json`](./tokens/izgah.json) (`pnpm tokens` writes the palette CSS); [`src/lib/styles/tokens.css`](./src/lib/styles/tokens.css) resolves them into shadcn-style semantic roles with `light-dark()`, and [`theme.css`](./src/lib/styles/theme.css) maps those roles to Tailwind utilities. A cookie-backed "Reduced" effect level (also forced by reduced motion, reduced transparency, high contrast and forced colours) turns animation off.
+- Site icons and profile photos are stored like thumbnails: re-encoded WebP files in the content-addressed media store, served by `/media/thumbnails/*` to signed-in members only.
 - i18n in [`src/lib/i18n`](./src/lib/i18n): typed message catalogs (`en` is the source), resolved per request.
 
 ## Browser extensions
@@ -51,4 +53,4 @@ Trigger-maintained `tsvector` columns combine the `simple`, `english` and `turki
 
 ## Design documents
 
-Approved designs are in [`docs/designs/`](./docs/designs), indexed in [SITEMAP.md](./docs/designs/SITEMAP.md). Start with `izgah-core.md`, then `izgah-ui-v4.md`, `izgah-i18n-oss.md` and `izgah-roadmap.md`.
+Approved designs are in [`docs/designs/`](./docs/designs), indexed in [SITEMAP.md](./docs/designs/SITEMAP.md). Start with `izgah-core.md`, then `izgah-ui-v5.md`, `izgah-i18n-oss.md` and `izgah-roadmap.md`.

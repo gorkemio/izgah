@@ -165,16 +165,19 @@
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-4);
-		padding: var(--space-4) 0 0;
-		background: none;
-		border: 0;
-		border-block-start: 1px solid var(--k-color-text);
-		border-radius: 0;
+		padding: 18px 20px;
+		background: var(--card);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		box-shadow: var(--elevation-sm);
 	}
 
 	.table-card {
-		border-block-start: 1px solid var(--k-color-text);
 		overflow: hidden;
+		background: var(--card);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		box-shadow: var(--elevation-sm);
 	}
 
 	.table-toolbar {
@@ -184,12 +187,12 @@
 		justify-content: space-between;
 		gap: var(--space-2) var(--space-3);
 		padding: var(--space-3) var(--space-4);
-		border-block-end: 1px solid var(--k-color-line);
+		border-block-end: 1px solid var(--border);
 	}
 
 	.table-toolbar h2 {
 		margin: 0;
-		font: var(--k-text-section);
+		font: var(--type-section);
 		letter-spacing: -0.01em;
 		font-variant-numeric: tabular-nums;
 	}
@@ -200,8 +203,8 @@
 
 	.table-footer {
 		padding: var(--space-3) var(--space-4);
-		border-block-start: 1px solid var(--k-color-line);
-		background: var(--k-color-surface-1);
+		border-block-start: 1px solid var(--border);
+		background: var(--card);
 	}
 
 	.filter-form {
@@ -229,7 +232,7 @@
 	}
 
 	.table-wrapper:focus-visible {
-		outline: 2px solid var(--k-color-accent);
+		outline: 2px solid var(--primary);
 		outline-offset: -2px;
 		box-shadow: none;
 	}
@@ -243,7 +246,7 @@
 	.responsive-audit-table th,
 	.responsive-audit-table td {
 		padding: 11px var(--space-4);
-		border-block-end: 1px solid var(--k-color-line);
+		border-block-end: 1px solid var(--border);
 		text-align: start;
 		vertical-align: top;
 	}
@@ -254,10 +257,10 @@
 	}
 
 	.responsive-audit-table thead th {
-		background: var(--k-color-surface-2);
-		font: var(--k-text-micro);
+		background: var(--muted);
+		font: var(--type-micro);
 		font-weight: 600;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 		position: sticky;
 		inset-block-start: 0;
 		z-index: 1;
@@ -270,14 +273,14 @@
 	}
 
 	.responsive-audit-table tbody tr:hover {
-		background: var(--k-color-surface-2);
+		background: var(--muted);
 	}
 
 	.date-cell {
 		white-space: nowrap;
-		font: var(--k-text-meta);
+		font: var(--type-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-secondary);
+		color: var(--muted-foreground);
 	}
 
 	.action-stack {
@@ -287,46 +290,46 @@
 	}
 
 	.action-label {
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 600;
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.action-code,
 	.target-code {
-		font: var(--k-text-micro);
+		font: var(--type-micro);
 		font-variant-numeric: tabular-nums;
 	}
 
 	.action-code {
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 	}
 
 	.target-code {
-		color: var(--k-color-text-secondary);
+		color: var(--muted-foreground);
 	}
 
 	.actor-name {
 		display: block;
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 500;
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.sub-meta {
 		display: block;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 	}
 
 	.actor-email {
-		font: var(--k-text-meta);
+		font: var(--type-meta);
 		min-inline-size: 11rem;
 		word-break: normal;
 		overflow-wrap: anywhere;
 	}
 
 	.target-id {
-		font: var(--k-text-micro);
+		font: var(--type-micro);
 		font-variant-numeric: tabular-nums;
 		max-inline-size: 14rem;
 		word-break: normal;
@@ -339,7 +342,7 @@
 		font-size: 0.75rem;
 		line-height: 1.45;
 		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 		max-inline-size: 22rem;
 		word-break: normal;
 		overflow-wrap: anywhere;
@@ -348,11 +351,11 @@
 	.empty-state {
 		margin: 0;
 		padding: var(--space-5) var(--space-4);
-		border: 1px solid var(--k-color-line);
-		border-radius: var(--k-radius-sm);
-		background: var(--k-color-surface-2);
-		font: var(--k-text-ui);
-		color: var(--k-color-text-muted);
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		background: var(--muted);
+		font: var(--type-ui);
+		color: var(--muted-foreground);
 	}
 
 	@container (width < 640px) {
@@ -369,7 +372,7 @@
 		}
 
 		.responsive-audit-table tr {
-			border-block-end: 2px solid var(--k-color-line);
+			border-block-end: 2px solid var(--border);
 			padding: var(--space-2) 0;
 		}
 
@@ -387,8 +390,8 @@
 		}
 
 		.responsive-audit-table td::before {
-			font: var(--k-text-micro);
-			color: var(--k-color-text-muted);
+			font: var(--type-micro);
+			color: var(--muted-foreground);
 		}
 
 		.responsive-audit-table td:nth-child(2)::before {

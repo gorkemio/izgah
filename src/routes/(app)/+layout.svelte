@@ -532,12 +532,12 @@
 		z-index: 70;
 		display: grid;
 		place-items: center;
-		font: var(--k-text-section);
-		color: var(--k-color-text);
-		background: color-mix(in oklab, var(--k-color-bg) 92%, transparent);
-		border: 2px dashed var(--k-color-accent);
-		border-radius: var(--k-radius-lg);
-		box-shadow: var(--k-shadow-lg);
+		font: var(--type-section);
+		color: var(--foreground);
+		background: color-mix(in oklab, var(--background) 92%, transparent);
+		border: 2px dashed var(--primary);
+		border-radius: 12px;
+		box-shadow: var(--elevation-lg);
 		pointer-events: none;
 	}
 

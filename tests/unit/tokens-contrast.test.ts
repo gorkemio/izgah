@@ -286,7 +286,7 @@ describe('Künye token contrast (docs/designs/izgah-ui-v4.md §1)', () => {
 				rule.media?.includes('forced-colors: active')
 		);
 		expect(contrastMedia).toBeDefined();
-		for (const key of ['--light-shadow-lg', '--dark-shadow-lg', '--k-shadow-lg']) {
+		for (const key of ['--elevation-sm', '--elevation-md', '--elevation-lg', '--elevation-xl']) {
 			expect(contrastMedia!.decls[key], key).toBe('none');
 		}
 	});

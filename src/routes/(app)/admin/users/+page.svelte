@@ -744,11 +744,11 @@
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-4);
-		padding: var(--space-4) 0 0;
-		background: none;
-		border: 0;
-		border-block-start: 1px solid var(--k-color-text);
-		border-radius: 0;
+		padding: 18px 20px;
+		background: var(--card);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		box-shadow: var(--elevation-sm);
 	}
 
 	.panel-head {
@@ -761,19 +761,19 @@
 	.table-toolbar h2,
 	.dialog-header h2 {
 		margin: 0;
-		font: var(--k-text-section);
+		font: var(--type-section);
 		letter-spacing: -0.01em;
 		font-variant-numeric: tabular-nums;
 	}
 
 	.panel-desc {
 		margin: 0;
-		font: var(--k-text-hint);
-		color: var(--k-color-text-muted);
+		font: var(--type-hint);
+		color: var(--muted-foreground);
 	}
 
 	.mono-inline {
-		font: var(--k-text-meta);
+		font: var(--type-meta);
 		font-variant-numeric: tabular-nums;
 	}
 
@@ -790,7 +790,7 @@
 	}
 
 	.copy-field-group label {
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 600;
 	}
 
@@ -798,10 +798,10 @@
 		inline-size: 100%;
 		min-block-size: 38px;
 		padding: var(--space-2) var(--space-3);
-		border: 1px solid var(--k-color-line-strong);
-		border-radius: var(--k-radius-sm);
-		background: var(--k-color-surface-2);
-		color: var(--k-color-text);
+		border: 1px solid var(--input);
+		border-radius: 6px;
+		background: var(--muted);
+		color: var(--foreground);
 		flex: 1 1 16rem;
 		font-family: var(--font-mono);
 		font-size: 0.8125rem;
@@ -815,10 +815,10 @@
 	}
 
 	.role-fieldset legend {
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 600;
 		padding: 0 var(--space-1);
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.radio-group {
@@ -832,7 +832,7 @@
 		align-items: center;
 		gap: var(--space-2);
 		min-block-size: 36px;
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		cursor: pointer;
 	}
 
@@ -847,8 +847,11 @@
 	}
 
 	.table-card {
-		border-block-start: 1px solid var(--k-color-text);
 		overflow: hidden;
+		background: var(--card);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		box-shadow: var(--elevation-sm);
 	}
 
 	.table-toolbar {
@@ -858,13 +861,13 @@
 		justify-content: space-between;
 		gap: var(--space-2) var(--space-3);
 		padding: var(--space-3) var(--space-4);
-		border-block-end: 1px solid var(--k-color-line);
+		border-block-end: 1px solid var(--border);
 	}
 
 	.table-summary {
-		font: var(--k-text-meta);
+		font: var(--type-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 	}
 
 	.table-wrapper {
@@ -875,7 +878,7 @@
 	}
 
 	.table-wrapper:focus-visible {
-		outline: 2px solid var(--k-color-accent);
+		outline: 2px solid var(--primary);
 		outline-offset: -2px;
 		box-shadow: none;
 	}
@@ -889,7 +892,7 @@
 	.responsive-users-table th,
 	.responsive-users-table td {
 		padding: 11px var(--space-3);
-		border-block-end: 1px solid var(--k-color-line);
+		border-block-end: 1px solid var(--border);
 		text-align: start;
 		vertical-align: middle;
 	}
@@ -900,10 +903,10 @@
 	}
 
 	.responsive-users-table thead th {
-		background: var(--k-color-surface-2);
-		font: var(--k-text-micro);
+		background: var(--muted);
+		font: var(--type-micro);
 		font-weight: 600;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 		position: sticky;
 		inset-block-start: 0;
 		z-index: 1;
@@ -916,16 +919,16 @@
 	}
 
 	.responsive-users-table tbody tr:hover {
-		background: var(--k-color-surface-2);
+		background: var(--muted);
 	}
 
 	.responsive-users-table tbody tr.is-disabled {
-		background: var(--k-color-surface-2);
-		color: var(--k-color-text-muted);
+		background: var(--muted);
+		color: var(--muted-foreground);
 	}
 
 	.user-cell {
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		min-inline-size: 12rem;
 	}
 
@@ -943,18 +946,18 @@
 	}
 
 	.user-name {
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 600;
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.is-disabled .user-name {
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 	}
 
 	.user-email {
-		font: var(--k-text-meta);
-		color: var(--k-color-text-muted);
+		font: var(--type-meta);
+		color: var(--muted-foreground);
 		word-break: normal;
 		white-space: nowrap;
 	}
@@ -967,13 +970,13 @@
 	}
 
 	.responsive-users-table tbody td.num-col {
-		font: var(--k-text-meta);
+		font: var(--type-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.responsive-users-table tbody tr.is-disabled td.num-col {
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 	}
 
 	.responsive-users-table th.actions-col {
@@ -981,9 +984,9 @@
 	}
 
 	.date-cell {
-		font: var(--k-text-meta);
+		font: var(--type-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 		white-space: nowrap;
 	}
 
@@ -997,12 +1000,12 @@
 	.role-select {
 		min-block-size: 30px;
 		padding: 0 var(--space-5) 0 var(--space-2);
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-size: 0.8125rem;
-		color: var(--k-color-text);
-		background: var(--k-color-surface-2);
-		border: 1px solid var(--k-color-line-strong);
-		border-radius: var(--k-radius-sm);
+		color: var(--foreground);
+		background: var(--muted);
+		border: 1px solid var(--input);
+		border-radius: 6px;
 		cursor: pointer;
 		transition:
 			border-color var(--dur-fast) var(--ease),
@@ -1010,12 +1013,12 @@
 	}
 
 	.role-select:hover {
-		border-color: var(--k-color-text-secondary);
+		border-color: var(--muted-foreground);
 	}
 
 	.passive-role {
-		font: var(--k-text-ui);
-		color: var(--k-color-text-muted);
+		font: var(--type-ui);
+		color: var(--muted-foreground);
 	}
 
 	.row-actions {
@@ -1027,9 +1030,9 @@
 	}
 
 	.disabled-meta {
-		font: var(--k-text-meta);
+		font: var(--type-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 		white-space: nowrap;
 	}
 
@@ -1054,7 +1057,7 @@
 		}
 
 		.responsive-users-table tr {
-			border-block-end: 2px solid var(--k-color-line);
+			border-block-end: 2px solid var(--border);
 			padding: var(--space-2) 0;
 		}
 
@@ -1076,8 +1079,8 @@
 		}
 
 		.responsive-users-table td::before {
-			font: var(--k-text-micro);
-			color: var(--k-color-text-muted);
+			font: var(--type-micro);
+			color: var(--muted-foreground);
 		}
 
 		.responsive-users-table td:nth-child(2)::before {
@@ -1132,8 +1135,8 @@
 
 	.dialog-desc {
 		margin: 0;
-		font: var(--k-text-body);
-		color: var(--k-color-text-secondary);
+		font: var(--type-body);
+		color: var(--muted-foreground);
 	}
 
 	.copy-field-group {
@@ -1159,11 +1162,11 @@
 	.copy-bubble {
 		opacity: 0;
 		transition: opacity var(--dur-base) var(--ease);
-		font: var(--k-text-micro);
-		color: var(--k-color-ok-text);
-		background: var(--k-color-ok-soft);
-		border: 1px solid var(--k-color-ok-border);
-		border-radius: var(--k-radius-pill);
+		font: var(--type-micro);
+		color: var(--success);
+		background: var(--success-soft);
+		border: 1px solid color-mix(in oklab, var(--success) 40%, transparent);
+		border-radius: 9999px;
 		padding: 2px 10px;
 		pointer-events: none;
 	}
@@ -1174,8 +1177,8 @@
 
 	.hint {
 		margin: 0;
-		font: var(--k-text-hint);
-		color: var(--k-color-text-muted);
+		font: var(--type-hint);
+		color: var(--muted-foreground);
 	}
 
 	.dialog-footer {

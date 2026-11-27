@@ -521,49 +521,52 @@
 	}
 
 	h1 {
-		font: var(--k-text-display);
+		font: var(--type-display);
 		letter-spacing: -0.02em;
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.page-subtitle {
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 400;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 	}
 
-	/* Underline subtabs: calm Studio indicator, zero loud neon block. */
+	/* Page tabs as a segmented control (izgah-ui-v5.md §5.6). */
 	.settings-subnav {
-		display: flex;
+		display: inline-flex;
+		justify-self: start;
 		flex-wrap: wrap;
-		gap: var(--space-2);
-		border-block-end: 1px solid var(--k-color-line);
+		gap: 2px;
+		padding: 3px;
+		background: var(--muted);
+		border-radius: 10px;
 	}
 
 	.settings-subnav a {
 		display: inline-flex;
 		align-items: center;
-		min-block-size: 38px;
-		padding: var(--space-2) var(--space-3) 10px;
-		margin-block-end: -1px;
-		font: var(--k-text-ui);
-		color: var(--k-color-text-muted);
+		min-block-size: 30px;
+		padding: 0 12px;
+		font: var(--type-ui);
+		color: var(--muted-foreground);
 		text-decoration: none;
-		border-block-end: 2px solid transparent;
+		border-radius: 7px;
 		transition:
 			color var(--dur-fast) var(--ease),
-			border-color var(--dur-fast) var(--ease);
+			background-color var(--dur-fast) var(--ease);
 	}
 
 	.settings-subnav a:not([aria-current='page']):hover {
-		color: var(--k-color-text);
+		color: var(--foreground);
 		text-decoration: none;
 	}
 
 	.settings-subnav a[aria-current='page'],
 	.settings-subnav a[aria-current='page']:hover {
-		color: var(--k-color-text);
-		font-weight: 600;
+		color: var(--foreground);
+		background: var(--background);
+		box-shadow: var(--elevation-sm);
 		text-decoration: none;
 	}
 
@@ -573,37 +576,41 @@
 		}
 	}
 
-	/* Strict serif boundary: section h2 stays --font-sans (--k-text-section). */
+	/* Strict serif boundary: section h2 stays --font-sans (--type-section). */
+	/* Each group is a card with a titled header (izgah-ui-v5.md §5.6). */
 	.settings-section {
 		display: grid;
-		gap: var(--space-2);
 		min-inline-size: 0;
+		background: var(--card);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		box-shadow: var(--elevation-sm);
 	}
 
 	.section-title {
-		font: var(--k-text-section);
-		color: var(--k-color-text);
-		padding-block-end: var(--space-2);
-		border-block-end: 1px solid var(--k-color-line);
+		font: var(--type-section);
+		color: var(--foreground);
+		padding: 14px 20px;
+		border-block-end: 1px solid var(--hairline);
 	}
 
 	.settings-rows {
 		display: grid;
 		margin: 0;
+		padding-inline: 20px;
 	}
 
 	.settings-row {
 		display: grid;
 		grid-template-columns: minmax(0, 1fr);
 		gap: var(--space-3);
-		padding-block: var(--space-5);
-		border-block-end: 1px solid var(--k-color-line);
+		padding-block: 18px;
+		border-block-end: 1px solid var(--hairline);
 		align-items: start;
 	}
 
 	.settings-row:last-child {
 		border-block-end: 0;
-		padding-block-end: 0;
 	}
 
 	@media (min-width: 768px) {
@@ -620,9 +627,9 @@
 	}
 
 	.settings-row-title {
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 600;
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.settings-row-control {
@@ -636,15 +643,15 @@
 	}
 
 	.profile-value {
-		font: var(--k-text-body);
+		font: var(--type-body);
 		font-weight: 500;
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.profile-email {
-		font: var(--k-text-meta);
+		font: var(--type-meta);
 		font-size: 0.84375rem;
-		color: var(--k-color-text-secondary);
+		color: var(--muted-foreground);
 		overflow-wrap: anywhere;
 	}
 
@@ -663,8 +670,8 @@
 		flex-wrap: wrap;
 		align-items: center;
 		gap: 6px;
-		font: var(--k-text-hint);
-		color: var(--k-color-text-secondary);
+		font: var(--type-hint);
+		color: var(--muted-foreground);
 	}
 
 	/* Shortcuts: a native checkbox, not a switch (izgah-ui-v4 §7). */
@@ -689,9 +696,9 @@
 		align-items: center;
 		gap: var(--space-2);
 		min-block-size: 32px;
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 400;
-		color: var(--k-color-text);
+		color: var(--foreground);
 		cursor: pointer;
 	}
 
@@ -706,8 +713,8 @@
 	}
 
 	.role-value {
-		font: var(--k-text-body);
-		color: var(--k-color-text);
+		font: var(--type-body);
+		color: var(--foreground);
 	}
 
 	@media (pointer: coarse) {
@@ -743,7 +750,7 @@
 
 	.field.is-invalid input,
 	.password-row input:global(.user-invalid-fallback) {
-		border-color: var(--k-color-danger);
+		border-color: var(--destructive);
 	}
 
 	/* Shown only after interaction (:user-invalid or the JS fallback class). */

@@ -460,10 +460,14 @@ Work happens on the `feat/ui-v5` branch; `main` receives v5 in one step after M1
 *   **2026-11-27 (M2):** the rail, the mobile top bar, the tab bar, the account menu and the notification panel are rebuilt in Lantern with icons and labels (shadcn-svelte Popover for the menus). A migration bridge in `src/lib/styles/tokens.css` maps the Künye `--k-*` colours, radii and shadows to v5 roles, so screens that M3–M6 have not rebuilt yet keep their layout but share the Lantern palette; the bridge goes with the `--k-*` variables in M11. The Künye 3 px radius test was retired in favour of the v5 radius scale.
 *   **2026-11-27 (maintainer):** the default theme is **Jade** (`#55d0a6` dark / `#0f7a5c` light), not Lantern; Lantern and Indigo night stay in the lab file only. Geist and the no-gradient rule are unchanged.
 
+*   **2026-11-27 (M8):** site icons, profile photos and undo delete as in §10. The image raises adapter-node's `BODY_SIZE_LIMIT` to `6M` for the 5 MB photo upload; `src/hooks.server.ts` rejects declared bodies over 512 KB for every other request. Undo is offered in the delete toast for its 6-second lifetime (longer while hovered or focused); the server accepts it for 30 seconds.
+*   **2026-11-27 (M4):** the reading pane keeps its native `<dialog>` (docked from 1280 px, modal below) instead of a Bits UI Sheet: the docked mode is non-modal, which Sheet does not offer, and the E2E contract covers it. Comment edit and delete are icon buttons revealed on hover and focus (always visible on touch); delete still confirms in the native dialog.
+*   **2026-11-27 (M6):** the class-based primitives in `src/lib/styles/components.css` (`.btn`, fields, tags, badges, status pills, KPI tiles, banners) stay for the admin, settings and sign-in screens that post plain forms, restyled to the shadcn-svelte sizes and the v5 roles; new components use shadcn-svelte and utilities. The `--k-*` variables and the migration bridge were removed in this milestone rather than in M11: every scoped style now reads the v5 roles directly, with `--type-*` shorthands for type. Settings keep every group on one page as cards behind a segmented page switch (Account settings, API keys) instead of hidden tab panels, so anchors and the E2E contract keep working. Section ordering keeps the Up and Down buttons; a drag handle was not added.
+*   **2026-11-27 (M6):** the sign-in screens are a quiet sidebar surface with the wordmark, the promise and a sample entry card beside a form card; no aurora or glass, following the no-gradient rule. Error pages are a single card with the status, the message, the request id and a way back.
+
 ## 17. Open questions
 
 *   Which screens and moments the team found amateurish, and which products they consider "premium" references.
-*   Whether the body font stays Atkinson Hyperlegible Next.
 *   Whether sections get a member-chosen colour or emoji (it needs a column; for now the dot colour is derived from the section id).
 
 ## Verification

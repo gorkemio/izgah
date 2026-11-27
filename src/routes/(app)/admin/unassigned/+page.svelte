@@ -279,17 +279,17 @@
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-4);
-		padding: var(--space-4) 0 0;
-		background: none;
-		border: 0;
-		border-block-start: 1px solid var(--k-color-text);
-		border-radius: 0;
+		padding: 18px 20px;
+		background: var(--card);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		box-shadow: var(--elevation-sm);
 	}
 
 	.panel h2,
 	.table-toolbar h2 {
 		margin: 0;
-		font: var(--k-text-section);
+		font: var(--type-section);
 		letter-spacing: -0.01em;
 		font-variant-numeric: tabular-nums;
 	}
@@ -311,14 +311,14 @@
 		align-items: center;
 		gap: var(--space-2);
 		min-block-size: 32px;
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 400;
-		color: var(--k-color-text);
+		color: var(--foreground);
 		cursor: pointer;
 	}
 
 	.checkbox-pill:hover {
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.checkbox-pill:has(input:checked) {
@@ -347,8 +347,11 @@
 	}
 
 	.table-card {
-		border-block-start: 1px solid var(--k-color-text);
 		overflow: hidden;
+		background: var(--card);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		box-shadow: var(--elevation-sm);
 	}
 
 	.table-toolbar {
@@ -358,13 +361,13 @@
 		justify-content: space-between;
 		gap: var(--space-2) var(--space-3);
 		padding: var(--space-3) var(--space-4);
-		border-block-end: 1px solid var(--k-color-line);
+		border-block-end: 1px solid var(--border);
 	}
 
 	.table-summary {
-		font: var(--k-text-meta);
+		font: var(--type-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--k-color-accent-text);
+		color: var(--link);
 	}
 
 	.table-wrapper {
@@ -374,15 +377,15 @@
 	}
 
 	.table-wrapper:focus-visible {
-		outline: 2px solid var(--k-color-accent);
+		outline: 2px solid var(--primary);
 		outline-offset: -2px;
 		box-shadow: none;
 	}
 
 	.table-footer {
 		padding: var(--space-3) var(--space-4);
-		border-block-start: 1px solid var(--k-color-line);
-		background: var(--k-color-surface-1);
+		border-block-start: 1px solid var(--border);
+		background: var(--card);
 	}
 
 	.responsive-unassigned-table {
@@ -394,7 +397,7 @@
 	.responsive-unassigned-table th,
 	.responsive-unassigned-table td {
 		padding: 11px var(--space-4);
-		border-block-end: 1px solid var(--k-color-line);
+		border-block-end: 1px solid var(--border);
 		text-align: start;
 		vertical-align: top;
 	}
@@ -405,10 +408,10 @@
 	}
 
 	.responsive-unassigned-table thead th {
-		background: var(--k-color-surface-2);
-		font: var(--k-text-micro);
+		background: var(--muted);
+		font: var(--type-micro);
 		font-weight: 600;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 		position: sticky;
 		inset-block-start: 0;
 		z-index: 1;
@@ -421,7 +424,7 @@
 	}
 
 	.responsive-unassigned-table tbody tr:hover {
-		background: var(--k-color-surface-2);
+		background: var(--muted);
 	}
 
 	.share-title-stack {
@@ -431,32 +434,32 @@
 	}
 
 	.share-title {
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 600;
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.resource-link {
-		font: var(--k-text-meta);
-		color: var(--k-color-text-muted);
+		font: var(--type-meta);
+		color: var(--muted-foreground);
 		word-break: normal;
 		overflow-wrap: anywhere;
 	}
 
 	.share-note {
 		margin: var(--space-1) 0 0;
-		font: var(--k-text-hint);
-		color: var(--k-color-text-secondary);
+		font: var(--type-hint);
+		color: var(--muted-foreground);
 	}
 
 	.author-cell {
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		white-space: nowrap;
 	}
 
 	.channel-badge {
-		font: var(--k-text-hint);
-		color: var(--k-color-text-secondary);
+		font: var(--type-hint);
+		color: var(--muted-foreground);
 	}
 
 	.responsive-unassigned-table th.num-col,
@@ -467,9 +470,9 @@
 	}
 
 	.date-cell {
-		font: var(--k-text-meta);
+		font: var(--type-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 	}
 
 	.pagination-row,
@@ -483,11 +486,11 @@
 	.empty-state {
 		margin: 0;
 		padding: var(--space-5) var(--space-4);
-		border: 1px solid var(--k-color-line);
-		border-radius: var(--k-radius-sm);
-		background: var(--k-color-surface-2);
-		font: var(--k-text-ui);
-		color: var(--k-color-text-muted);
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		background: var(--muted);
+		font: var(--type-ui);
+		color: var(--muted-foreground);
 	}
 
 	@media (pointer: coarse) {
@@ -515,7 +518,7 @@
 		}
 
 		.responsive-unassigned-table tr {
-			border-block-end: 2px solid var(--k-color-line);
+			border-block-end: 2px solid var(--border);
 			padding: var(--space-2) 0;
 		}
 
@@ -537,8 +540,8 @@
 		}
 
 		.responsive-unassigned-table td::before {
-			font: var(--k-text-micro);
-			color: var(--k-color-text-muted);
+			font: var(--type-micro);
+			color: var(--muted-foreground);
 		}
 
 		.responsive-unassigned-table td:nth-child(1)::before {
@@ -568,15 +571,15 @@
 		flex-wrap: wrap;
 		gap: var(--space-1) var(--space-2);
 		margin: var(--space-1) 0 0;
-		font: var(--k-text-hint);
-		color: var(--k-color-text-muted);
+		font: var(--type-hint);
+		color: var(--muted-foreground);
 	}
 
 	.suggestion-add {
 		padding: 0;
 		font: inherit;
 		font-weight: 600;
-		color: var(--k-color-accent-text);
+		color: var(--link);
 		background: none;
 		border: 0;
 		text-decoration: underline;

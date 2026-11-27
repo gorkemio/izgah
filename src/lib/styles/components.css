@@ -1,4 +1,7 @@
-/* Behaviour-free visual primitives as classes (docs/designs/izgah-ui-v3.md §2, §3, §7, §8). */
+/*
+ * Behaviour-free visual primitives as classes, in the v5 look (docs/designs/izgah-ui-v5.md §4).
+ * Screens that post plain forms use them; new components use shadcn-svelte and utilities.
+ */
 @layer components {
 	/* Strict serif boundary classes (§2.2) -------------------------------- */
 	.brand {
@@ -8,30 +11,32 @@
 	}
 
 	.attachment-title {
-		font: var(--k-text-title);
+		font: var(--type-title);
 		letter-spacing: -0.01em;
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.resource-title {
-		font: var(--k-text-display);
+		font: var(--type-display);
 		letter-spacing: -0.02em;
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
-	/* Buttons (§7.1) ------------------------------------------------------ */
+	/* Buttons (izgah-ui-v5.md §4): the same sizes, radii and variants as shadcn-svelte's Button, for
+	   screens that still post plain forms with class-based buttons. */
 	.btn {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		gap: var(--space-2);
-		min-block-size: 36px;
-		padding: 0 var(--space-4);
-		font: var(--k-text-ui);
-		color: var(--k-color-text);
-		background: var(--k-color-surface-1);
-		border: 1px solid var(--k-color-line-strong);
-		border-radius: var(--k-radius-sm);
+		gap: 6px;
+		min-block-size: 32px;
+		padding: 0 12px;
+		font: var(--type-ui);
+		color: var(--foreground);
+		background: var(--card);
+		border: 1px solid var(--input);
+		border-radius: 8px;
+		box-shadow: var(--elevation-sm);
 		text-decoration: none;
 		white-space: nowrap;
 		cursor: pointer;
@@ -43,28 +48,25 @@
 	}
 
 	.btn-sm {
-		min-block-size: 30px;
-		padding: 0 var(--space-3);
+		min-block-size: 28px;
+		padding: 0 10px;
 		font-size: 0.8125rem;
+		border-radius: 7px;
 	}
 
 	.btn:hover:not(:disabled, [aria-disabled='true']) {
-		background: var(--k-color-surface-2);
-		border-color: var(--k-color-text-secondary);
-		color: var(--k-color-text);
+		background: var(--muted);
+		color: var(--foreground);
 	}
 
 	.btn:active:not(:disabled, [aria-disabled='true']) {
-		opacity: 0.9;
+		translate: 0 1px;
 	}
 
 	.btn[aria-disabled='true'],
 	.btn:disabled {
-		color: var(--k-color-text-muted);
-		background: var(--k-color-surface-2);
-		border-color: var(--k-color-line);
 		cursor: not-allowed;
-		opacity: 0.65;
+		opacity: 0.5;
 	}
 
 	.btn[aria-busy='true'] {
@@ -73,105 +75,73 @@
 	}
 
 	.btn-primary {
-		background: var(--btn-primary-bg);
-		color: var(--btn-primary-fg);
-		border-color: var(--btn-primary-bg);
-		font-weight: 600;
+		background: var(--primary);
+		color: var(--primary-foreground);
+		border-color: transparent;
+		box-shadow: var(--elevation-sm);
 	}
 
 	.btn-primary:hover:not(:disabled, [aria-disabled='true']) {
-		background: color-mix(in oklab, var(--btn-primary-bg) 88%, var(--k-color-text));
-		color: var(--btn-primary-fg);
-		border-color: color-mix(in oklab, var(--btn-primary-bg) 88%, var(--k-color-text));
+		background: color-mix(in oklab, var(--primary) 88%, var(--foreground));
+		color: var(--primary-foreground);
 	}
 
-	.btn-primary[aria-disabled='true'],
-	.btn-primary:disabled {
-		background: var(--btn-primary-bg);
-		color: var(--btn-primary-fg);
-		border-color: var(--btn-primary-bg);
-		opacity: 0.55;
-	}
-
-	.btn-subtle {
+	.btn-subtle,
+	.btn-outline {
 		background: transparent;
-		border-color: var(--k-color-line-strong);
-		color: var(--k-color-text);
+		border-color: var(--input);
+		color: var(--foreground);
 	}
 
-	.btn-subtle:hover:not(:disabled, [aria-disabled='true']) {
-		background: var(--k-color-surface-2);
-		border-color: var(--k-color-text-secondary);
+	.btn-subtle:hover:not(:disabled, [aria-disabled='true']),
+	.btn-outline:hover:not(:disabled, [aria-disabled='true']) {
+		background: var(--muted);
 	}
 
 	.btn-ghost {
 		background: transparent;
 		border-color: transparent;
-		color: var(--k-color-text-secondary);
+		box-shadow: none;
+		color: var(--muted-foreground);
 	}
 
 	.btn-ghost:hover:not(:disabled, [aria-disabled='true']) {
-		background: var(--k-color-surface-2);
-		border-color: transparent;
-		color: var(--k-color-text);
-	}
-
-	.btn-outline {
-		background: var(--k-color-surface-1);
-		border-color: var(--k-color-line-strong);
-		color: var(--k-color-text);
+		background: var(--accent);
+		color: var(--foreground);
 	}
 
 	.btn-danger {
-		background: var(--k-color-danger);
-		color: var(--k-color-on-danger);
-		border-color: var(--k-color-danger);
-		font-weight: 600;
+		background: var(--destructive);
+		color: var(--destructive-foreground);
+		border-color: transparent;
 	}
 
 	.btn-danger:hover:not(:disabled, [aria-disabled='true']) {
-		background: var(--k-color-danger);
-		color: var(--k-color-on-danger);
-		border-color: var(--k-color-danger);
-		opacity: 0.9;
-	}
-
-	.btn-danger[aria-disabled='true'],
-	.btn-danger:disabled {
-		background: var(--k-color-danger);
-		color: var(--k-color-on-danger);
-		border-color: var(--k-color-danger);
-		opacity: 0.55;
+		background: color-mix(in oklab, var(--destructive) 88%, var(--foreground));
+		color: var(--destructive-foreground);
 	}
 
 	.btn-danger-soft {
 		background: transparent;
-		color: var(--k-color-danger);
-		border-color: var(--k-color-danger);
+		color: var(--destructive);
+		border-color: color-mix(in oklab, var(--destructive) 35%, transparent);
+		box-shadow: none;
 	}
 
 	.btn-danger-soft:hover:not(:disabled, [aria-disabled='true']) {
-		background: var(--k-color-danger);
-		color: var(--k-color-on-danger);
-		border-color: var(--k-color-danger);
-	}
-
-	.btn-danger-soft[aria-disabled='true'],
-	.btn-danger-soft:disabled {
-		color: var(--k-color-text-muted);
-		background: var(--k-color-surface-2);
-		border-color: var(--k-color-line-strong);
+		background: color-mix(in oklab, var(--destructive) 10%, transparent);
+		color: var(--destructive);
 	}
 
 	.btn-icon {
-		inline-size: 36px;
-		min-inline-size: 36px;
+		inline-size: 32px;
+		min-inline-size: 32px;
 		padding: 0;
 	}
 
 	.btn-icon.btn-sm {
-		inline-size: 30px;
-		min-inline-size: 30px;
+		inline-size: 28px;
+		min-inline-size: 28px;
 	}
 
 	@media (pointer: coarse) {
@@ -195,15 +165,15 @@
 
 	.field > label,
 	.field-label {
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 600;
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
-	/* .field-hint MUST use --font-sans (--k-text-hint), NEVER monospace (§2.2). */
+	/* .field-hint MUST use --font-sans (--type-hint), NEVER monospace (§2.2). */
 	.field-hint {
-		font: var(--k-text-hint);
-		color: var(--k-color-text-muted);
+		font: var(--type-hint);
+		color: var(--muted-foreground);
 	}
 
 	.field input:where(:not([type='checkbox'], [type='radio'])),
@@ -213,15 +183,17 @@
 	.textarea,
 	.select {
 		inline-size: 100%;
-		min-block-size: 38px;
-		padding: var(--space-2) var(--space-3);
-		font: var(--k-text-body);
-		color: var(--k-color-text);
-		background: var(--input-bg);
-		border: 1px solid var(--k-color-line-strong);
-		border-radius: var(--k-radius-sm);
+		min-block-size: 36px;
+		padding: 6px 10px;
+		font: 400 0.875rem / 1.45 var(--font-sans);
+		color: var(--foreground);
+		background: var(--card);
+		border: 1px solid var(--input);
+		border-radius: 8px;
+		box-shadow: var(--elevation-sm);
 		transition:
 			border-color var(--dur-fast) var(--ease),
+			box-shadow var(--dur-fast) var(--ease),
 			background-color var(--dur-fast) var(--ease);
 	}
 
@@ -229,7 +201,7 @@
 	.field textarea::placeholder,
 	.input::placeholder,
 	.textarea::placeholder {
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 	}
 
 	.field input:where(:not([type='checkbox'], [type='radio'])):hover:not(:disabled, :read-only),
@@ -238,7 +210,7 @@
 	.input:hover:not(:disabled, :read-only),
 	.textarea:hover:not(:disabled, :read-only),
 	.select:hover:not(:disabled) {
-		border-color: var(--k-color-text-secondary);
+		border-color: color-mix(in oklab, var(--foreground) 22%, transparent);
 	}
 
 	.field input:where(:not([type='checkbox'], [type='radio'])):focus-visible,
@@ -247,7 +219,9 @@
 	.input:focus-visible,
 	.textarea:focus-visible,
 	.select:focus-visible {
-		border-color: var(--k-color-accent);
+		border-color: var(--ring);
+		outline: none;
+		box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring) 50%, transparent);
 	}
 
 	.field input:where(:not([type='checkbox'], [type='radio'])):disabled,
@@ -256,9 +230,9 @@
 	.input:disabled,
 	.textarea:disabled,
 	.select:disabled {
-		background: var(--k-color-surface-2);
-		color: var(--k-color-text-muted);
-		border-color: var(--k-color-line);
+		background: var(--muted);
+		color: var(--muted-foreground);
+		border-color: var(--border);
 		cursor: not-allowed;
 	}
 
@@ -266,7 +240,7 @@
 	.field textarea:read-only,
 	.input:read-only,
 	.textarea:read-only {
-		background: var(--k-color-surface-2);
+		background: var(--muted);
 	}
 
 	.field select,
@@ -278,8 +252,8 @@
 		cursor: pointer;
 		/* Chevron drawn with two gradients so it follows the theme's muted text colour. */
 		background-image:
-			linear-gradient(45deg, transparent 50%, var(--k-color-text-muted) 50%),
-			linear-gradient(135deg, var(--k-color-text-muted) 50%, transparent 50%);
+			linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
+			linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
 		background-repeat: no-repeat;
 		background-position:
 			calc(100% - 15px) 52%,
@@ -294,9 +268,9 @@
 	}
 
 	.field-error {
-		font: var(--k-text-hint);
+		font: var(--type-hint);
 		font-weight: 500;
-		color: var(--k-color-danger);
+		color: var(--destructive);
 	}
 
 	.field :user-invalid,
@@ -307,85 +281,91 @@
 	.input[aria-invalid='true'],
 	.textarea[aria-invalid='true'],
 	.select[aria-invalid='true'] {
-		border-color: var(--k-color-danger);
+		border-color: var(--destructive);
 	}
 
-	/*
-	 * Tags, badges and states are plain words in Künye (izgah-ui-v4.md §7): no pills, no fills.
-	 * State words carry their meaning in text; colour only reinforces it.
-	 */
+	/* Tags, badges and states (izgah-ui-v5.md §4): small pills; state words keep their meaning in
+	   text and colour only reinforces it. */
 	.tag {
 		display: inline-flex;
-		align-items: baseline;
+		align-items: center;
 		gap: 5px;
-		padding: 0;
-		font: var(--k-text-hint);
-		color: var(--k-color-text-secondary);
-		background: none;
-		border: 0;
-		text-decoration: underline;
-		text-decoration-color: var(--k-color-line-strong);
-		text-underline-offset: 0.2em;
+		padding: 2px 9px;
+		font: 400 0.78125rem / 1.4 var(--font-sans);
+		color: var(--muted-foreground);
+		background: transparent;
+		border: 1px solid var(--hairline);
+		border-radius: 9999px;
+		text-decoration: none;
 		white-space: nowrap;
+		transition:
+			background-color var(--dur-fast) var(--ease),
+			color var(--dur-fast) var(--ease);
 	}
 
 	a.tag:hover,
 	button.tag:hover {
-		color: var(--k-color-text);
-		text-decoration-color: currentColor;
-	}
-
-	span.tag {
-		text-decoration: none;
+		color: var(--foreground);
+		background: var(--accent);
 	}
 
 	.tag-accent {
-		color: var(--k-color-text-secondary);
+		color: var(--foreground);
+		background: var(--muted);
 	}
 
 	.badge {
 		display: inline-flex;
-		align-items: baseline;
+		align-items: center;
 		gap: var(--space-1);
-		padding: 0;
-		font: var(--k-text-hint);
+		padding: 1px 7px;
+		font: var(--type-micro);
 		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-muted);
-		background: none;
+		color: var(--muted-foreground);
+		background: var(--muted);
 		border: 0;
+		border-radius: 9999px;
 		white-space: nowrap;
 	}
 
 	.badge-accent {
-		color: var(--k-color-link);
+		color: var(--primary-foreground);
+		background: var(--primary);
 	}
 
 	.status-pill {
 		display: inline-flex;
-		align-items: baseline;
+		align-items: center;
 		gap: 6px;
-		padding: 0;
-		font: var(--k-text-hint);
+		padding: 2px 9px 2px 7px;
+		font: var(--type-micro);
 		white-space: nowrap;
-		color: var(--k-color-text-secondary);
-		background: none;
+		color: var(--muted-foreground);
+		background: var(--muted);
 		border: 0;
+		border-radius: 9999px;
 	}
 
 	.status-dot {
-		display: none;
+		display: inline-block;
+		inline-size: 6px;
+		block-size: 6px;
+		border-radius: 9999px;
+		background: currentColor;
 	}
 
 	.status-active {
-		color: var(--k-color-ok-text);
+		color: var(--success);
+		background: var(--success-soft);
 	}
 
 	.status-pending {
-		color: var(--k-color-warn-text);
+		color: var(--warning);
+		background: var(--warning-soft);
 	}
 
 	.status-passive {
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 	}
 
 	.kbd {
@@ -395,14 +375,14 @@
 		min-inline-size: 20px;
 		block-size: 20px;
 		padding: 0 5px;
-		font: var(--k-text-micro);
+		font: var(--type-micro);
 		font-variant-numeric: tabular-nums;
 		letter-spacing: 0.03em;
-		color: var(--k-color-text-muted);
-		background: var(--k-color-surface-2);
-		border: 1px solid var(--k-color-line);
-		border-block-end-color: var(--k-color-line-strong);
-		border-radius: var(--k-radius-xs);
+		color: var(--muted-foreground);
+		background: var(--muted);
+		border: 1px solid var(--border);
+		border-block-end-color: var(--input);
+		border-radius: 4px;
 		line-height: 1;
 	}
 
@@ -413,8 +393,8 @@
 
 	/* Search hit highlight (§1.1 & §1.2) */
 	mark.hl {
-		background: var(--k-color-highlight-bg);
-		color: var(--k-color-highlight-fg);
+		background: var(--highlight);
+		color: var(--highlight-foreground);
 		padding-inline: 1px;
 		border-radius: 2px;
 		box-decoration-break: clone;
@@ -423,8 +403,8 @@
 	/* Skeleton: a still placeholder; Künye moves only colour and the list → detail View Transition. */
 	.skeleton {
 		display: block;
-		background: var(--k-color-surface-2);
-		border-radius: var(--k-radius-xs);
+		background: var(--muted);
+		border-radius: 4px;
 	}
 
 	.skeleton-line {
@@ -434,11 +414,11 @@
 
 	.skeleton-thumb {
 		aspect-ratio: 1200 / 630;
-		border-radius: var(--k-radius-sm);
+		border-radius: 6px;
 	}
 
 	.skeleton-circle {
-		border-radius: var(--k-radius-pill);
+		border-radius: 9999px;
 	}
 
 	/* Feed structure ------------------------------------------------------ */
@@ -447,19 +427,19 @@
 		inset-block-start: var(--header-h);
 		z-index: 5;
 		padding-block: var(--space-4) var(--space-2);
-		font: var(--k-text-day);
+		font: var(--type-day);
 		letter-spacing: -0.01em;
-		color: var(--k-color-text);
-		background: var(--k-color-bg);
-		border-block-end: 1px solid var(--k-color-line);
+		color: var(--foreground);
+		background: var(--background);
+		border-block-end: 1px solid var(--border);
 	}
 
 	.unseen-mark {
 		display: inline-block;
 		inline-size: 8px;
 		block-size: 8px;
-		background: var(--k-color-accent);
-		border-radius: var(--k-radius-pill);
+		background: var(--primary);
+		border-radius: 9999px;
 		flex: none;
 	}
 
@@ -486,9 +466,10 @@
 		display: grid;
 		justify-items: start;
 		gap: var(--space-3);
-		padding: var(--space-5) 0;
-		color: var(--k-color-text);
-		border-block: 1px solid var(--k-color-line);
+		padding: var(--space-5);
+		color: var(--foreground);
+		border: 1px dashed var(--border);
+		border-radius: 12px;
 	}
 
 	/* Native modal <dialog> (§3, §7.1, §8) -------------------------------- */
@@ -499,11 +480,11 @@
 		overflow-y: auto;
 		margin: auto;
 		padding: var(--space-5);
-		border: 1px solid var(--k-color-line);
-		border-radius: var(--k-radius-lg);
-		background: var(--k-color-surface-1);
-		color: var(--k-color-text);
-		box-shadow: var(--k-shadow-lg);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		background: var(--card);
+		color: var(--foreground);
+		box-shadow: var(--elevation-lg);
 	}
 
 	dialog.izgah-dialog:modal {
@@ -511,17 +492,53 @@
 	}
 
 	dialog.izgah-dialog::backdrop {
-		background: var(--k-color-backdrop);
+		background: var(--backdrop);
+	}
+
+	/* Shared content of confirmation dialogs. */
+	dialog.izgah-dialog .dialog-title {
+		margin: 0 0 var(--space-2);
+		font: 600 1rem / 1.35 var(--font-sans);
+		color: var(--foreground);
+	}
+
+	dialog.izgah-dialog .dialog-confirm-text {
+		margin: 0;
+		font: var(--type-hint);
+		font-size: 0.875rem;
+		color: var(--muted-foreground);
+	}
+
+	dialog.izgah-dialog .dialog-actions {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		gap: var(--space-2);
+		margin-block-start: var(--space-5);
+	}
+
+	dialog.izgah-dialog .dialog-actions form {
+		display: contents;
+	}
+
+	dialog.izgah-dialog .panel-error {
+		margin-block-end: var(--space-3);
+		padding: 8px 12px;
+		font: var(--type-hint);
+		color: var(--destructive);
+		background: color-mix(in oklab, var(--destructive) 8%, transparent);
+		border: 1px solid color-mix(in oklab, var(--destructive) 35%, transparent);
+		border-radius: 8px;
 	}
 
 	/* Popover panels + feature-gated CSS Anchor Positioning (WebKit fix preserved) */
 	.popover-panel[popover] {
 		padding: var(--space-1);
-		border: 1px solid var(--k-color-line);
-		border-radius: var(--k-radius-md);
-		background: var(--k-color-surface-1);
-		color: var(--k-color-text);
-		box-shadow: var(--k-shadow-lg);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		background: var(--card);
+		color: var(--foreground);
+		box-shadow: var(--elevation-lg);
 		min-inline-size: 10.5rem;
 		max-inline-size: calc(100dvw - 1rem);
 	}
@@ -556,56 +573,55 @@
 	.page-lead {
 		margin: 0;
 		max-inline-size: 68ch;
-		font: var(--k-text-body);
-		color: var(--k-color-text-muted);
+		font: var(--type-body);
+		color: var(--muted-foreground);
 	}
 
-	/* ---- Admin KPI strip (ui-v3 §9: tabular 3-up strip on Members/Metrics/Jobs) ---- */
-	/* Figures in a ruled row, not tiles (izgah-ui-v4.md §7). */
+	/* ---- Admin KPI tiles (izgah-ui-v5.md §5.6): one card per figure ---- */
 	.kpi-strip {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--space-1) var(--space-5);
-		padding-block: var(--space-2);
-		border-block-end: 1px solid var(--k-color-line);
-	}
-
-	.kpi-strip-4 {
-		--kpi-cols: 4;
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+		gap: var(--space-3);
 	}
 
 	.kpi-box {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: baseline;
-		gap: 0 0.35em;
+		display: grid;
+		align-content: start;
+		gap: 2px;
+		padding: var(--space-4);
+		background: var(--card);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		box-shadow: var(--elevation-sm);
 	}
 
 	.kpi-box h2,
 	.kpi-label {
 		margin: 0;
-		font: var(--k-text-body);
-		color: var(--k-color-text-secondary);
+		font: var(--type-meta);
+		color: var(--muted-foreground);
 	}
 
 	.kpi-value-row {
-		display: contents;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0 var(--space-2);
 	}
 
 	.kpi-value {
-		order: -1;
 		margin: 0;
-		font: var(--k-text-body);
-		font-weight: 600;
+		font: 600 1.5rem / 1.2 var(--font-sans);
+		letter-spacing: -0.02em;
 		font-variant-numeric: tabular-nums;
-		color: inherit;
+		color: var(--foreground);
 	}
 
 	.kpi-sub {
 		margin: 0;
-		font: var(--k-text-hint);
+		font: var(--type-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 	}
 
 	/* ---- Inline status banners (JS-off fallback for toasts, form results) ---- */
@@ -614,24 +630,31 @@
 		display: flex;
 		align-items: center;
 		gap: var(--space-2);
-		padding: var(--space-2) 0;
-		font: var(--k-text-ui);
-		color: var(--k-color-text);
-		background: none;
-		border-block: 1px solid var(--k-color-line);
+		padding: 10px 12px;
+		font: var(--type-ui);
+		font-weight: 400;
+		color: var(--foreground);
+		background: var(--muted);
+		border: 1px solid var(--border);
+		border-radius: 8px;
 	}
 
 	.banner-success {
-		color: var(--k-color-ok-text);
+		color: var(--success);
+		background: var(--success-soft);
+		border-color: color-mix(in oklab, var(--success) 30%, transparent);
 	}
 
 	.banner-error {
-		color: var(--k-color-danger);
-		border-block-color: var(--k-color-danger-border);
+		color: var(--destructive);
+		background: color-mix(in oklab, var(--destructive) 8%, transparent);
+		border-color: color-mix(in oklab, var(--destructive) 35%, transparent);
 	}
 
 	.banner-warn {
-		color: var(--k-color-warn-text);
+		color: var(--warning);
+		background: var(--warning-soft);
+		border-color: color-mix(in oklab, var(--warning) 30%, transparent);
 	}
 
 	@media (forced-colors: active) {
@@ -727,20 +750,21 @@
 	/* Labelled machine summary (docs/designs/izgah-smart-capture.md §10). */
 	.ai-summary {
 		margin-block: var(--space-3) 0;
-		padding-block: var(--space-2);
-		border-block: 1px solid var(--k-color-line);
+		padding: var(--space-3);
+		background: color-mix(in oklab, var(--muted) 50%, transparent);
+		border: 1px solid var(--hairline);
+		border-radius: 8px;
 	}
 
 	.ai-summary-label {
 		display: block;
-		font: var(--k-text-hint);
-		color: var(--k-color-text-muted);
+		font: var(--type-hint);
+		color: var(--muted-foreground);
 	}
 
 	.ai-summary p {
 		margin: var(--space-1) 0 0;
-		font: var(--k-text-body);
-		font-style: italic;
-		color: var(--k-color-text-secondary);
+		font: var(--type-body);
+		color: var(--foreground);
 	}
 }

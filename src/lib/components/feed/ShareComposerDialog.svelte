@@ -748,19 +748,19 @@
 
 	.composer-title {
 		margin: 0;
-		font: var(--k-text-section);
+		font: var(--type-section);
 		font-size: 1.125rem;
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.composer-error {
 		padding: var(--space-3) var(--space-4);
 		margin-block-end: var(--space-4);
-		border: 1px solid var(--k-color-danger-border);
-		background: var(--k-color-danger-soft);
-		color: var(--k-color-danger);
-		border-radius: var(--k-radius-sm);
-		font: var(--k-text-ui);
+		border: 1px solid color-mix(in oklab, var(--destructive) 40%, transparent);
+		background: color-mix(in oklab, var(--destructive) 10%, transparent);
+		color: var(--destructive);
+		border-radius: 6px;
+		font: var(--type-ui);
 	}
 
 	.composer-form {
@@ -781,20 +781,20 @@
 
 	.duplicate-banner {
 		padding: var(--space-3) var(--space-4);
-		border: 1px solid var(--k-color-warn-border);
-		background: var(--k-color-warn-soft);
-		color: var(--k-color-text);
-		border-radius: var(--k-radius-md);
+		border: 1px solid color-mix(in oklab, var(--warning) 40%, transparent);
+		background: var(--warning-soft);
+		color: var(--foreground);
+		border-radius: 8px;
 		display: grid;
 		gap: var(--space-1);
-		font: var(--k-text-hint);
+		font: var(--type-hint);
 	}
 
 	.duplicate-heading {
 		margin: 0;
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 600;
-		color: var(--k-color-warn-text);
+		color: var(--warning);
 	}
 
 	.duplicate-detail,
@@ -829,18 +829,18 @@
 		align-items: center;
 		gap: var(--space-2);
 		min-block-size: 34px;
-		font: var(--k-text-ui);
-		color: var(--k-color-text);
+		font: var(--type-ui);
+		color: var(--foreground);
 		cursor: pointer;
 	}
 
 	.sections-grid .checkbox-row {
 		padding: 0;
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.sections-grid .checkbox-row:hover {
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.sections-grid .checkbox-row:has(input:checked) {
@@ -855,7 +855,7 @@
 
 	.silent-checkbox {
 		padding: var(--space-2) 0 0;
-		border-block-start: 1px solid var(--k-color-line);
+		border-block-start: 1px solid var(--border);
 	}
 
 	.composer-actions {
@@ -879,7 +879,7 @@
 		}
 	}
 	.suggested-tag {
-		font: var(--k-text-hint);
-		color: var(--k-color-accent-text);
+		font: var(--type-hint);
+		color: var(--link);
 	}
 </style>
