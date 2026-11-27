@@ -26,6 +26,7 @@ ENV NODE_ENV=production \
 	PORT=3000 \
 	ADDRESS_HEADER=x-forwarded-for \
 	XFF_DEPTH=1 \
+	BODY_SIZE_LIMIT=6M \
 	MEDIA_STORAGE_DIR=/data/thumbnails
 
 COPY --from=builder /app/package.json ./package.json

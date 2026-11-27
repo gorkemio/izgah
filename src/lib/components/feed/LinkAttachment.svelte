@@ -32,6 +32,19 @@
 		});
 	});
 
+	let iconFailed = $state(false);
+	let iconEl = $state<HTMLImageElement | null>(null);
+
+	$effect(() => {
+		const img = iconEl;
+		if (!img) {
+			return;
+		}
+		return watchImageError(img, () => {
+			iconFailed = true;
+		});
+	});
+
 	let lastAssetKey: string | null = null;
 	$effect.pre(() => {
 		if (item.resource.thumbnailAssetKey !== lastAssetKey) {
@@ -71,6 +84,7 @@
 	const siteInitial = $derived(
 		(item.resource.domain.replace(/^www\./, '')[0] ?? '?').toLocaleUpperCase('tr')
 	);
+	const siteIconKey = $derived(item.resource.siteIconAssetKey ?? null);
 	const showThumbnail = $derived(Boolean(item.resource.thumbnailAssetKey && !imgFailed));
 	const repoSlug = $derived(extractRepoSlug(item.resource.canonicalUrl || item.rawUrl));
 	const title = $derived(
@@ -88,12 +102,25 @@
 >
 	<div class="attachment-text grid min-w-0 flex-1 content-start gap-1">
 		<div class="flex min-w-0 items-start gap-1.5">
-			<span
-				class="mt-px grid size-4 shrink-0 place-items-center rounded-[4px] bg-muted text-[9px] font-semibold text-muted-foreground uppercase"
-				aria-hidden="true"
-			>
-				{siteInitial}
-			</span>
+			{#if siteIconKey && !iconFailed}
+				<img
+					class="site-icon mt-px size-4 shrink-0 rounded-[4px] bg-muted object-contain"
+					src={`/media/thumbnails/${encodeURIComponent(siteIconKey)}`}
+					alt=""
+					width="16"
+					height="16"
+					loading="lazy"
+					decoding="async"
+					bind:this={iconEl}
+				/>
+			{:else}
+				<span
+					class="mt-px grid size-4 shrink-0 place-items-center rounded-[4px] bg-muted text-[9px] font-semibold text-muted-foreground uppercase"
+					aria-hidden="true"
+				>
+					{siteInitial}
+				</span>
+			{/if}
 			<div class="min-w-0 flex-1">{@render kunye?.()}</div>
 		</div>
 		<h3

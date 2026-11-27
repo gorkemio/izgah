@@ -16,6 +16,7 @@ import {
 	linkShares,
 	linkShareSections,
 	mediaAssets,
+	siteIcons,
 	sections,
 	users,
 	type ContentType,
@@ -46,6 +47,7 @@ export interface FeedShareItem {
 	author: {
 		id: string;
 		name: string;
+		avatarAssetKey?: string | null;
 	};
 	resource: {
 		id: string;
@@ -59,6 +61,7 @@ export interface FeedShareItem {
 		siteName: string | null;
 		providerMeta: ProviderMeta | null;
 		thumbnailAssetKey: string | null;
+		siteIconAssetKey?: string | null;
 		thumbnailWidth: number | null;
 		thumbnailHeight: number | null;
 		likeCount: number;
@@ -84,6 +87,7 @@ import {
 	createLinkShare,
 	getResourceShareReferences,
 	LinkServiceError,
+	restoreLinkShare,
 	softDeleteLinkShare,
 	updateLinkShare
 } from '#lib/server/links/service.ts';
@@ -187,6 +191,7 @@ export async function _loadFeedPage(options: {
 			createdAtCursor: preciseTimestampText(linkShares.createdAt),
 			authorId: users.id,
 			authorName: users.name,
+			authorAvatarAssetKey: users.avatarAssetKey,
 			resourceId: canonicalResources.id,
 			canonicalUrl: canonicalResources.canonicalUrl,
 			domain: canonicalResources.domain,
@@ -198,6 +203,7 @@ export async function _loadFeedPage(options: {
 			siteName: canonicalResources.siteName,
 			providerMeta: canonicalResources.providerMeta,
 			thumbnailAssetKey: canonicalResources.thumbnailAssetKey,
+			siteIconAssetKey: siteIcons.assetKey,
 			thumbnailWidth: mediaAssets.width,
 			thumbnailHeight: mediaAssets.height,
 			likeCount: canonicalResources.likeCount,
@@ -207,6 +213,7 @@ export async function _loadFeedPage(options: {
 		.innerJoin(canonicalResources, eq(linkShares.resourceId, canonicalResources.id))
 		.innerJoin(users, eq(linkShares.authorId, users.id))
 		.leftJoin(mediaAssets, eq(canonicalResources.thumbnailAssetKey, mediaAssets.assetKey))
+		.leftJoin(siteIcons, eq(siteIcons.domain, canonicalResources.domain))
 		.where(and(...conditions))
 		.orderBy(desc(linkShares.createdAt), desc(linkShares.id))
 		.limit(FEED_PAGE_SIZE + 1);
@@ -285,7 +292,8 @@ export async function _loadFeedPage(options: {
 			createdAt: row.createdAt.toISOString(),
 			author: {
 				id: row.authorId,
-				name: row.authorName
+				name: row.authorName,
+				avatarAssetKey: row.authorAvatarAssetKey
 			},
 			resource: {
 				id: row.resourceId,
@@ -299,6 +307,7 @@ export async function _loadFeedPage(options: {
 				siteName: row.siteName,
 				providerMeta: row.providerMeta,
 				thumbnailAssetKey: row.thumbnailAssetKey,
+				siteIconAssetKey: row.siteIconAssetKey,
 				thumbnailWidth: row.thumbnailWidth,
 				thumbnailHeight: row.thumbnailHeight,
 				likeCount: row.likeCount,
@@ -582,6 +591,41 @@ export const _feedShareActions = {
 						errorMessage: error.message
 					}
 				);
+			}
+			throw error;
+		}
+	},
+
+	/** Undo for a delete made in the last 30 seconds (docs/designs/izgah-ui-v5.md §10.3). */
+	restoreShare: async ({ request, locals }) => {
+		if (!locals.user) {
+			return fail(401, {
+				formType: 'restoreShare' as const,
+				errorMessage: t('auth.signInForActionAlt')
+			});
+		}
+		const formData = await request.formData();
+		const shareId = String(formData.get('shareId') ?? '').trim();
+		if (!shareId) {
+			return fail(422, {
+				formType: 'restoreShare' as const,
+				shareId,
+				errorMessage: t('share.idMissing')
+			});
+		}
+		try {
+			await restoreLinkShare({
+				actor: { id: locals.user.id, role: locals.user.role },
+				shareId
+			});
+			return { success: true, formType: 'restoreShare' as const, shareId };
+		} catch (error) {
+			if (error instanceof LinkServiceError) {
+				return fail(error.status, {
+					formType: 'restoreShare' as const,
+					shareId,
+					errorMessage: error.message
+				});
 			}
 			throw error;
 		}

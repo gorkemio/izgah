@@ -385,6 +385,7 @@ Seen in the catalogue; licences are checked when a component is adopted.
 *   Validation: JPEG, PNG or WebP by magic bytes (`detectRasterFormat`), at most 5 MB and `MAX_INPUT_PIXELS`, centre-cropped to 256×256 WebP with EXIF removed, and the disk guards of `hasSufficientMediaDiskSpace`.
 *   A new `checkAvatarUploadRateLimit(userId)` in [`rate-limit.ts`](../../src/lib/server/auth/rate-limit.ts) allows 10 changes per 15 minutes. Every change and removal is written to the audit log.
 *   A replaced photo releases its reference; orphans are removed by the existing `cleanupOrphanMediaAssets`.
+*   The image sets `BODY_SIZE_LIMIT=6M` so adapter-node accepts the upload; `src/hooks.server.ts` keeps rejecting declared bodies over 512 KB for every request other than `POST /settings?/setAvatar`.
 
 ### 10.3 Undo delete
 

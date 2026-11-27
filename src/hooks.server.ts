@@ -62,6 +62,7 @@ type CookieSessionResolution =
 				email: string;
 				role: UserRole;
 				authVersion: number;
+				avatarAssetKey: string | null;
 			};
 			session: { id: string; expiresAt: Date };
 	  };
@@ -225,6 +226,7 @@ async function resolveVerifiedCookieSession(event: RequestEvent): Promise<Cookie
 				role: UserRole;
 				isActive: boolean;
 				authVersion: number;
+				avatarAssetKey: string | null;
 		  }
 		| undefined;
 	try {
@@ -238,7 +240,8 @@ async function resolveVerifiedCookieSession(event: RequestEvent): Promise<Cookie
 				email: users.email,
 				role: users.role,
 				isActive: users.isActive,
-				authVersion: users.authVersion
+				authVersion: users.authVersion,
+				avatarAssetKey: users.avatarAssetKey
 			})
 			.from(sessions)
 			.innerJoin(users, eq(users.id, sessions.userId))
@@ -268,13 +271,28 @@ async function resolveVerifiedCookieSession(event: RequestEvent): Promise<Cookie
 			name: row.name,
 			email: row.email,
 			role: row.role,
-			authVersion: row.authVersion
+			authVersion: row.authVersion,
+			avatarAssetKey: row.avatarAssetKey
 		},
 		session: {
 			id: row.sessionId,
 			expiresAt: row.expiresAt
 		}
 	};
+}
+
+export const DEFAULT_BODY_LIMIT_BYTES = 512 * 1024;
+
+function exceedsDefaultBodyLimit(request: Request, pathname: string, url: URL): boolean {
+	const length = Number(request.headers.get('content-length') ?? 0);
+	if (!Number.isFinite(length) || length <= DEFAULT_BODY_LIMIT_BYTES) {
+		return false;
+	}
+	const isAvatarUpload =
+		request.method.toUpperCase() === 'POST' &&
+		pathname === '/settings' &&
+		url.searchParams.has('/setAvatar');
+	return !isAvatarUpload;
 }
 
 /**
@@ -466,6 +484,12 @@ async function handleRequest(
 	const decodedPathname = decodeRequestPathname(event.url.pathname);
 	if (decodedPathname === null) {
 		return jsonErrorResponse(400, 'BAD_REQUEST', t('api.badPath'), requestId);
+	}
+
+	// The server accepts bodies up to BODY_SIZE_LIMIT (6M in the image) only for profile photo
+	// uploads (izgah-ui-v5.md §10.2); everything else keeps adapter-node's 512 KB default.
+	if (exceedsDefaultBodyLimit(event.request, decodedPathname, event.url)) {
+		return jsonErrorResponse(413, 'PAYLOAD_TOO_LARGE', t('api.payloadTooLarge'), requestId);
 	}
 	const pathname = decodedPathname;
 

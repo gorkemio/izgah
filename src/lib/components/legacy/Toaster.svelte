@@ -24,8 +24,20 @@
 		}}
 	>
 		<span class="toast-message">{toast.message}</span>
-		{#if toast.action}
+		{#if toast.action && 'href' in toast.action}
 			<a href={toast.action.href} class="toast-action">{toast.action.label}</a>
+		{:else if toast.action}
+			{@const onClick = toast.action.onClick}
+			<button
+				type="button"
+				class="toast-action"
+				onclick={() => {
+					toasts.dismiss(toast.id);
+					onClick();
+				}}
+			>
+				{toast.action.label}
+			</button>
 		{/if}
 		<button
 			type="button"
@@ -107,9 +119,18 @@
 
 	.toast-action {
 		color: var(--k-color-accent-text);
+		font: inherit;
 		font-weight: 600;
 		white-space: nowrap;
 		text-decoration-color: currentColor;
+	}
+
+	button.toast-action {
+		min-block-size: 28px;
+		padding: 0 var(--space-1);
+		background: transparent;
+		border: 0;
+		cursor: pointer;
 	}
 
 	.toast.is-error .toast-action {

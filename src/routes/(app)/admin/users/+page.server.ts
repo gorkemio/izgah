@@ -8,6 +8,7 @@ import {
 	issuePasswordResetLink,
 	listAdminUsers,
 	regenerateUserInvite,
+	removeMemberAvatar,
 	requireAdmin
 } from '#lib/server/admin/service.ts';
 import type { UserRole } from '#lib/server/db/schema.ts';
@@ -186,6 +187,26 @@ export const actions: Actions = {
 			};
 		} catch (err) {
 			return handleAdminError(err, 'disable');
+		}
+	},
+
+	removeAvatar: async ({ request, locals }) => {
+		const admin = requireAdmin(locals);
+		const formData = await request.formData();
+		const userId = readFormText(formData, 'userId').trim();
+
+		try {
+			const result = await removeMemberAvatar(userId, admin.id, locals.requestId);
+			return {
+				actionType: 'removeAvatar',
+				success: true,
+				targetUserId: userId,
+				message: result.removed
+					? t('admin.avatarRemoved', { name: result.user.name })
+					: t('admin.avatarNone', { name: result.user.name })
+			};
+		} catch (err) {
+			return handleAdminError(err, 'removeAvatar');
 		}
 	}
 };

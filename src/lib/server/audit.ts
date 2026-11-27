@@ -20,7 +20,8 @@ export const ADMIN_AUDIT_ACTIONS = [
 	'admin.ai_key_removed',
 	'admin.ai_backfill_started',
 	'admin.ai_data_purged',
-	'admin.ai_jobs_retried'
+	'admin.ai_jobs_retried',
+	'admin.user_avatar_removed'
 ] as const;
 
 export const KNOWN_SYSTEM_AUDIT_ACTIONS = [
@@ -30,6 +31,8 @@ export const KNOWN_SYSTEM_AUDIT_ACTIONS = [
 	'user.invite_accepted',
 	'user.password_reset_completed',
 	'user.password_changed',
+	'user.avatar_updated',
+	'user.avatar_removed',
 	'api_key.created',
 	'api_key.revoked'
 ] as const;

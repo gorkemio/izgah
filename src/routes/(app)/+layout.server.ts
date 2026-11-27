@@ -22,7 +22,8 @@ export const load: LayoutServerLoad = async ({ locals, url, cookies, request }) 
 			id: locals.user.id,
 			name: locals.user.name,
 			email: locals.user.email,
-			role: locals.user.role
+			role: locals.user.role,
+			avatarAssetKey: locals.user.avatarAssetKey ?? null
 		},
 		sections,
 		theme: parseThemePreference(cookies.get(THEME_COOKIE)),

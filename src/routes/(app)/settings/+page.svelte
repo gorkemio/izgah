@@ -3,6 +3,7 @@
 	import { instanceName, pageTitle, sourceUrl } from '#lib/instance.ts';
 	import { enhance } from '$app/forms';
 	import { page } from '$app/state';
+	import AvatarForm from '#lib/components/member/AvatarForm.svelte';
 	import EffectsForm from '#lib/components/shell/EffectsForm.svelte';
 	import PaletteForm from '#lib/components/shell/PaletteForm.svelte';
 	import ThemeForm from '#lib/components/shell/ThemeForm.svelte';
@@ -185,6 +186,14 @@
 	<section class="settings-section" aria-labelledby="profile-heading">
 		<h2 id="profile-heading" class="section-title">{t('settings.profile')}</h2>
 		<dl class="settings-rows">
+			<div class="settings-row">
+				<dt class="settings-row-info">
+					<span class="settings-row-title">{t('settings.avatarTitle')}</span>
+				</dt>
+				<dd class="settings-row-control">
+					<AvatarForm user={data.user} />
+				</dd>
+			</div>
 			<div class="settings-row">
 				<dt class="settings-row-info">
 					<span class="settings-row-title">{t('settings.name')}</span>

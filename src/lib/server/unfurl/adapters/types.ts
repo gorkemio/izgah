@@ -17,6 +17,8 @@ export interface UnfurlMetadata {
 	ogType: string | null;
 	/** Readable page text (HTML pages only; docs/designs/izgah-smart-capture.md §4). */
 	contentText?: string | null;
+	/** Site icon URLs in preference order (HTML pages only; izgah-ui-v5.md §10.1). */
+	iconCandidates?: string[];
 }
 
 export interface AdapterFetchResult {

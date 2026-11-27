@@ -36,6 +36,7 @@ const EXPECTED_TABLES = [
 	'sections',
 	'sessions',
 	'share_section_suggestions',
+	'site_icons',
 	'unfurl_jobs',
 	'users',
 	'verifications'

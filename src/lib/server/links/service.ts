@@ -201,6 +201,21 @@ export interface SoftDeleteLinkShareInput {
 	shareId: string;
 }
 
+/** How long after a delete the author or an admin may undo it (izgah-ui-v5.md §10.3). */
+export const RESTORE_WINDOW_MS = 30_000;
+
+export interface RestoreLinkShareInput {
+	actor: LinkActor;
+	shareId: string;
+	now?: Date;
+}
+
+export interface RestoreLinkShareResult {
+	id: string;
+	resourceId: string;
+	unfurlRequeued: boolean;
+}
+
 export interface SoftDeleteLinkShareResult {
 	id: string;
 	resourceId: string;
@@ -951,4 +966,93 @@ export async function softDeleteLinkShare(
 			deletedAt: updated.deletedAt ?? deletedAt
 		};
 	});
+}
+
+/**
+ * Undoes a delete made in the last {@link RESTORE_WINDOW_MS} (docs/designs/izgah-ui-v5.md §10.3).
+ * If the delete detached the resource's thumbnail (it was the last active share), the unfurl job is
+ * queued again; content-addressed storage attaches the same image asset when it is fetched again.
+ */
+export async function restoreLinkShare(
+	input: RestoreLinkShareInput
+): Promise<RestoreLinkShareResult> {
+	const now = input.now ?? new Date();
+	const result = await db.transaction(async (tx) => {
+		const [existing] = await tx
+			.select({
+				id: linkShares.id,
+				resourceId: linkShares.resourceId,
+				authorId: linkShares.authorId,
+				deletedAt: linkShares.deletedAt
+			})
+			.from(linkShares)
+			.where(eq(linkShares.id, input.shareId))
+			.limit(1)
+			.for('update');
+
+		if (!existing || existing.deletedAt === null) {
+			throw new LinkServiceError(404, 'NOT_FOUND', t('share.notFound'));
+		}
+		if (existing.authorId !== input.actor.id && input.actor.role !== 'admin') {
+			throw new LinkServiceError(403, 'FORBIDDEN', t('share.noDeletePermission'));
+		}
+		if (now.getTime() - existing.deletedAt.getTime() > RESTORE_WINDOW_MS) {
+			throw new LinkServiceError(409, 'CONFLICT', t('share.restoreExpired'));
+		}
+
+		// Same lock order as softDeleteLinkShare: share row, then resource row.
+		const [resource] = await tx
+			.select({
+				id: canonicalResources.id,
+				canonicalUrl: canonicalResources.canonicalUrl,
+				unfurlStatus: canonicalResources.unfurlStatus,
+				thumbnailAssetKey: canonicalResources.thumbnailAssetKey
+			})
+			.from(canonicalResources)
+			.where(eq(canonicalResources.id, existing.resourceId))
+			.limit(1)
+			.for('update');
+
+		await tx
+			.update(linkShares)
+			.set({ deletedAt: null, updatedAt: now })
+			.where(eq(linkShares.id, existing.id));
+
+		const unfurlRequeued =
+			Boolean(resource) &&
+			resource.thumbnailAssetKey === null &&
+			resource.unfurlStatus !== 'queued' &&
+			resource.unfurlStatus !== 'running';
+
+		if (resource && unfurlRequeued) {
+			await tx
+				.update(canonicalResources)
+				.set({ unfurlStatus: 'queued', updatedAt: now })
+				.where(eq(canonicalResources.id, resource.id));
+			await tx
+				.insert(unfurlJobs)
+				.values({ resourceId: resource.id, targetUrl: resource.canonicalUrl, status: 'queued' })
+				.onConflictDoUpdate({
+					target: unfurlJobs.resourceId,
+					set: {
+						targetUrl: resource.canonicalUrl,
+						status: 'queued',
+						attempts: 0,
+						nextRunAt: now,
+						lockedUntil: null,
+						lockToken: null,
+						lastErrorCode: null,
+						lastErrorMessage: null,
+						updatedAt: now
+					}
+				});
+		}
+
+		return { id: existing.id, resourceId: existing.resourceId, unfurlRequeued };
+	});
+
+	if (result.unfurlRequeued) {
+		notifyUnfurlWorker();
+	}
+	return result;
 }

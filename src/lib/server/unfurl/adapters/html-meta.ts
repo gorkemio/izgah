@@ -215,6 +215,7 @@ export async function fetchHtmlMetadata(
 	let twitterImage: string | null = null;
 	let ogSiteName: string | null = null;
 	let ogType: string | null = null;
+	const iconLinks: IconLink[] = [];
 	let headFinished = false;
 	let bytesRead = 0;
 	const bodyText = new ReadableTextCollector();
@@ -232,6 +233,22 @@ export async function fetchHtmlMetadata(
 				}
 				if (name === 'title') {
 					inTitleTag = true;
+					return;
+				}
+				if (name === 'link') {
+					const rel = asciiLower(attribs.rel ?? '');
+					const href = attribs.href?.trim();
+					if (
+						href &&
+						/(^|\s)(icon|apple-touch-icon|apple-touch-icon-precomposed)(\s|$)/.test(rel)
+					) {
+						iconLinks.push({
+							href,
+							apple: rel.includes('apple-touch-icon'),
+							sizes: asciiLower(attribs.sizes ?? ''),
+							type: asciiLower(attribs.type ?? '')
+						});
+					}
 					return;
 				}
 				if (name === 'meta') {
@@ -383,8 +400,56 @@ export async function fetchHtmlMetadata(
 			providerMeta: null,
 			thumbnailUrl,
 			ogType: normalizedOgType ? asciiLower(normalizedOgType) : null,
-			contentText: bodyText.result()
+			contentText: bodyText.result(),
+			iconCandidates: pickIconCandidates(iconLinks, stream.finalUrl.toString())
 		},
 		shortCircuited: false
 	};
+}
+
+interface IconLink {
+	href: string;
+	apple: boolean;
+	sizes: string;
+	type: string;
+}
+
+const MAX_ICON_EDGE = 256;
+
+function largestEdge(sizes: string): number {
+	let best = 0;
+	for (const token of sizes.split(/\s+/)) {
+		const match = /^(\d+)x(\d+)$/.exec(token);
+		if (match) {
+			best = Math.max(best, Math.min(Number(match[1]), Number(match[2])));
+		}
+	}
+	return best;
+}
+
+/**
+ * Site icon URLs in preference order (docs/designs/izgah-ui-v5.md §10.1): Apple touch icons, then
+ * PNG/WebP icons from largest to smallest (up to 256px), then /favicon.ico. SVG icons are never
+ * fetched, since they can carry scripts.
+ */
+export function pickIconCandidates(links: IconLink[], pageUrl: string): string[] {
+	const usable = links.filter(
+		(link) => !link.type.includes('svg') && !/\.svgz?(\?|#|$)/i.test(link.href)
+	);
+	const ranked = usable
+		.map((link) => ({ link, edge: largestEdge(link.sizes) }))
+		.filter(({ edge }) => edge <= MAX_ICON_EDGE)
+		.sort((a, b) => Number(b.link.apple) - Number(a.link.apple) || b.edge - a.edge);
+	const urls: string[] = [];
+	for (const { link } of ranked) {
+		const resolved = resolveHttpAssetUrl(link.href, pageUrl);
+		if (resolved && !urls.includes(resolved)) {
+			urls.push(resolved);
+		}
+	}
+	const fallback = resolveHttpAssetUrl('/favicon.ico', pageUrl);
+	if (fallback && !urls.includes(fallback)) {
+		urls.push(fallback);
+	}
+	return urls.slice(0, 4);
 }

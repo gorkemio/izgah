@@ -9,7 +9,8 @@ export interface Toast {
 	id: number;
 	message: string;
 	tone: ToastTone;
-	action?: { label: string; href: string };
+	/** A link (`href`) or an in-page action such as "Undo" (`onClick`, izgah-ui-v5.md §10.3). */
+	action?: { label: string; href: string } | { label: string; onClick: () => void };
 }
 
 /*

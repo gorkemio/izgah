@@ -5,7 +5,18 @@ import {
 	PasswordChangeError,
 	useSecureCookies
 } from '#lib/server/auth/better-auth.ts';
-import { checkPasswordChangeRateLimit } from '#lib/server/auth/rate-limit.ts';
+import {
+	checkAvatarUploadRateLimit,
+	checkPasswordChangeRateLimit
+} from '#lib/server/auth/rate-limit.ts';
+import {
+	AvatarError,
+	MAX_AVATAR_BYTES,
+	removeUserAvatar,
+	setUserAvatar,
+	type AvatarErrorCode
+} from '#lib/server/media/avatars.ts';
+import type { MessageKey } from '#lib/i18n/messages/en.ts';
 import { isLocale, LOCALE_COOKIE, t } from '#lib/i18n/index.ts';
 import { setHeadersOnce } from '#lib/server/http/headers.ts';
 import { sanitizeInternalPath } from '#lib/server/http/safe-path.ts';
@@ -35,6 +46,19 @@ function setAppearanceCookie(cookies: Cookies, name: string, value: string): voi
 	});
 }
 
+function avatarErrorKey(code: AvatarErrorCode): MessageKey {
+	switch (code) {
+		case 'empty':
+			return 'settings.avatarEmpty';
+		case 'too_large':
+			return 'settings.avatarTooLarge';
+		case 'low_disk':
+			return 'settings.avatarLowDisk';
+		default:
+			return 'settings.avatarUnsupported';
+	}
+}
+
 export const load: PageServerLoad = async ({ locals, request, setHeaders }) => {
 	setHeadersOnce({ request, setHeaders }, { 'Cache-Control': 'no-store' });
 
@@ -43,7 +67,7 @@ export const load: PageServerLoad = async ({ locals, request, setHeaders }) => {
 	}
 
 	return {
-		user: locals.user
+		user: { ...locals.user, avatarAssetKey: locals.user.avatarAssetKey ?? null }
 	};
 };
 
@@ -129,6 +153,93 @@ export const actions: Actions = {
 		}
 		setAppearanceCookie(cookies, LOCALE_COOKIE, locale);
 		redirect(303, sanitizeInternalPath(formData.get('returnTo'), { fallback: '/settings' }));
+	},
+
+	/** Uploads a profile photo (docs/designs/izgah-ui-v5.md §10.2). */
+	setAvatar: async ({ locals, request, setHeaders }) => {
+		if (!locals.user || !locals.session) {
+			error(401, t('auth.signInRequired'), { requestId: locals.requestId });
+		}
+		const rateLimit = checkAvatarUploadRateLimit(locals.user.id);
+		if (!rateLimit.allowed) {
+			setHeadersOnce(
+				{ request, setHeaders },
+				{ 'Retry-After': String(rateLimit.retryAfterSeconds) }
+			);
+			return fail(429, {
+				formType: 'avatar' as const,
+				error: t('settings.tooManyAvatarChanges')
+			});
+		}
+
+		const declaredLength = Number(request.headers.get('content-length') ?? 0);
+		if (declaredLength > MAX_AVATAR_BYTES + 64 * 1024) {
+			return fail(413, { formType: 'avatar' as const, error: t('settings.avatarTooLarge') });
+		}
+		const formData = await request.formData();
+		const file = formData.get('avatar');
+		if (!(file instanceof File) || file.size === 0) {
+			return fail(400, { formType: 'avatar' as const, error: t('settings.avatarEmpty') });
+		}
+		if (file.size > MAX_AVATAR_BYTES) {
+			return fail(413, { formType: 'avatar' as const, error: t('settings.avatarTooLarge') });
+		}
+
+		try {
+			const assetKey = await setUserAvatar(
+				locals.user.id,
+				new Uint8Array(await file.arrayBuffer())
+			);
+			await recordAuditLog({
+				actorUserId: locals.user.id,
+				action: 'user.avatar_updated',
+				targetType: 'user',
+				targetId: locals.user.id,
+				metadata: { assetKey },
+				requestId: locals.requestId
+			});
+			return {
+				formType: 'avatar' as const,
+				avatarAssetKey: assetKey,
+				message: t('settings.avatarUpdated')
+			};
+		} catch (err) {
+			if (err instanceof AvatarError) {
+				return fail(err.code === 'too_large' ? 413 : err.code === 'low_disk' ? 507 : 400, {
+					formType: 'avatar' as const,
+					error: t(avatarErrorKey(err.code))
+				});
+			}
+			throw err;
+		}
+	},
+
+	removeAvatar: async ({ locals }) => {
+		if (!locals.user || !locals.session) {
+			error(401, t('auth.signInRequired'), { requestId: locals.requestId });
+		}
+		const rateLimit = checkAvatarUploadRateLimit(locals.user.id);
+		if (!rateLimit.allowed) {
+			return fail(429, {
+				formType: 'avatar' as const,
+				error: t('settings.tooManyAvatarChanges')
+			});
+		}
+		const removed = await removeUserAvatar(locals.user.id);
+		if (removed) {
+			await recordAuditLog({
+				actorUserId: locals.user.id,
+				action: 'user.avatar_removed',
+				targetType: 'user',
+				targetId: locals.user.id,
+				requestId: locals.requestId
+			});
+		}
+		return {
+			formType: 'avatar' as const,
+			avatarAssetKey: null,
+			message: t('settings.avatarRemoved')
+		};
 	},
 
 	changePassword: async ({ locals, request, setHeaders }) => {

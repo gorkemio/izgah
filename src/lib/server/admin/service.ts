@@ -31,6 +31,7 @@ import {
 	type UserRole
 } from '#lib/server/db/schema.ts';
 import { logger } from '#lib/server/logger.ts';
+import { removeUserAvatar } from '#lib/server/media/avatars.ts';
 import { findExistingSectionIds } from '#lib/server/sections/service.ts';
 import { slugifySectionName } from '#lib/server/sections/slug.ts';
 import { notifyUnfurlWorker } from '#lib/server/unfurl/worker.ts';
@@ -68,12 +69,15 @@ export function auditActionLabels(): Record<string, string> {
 		'admin.ai_backfill_started': t('audit.aiBackfillStarted'),
 		'admin.ai_data_purged': t('audit.aiDataPurged'),
 		'admin.ai_jobs_retried': t('audit.aiJobsRetried'),
+		'admin.user_avatar_removed': t('audit.adminAvatarRemoved'),
 		'admin.bootstrap': t('audit.bootstrap'),
 		'cli.create_admin': t('audit.cliCreateAdmin'),
 		'cli.reset_admin': t('audit.cliResetAdmin'),
 		'user.invite_accepted': t('audit.inviteAccepted'),
 		'user.password_reset_completed': t('audit.resetCompleted'),
 		'user.password_changed': t('audit.passwordChanged'),
+		'user.avatar_updated': t('audit.avatarUpdated'),
+		'user.avatar_removed': t('audit.avatarRemoved'),
 		'api_key.created': t('audit.apiKeyCreated'),
 		'api_key.revoked': t('audit.apiKeyRevoked')
 	};
@@ -123,6 +127,7 @@ export interface AdminUserItem {
 	hasOpenInvite: boolean;
 	openInviteExpiresAt: string | null;
 	shareCount: number;
+	avatarAssetKey: string | null;
 	createdAt: string;
 	updatedAt: string;
 }
@@ -442,6 +447,7 @@ export async function listAdminUsers(): Promise<AdminUserItem[]> {
 			u.email_verified AS "emailVerified",
 			u.created_at AS "createdAt",
 			u.updated_at AS "updatedAt",
+			u.avatar_asset_key AS "avatarAssetKey",
 			EXISTS (
 				SELECT 1
 				FROM accounts a
@@ -486,6 +492,7 @@ export async function listAdminUsers(): Promise<AdminUserItem[]> {
 			hasOpenInvite: Boolean(openInviteExpiresAt),
 			openInviteExpiresAt,
 			shareCount: Number(record.shareCount ?? 0),
+			avatarAssetKey: record.avatarAssetKey ? String(record.avatarAssetKey) : null,
 			createdAt: new Date(record.createdAt as string | Date).toISOString(),
 			updatedAt: new Date(record.updatedAt as string | Date).toISOString()
 		};
@@ -731,6 +738,34 @@ export async function issuePasswordResetLink(
 			}
 		};
 	});
+}
+
+/** Removes a member's profile photo (docs/designs/izgah-ui-v5.md §10.2). */
+export async function removeMemberAvatar(
+	targetUserId: string,
+	actorUserId: string,
+	requestId: string | null = null
+): Promise<{ user: { id: string; name: string }; removed: boolean }> {
+	const [target] = await db
+		.select({ id: users.id, name: users.name })
+		.from(users)
+		.where(eq(users.id, targetUserId))
+		.limit(1);
+	if (!target) {
+		throw new AdminServiceError(404, 'USER_NOT_FOUND', t('admin.userNotFound'));
+	}
+	const removed = await removeUserAvatar(target.id);
+	if (removed) {
+		await recordAuditLog({
+			actorUserId,
+			action: 'admin.user_avatar_removed',
+			targetType: 'user',
+			targetId: target.id,
+			metadata: { name: target.name },
+			requestId
+		});
+	}
+	return { user: target, removed };
 }
 
 export async function changeAdminUserRole(

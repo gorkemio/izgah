@@ -24,6 +24,7 @@ import {
 	type UnfurlMetadata
 } from '#lib/server/unfurl/adapters/index.ts';
 import { MAX_IMAGE_BYTES, safeFetchBytes, SafeFetchError } from '#lib/server/unfurl/safe-fetch.ts';
+import { refreshSiteIcon } from '#lib/server/media/site-icons.ts';
 
 export const UNFURL_LEASE_DURATION_MS = 90_000;
 export const UNFURL_POLL_INTERVAL_MS = 15_000;
@@ -502,6 +503,30 @@ async function unlinkIfUnreferencedMediaAsset(
 	}
 }
 
+/**
+ * Refreshes the site icon of the job's domain (docs/designs/izgah-ui-v5.md §10.1). Best effort:
+ * refreshSiteIcon never throws and skips domains fetched in the last 30 days.
+ */
+async function refreshResourceSiteIcon(
+	job: ClaimedUnfurlJob,
+	candidates: string[] | undefined,
+	options: { adapterOptions?: AdapterOptions; mediaOptions?: MediaDiskCheckOptions }
+): Promise<void> {
+	const [resource] = await db
+		.select({ domain: canonicalResources.domain })
+		.from(canonicalResources)
+		.where(eq(canonicalResources.id, job.resourceId))
+		.limit(1);
+	if (!resource?.domain) {
+		return;
+	}
+	const list = candidates?.length ? candidates : [`https://${resource.domain}/favicon.ico`];
+	await refreshSiteIcon(resource.domain, list, {
+		safeFetchOptions: options.adapterOptions?.safeFetchOptions,
+		mediaOptions: options.mediaOptions
+	});
+}
+
 export async function executeClaimedJob(
 	job: ClaimedUnfurlJob,
 	options: {
@@ -560,6 +585,10 @@ export async function executeClaimedJob(
 
 		if (!committed.fencedOut) {
 			notifyEnrichmentWorker();
+			// A short-circuited unfurl (open circuit breaker, plain fallback) makes no network calls.
+			if (!adapterResult.shortCircuited) {
+				await refreshResourceSiteIcon(job, adapterResult.metadata.iconCandidates, options);
+			}
 		}
 
 		if (committed.fencedOut) {

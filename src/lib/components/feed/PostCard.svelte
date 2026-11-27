@@ -5,9 +5,10 @@
 <script lang="ts">
 	import { t } from '#lib/i18n/index.ts';
 	import { formatDate, formatDateTime, formatShortDate, formatTime } from '#lib/format/date.ts';
+	import { restoreShare } from '#lib/client/restore-share.ts';
 	import { toasts } from '#lib/client/toast.svelte.ts';
 	import { enhance, type SubmitFunction } from '$app/forms';
-	import { goto, invalidate } from '$app/navigation';
+	import { goto, invalidate, invalidateAll } from '$app/navigation';
 	import Dialog from '#lib/components/legacy/Dialog.svelte';
 	import Highlight from '#lib/components/ui/Highlight.svelte';
 	import PopoverPanel from '#lib/components/legacy/PopoverPanel.svelte';
@@ -21,7 +22,7 @@
 	import Ellipsis from '@lucide/svelte/icons/ellipsis';
 	import ExternalLink from '@lucide/svelte/icons/external-link';
 	import MessageCircle from '@lucide/svelte/icons/message-circle';
-	import { avatarTone, initials } from '#lib/format/avatar.ts';
+	import MemberAvatar from '#lib/components/member/MemberAvatar.svelte';
 	import ShareSuggestions from './ShareSuggestions.svelte';
 
 	interface Props {
@@ -279,6 +280,7 @@
 
 			if (result.type === 'redirect') {
 				deleteDialogOpen = false;
+				offerUndo(item.id);
 				await goto(result.location, { refreshAll: true });
 				return;
 			}
@@ -286,10 +288,30 @@
 			if (result.type === 'success') {
 				deleteDialogOpen = false;
 				onDeleted?.(item.id);
+				offerUndo(item.id);
 				await refreshLists();
 			}
 		};
 	};
+
+	/** "Share deleted · Undo" for 30 seconds' worth of regret (izgah-ui-v5.md §10.3). */
+	function offerUndo(shareId: string) {
+		toasts.push(t('share.deletedToast'), {
+			tone: 'success',
+			action: {
+				label: t('share.restore'),
+				onClick: async () => {
+					const outcome = await restoreShare(shareId);
+					if (outcome.ok) {
+						toasts.push(t('share.restored'), { tone: 'success' });
+						await invalidateAll();
+					} else {
+						toasts.push(outcome.message, { tone: 'error' });
+					}
+				}
+			}
+		});
+	}
 </script>
 
 <div class="share-card-container">
@@ -310,13 +332,11 @@
 		data-resource-id={item.resource.id}
 	>
 		<header class="post-head flex min-w-0 items-center gap-2.5">
-			<span
-				class="grid size-7 shrink-0 place-items-center rounded-full text-[11px] font-semibold text-avatar-foreground"
-				style="background: var(--avatar-{avatarTone(item.author.id)})"
-				aria-hidden="true"
-			>
-				{initials(item.author.name)}
-			</span>
+			<MemberAvatar
+				id={item.author.id}
+				name={item.author.name}
+				avatarAssetKey={item.author.avatarAssetKey}
+			/>
 			<p class="min-w-0 truncate text-[13px] leading-tight">
 				<strong id={authorId} class="post-author font-medium">{item.author.name}</strong>
 				<span class="text-muted-foreground">

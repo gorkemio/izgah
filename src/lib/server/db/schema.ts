@@ -83,6 +83,10 @@ export const users = pgTable(
 		email: text('email').notNull().unique(),
 		emailVerified: boolean('email_verified').notNull().default(false),
 		image: text('image'),
+		/** Profile photo (docs/designs/izgah-ui-v5.md §10.2): a 256×256 WebP in media_assets. */
+		avatarAssetKey: text('avatar_asset_key').references(() => mediaAssets.assetKey, {
+			onDelete: 'set null'
+		}),
 		role: userRoleEnum('role').notNull().default('member'),
 		isActive: boolean('is_active').notNull().default(true),
 		disabledAt: timestamp('disabled_at', { withTimezone: true }),
@@ -219,6 +223,27 @@ export const mediaAssets = pgTable(
 		index('media_assets_orphaned_idx')
 			.on(table.orphanedAt)
 			.where(sql`${table.refCount} = 0 AND ${table.orphanedAt} IS NOT NULL`)
+	]
+);
+
+/**
+ * One icon per site domain (docs/designs/izgah-ui-v5.md §10.1), fetched by the unfurl worker at most
+ * every 30 days. `status` is 'ok' with an asset, 'none' when the site offers no usable icon and
+ * 'failed' after a download or decode error.
+ */
+export const siteIcons = pgTable(
+	'site_icons',
+	{
+		domain: text('domain').primaryKey(),
+		assetKey: text('asset_key').references(() => mediaAssets.assetKey, { onDelete: 'set null' }),
+		status: text('status').notNull(),
+		sourceUrl: text('source_url'),
+		fetchedAt: timestamp('fetched_at', { withTimezone: true }).notNull().defaultNow()
+	},
+	(table) => [
+		check('site_icons_status_chk', sql`${table.status} IN ('ok', 'none', 'failed')`),
+		check('site_icons_domain_length_chk', sql`char_length(${table.domain}) <= 253`),
+		index('site_icons_asset_key_idx').on(table.assetKey)
 	]
 );
 
