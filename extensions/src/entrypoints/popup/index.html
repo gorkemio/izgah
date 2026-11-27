@@ -11,6 +11,7 @@
 	<body>
 		<main class="popup-main">
 			<div id="popup-setup-panel" class="setup-panel" hidden>
+				<span class="brand-mark setup-mark" aria-hidden="true"></span>
 				<h1 data-i18n="popupTitle">Add a link to Izgah</h1>
 				<p class="setup-description" data-i18n="setupDescription">
 					Before sharing, set your Izgah server address and personal API key in the extension
@@ -28,6 +29,7 @@
 
 			<div id="popup-composer-panel" class="composer-panel" hidden>
 				<header class="popup-header">
+					<span class="brand-mark" aria-hidden="true"></span>
 					<div class="popup-header-title">
 						<h1 class="wordmark">
 							<span data-i18n="extName">Izgah</span
@@ -35,8 +37,21 @@
 						</h1>
 						<p id="popup-user-badge" class="user-badge" hidden></p>
 					</div>
-					<button id="popup-header-options-btn" type="button" class="text-btn" data-i18n="settings">
-						Settings
+					<button
+						id="popup-header-options-btn"
+						type="button"
+						class="btn btn-ghost btn-icon"
+						aria-label="Settings"
+						title="Settings"
+						data-i18n-attr="aria-label:settings title:settings"
+					>
+						<!-- Lucide "settings" (ISC) -->
+						<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+							<path
+								d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"
+							/>
+							<circle cx="12" cy="12" r="3" />
+						</svg>
 					</button>
 				</header>
 
@@ -64,6 +79,13 @@
 							<p id="share-url-notice-text" class="banner-message"></p>
 						</div>
 						<p id="share-title-preview" class="title-preview" hidden>
+							<span class="title-preview-tile" aria-hidden="true">
+								<!-- Lucide "link" (ISC) -->
+								<svg class="icon" viewBox="0 0 24 24">
+									<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+									<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+								</svg>
+							</span>
 							<span class="title-preview-label visually-hidden" data-i18n="titleLabel">Title:</span>
 							<span id="share-title-text" class="title-preview-text"></span>
 							<span id="share-title-domain" class="title-preview-domain"></span>
@@ -215,7 +237,11 @@
 				</form>
 			</div>
 
-			<div id="popup-success-panel" class="success-panel banner banner-success" hidden>
+			<div id="popup-success-panel" class="success-panel" hidden>
+				<span class="success-icon" aria-hidden="true">
+					<!-- Lucide "check" (ISC) -->
+					<svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></svg>
+				</span>
 				<h2 id="popup-success-heading" tabindex="-1" data-i18n="sharedHeading">
 					Link shared to Izgah
 				</h2>

@@ -1,5 +1,7 @@
 /*
- * UI v5 tokens for the browser extension (docs/designs/izgah-ui-v5.md §11). Colours come from
+ * UI v5 tokens and primitives for the browser extension (docs/designs/izgah-ui-v5.md §11): the app's
+ * field, button and notice styles rewritten in plain CSS, since the extension does not use Tailwind or
+ * shadcn-svelte. Colours come from
  * palette.css, generated from tokens/izgah.json like the web app's (`pnpm tokens` at the repo root):
  * the Jade theme and its high contrast palette. The extension runs on its own origin and cannot read
  * the izgah_theme cookie, so it follows prefers-color-scheme and prefers-contrast. Bundles only the
@@ -34,8 +36,15 @@
 	--font-sans: 'Geist Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
 	--font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-	--input-bg: var(--color-bg);
-	--color-focus-outer: var(--color-accent);
+	/* v5 roles on top of the generated palette, named like the app's. */
+	--background: var(--color-bg);
+	--card: var(--color-surface-1);
+	--muted: var(--color-surface-2);
+	--foreground: var(--color-text);
+	--muted-foreground: var(--color-text-secondary);
+	--hairline: var(--color-line);
+	--input: var(--color-line-strong);
+	--ring: var(--color-accent);
 
 	--space-1: 4px;
 	--space-2: 8px;
@@ -48,7 +57,9 @@
 	--radius-sm: 8px;
 	--radius-md: 12px;
 
-	--shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
+	--elevation-sm: 0 1px 2px rgb(0 0 0 / 0.05);
+	--elevation-md:
+		0 0 0 1px rgb(0 0 0 / 0.04), 0 1px 2px rgb(0 0 0 / 0.04), 0 12px 32px -16px rgb(0 0 0 / 0.16);
 
 	--dur-fast: 120ms;
 	--dur-base: 160ms;
@@ -56,6 +67,15 @@
 
 	color-scheme: light dark;
 	accent-color: var(--color-accent);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--elevation-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+		--elevation-md:
+			0 0 0 1px rgb(255 255 255 / 0.05), 0 1px 2px rgb(0 0 0 / 0.4),
+			0 12px 32px -16px rgb(0 0 0 / 0.7);
+	}
 }
 
 *,
@@ -67,8 +87,8 @@
 html {
 	font-family: var(--font-sans);
 	line-height: 1.5;
-	color: var(--color-text);
-	background: var(--color-bg);
+	color: var(--foreground);
+	background: var(--background);
 	font-synthesis: none;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -76,37 +96,41 @@ html {
 
 body {
 	margin: 0;
-	color: var(--color-text);
-	background: var(--color-bg);
+	color: var(--foreground);
+	background: var(--background);
 	font-size: 0.875rem;
+	letter-spacing: -0.005em;
 }
 
 a {
 	color: var(--color-link);
 	text-decoration-thickness: 1px;
+	text-decoration-color: color-mix(in oklab, currentColor 40%, transparent);
 	text-underline-offset: 0.2em;
-	transition:
-		color var(--dur-fast) var(--ease),
-		text-decoration-color var(--dur-fast) var(--ease);
+	transition: text-decoration-color var(--dur-fast) var(--ease);
 }
 
 a:not(.btn):hover {
-	color: var(--color-accent);
 	text-decoration-color: currentColor;
 }
 
-/* Two-layer crisp focus ring, the same as the web app (izgah-ui-v4 §1). */
-:where(a:any-link, button, input, select, textarea, summary, [tabindex]):focus-visible {
+/* The app's focus halo: a ring-coloured border plus a soft 3px ring. */
+:where(a:any-link, button, select, summary, [tabindex]):focus-visible {
 	outline: 2px solid transparent;
 	outline-offset: 2px;
 	box-shadow:
-		0 0 0 2px var(--color-bg),
-		0 0 0 4px var(--color-accent);
+		0 0 0 2px var(--background),
+		0 0 0 4px var(--ring);
+}
+
+input[type='checkbox']:focus-visible {
+	outline: 2px solid var(--ring);
+	outline-offset: 2px;
 }
 
 ::selection {
-	background: var(--color-accent);
-	color: var(--color-on-accent);
+	background: var(--color-highlight-bg);
+	color: var(--color-highlight-fg);
 }
 
 .visually-hidden:where(:not(:focus-within, :active)) {
@@ -121,6 +145,47 @@ a:not(.btn):hover {
 	white-space: nowrap !important;
 }
 
+.icon {
+	inline-size: 16px;
+	block-size: 16px;
+	flex: none;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1.75;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+/* Brand mark, as in the app's rail: an accent square with a dot. */
+.brand-mark {
+	display: inline-grid;
+	place-items: center;
+	inline-size: 22px;
+	block-size: 22px;
+	flex: none;
+	border-radius: 7px;
+	background: var(--color-accent);
+}
+
+.brand-mark::after {
+	content: '';
+	inline-size: 6px;
+	block-size: 6px;
+	border-radius: 50%;
+	background: var(--color-on-accent);
+}
+
+.wordmark {
+	font-weight: 600;
+	letter-spacing: -0.02em;
+}
+
+.wordmark .gah {
+	color: var(--muted-foreground);
+}
+
+/* Fields: the app's shadcn-svelte Input sizes (36px, 8px radius, input border, halo on focus). */
+
 .form-field {
 	display: flex;
 	flex-direction: column;
@@ -129,18 +194,17 @@ a:not(.btn):hover {
 }
 
 .form-label {
-	font-weight: 600;
-	font-size: 0.875rem;
+	font-weight: 500;
+	font-size: 0.8125rem;
 	line-height: 1.35;
-	color: var(--color-text);
+	color: var(--foreground);
 }
 
 .field-hint {
 	margin: 0;
-	font-family: var(--font-sans);
 	font-size: 0.8125rem;
 	line-height: 1.45;
-	color: var(--color-text-muted);
+	color: var(--muted-foreground);
 }
 
 input[type='url'],
@@ -149,35 +213,32 @@ input[type='password'],
 select,
 textarea {
 	inline-size: 100%;
-	min-block-size: 38px;
-	padding: var(--space-2) var(--space-3);
+	min-block-size: 36px;
+	padding: 6px 10px;
 	font: inherit;
 	font-size: 0.875rem;
 	line-height: 1.45;
-	color: var(--color-text);
-	background: var(--input-bg);
-	border: 1px solid var(--color-line-strong);
+	color: var(--foreground);
+	background: light-dark(var(--card), color-mix(in oklab, var(--input) 18%, var(--card)));
+	border: 1px solid var(--input);
 	border-radius: var(--radius-sm);
+	box-shadow: var(--elevation-sm);
 	transition:
 		border-color var(--dur-fast) var(--ease),
-		background-color var(--dur-fast) var(--ease);
+		box-shadow var(--dur-fast) var(--ease);
 }
 
 input::placeholder,
 textarea::placeholder {
-	color: var(--color-text-muted);
-}
-
-input:hover:not(:disabled, :read-only),
-select:hover:not(:disabled),
-textarea:hover:not(:disabled, :read-only) {
-	border-color: var(--color-text-secondary);
+	color: var(--muted-foreground);
 }
 
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-	border-color: var(--color-accent);
+	outline: 2px solid transparent;
+	border-color: var(--ring);
+	box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring) 28%, transparent);
 }
 
 select {
@@ -185,10 +246,14 @@ select {
 	padding-inline-end: 2rem;
 	line-height: 1.35;
 	cursor: pointer;
-	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23767676' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+	background-image:
+		linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
+		linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+	background-position:
+		calc(100% - 15px) 50%,
+		calc(100% - 11px) 50%;
+	background-size: 4px 4px;
 	background-repeat: no-repeat;
-	background-position: right 10px center;
-	background-size: 14px 14px;
 }
 
 @media (pointer: coarse) {
@@ -207,9 +272,16 @@ select {
 	border-color: var(--color-danger);
 }
 
+:is(input, select, textarea):is(
+		:user-invalid,
+		.user-invalid-fallback,
+		[aria-invalid='true']
+	):focus-visible {
+	box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-danger) 24%, transparent);
+}
+
 .field-error {
 	margin: 0;
-	font-family: var(--font-sans);
 	font-size: 0.8125rem;
 	font-weight: 500;
 	line-height: 1.4;
@@ -220,20 +292,23 @@ select {
 	display: none !important;
 }
 
+/* Buttons: solid ink primary, card-coloured secondary, as in the app. */
+
 .btn {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
 	gap: var(--space-2);
-	min-block-size: 38px;
-	min-inline-size: 38px;
+	min-block-size: 36px;
+	min-inline-size: 36px;
 	padding: 0 var(--space-4);
 	border-radius: var(--radius-sm);
-	border: 1px solid var(--color-line-strong);
+	border: 1px solid transparent;
 	font: inherit;
 	font-size: 0.875rem;
 	font-weight: 500;
 	line-height: 1.3;
+	white-space: nowrap;
 	cursor: pointer;
 	text-decoration: none;
 	transition:
@@ -243,14 +318,6 @@ select {
 		opacity var(--dur-fast) var(--ease);
 }
 
-.btn:hover:not(:disabled) {
-	border-color: var(--color-text-secondary);
-}
-
-.btn:active:not(:disabled) {
-	opacity: 0.9;
-}
-
 @media (prefers-reduced-motion: no-preference) {
 	.btn {
 		transition:
@@ -258,107 +325,118 @@ select {
 			border-color var(--dur-fast) var(--ease),
 			color var(--dur-fast) var(--ease),
 			opacity var(--dur-fast) var(--ease),
-			scale 90ms var(--ease);
+			translate 90ms var(--ease);
 	}
 
 	.btn:active:not(:disabled) {
-		scale: 0.98;
+		translate: 0 1px;
 	}
 }
 
 .btn-sm {
-	min-block-size: 30px;
-	min-inline-size: 30px;
+	min-block-size: 28px;
+	min-inline-size: 28px;
 	padding: 0 var(--space-3);
 	font-size: 0.8125rem;
 }
 
-/* Primary actions are ink, as in the web app (izgah-ui-v4 §1): link blue is for links only. */
 .btn-primary {
-	background: var(--color-text);
-	color: var(--color-bg);
-	border-color: var(--color-text);
-	font-weight: 600;
+	background: var(--foreground);
+	color: var(--background);
+	box-shadow: var(--elevation-sm);
 }
 
 .btn-primary:hover:not(:disabled) {
-	background: color-mix(in oklab, var(--color-text) 86%, var(--color-bg));
-	border-color: color-mix(in oklab, var(--color-text) 86%, var(--color-bg));
-	color: var(--color-bg);
+	background: color-mix(in oklab, var(--foreground) 86%, var(--background));
 }
 
 .btn-secondary {
-	background: var(--color-surface-1);
-	color: var(--color-text);
-	border-color: var(--color-line-strong);
+	background: var(--card);
+	color: var(--foreground);
+	border-color: var(--hairline);
+	box-shadow: var(--elevation-sm);
 }
 
 .btn-secondary:hover:not(:disabled) {
-	background: var(--color-surface-2);
-	border-color: var(--color-text-secondary);
-	color: var(--color-text);
+	background: var(--muted);
+}
+
+.btn-ghost {
+	background: transparent;
+	color: var(--muted-foreground);
+}
+
+.btn-ghost:hover:not(:disabled) {
+	background: var(--muted);
+	color: var(--foreground);
+}
+
+.btn-icon {
+	padding: 0;
+	inline-size: 32px;
+	min-block-size: 32px;
 }
 
 .btn-danger {
 	background: var(--color-danger);
 	color: var(--color-on-danger);
-	border-color: var(--color-danger);
-	font-weight: 600;
 }
 
 .btn-danger:hover:not(:disabled) {
-	border-color: var(--color-danger);
 	opacity: 0.9;
 }
 
 .btn-danger-outline {
 	background: transparent;
 	color: var(--color-danger);
-	border-color: var(--color-danger);
+	border-color: var(--color-danger-border);
 }
 
 .btn-danger-outline:hover:not(:disabled) {
-	background: var(--color-danger);
-	color: var(--color-on-danger);
-	border-color: var(--color-danger);
+	background: var(--color-danger-soft);
 }
 
 .btn:disabled {
-	opacity: 0.58;
+	opacity: 0.55;
 	cursor: not-allowed;
 }
 
-/* Notices are text between rules, not filled boxes (izgah-ui-v4 §3); state colour is for words. */
+/* Notices: soft-filled rounded boxes with a matching border, as in the app. */
 .banner {
-	padding: 10px 0;
-	border-block: 1px solid var(--color-line);
+	padding: 10px 12px;
+	border: 1px solid var(--hairline);
+	border-radius: var(--radius-sm);
+	background: var(--muted);
 	font-size: 0.8125rem;
 	line-height: 1.45;
-	color: var(--color-text);
+	color: var(--foreground);
 }
 
 .banner-error {
+	border-color: var(--color-danger-border);
+	background: var(--color-danger-soft);
 	color: var(--color-danger);
 }
 
-.banner-info {
-	color: var(--color-text-secondary);
+.banner-warn {
+	border-color: var(--color-warn-border);
+	background: var(--color-warn-soft);
+	color: var(--color-warn-text);
 }
 
-.banner-warn,
-.banner-note,
 .banner-success {
-	color: var(--color-text);
+	border-color: var(--color-ok-border);
+	background: var(--color-ok-soft);
+	color: var(--color-ok-text);
+}
+
+.banner-info,
+.banner-note {
+	color: var(--foreground);
 }
 
 .banner-message {
 	margin: 0;
-}
-
-/* Notices that follow each other share one rule instead of drawing two. */
-.banner + .banner,
-.banner + [hidden] + .banner {
-	border-block-start: 0;
 }
 
 .request-id-row {
@@ -368,6 +446,7 @@ select {
 	gap: var(--space-2);
 	margin-block-start: var(--space-2);
 	font-size: 0.8125rem;
+	color: var(--foreground);
 }
 
 .request-id-row code {
@@ -375,9 +454,9 @@ select {
 	font-variant-numeric: tabular-nums;
 	padding: 1px 6px;
 	border-radius: var(--radius-xs);
-	background: var(--color-surface-1);
-	color: var(--color-text);
-	border: 1px solid var(--color-line);
+	background: var(--card);
+	color: var(--foreground);
+	border: 1px solid var(--hairline);
 }
 
 .copy-control {
@@ -420,13 +499,9 @@ select {
 		box-shadow: none;
 	}
 
-	.btn:active:not(:disabled) {
-		opacity: 1;
-	}
-
 	.btn,
-	.btn-primary,
 	.btn-secondary,
+	.btn-ghost,
 	.btn-danger,
 	.btn-danger-outline {
 		border-color: ButtonText;
@@ -438,10 +513,8 @@ select {
 		border-color: Highlight;
 	}
 
-	.btn-primary:hover:not(:disabled) {
-		background: Highlight;
-		color: HighlightText;
-		border-color: CanvasText;
+	.brand-mark {
+		border: 1px solid CanvasText;
 	}
 
 	.banner,
