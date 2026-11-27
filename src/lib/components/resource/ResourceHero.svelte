@@ -5,7 +5,17 @@
 	import { goto } from '$app/navigation';
 	import { toasts } from '#lib/client/toast.svelte.ts';
 	import { kunyeCase, resourceFacts } from '#lib/format/kunye.ts';
+	import { buttonVariants } from '#lib/components/ui/button/index.ts';
+	import AnimatedNumber from '#lib/motion/AnimatedNumber.svelte';
+	import { SPRING, effectsReduced } from '#lib/motion/index.ts';
 	import type { FeedShareItem } from '#lib/types/feed.ts';
+	import Check from '@lucide/svelte/icons/check';
+	import Copy from '@lucide/svelte/icons/copy';
+	import ExternalLink from '@lucide/svelte/icons/external-link';
+	import Heart from '@lucide/svelte/icons/heart';
+	import MessageCircle from '@lucide/svelte/icons/message-circle';
+	import Sparkles from '@lucide/svelte/icons/sparkles';
+	import { Spring } from 'svelte/motion';
 
 	type HeroResource = Pick<
 		FeedShareItem['resource'],
@@ -20,6 +30,7 @@
 		| 'thumbnailAssetKey'
 		| 'thumbnailWidth'
 		| 'thumbnailHeight'
+		| 'siteIconAssetKey'
 		| 'likeCount'
 		| 'likedByViewer'
 		| 'commentCount'
@@ -28,12 +39,18 @@
 	let {
 		resource,
 		originalShareDeleted = false,
-		aiSummary = null
+		aiSummary = null,
+		headingLevel = 1,
+		actionBase = ''
 	}: {
 		resource: HeroResource;
 		originalShareDeleted?: boolean;
 		/** Labelled machine summary (docs/designs/izgah-smart-capture.md §10). */
 		aiSummary?: string | null;
+		/** The resource page uses an h1; the reading pane sits under the feed's h1. */
+		headingLevel?: 1 | 2;
+		/** Where the like action lives: '' on the resource page, '/' from the reading pane. */
+		actionBase?: string;
 	} = $props();
 
 	let imgFailed = $state(false);
@@ -47,6 +64,17 @@
 			imgFailed = true;
 		});
 	});
+	let iconFailed = $state(false);
+	let iconEl = $state<HTMLImageElement | null>(null);
+	$effect(() => {
+		const img = iconEl;
+		if (!img) {
+			return;
+		}
+		return watchImageError(img, () => {
+			iconFailed = true;
+		});
+	});
 	let lastAssetKey: string | null = null;
 	$effect.pre(() => {
 		if (resource.thumbnailAssetKey !== lastAssetKey) {
@@ -57,12 +85,15 @@
 
 	const showThumbnail = $derived(Boolean(resource.thumbnailAssetKey && !imgFailed));
 	const facts = $derived(resourceFacts(resource));
+	const siteInitial = $derived((resource.domain[0] ?? '?').toLocaleUpperCase('tr'));
+	const title = $derived(resource.title || resource.canonicalUrl);
 
 	// Optimistic, idempotent like (izgah-ui-v2 §8.6): send the desired state, apply the result.
 	let likeSubmitting = $state(false);
 	let likeOverride = $state<{ liked: boolean; count: number } | null>(null);
 	const viewerLiked = $derived(likeOverride?.liked ?? Boolean(resource.likedByViewer));
 	const likeCount = $derived(likeOverride?.count ?? resource.likeCount);
+	const heart = new Spring(1, SPRING.bouncy);
 
 	$effect(() => {
 		void resource.likeCount;
@@ -79,6 +110,10 @@
 		const desired = !previous.liked;
 		likeSubmitting = true;
 		likeOverride = { liked: desired, count: Math.max(0, previous.count + (desired ? 1 : -1)) };
+		if (desired && !effectsReduced()) {
+			heart.set(1.25, { instant: true });
+			void heart.set(1);
+		}
 		return async ({ result }) => {
 			likeSubmitting = false;
 			if (result.type === 'success') {
@@ -128,27 +163,55 @@
 	}
 </script>
 
-<!-- A catalogue card (izgah-ui-v4 §5): title and künye line, a small cover beside them, then the
-     abstract and the actions. The reading pane uses the same order. -->
-<article class="resource-hero" class:has-thumbnail={showThumbnail}>
-	<div class="hero-head">
-		<h1 tabindex="-1" class="resource-title">{resource.title || resource.canonicalUrl}</h1>
-		<p class="hero-kunye">
-			{facts.join(' · ')}
-			{#if originalShareDeleted}
-				<span class="hero-deleted">· {kunyeCase(t('resource.originalDeleted'))}</span>
+<!-- Resource hero (docs/designs/izgah-ui-v5.md §5.3): the facts line with the site icon, the title,
+     a wide cover, the abstract, the labelled machine summary and one row of actions. The reading
+     pane renders the same component with an h2. -->
+<article class="resource-hero grid gap-4" class:has-thumbnail={showThumbnail}>
+	<div class="grid min-w-0 gap-2.5">
+		<p class="hero-kunye flex min-w-0 items-center gap-2 text-[12.5px] text-muted-foreground">
+			{#if resource.siteIconAssetKey && !iconFailed}
+				<img
+					class="size-4 shrink-0 rounded-[4px] bg-muted object-contain"
+					src={`/media/thumbnails/${encodeURIComponent(resource.siteIconAssetKey)}`}
+					alt=""
+					width="16"
+					height="16"
+					decoding="async"
+					bind:this={iconEl}
+				/>
+			{:else}
+				<span
+					class="grid size-4 shrink-0 place-items-center rounded-[4px] bg-muted text-[9px] font-semibold uppercase"
+					aria-hidden="true"
+				>
+					{siteInitial}
+				</span>
 			{/if}
+			<span class="min-w-0 truncate tabular-nums">
+				{facts.join(' · ')}
+				{#if originalShareDeleted}
+					<span class="hero-deleted italic">· {kunyeCase(t('resource.originalDeleted'))}</span>
+				{/if}
+			</span>
 		</p>
+		<svelte:element
+			this={headingLevel === 1 ? 'h1' : 'h2'}
+			tabindex="-1"
+			class="resource-title text-[1.625rem] leading-tight font-semibold tracking-[-0.02em] text-balance [overflow-wrap:anywhere] outline-none max-sm:text-[1.375rem]"
+		>
+			{title}
+		</svelte:element>
 	</div>
 
 	{#if showThumbnail && resource.thumbnailAssetKey}
-		<div class="hero-media">
+		<div
+			class="hero-media aspect-[1200/630] overflow-hidden rounded-xl bg-muted ring-1 ring-hairline"
+			style="view-transition-name: resource-cover-{resource.id}"
+		>
 			<img
-				class="hero-thumbnail"
+				class="hero-thumbnail size-full object-cover"
 				src={`/media/thumbnails/${encodeURIComponent(resource.thumbnailAssetKey)}`}
-				alt={resource.title
-					? t('resource.imageAlt', { title: resource.title })
-					: t('resource.imageAlt', { title: resource.domain })}
+				alt={t('resource.imageAlt', { title: resource.title || resource.domain })}
 				width={resource.thumbnailWidth ?? 1200}
 				height={resource.thumbnailHeight ?? 630}
 				loading="eager"
@@ -159,158 +222,94 @@
 		</div>
 	{/if}
 
-	<div class="hero-body">
-		{#if resource.description}
-			<p class="resource-description">{resource.description}</p>
-		{/if}
+	{#if resource.description}
+		<p class="resource-description max-w-[68ch] text-[15px] leading-relaxed text-muted-foreground">
+			{resource.description}
+		</p>
+	{/if}
 
-		{#if aiSummary}
-			<div class="ai-summary">
-				<span class="ai-summary-label">{t('resource.aiSummary')}</span>
-				<p>{aiSummary}</p>
-			</div>
-		{/if}
-
-		<div class="hero-actions">
-			<a
-				href={resource.canonicalUrl}
-				target="_blank"
-				rel="noopener noreferrer"
-				class="btn btn-primary external-resource-link"
-				aria-label={t('resource.visitLabel', { domain: resource.domain })}
+	{#if aiSummary}
+		<div class="ai-summary grid gap-1.5 rounded-lg border border-hairline bg-muted/50 p-3.5">
+			<span
+				class="ai-summary-label inline-flex items-center gap-1.5 text-[11.5px] font-medium tracking-wide text-muted-foreground uppercase"
 			>
-				<span>{t('resource.visit')}</span>
-			</a>
-
-			<form method="POST" action="?/toggleLike" use:enhance={handleLikeEnhance}>
-				<input type="hidden" name="returnTo" value={`/resources/${resource.id}`} />
-				<input type="hidden" name="liked" value={String(!viewerLiked)} />
-				<button
-					type="submit"
-					class="btn btn-subtle hero-like-btn"
-					class:is-liked={viewerLiked}
-					aria-pressed={viewerLiked}
-					disabled={likeSubmitting}
-				>
-					<span>{t('common.likeCount', { count: likeCount })}</span>
-				</button>
-			</form>
-
-			<button
-				type="button"
-				class="btn btn-ghost hero-copy-btn"
-				aria-label={t('link.copyLabel', { title: resource.title || resource.domain })}
-				onclick={copyResourceUrl}
-			>
-				<span>{copied ? t('resource.copied') : t('resource.copy')}</span>
-			</button>
-
-			<a href="#comments" class="btn btn-ghost hero-comment-count">
-				<span>{t('common.commentCount', { count: resource.commentCount })}</span>
-			</a>
+				<Sparkles class="size-3.5" aria-hidden="true" />
+				{t('resource.aiSummary')}
+			</span>
+			<p class="text-[14px] leading-relaxed">{aiSummary}</p>
 		</div>
+	{/if}
+
+	<div class="hero-actions flex flex-wrap items-center gap-2 border-t border-hairline pt-4">
+		<a
+			href={resource.canonicalUrl}
+			target="_blank"
+			rel="noopener noreferrer"
+			class="external-resource-link {buttonVariants({ variant: 'default' })}"
+			aria-label={t('resource.visitLabel', { domain: resource.domain })}
+		>
+			<ExternalLink aria-hidden="true" />
+			<span>{t('resource.visit')}</span>
+		</a>
+
+		<form
+			method="POST"
+			action="{actionBase}?/toggleLike"
+			use:enhance={handleLikeEnhance}
+			class="contents"
+		>
+			<input type="hidden" name="resourceId" value={resource.id} />
+			<input type="hidden" name="returnTo" value={`/resources/${resource.id}`} />
+			<input type="hidden" name="liked" value={String(!viewerLiked)} />
+			<button
+				type="submit"
+				class="hero-like-btn {buttonVariants({ variant: 'outline' })} tabular-nums"
+				class:is-liked={viewerLiked}
+				aria-pressed={viewerLiked}
+				aria-label={t('common.likeCount', { count: likeCount })}
+				disabled={likeSubmitting}
+			>
+				<span class="inline-flex" style="transform: scale({heart.current})">
+					<Heart class={viewerLiked ? 'fill-current' : ''} aria-hidden="true" />
+				</span>
+				<AnimatedNumber value={likeCount} />
+			</button>
+		</form>
+
+		<button
+			type="button"
+			class="hero-copy-btn {buttonVariants({ variant: 'ghost' })}"
+			aria-label={t('link.copyLabel', { title: resource.title || resource.domain })}
+			onclick={copyResourceUrl}
+		>
+			{#if copied}
+				<Check aria-hidden="true" />
+			{:else}
+				<Copy aria-hidden="true" />
+			{/if}
+			<span>{copied ? t('resource.copied') : t('resource.copy')}</span>
+		</button>
+
+		<a
+			href="#comments"
+			class="hero-comment-count {buttonVariants({ variant: 'ghost' })} tabular-nums"
+			aria-label={t('common.commentCount', { count: resource.commentCount })}
+		>
+			<MessageCircle aria-hidden="true" />
+			<span>{resource.commentCount}</span>
+		</a>
 	</div>
 </article>
 
 <style>
-	.resource-hero {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr);
-		gap: var(--space-4) var(--space-5);
-		align-items: start;
-	}
-
-	.resource-hero.has-thumbnail {
-		grid-template-columns: minmax(0, 1fr) 160px;
-	}
-
-	.hero-head {
-		display: grid;
-		gap: var(--space-2);
-		min-inline-size: 0;
-	}
-
-	.resource-title {
-		font: var(--k-text-display);
-		font-size: 1.625rem;
-		letter-spacing: -0.01em;
-		line-height: 1.22;
-		overflow-wrap: anywhere;
-		color: var(--k-color-text);
-	}
-
-	.hero-kunye {
-		font: var(--k-text-meta);
-		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-muted);
-	}
-
-	.hero-deleted {
-		font-style: italic;
-	}
-
-	.hero-media {
-		overflow: hidden;
-		aspect-ratio: 16 / 10;
-		background: var(--k-color-surface-2);
-		border-radius: var(--k-radius-xs);
-	}
-
-	.hero-thumbnail {
-		display: block;
-		inline-size: 100%;
-		block-size: 100%;
-		object-fit: cover;
-	}
-
-	.hero-body {
-		grid-column: 1 / -1;
-		display: grid;
-		gap: var(--space-3);
-		min-inline-size: 0;
-	}
-
-	.resource-description {
-		max-inline-size: var(--measure);
-		font: var(--k-text-body);
-		color: var(--k-color-text-secondary);
-	}
-
-	.hero-actions {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: var(--space-2);
-		padding-block-start: var(--space-3);
-		border-block-start: 1px solid var(--k-color-line);
-	}
-
-	.hero-actions form {
-		display: contents;
-	}
-
-	.hero-like-btn,
-	.hero-comment-count {
-		font-variant-numeric: tabular-nums;
-	}
-
 	.hero-like-btn.is-liked {
-		font-weight: 600;
-		border-color: var(--k-color-text);
-	}
-
-	@media (max-width: 479px) {
-		.resource-hero.has-thumbnail {
-			grid-template-columns: minmax(0, 1fr) 96px;
-		}
-
-		.resource-title {
-			font-size: 1.375rem;
-		}
+		color: var(--primary);
+		border-color: color-mix(in oklab, var(--primary) 40%, transparent);
 	}
 
 	@media (forced-colors: active) {
 		.hero-like-btn.is-liked {
+			color: Highlight;
 			border-color: Highlight;
 		}
 	}

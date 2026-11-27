@@ -50,7 +50,11 @@ const roomyDisk: MediaDiskCheckOptions['statfs'] = async () => ({
 	blocks: 1_000_000
 });
 
-async function png(width: number, height: number, colour = '#3a7'): Promise<Uint8Array<ArrayBuffer>> {
+async function png(
+	width: number,
+	height: number,
+	colour = '#3a7'
+): Promise<Uint8Array<ArrayBuffer>> {
 	return new Uint8Array(
 		await sharp({ create: { width, height, channels: 3, background: colour } })
 			.png()
