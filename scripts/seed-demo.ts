@@ -430,24 +430,77 @@ function hashHue(text: string): number {
 	return h % 360;
 }
 
-/** A colourful abstract 1200×630 image per resource (no text, no external assets). */
+/**
+ * Flat 1200×630 link cards like real sites' social images: a solid background from a small set of
+ * quiet tones, the site name and the title in large type, a play button on videos and the language
+ * and stars on repositories. Text keeps clear of the edges, since the feed crops thumbnails. No
+ * gradients, blur or external assets (docs/designs/izgah-ui-v5.md §3.0).
+ */
+const CARD_TONES = [
+	{ bg: '#111113', fg: '#f4f4f5', muted: '#a1a1aa' },
+	{ bg: '#f4f1ea', fg: '#1c1917', muted: '#78716c' },
+	{ bg: '#0f3d33', fg: '#ecfdf5', muted: '#9fd8c4' },
+	{ bg: '#1e2a44', fg: '#e8edf7', muted: '#a3b1cc' },
+	{ bg: '#ffffff', fg: '#18181b', muted: '#71717a' },
+	{ bg: '#3b1f1a', fg: '#fbeee9', muted: '#d6a99c' }
+] as const;
+
+function escapeXml(text: string): string {
+	return text
+		.replaceAll('&', '&amp;')
+		.replaceAll('<', '&lt;')
+		.replaceAll('>', '&gt;')
+		.replaceAll('"', '&quot;');
+}
+
+/** Greedy word wrap to at most `maxLines` lines of about `width` characters. */
+function wrapWords(text: string, width: number, maxLines: number): string[] {
+	const lines: string[] = [];
+	let line = '';
+	for (const word of text.split(/\s+/)) {
+		if (line && (line + ' ' + word).length > width) {
+			lines.push(line);
+			line = word;
+		} else {
+			line = line ? `${line} ${word}` : word;
+		}
+	}
+	if (line) lines.push(line);
+	if (lines.length > maxLines) {
+		const kept = lines.slice(0, maxLines);
+		kept[maxLines - 1] = `${kept[maxLines - 1]}…`;
+		return kept;
+	}
+	return lines;
+}
+
 async function thumbnailFor(share: SeedShare): Promise<Buffer> {
-	const hue = hashHue(share.url);
-	const random = prng(hue + 7);
-	const circles = Array.from({ length: 5 }, (_, i) => {
-		const x = Math.round(random() * 1200);
-		const y = Math.round(random() * 630);
-		const r = Math.round(120 + random() * 260);
-		const h = (hue + i * 47) % 360;
-		return `<circle cx="${x}" cy="${y}" r="${r}" fill="hsl(${h} 80% 60%)" fill-opacity="0.55"/>`;
-	}).join('');
+	const tone = CARD_TONES[hashHue(share.url) % CARD_TONES.length]!;
+	const font = "'Helvetica Neue', Helvetica, Arial, sans-serif";
+	const mono = "Menlo, 'SF Mono', Consolas, monospace";
+	const isRepo = share.type === 'repo';
+	const titleLines = wrapWords(share.title, isRepo ? 21 : 22, 3);
+	const title = titleLines
+		.map(
+			(line, i) =>
+				`<text x="140" y="${250 + i * 84}" font-family="${isRepo ? mono : font}" font-size="${isRepo ? 64 : 72}" font-weight="700" fill="${tone.fg}" letter-spacing="-1">${escapeXml(line)}</text>`
+		)
+		.join('');
+	const footer = isRepo
+		? `<text x="140" y="550" font-family="${font}" font-size="30" fill="${tone.muted}">${escapeXml(
+				[share.meta?.language, share.meta?.stars ? `★ ${Math.round(share.meta.stars / 1000)}k` : '']
+					.filter(Boolean)
+					.join('   ·   ')
+			)}</text>`
+		: `<text x="140" y="550" font-family="${font}" font-size="30" fill="${tone.muted}">${escapeXml(share.domain)}</text>`;
+	const play =
+		share.type === 'video'
+			? `<circle cx="1000" cy="520" r="54" fill="${tone.fg}"/><path d="M984 494 L1028 520 L984 546 Z" fill="${tone.bg}"/>`
+			: '';
 	const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630">
-		<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-			<stop offset="0" stop-color="hsl(${hue} 70% 22%)"/>
-			<stop offset="1" stop-color="hsl(${(hue + 60) % 360} 75% 38%)"/>
-		</linearGradient><filter id="b"><feGaussianBlur stdDeviation="60"/></filter></defs>
-		<rect width="1200" height="630" fill="url(#g)"/>
-		<g filter="url(#b)">${circles}</g>
+		<rect width="1200" height="630" fill="${tone.bg}"/>
+		<text x="140" y="130" font-family="${font}" font-size="32" font-weight="600" fill="${tone.muted}">${escapeXml(share.siteName)}</text>
+		${title}${footer}${play}
 	</svg>`;
 	return sharp(Buffer.from(svg)).png().toBuffer();
 }
