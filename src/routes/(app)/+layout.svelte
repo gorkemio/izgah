@@ -8,7 +8,6 @@
 		type ShareComposerInitialState
 	} from '#lib/components/feed/ShareComposerDialog.svelte';
 	import BottomTabBar from '#lib/components/shell/BottomTabBar.svelte';
-	import CommandPalette from '#lib/components/shell/CommandPalette.svelte';
 	import KeyboardHelpDialog from '#lib/components/shell/KeyboardHelpDialog.svelte';
 	import SiteHeader from '#lib/components/shell/SiteHeader.svelte';
 	import Toaster from '#lib/components/platform/Toaster.svelte';
@@ -54,6 +53,27 @@
 		)
 	);
 	let helpOpen = $state(false);
+
+	// The command palette loads on first use or when the browser is idle, so it stays out of the
+	// first page load (izgah-ui-v5.md §7 budgets).
+	type PaletteModule = typeof import('#lib/components/shell/CommandPalette.svelte');
+	let paletteModule = $state<Promise<PaletteModule> | null>(null);
+	function loadPalette(): void {
+		paletteModule ??= import('#lib/components/shell/CommandPalette.svelte');
+	}
+	$effect(() => {
+		if (cmdkOpen) {
+			loadPalette();
+		}
+	});
+	$effect(() => {
+		if (typeof requestIdleCallback === 'function') {
+			const id = requestIdleCallback(loadPalette, { timeout: 4000 });
+			return () => cancelIdleCallback(id);
+		}
+		const timer = setTimeout(loadPalette, 2000);
+		return () => clearTimeout(timer);
+	});
 	let helpHasPosts = $state(false);
 	let cmdkOpen = $state(false);
 
@@ -502,13 +522,17 @@
 {/if}
 
 {#if hydrated}
-	<CommandPalette
-		bind:open={cmdkOpen}
-		sections={data.sections}
-		isAdmin={data.user.role === 'admin'}
-		onCompose={openComposer}
-		onOpenHelp={openHelp}
-	/>
+	{#if paletteModule}
+		{#await paletteModule then { default: CommandPalette }}
+			<CommandPalette
+				bind:open={cmdkOpen}
+				sections={data.sections}
+				isAdmin={data.user.role === 'admin'}
+				onCompose={openComposer}
+				onOpenHelp={openHelp}
+			/>
+		{/await}
+	{/if}
 	<KeyboardHelpDialog
 		bind:open={helpOpen}
 		preference={shortcutPreference}
