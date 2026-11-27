@@ -217,20 +217,7 @@ export function standaloneRoles(tokens: KunyeTokens, scheme: Scheme, name: Palet
 }
 
 /** Extension and site: semantic --color-* names switched by prefers-color-scheme / -contrast. */
-/**
- * Optional selectors that pin one scheme regardless of the system, e.g. the izgah.com specimen's
- * CSS-only Light · Dark choice (izgah-ui-v4 §6). They still follow prefers-contrast.
- */
-export interface SchemeScopes {
-	light: string;
-	dark: string;
-}
-
-export function renderStandalonePalette(
-	tokens: KunyeTokens,
-	purpose: string,
-	scopes?: SchemeScopes
-): string {
+export function renderStandalonePalette(tokens: KunyeTokens, purpose: string): string {
 	const semantic = (scheme: Scheme, name: PaletteName, indent: string) => {
 		const roles = standaloneRoles(tokens, scheme, name);
 		return [
@@ -242,25 +229,6 @@ export function renderStandalonePalette(
 	};
 	const media = (query: string, scheme: Scheme, name: PaletteName) =>
 		[`@media ${query} {`, rule([':root'], semantic(scheme, name, '\t\t'), '\t'), '}'].join('\n');
-	const scoped = (name: PaletteName, indent: string) =>
-		scopes
-			? (['light', 'dark'] as const).map((scheme) =>
-					rule(
-						[scopes[scheme]],
-						[`${indent}\tcolor-scheme: ${scheme};`, ...semantic(scheme, name, `${indent}\t`)],
-						indent
-					)
-				)
-			: [];
-	const pinned = scopes
-		? [
-				...scoped('default', '').flatMap((block) => [block, '']),
-				['@media (prefers-contrast: more) {', scoped('contrast', '\t').join('\n\n'), '}'].join(
-					'\n'
-				),
-				''
-			]
-		: [];
 	return [
 		HEADER(purpose),
 		rule([':root'], semantic('light', 'default', '\t'), ''),
@@ -270,8 +238,7 @@ export function renderStandalonePalette(
 		media('(prefers-contrast: more)', 'light', 'contrast'),
 		'',
 		media('(prefers-contrast: more) and (prefers-color-scheme: dark)', 'dark', 'contrast'),
-		'',
-		...pinned
+		''
 	].join('\n');
 }
 
@@ -281,15 +248,11 @@ export function renderAll(tokens: KunyeTokens): Record<keyof typeof OUTPUTS, str
 		lab: renderLabPalette(tokens),
 		extension: renderStandalonePalette(
 			tokens,
-			'Künye palettes for the browser extensions: they follow the system theme and contrast.'
+			'UI v5 palettes for the browser extensions: they follow the system theme and contrast.'
 		),
 		site: renderStandalonePalette(
 			tokens,
-			'Künye palettes for izgah.com: it follows the system theme and contrast; the specimen can pin a scheme.',
-			{
-				light: '.specimen:has(#specimen-light:checked)',
-				dark: '.specimen:has(#specimen-dark:checked)'
-			}
+			'UI v5 palettes for izgah.com: it follows the system theme and contrast.'
 		)
 	};
 }

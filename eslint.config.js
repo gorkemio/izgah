@@ -39,11 +39,15 @@ export default tseslint.config(
 		}
 	},
 	{
-		// The izgah.com specimen runs as a plain browser script.
+		// izgah.com's script runs as a plain browser script.
 		files: ['site/**/*.js'],
 		languageOptions: {
 			globals: {
-				document: 'readonly'
+				document: 'readonly',
+				navigator: 'readonly',
+				Element: 'readonly',
+				setTimeout: 'readonly',
+				clearTimeout: 'readonly'
 			}
 		}
 	},

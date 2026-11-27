@@ -7,7 +7,7 @@
 		<title>İzgah — küçük ekipler için ortak link kütüphanesi</title>
 		<meta
 			name="description"
-			content="İzgah, küçük bir ekibin bulduğu linkleri notuyla paylaştığı, bölümlere ayırdığı ve her link için tek bir tartışma yürüttüğü açık kaynak, kendi sunucunuzda çalışan bir akıştır."
+			content="İzgah, küçük bir ekibin bulduğu linkleri notuyla paylaştığı, bölümlere ayırdığı ve her link için tek bir tartışma yürüttüğü, açık kaynaklı ve kendi sunucunuzda çalışan bir akıştır."
 		/>
 		<link rel="canonical" href="https://izgah.com/tr/" />
 		<link rel="alternate" hreflang="en" href="https://izgah.com/" />
@@ -21,288 +21,531 @@
 			type="font/woff2"
 			crossorigin
 		/>
-		<link rel="stylesheet" href="../palette.css?v=2026-11-27-1" />
-		<link rel="stylesheet" href="../styles.css?v=2026-11-27-1" />
+		<link rel="stylesheet" href="../palette.css?v=2026-11-27-2" />
+		<link rel="stylesheet" href="../styles.css?v=2026-11-27-2" />
 		<meta property="og:title" content="İzgah — küçük ekipler için ortak link kütüphanesi" />
 		<meta
 			property="og:description"
-			content="Açık kaynak ve kendi sunucunuzda: ekibinizin bulduğu linkleri paylaşın, tartışın, yeniden bulun."
+			content="Açık kaynak, kendi sunucunuzda: ekibinizin bulduğu linkleri paylaşın, tartışın, yeniden bulun."
 		/>
 		<meta property="og:image" content="https://izgah.com/assets/og-tr.png" />
 		<meta property="og:url" content="https://izgah.com/tr/" />
 		<meta property="og:locale" content="tr_TR" />
 		<meta name="twitter:card" content="summary_large_image" />
-		<script src="../specimen.js?v=2026-11-27-1" defer></script>
+		<script src="../site.js?v=2026-11-27-2" defer></script>
 	</head>
 	<body>
+		<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+			<!-- Lucide icons (ISC licence), see THIRD_PARTY_NOTICES.md -->
+			<symbol id="i-arrow-right" viewBox="0 0 24 24">
+				<path d="M5 12h14" />
+				<path d="m12 5 7 7-7 7" />
+			</symbol>
+			<symbol id="i-arrow-up-right" viewBox="0 0 24 24">
+				<path d="M7 7h10v10" />
+				<path d="M7 17 17 7" />
+			</symbol>
+			<symbol id="i-messages" viewBox="0 0 24 24">
+				<path
+					d="M16 10a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 14.286V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"
+				/>
+				<path
+					d="M20 9a2 2 0 0 1 2 2v10.286a.71.71 0 0 1-1.212.502l-2.202-2.202A2 2 0 0 0 17.172 19H10a2 2 0 0 1-2-2v-1"
+				/>
+			</symbol>
+			<symbol id="i-hash" viewBox="0 0 24 24">
+				<line x1="4" x2="20" y1="9" y2="9" />
+				<line x1="4" x2="20" y1="15" y2="15" />
+				<line x1="10" x2="8" y1="3" y2="21" />
+				<line x1="16" x2="14" y1="3" y2="21" />
+			</symbol>
+			<symbol id="i-command" viewBox="0 0 24 24">
+				<path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
+			</symbol>
+			<symbol id="i-puzzle" viewBox="0 0 24 24">
+				<path
+					d="M15.39 4.39a1 1 0 0 0 1.68-.474 2.5 2.5 0 1 1 3.014 3.015 1 1 0 0 0-.474 1.68l1.683 1.682a2.414 2.414 0 0 1 0 3.414L19.61 15.39a1 1 0 0 1-1.68-.474 2.5 2.5 0 1 0-3.014 3.015 1 1 0 0 1 .474 1.68l-1.683 1.682a2.414 2.414 0 0 1-3.414 0L8.61 19.61a1 1 0 0 0-1.68.474 2.5 2.5 0 1 1-3.014-3.015 1 1 0 0 0 .474-1.68l-1.683-1.682a2.414 2.414 0 0 1 0-3.414L4.39 8.61a1 1 0 0 1 1.68.474 2.5 2.5 0 1 0 3.014-3.015 1 1 0 0 1-.474-1.68l1.683-1.682a2.414 2.414 0 0 1 3.414 0z"
+				/>
+			</symbol>
+			<symbol id="i-sparkles" viewBox="0 0 24 24">
+				<path
+					d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"
+				/>
+				<path d="M20 2v4" />
+				<path d="M22 4h-4" />
+				<circle cx="4" cy="20" r="2" />
+			</symbol>
+			<symbol id="i-contrast" viewBox="0 0 24 24">
+				<circle cx="12" cy="12" r="10" />
+				<path d="M12 18a6 6 0 0 0 0-12v12z" />
+			</symbol>
+			<symbol id="i-languages" viewBox="0 0 24 24">
+				<path d="m5 8 6 6" />
+				<path d="m4 14 6-6 2-3" />
+				<path d="M2 5h12" />
+				<path d="M7 2h1" />
+				<path d="m22 22-5-10-5 10" />
+				<path d="M14 18h6" />
+			</symbol>
+			<symbol id="i-copy" viewBox="0 0 24 24">
+				<rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+				<path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+			</symbol>
+			<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></symbol>
+			<symbol id="i-server" viewBox="0 0 24 24">
+				<rect width="20" height="8" x="2" y="2" rx="2" ry="2" />
+				<rect width="20" height="8" x="2" y="14" rx="2" ry="2" />
+				<line x1="6" x2="6.01" y1="6" y2="6" />
+				<line x1="6" x2="6.01" y1="18" y2="18" />
+			</symbol>
+			<symbol id="i-shield-check" viewBox="0 0 24 24">
+				<path
+					d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+				/>
+				<path d="m9 12 2 2 4-4" />
+			</symbol>
+		</svg>
+
 		<a class="skip-link" href="#main">İçeriğe geç</a>
-		<div class="site">
-			<header class="site-head">
-				<a class="wordmark" href="./" aria-label="İzgah, ana sayfa"
-					>iz<span class="gah">gah</span></a
+
+		<header class="site-head">
+			<div class="wrap">
+				<a class="brand" href="./" aria-label="İzgah, ana sayfa"
+					><span class="brand-mark" aria-hidden="true"></span>İzgah</a
 				>
-				<nav aria-label="Site">
+				<nav class="site-nav" aria-label="Site">
 					<ul>
-						<li><a href="https://github.com/gorkemio/izgah/blob/main/README.tr.md">Belgeler</a></li>
-						<li><a href="https://github.com/gorkemio/izgah">Kaynak kod</a></li>
+						<li class="nav-optional"><a href="#features">Özellikler</a></li>
+						<li class="nav-optional"><a href="#install">Kurulum</a></li>
+						<li>
+							<a href="https://github.com/gorkemio/izgah"
+								>GitHub<svg class="icon" aria-hidden="true"><use href="#i-arrow-up-right" /></svg
+							></a>
+						</li>
 						<li><a href="../" hreflang="en" lang="en">English</a></li>
 					</ul>
 				</nav>
-			</header>
+			</div>
+		</header>
 
-			<main id="main">
-				<h1 class="statement">
-					Ekibiniz iyi linkler bulmaya devam ediyor. İzgah onları bulunur kılıyor.
-				</h1>
-				<p class="lede">
-					Ekibin bulduğu linkleri notuyla paylaştığı, bölümlere ayırdığı ve her link için tek bir
-					tartışma yürüttüğü, kendi sunucunuzda çalışan küçük bir akış. AGPL ile açık kaynak. Tek
-					konteyner ve PostgreSQL.
-				</p>
+		<main id="main">
+			<section class="hero" aria-labelledby="hero-title">
+				<div class="wrap">
+					<p class="eyebrow"><b>Açık kaynak</b> Kendi sunucunuzda · AGPL-3.0</p>
+					<h1 id="hero-title">
+						Ekibiniz iyi linkler bulmaya devam ediyor. <span>İzgah onları bulunur kılıyor.</span>
+					</h1>
+					<p class="lede">
+						Ekibin bulduğu linkleri notuyla paylaştığı, bölümlere ayırdığı ve her link için tek bir
+						tartışma yürüttüğü, kendi sunucunuzda çalışan küçük bir akış.
+					</p>
+					<div class="actions">
+						<a class="btn btn-primary" href="#install"
+							>Kendi sunucunuzda çalıştırın<svg class="icon" aria-hidden="true">
+								<use href="#i-arrow-right" /></svg
+						></a>
+						<a class="btn btn-secondary" href="https://github.com/gorkemio/izgah"
+							>Kaynak koda bakın</a
+						>
+					</div>
+					<ul class="hero-meta">
+						<li>
+							<svg class="icon" aria-hidden="true"><use href="#i-server" /></svg>Tek konteyner ve
+							PostgreSQL
+						</li>
+						<li>
+							<svg class="icon" aria-hidden="true"><use href="#i-languages" /></svg>Türkçe ve
+							İngilizce
+						</li>
+						<li>
+							<svg class="icon" aria-hidden="true"><use href="#i-puzzle" /></svg>Chrome, Firefox ve
+							Safari eklentileri
+						</li>
+					</ul>
+					<figure class="showcase">
+						<div class="frame">
+							<picture>
+								<source
+									media="(max-width: 720px) and (prefers-color-scheme: dark)"
+									srcset="../assets/shots/mobile-tr-dark.webp"
+									width="780"
+									height="1688"
+								/>
+								<source
+									media="(max-width: 720px)"
+									srcset="../assets/shots/mobile-tr-light.webp"
+									width="780"
+									height="1688"
+								/>
+								<source
+									media="(prefers-color-scheme: dark)"
+									srcset="../assets/shots/feed-tr-dark.webp"
+								/>
+								<img
+									src="../assets/shots/feed-tr-light.webp"
+									width="2000"
+									height="1250"
+									alt="İzgah akışı: bölümlerin listelendiği bir kenar çubuğu ve dün paylaşılan linkler; her birinde üyenin avatarı ve notu, site, başlık, açıklama ve önizleme görseliyle bir link kartı, bölüm etiketleri, yorumlar ve beğeniler."
+									fetchpriority="high"
+								/>
+							</picture>
+						</div>
+						<picture>
+							<source
+								media="(prefers-color-scheme: dark)"
+								srcset="../assets/shots/mobile-tr-dark.webp"
+							/>
+							<img
+								class="phone"
+								src="../assets/shots/mobile-tr-light.webp"
+								width="780"
+								height="1688"
+								alt="Aynı akış telefonda, altta bir sekme çubuğuyla."
+								loading="lazy"
+							/>
+						</picture>
+					</figure>
+				</div>
+			</section>
 
-				<section class="specimen" aria-labelledby="specimen-title" data-specimen>
-					<div class="specimen-bar">
-						<p id="specimen-title" class="specimen-try">
-							<b>Dene.</b>
-							<span class="hint-keys"
-								><kbd>j</kbd> <kbd>k</kbd> gezinir · <kbd>Boşluk</kbd> tartışmayı açar · açtığınız
-								linkler solar</span
-							><span class="hint-touch">Tartışmayı açmak için yorumlara dokunun.</span>
+			<section class="band band-muted" id="features" aria-labelledby="features-title">
+				<div class="wrap">
+					<div class="band-head reveal">
+						<p class="kicker">Ne yapar</p>
+						<h2 id="features-title">
+							Ekibinizin elden ele geçirdiği linkler için ortak bir hafıza
+						</h2>
+						<p>
+							Bir WhatsApp grubu olarak başladı. İyi linkler bir gün içinde kayıp gidiyordu, aynı
+							video üç kez paylaşılıp üç ayrı tartışma açılıyordu ve bir ay sonra kimse "şu
+							makaleyi" bulamıyordu.
 						</p>
-						<fieldset class="theme-switch">
-							<legend class="visually-hidden">Örneğin teması</legend>
-							<input type="radio" name="specimen-theme" id="specimen-light" value="light" />
-							<label for="specimen-light">Açık</label>
-							<input type="radio" name="specimen-theme" id="specimen-dark" value="dark" />
-							<label for="specimen-dark">Koyu</label>
-						</fieldset>
 					</div>
 
-					<div class="specimen-body">
-						<div class="specimen-board">
-							<div class="day">
-								<p class="day-heading">Bugün <span class="day-date">25 Kasım Çarşamba</span></p>
-								<p class="day-count">3 iz</p>
-							</div>
-
-							<article class="share-card" aria-labelledby="sp-title-1">
-								<p class="card-gutter">
-									<time datetime="2026-11-25T18:41">18:41</time> Deniz
-									<span class="unseen">yeni</span>
+					<ul class="bento">
+						<li class="tile tile-wide reveal">
+							<div class="tile-text">
+								<span class="tile-icon"
+									><svg class="icon" aria-hidden="true"><use href="#i-messages" /></svg
+								></span>
+								<h3>Bir link, tek tartışma</h3>
+								<p>
+									Linkler asıl adreslerine göre eşleşir. İkinci paylaşım var olan tartışmaya
+									katılır; sayfa her paylaşımı yanında tutar.
 								</p>
-								<div class="card-body">
-									<p class="share-note">
-										Yeni modelleri dizüstünde denedim; uzun PDF'lerde şaşırtıcı derecede hızlı.
-									</p>
-									<p id="sp-title-1" class="card-title">
-										<a href="https://github.com/ollama/ollama">ollama/ollama</a>
-									</p>
-									<div class="kunye">
-										<span>github.com</span><span>kod</span><span>Go</span
-										><span class="section-chip">YZ araçları</span>
-										<details class="thread">
-											<summary class="kunye-action">2 yorum</summary>
-											<ol class="comments">
-												<li><b>Mert</b> M2'de de öyle; 8B model tam kıvamında.</li>
-												<li><b>Elif</b> Kurulum adımlarını yazar mısın?</li>
-											</ol>
-										</details>
-										<span>4 beğeni</span>
-									</div>
-								</div>
-							</article>
+							</div>
+							<div class="tile-shot">
+								<picture>
+									<source
+										media="(prefers-color-scheme: dark)"
+										srcset="../assets/shots/resource-tr-dark.webp"
+									/>
+									<img
+										src="../assets/shots/resource-tr-light.webp"
+										width="1400"
+										height="1033"
+										alt="Bir linkin sayfası: kapak görseli, kaynağa git düğmesi, beğeniler, paylaşım geçmişi ve tartışma."
+										loading="lazy"
+									/>
+								</picture>
+							</div>
+						</li>
 
-							<article class="share-card" aria-labelledby="sp-title-2" aria-current="true">
-								<p class="card-gutter"><time datetime="2026-11-25T17:02">17:02</time> Elif</p>
-								<div class="card-body">
-									<p class="share-note">Bununla tema medya sorgularımızın yarısını silebiliriz.</p>
-									<p id="sp-title-2" class="card-title">
-										<a href="https://web.dev/articles/light-dark"
-											>CSS color-scheme-dependent colors with light-dark()</a
-										><a class="note-ref" href="#note-1" aria-label="Not 1">1</a>
-									</p>
-									<div class="kunye">
-										<span>web.dev</span><span>makale</span><span class="section-chip">Frontend</span
-										><span>ilk: Can, 12 Kas</span>
-										<details class="thread">
-											<summary class="kunye-action">3 yorum</summary>
-											<ol class="comments">
-												<li><b>Can</b> Safari desteği geldi; buna dönelim.</li>
-												<li><b>Zeynep</b> Yüksek kontrast paleti de bununla çalışıyor.</li>
-												<li><b>Elif</b> Bu hafta token'larımızda deniyorum.</li>
-											</ol>
-										</details>
-										<button type="button" class="kunye-action is-idle" data-like hidden>
-											<span class="like-off">Beğen</span><span class="like-on">1 beğeni</span>
-										</button>
-									</div>
-								</div>
-							</article>
+						<li class="tile reveal">
+							<div class="tile-text">
+								<span class="tile-icon"
+									><svg class="icon" aria-hidden="true"><use href="#i-hash" /></svg
+								></span>
+								<h3>Bölümler ve akışa düşmeyen linkler</h3>
+								<p>
+									Bölümleri yöneticiler düzenler. Bir link birden çok bölümde durabilir; başvuru
+									linkleri akışta görünmeden bir bölüme eklenebilir.
+								</p>
+							</div>
+							<div class="tile-visual">
+								<ul class="mini-rail" aria-hidden="true">
+									<li class="is-active"><span>#</span>Frontend</li>
+									<li><span>#</span>Tasarım</li>
+									<li><span>#</span>YZ araçları</li>
+									<li><span>#</span>Uzun okumalar</li>
+								</ul>
+							</div>
+						</li>
 
-							<article class="share-card" aria-labelledby="sp-title-3">
-								<p class="card-gutter"><time datetime="2026-11-25T15:27">15:27</time> Mert</p>
-								<div class="card-body">
-									<p class="share-note">
-										İzgah'ta açtığın linkler neden soluyor ve bu neden sende kalıyor.
-									</p>
-									<p id="sp-title-3" class="card-title">
-										<a href="https://developer.chrome.com/blog/visited-links"
-											>Making :visited more private</a
-										><a class="note-ref" href="#note-3" aria-label="Not 3">3</a>
-									</p>
-									<div class="kunye">
-										<span>developer.chrome.com</span><span>makale</span
-										><span class="section-chip">Frontend</span>
-									</div>
-									<p class="suggestion" data-suggestion>
-										Önerilen bölüm:
-										<span class="section-chip">Tasarım</span>
-										<span class="suggestion-why">(bu sitenin önceki linklerinden)</span
-										><a class="note-ref" href="#note-2" aria-label="Not 2">2</a>
-										<button type="button" class="kunye-action" data-suggestion-add hidden>
-											Ekle
-										</button>
-										<button type="button" class="kunye-action" data-suggestion-dismiss hidden>
-											Yoksay
-										</button>
-									</p>
-								</div>
-							</article>
-						</div>
+						<li class="tile reveal">
+							<div class="tile-text">
+								<span class="tile-icon"
+									><svg class="icon" aria-hidden="true"><use href="#i-puzzle" /></svg
+								></span>
+								<h3>Tarayıcı eklentileri</h3>
+								<p>
+									Chrome, Firefox ve Safari. <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd> açık
+									sekmeyi paylaşır; eklenti yalnızca sizin sunucunuzla konuşur.
+								</p>
+							</div>
+							<div class="tile-visual">
+								<p class="mini-keys" aria-hidden="true">
+									<kbd>Alt</kbd><kbd>Shift</kbd><kbd>I</kbd>
+								</p>
+								<ul class="mini-chips" aria-hidden="true">
+									<li>Chrome</li>
+									<li>Firefox</li>
+									<li>Safari</li>
+								</ul>
+							</div>
+						</li>
 
-						<ol class="notes">
-							<li id="note-1">
-								<b>Bir link, tek tartışma</b> Önce Can paylaştı; Elif'in izi aynı tartışmaya
-								eklendi.
+						<li class="tile tile-wide reveal">
+							<div class="tile-text">
+								<span class="tile-icon"
+									><svg class="icon" aria-hidden="true"><use href="#i-command" /></svg
+								></span>
+								<h3>Türkçe ve İngilizce arama</h3>
+								<p>
+									Başlıklar, notlar, sayfa metni ve URL parçaları. Her yerden <kbd>⌘K</kbd>, akışta
+									<kbd>j</kbd> <kbd>k</kbd> ile gezinme.
+								</p>
+							</div>
+							<div class="tile-shot is-palette">
+								<picture>
+									<source
+										media="(prefers-color-scheme: dark)"
+										srcset="../assets/shots/palette-tr-dark.webp"
+									/>
+									<img
+										src="../assets/shots/palette-tr-light.webp"
+										width="1100"
+										height="836"
+										alt="Komut paleti css için arama yapıyor; eşleşen linkler vurgulu."
+										loading="lazy"
+									/>
+								</picture>
+							</div>
+						</li>
+
+						<li class="tile reveal">
+							<div class="tile-text">
+								<span class="tile-icon"
+									><svg class="icon" aria-hidden="true"><use href="#i-sparkles" /></svg
+								></span>
+								<h3>Akıllı ekleme, varsayılan olarak kapalı</h3>
+								<p>
+									Nota <code>#bölüm</code> yazın, ekibinizin dosyalama alışkanlığından öneri alın.
+									Bir yönetici anahtar eklerse kısa özetler ve yapay zekâ bölüm önerileri de gelir.
+								</p>
+							</div>
+							<div class="tile-visual">
+								<div class="mini-note" aria-hidden="true">
+									<p>
+										Yeniden tasarımdan önce göz atmaya değer <span class="mini-tag">#tasarım</span>
+									</p>
+									<p class="mini-suggest">Öneri <span>Tasarım</span><span>Frontend</span></p>
+								</div>
+							</div>
+						</li>
+
+						<li class="tile reveal">
+							<div class="tile-text">
+								<span class="tile-icon"
+									><svg class="icon" aria-hidden="true"><use href="#i-contrast" /></svg
+								></span>
+								<h3>Sakin ve erişilebilir</h3>
+								<p>
+									WCAG 2.2 AA'yı karşılayan yüksek kontrast paletleriyle açık ve koyu temalar,
+									hareketi azaltan bir ayar.
+								</p>
+							</div>
+							<div class="tile-visual">
+								<ul class="mini-themes" aria-hidden="true">
+									<li class="t-light"><span>Aa</span>Açık</li>
+									<li class="t-dark"><span>Aa</span>Koyu</li>
+									<li class="t-contrast"><span>Aa</span>Yüksek kontrast</li>
+								</ul>
+							</div>
+						</li>
+
+						<li class="tile reveal">
+							<div class="tile-text">
+								<span class="tile-icon"
+									><svg class="icon" aria-hidden="true"><use href="#i-languages" /></svg
+								></span>
+								<h3>Her ekranda</h3>
+								<p>
+									Her üye Türkçe ya da İngilizce'yi seçer. Telefonda kenar çubuğunun yerini bir
+									sekme çubuğu alır.
+								</p>
+							</div>
+							<div class="tile-shot is-phone">
+								<picture>
+									<source
+										media="(prefers-color-scheme: dark)"
+										srcset="../assets/shots/mobile-tr-dark.webp"
+									/>
+									<img
+										src="../assets/shots/mobile-tr-light.webp"
+										width="780"
+										height="1688"
+										alt=""
+										loading="lazy"
+									/>
+								</picture>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</section>
+
+			<section class="band" id="install" aria-labelledby="install-title">
+				<div class="wrap install-grid">
+					<div class="reveal">
+						<p class="kicker">Kurulum</p>
+						<h2 id="install-title">Kendi sunucunuzda çalıştırın</h2>
+						<ol class="steps">
+							<li>
+								<span
+									><b>Docker ile başlatın</b>Herhangi bir sunucuda, ters vekil sunucunuzun
+									arkasında.</span
+								>
 							</li>
-							<li id="note-2">
-								<b>Kendini öneren bölümler</b> Ekibinizin bu siteyi daha önce nereye koyduğundan.
-								Yapay zekâ isteğe bağlı, varsayılan olarak kapalı.
+							<li>
+								<span
+									><b>İlk yöneticiyi oluşturun</b>Komut tek kullanımlık bir davet linki yazdırır;
+									açın ve parolanızı belirleyin.</span
+								>
 							</li>
-							<li id="note-3">
-								<b>Açılan linkler solar</b> Tarayıcınızın kendi geçmişi. İzgah hiçbir şey kaydetmez.
+							<li>
+								<span
+									><b>Ekibinizi davet edin</b>İzgah e-posta göndermez: davetler, yöneticinin
+									ilettiği linklerdir.</span
+								>
 							</li>
 						</ol>
+						<p class="guides">
+							Adım adım rehberler:
+							<a href="https://github.com/gorkemio/izgah/blob/main/docs/deploy/docker-compose.md"
+								>Docker Compose ve Caddy</a
+							>,
+							<a href="https://github.com/gorkemio/izgah/blob/main/docs/deploy/dokploy.md"
+								>Dokploy</a
+							>.
+						</p>
 					</div>
-
-					<p class="specimen-cap">
-						Uygulamanın kendi yazı tipi ve renkleriyle dizildi. Ekran görüntüsü değil: metni
-						seçebilirsiniz.
-					</p>
-				</section>
-
-				<h2>Kendi sunucunuzda çalıştırın</h2>
-				<pre
-					class="install"
-					tabindex="0"
-					aria-label="Kurulum komutları"
-				><code><span class="c"># Docker kurulu, ters vekil sunucunun arkasındaki bir sunucuda</span>
+					<div class="terminal reveal">
+						<div class="terminal-bar">
+							<span>Uçbirim</span>
+							<button type="button" class="copy-btn" data-copy="#install-code" hidden>
+								<span class="when-idle"
+									><svg class="icon" aria-hidden="true"><use href="#i-copy" /></svg>Kopyala</span
+								><span class="when-copied" role="status"
+									><svg class="icon" aria-hidden="true"><use href="#i-check" /></svg
+									>Kopyalandı</span
+								>
+							</button>
+						</div>
+						<pre
+							tabindex="0"
+							aria-label="Kurulum komutları"
+						><code id="install-code"><span class="c"># Docker kurulu, ters vekil sunucunun arkasındaki bir sunucuda</span>
 git clone https://github.com/gorkemio/izgah && cd izgah
 export POSTGRES_PASSWORD='…' BETTER_AUTH_SECRET="$(openssl rand -hex 32)" ORIGIN='https://links.example.com' DEFAULT_LOCALE=tr APP_TIME_ZONE=Europe/Istanbul
 docker compose -f docker-compose.prod.yml up -d --build
 docker compose -f docker-compose.prod.yml exec app node build/cli.js create-admin --email siz@example.com --name Siz</code></pre>
-				<p class="after">
-					Yazdırdığı davet linkini açın, parolanızı belirleyin, ekibinizi davet edin. Adım adım
-					rehberler:
-					<a href="https://github.com/gorkemio/izgah/blob/main/docs/deploy/docker-compose.md"
-						>Docker Compose ve Caddy</a
-					>,
-					<a href="https://github.com/gorkemio/izgah/blob/main/docs/deploy/dokploy.md">Dokploy</a>.
-				</p>
+					</div>
+				</div>
+			</section>
 
-				<h2>Ne yapar</h2>
-				<ul class="annotated">
-					<li>
-						<a href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-core.md"
-							>Bölümler ve akışa düşmeyen linkler</a
-						>
-						<p>
-							Linkleri yöneticiler bölümlere ayırır. Başvuru linkleri akışta görünmeden bir bölümde
-							durabilir.
-						</p>
-					</li>
-					<li>
-						<a href="https://github.com/gorkemio/izgah/blob/main/src/lib/server/search/service.ts"
-							>Türkçe ve İngilizce arama</a
-						>
-						<p>Başlıklar, notlar, sayfa metni ve URL parçaları; her yerden <kbd>⌘K</kbd> ile.</p>
-					</li>
-					<li>
-						<a href="https://github.com/gorkemio/izgah/tree/main/extensions#readme"
-							>Tarayıcı eklentileri</a
-						>
-						<p>
-							Chrome, Firefox ve Safari. <kbd>Alt+Shift+I</kbd> açık sekmeyi paylaşır; eklenti
-							yalnızca sizin sunucunuzla konuşur.
-						</p>
-					</li>
-					<li>
-						<a
-							href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-smart-capture.md"
-							>Akıllı ekleme</a
-						>
-						<p>
-							Nota <code>#bölüm</code> yazın, ekibinizin dosyalama alışkanlığından öneri alın; bir
-							yönetici anahtar eklerse kısa özetler ve yapay zekâ bölüm önerileri de gelir. Siz
-							açana kadar kapalıdır.
-						</p>
-					</li>
-					<li>
-						<a href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-ui-v5.md"
-							>Sakin ve erişilebilir arayüz</a
-						>
-						<p>
-							Sunucuda çizilen sayfalar, WCAG 2.2 AA'yı karşılayan yüksek kontrast paletleriyle açık
-							ve koyu temalar, hareketi ve saydamlığı azaltan bir ayar.
-						</p>
-					</li>
-				</ul>
+			<section class="band band-muted" aria-labelledby="privacy-title">
+				<div class="wrap">
+					<div class="band-head reveal">
+						<p class="kicker">Gizlilik</p>
+						<h2 id="privacy-title">Sunucunuzda ne çalışır, sunucunuzdan ne çıkar</h2>
+					</div>
+					<dl class="facts">
+						<div class="fact reveal">
+							<dt>
+								<svg class="icon" aria-hidden="true"><use href="#i-server" /></svg>Çalışır
+							</dt>
+							<dd>Tek Node.js konteyneri, PostgreSQL ve WebP görsellerden oluşan bir klasör.</dd>
+						</div>
+						<div class="fact reveal">
+							<dt>
+								<svg class="icon" aria-hidden="true"><use href="#i-arrow-up-right" /></svg>Çıkar
+							</dt>
+							<dd>
+								Başlık, simge ve önizleme görselini okumak için ekibinizin paylaştığı sayfalara
+								istekler; depo bilgileri için GitHub API'si. Yönetici yapay zekâyı açarsa: linkin
+								başlığı, açıklaması, bir metin kesiti ve bölüm adlarınız, seçtiğiniz sağlayıcıya.
+							</dd>
+						</div>
+						<div class="fact reveal">
+							<dt>
+								<svg class="icon" aria-hidden="true"><use href="#i-shield-check" /></svg>Asla
+							</dt>
+							<dd>
+								Bize analiz, telemetri ya da e-posta. "Biz" diye bir şey yok: izgah.com hiçbir örnek
+								barındırmaz.
+							</dd>
+						</div>
+					</dl>
+				</div>
+			</section>
 
-				<h2>Neden var</h2>
-				<p class="prose">
-					Bir WhatsApp grubu olarak başladı. İyi linkler bir gün içinde kayıp gidiyordu, aynı video
-					üç kez paylaşılıp üç ayrı tartışma açılıyordu ve bir ay sonra kimse "şu makaleyi"
-					bulamıyordu.
-				</p>
+			<section class="band" aria-label="Kapsam ve yol haritası">
+				<div class="wrap">
+					<div class="pair">
+						<div class="reveal">
+							<h2>Ne yapmaz</h2>
+							<p>
+								İzgah kişisel bir yer imi yöneticisi değil. Sayfaların tamamını arşivlemez, metin
+								vurgulamaz, özel klasör tutmaz. İhtiyacınız buysa
+								<a href="https://karakeep.app">Karakeep</a> ve
+								<a href="https://linkwarden.app">Linkwarden</a> iyi, kendi sunucunuzda çalışan
+								seçeneklerdir.
+							</p>
+						</div>
+						<div class="reveal">
+							<h2>Sırada ne var</h2>
+							<ul class="roadmap">
+								<li>Sohbet dökümünden içe aktarma</li>
+								<li>Sonra oku</li>
+								<li>Dışa aktarma ve RSS</li>
+								<li>Telefondan paylaşma</li>
+							</ul>
+							<p>
+								<a href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-roadmap.md"
+									>Yol haritasının tamamı</a
+								>
+								depodaki bir belgedir.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
 
-				<h2>Ne yapmaz</h2>
-				<p class="prose">
-					İzgah kişisel bir yer imi yöneticisi değil. Sayfaların tamamını arşivlemez, metin
-					vurgulamaz, özel klasör tutmaz. İhtiyacınız buysa
-					<a href="https://karakeep.app">Karakeep</a> ve
-					<a href="https://linkwarden.app">Linkwarden</a> iyi, kendi sunucunuzda çalışan
-					seçeneklerdir.
-				</p>
+			<section class="band" aria-labelledby="closing-title">
+				<div class="wrap">
+					<div class="closing reveal">
+						<div>
+							<h2 id="closing-title">Ekibinizin linklerine bir yuva verin</h2>
+							<p>
+								GNU AGPL-3.0 ile özgür yazılım. Sizin sunucunuz, sizin alan adınız, sizin veriniz.
+							</p>
+						</div>
+						<div class="actions">
+							<a class="btn btn-primary" href="#install">Kendi sunucunuzda çalıştırın</a>
+							<a
+								class="btn btn-secondary"
+								href="https://github.com/gorkemio/izgah/blob/main/README.tr.md"
+								>Belgeleri okuyun</a
+							>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
 
-				<h2>Sunucunuzda ne çalışır, sunucunuzdan ne çıkar</h2>
-				<dl class="facts">
-					<dt>Çalışır</dt>
-					<dd>Tek Node.js konteyneri, PostgreSQL ve WebP küçük resimlerden oluşan bir klasör.</dd>
-					<dt>Çıkar</dt>
-					<dd>
-						Başlık ve önizleme görselini okumak için ekibinizin paylaştığı sayfalara istekler; depo
-						bilgileri için GitHub API'si. Yönetici yapay zekâyı açarsa: linkin başlığı, açıklaması,
-						bir metin kesiti ve bölüm adlarınız, seçtiğiniz sağlayıcıya.
-					</dd>
-					<dt>Asla</dt>
-					<dd>
-						Bize analiz, telemetri ya da e-posta. "Biz" diye bir şey yok: izgah.com hiçbir örnek
-						barındırmaz.
-					</dd>
-				</dl>
-
-				<h2>Yol haritası</h2>
-				<p class="prose">
-					Sırada: sohbet dökümünden içe aktarma, sonra oku, dışa aktarma ve RSS, telefondan
-					paylaşma.
-					<a href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-roadmap.md"
-						>Yol haritasının tamamı</a
-					>
-					depodaki bir belgedir.
-				</p>
-			</main>
-
-			<footer class="site-foot">
+		<footer class="site-foot">
+			<div class="wrap">
 				<p>İzgah, GNU AGPL-3.0 ile lisanslanmış özgür bir yazılımdır.</p>
 				<ul>
 					<li><a href="https://github.com/gorkemio/izgah">Kaynak kod</a></li>
@@ -313,7 +556,7 @@ docker compose -f docker-compose.prod.yml exec app node build/cli.js create-admi
 					</li>
 					<li><a href="https://github.com/gorkemio/izgah/blob/main/SECURITY.md">Güvenlik</a></li>
 				</ul>
-			</footer>
-		</div>
+			</div>
+		</footer>
 	</body>
 </html>

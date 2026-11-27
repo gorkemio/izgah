@@ -9,24 +9,32 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./docs/images/feed-dark.png">
-  <img alt="The Izgah feed: links shared today, each with the member's note, the link title and one line of facts (site, type, section, comments, likes)." src="./docs/images/feed-light.png">
+  <img alt="The Izgah feed: a sidebar with sections, and links shared yesterday, each with the member's avatar and note, a link card with the site, title, description and preview image, section tags, comments and likes." src="./docs/images/feed-light.png">
 </picture>
 
 > [izgah.com](https://izgah.com) only describes the project; it does not host an instance. Every team runs Izgah on its own server and domain.
 
 ## Features
 
-- **Feed** — a reverse-chronological register of shared links. The member's note comes first; the link follows with one line of facts (site, type, language, sections, comments, likes). New posts are announced, never pushed in under your cursor.
+- **Feed** — shared links, newest first, grouped by day. Each entry shows the member's avatar and note, then a link card with the site's icon, title, description and preview image, its sections, comments and likes. New posts are announced, never pushed in under your cursor, and a deleted post can be undone for a few seconds.
 - **One link, one conversation** — links are deduplicated by their canonical URL, so a second share joins the existing discussion instead of starting a new one.
 - **Sections** — admin-managed topics. A link can live in several sections, and admins can file "silent" reference links without posting them to the feed.
 - **Search** — full-text search over titles, descriptions, notes and URL fragments in English and Turkish, plus a `⌘K` / `Ctrl+K` command palette and `j` / `k` keyboard navigation.
 - **Smart capture** — `#section` in a note files the link, and sections are suggested from your team's history. Admins can optionally connect OpenRouter, Anthropic, OpenAI, Gemini or a local OpenAI-compatible model for short summaries, search keywords and section suggestions. AI is off until configured.
 - **Link previews** — an in-process worker fetches titles, descriptions and cover images behind SSRF guards and stores resized WebP thumbnails locally.
 - **Browser extensions** — Chrome, Firefox and Safari extensions share the current tab or a right-clicked link with a personal API key.
-- **Server-rendered, fast to load** — every page renders on the server and every change goes through a server form action; the interface adds icons, previews and motion on top, with a reduced effects setting.
+- **Server-rendered, fast to load** — every page renders on the server and every change goes through a server form action. JavaScript is required; the interface adds motion on top, with a setting that turns effects down.
+- **Profile photos** — members can upload a photo (re-encoded on the server, metadata stripped); everyone else gets initials on a colour of their own.
 - **Accessible by default** — light and dark themes, each with a standard and a high-contrast palette, all meeting WCAG 2.2 AA (AAA in high contrast). Links you have opened fade through the browser's own `:visited` history; the server records nothing.
 - **English and Turkish** — each member picks a language; the instance sets the default.
 - **Small footprint** — one Node.js container and PostgreSQL. No external e-mail, queue or cache service.
+
+<table>
+  <tr>
+    <td width="58%"><picture><source media="(prefers-color-scheme: dark)" srcset="./site/assets/shots/resource-en-dark.webp"><img alt="A link's page with its cover image, likes, the share history and the discussion." src="./site/assets/shots/resource-en-light.webp"></picture></td>
+    <td width="42%"><picture><source media="(prefers-color-scheme: dark)" srcset="./site/assets/shots/palette-en-dark.webp"><img alt="The command palette searching for css, with matching links highlighted." src="./site/assets/shots/palette-en-light.webp"></picture></td>
+  </tr>
+</table>
 
 ## Self-hosting
 
@@ -114,7 +122,7 @@ pnpm test        # unit and PostgreSQL integration tests
 pnpm test:e2e    # Playwright: Chromium, Firefox, WebKit and mobile
 ```
 
-Built with SvelteKit 3 (Svelte 5) on Node.js 22, PostgreSQL 16 (`unaccent`, `pg_trgm`), Drizzle ORM and Better Auth; the extensions use WXT. No UI framework: native `<dialog>`, `popover`, View Transitions and container queries.
+Built with SvelteKit 3 (Svelte 5) on Node.js 22, PostgreSQL 16 (`unaccent`, `pg_trgm`), Drizzle ORM and Better Auth; the extensions use WXT. The interface uses Tailwind CSS and shadcn-svelte components on Bits UI, Lucide icons and the Geist typeface, with native `<dialog>`, `popover` and View Transitions where they fit.
 
 ## Documentation
 
@@ -129,4 +137,4 @@ Bug reports, translations and pull requests are welcome. For anything larger tha
 
 ## License
 
-Izgah is free software under the [GNU Affero General Public License v3.0](./LICENSE). If you run a modified version for others over a network, you must offer them its source code. The bundled font, Atkinson Hyperlegible Next, is under the SIL Open Font License; see [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).
+Izgah is free software under the [GNU Affero General Public License v3.0](./LICENSE). If you run a modified version for others over a network, you must offer them its source code. The bundled font, Geist, is under the SIL Open Font License; see [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).
