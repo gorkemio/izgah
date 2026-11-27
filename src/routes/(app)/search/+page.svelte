@@ -6,22 +6,23 @@
 	import PostCard from '#lib/components/feed/PostCard.svelte';
 	import { highlightTerms } from '#lib/search/highlight.ts';
 	import type { ContentType } from '#lib/types/domain.ts';
+	import { buttonVariants } from '#lib/components/ui/button/index.ts';
+	import { Kbd } from '#lib/components/ui/kbd/index.ts';
+	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
+	import ChevronRight from '@lucide/svelte/icons/chevron-right';
+	import SearchIcon from '@lucide/svelte/icons/search';
+	import SearchX from '@lucide/svelte/icons/search-x';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
-	// Seed the controls from `data` synchronously so the server-rendered HTML (and JS-off users)
-	// show the submitted query and scope; the effect below keeps them in sync on later navigations.
+	// Seed the controls from `data` synchronously so the server-rendered HTML shows the submitted
+	// query and scope; the effect below keeps them in sync on later navigations.
 	const initialData = untrack(() => data);
-	let hydrated = $state(false);
 	let queryInput = $state(initialData.query);
 	let scopeMode = $state<'all' | 'section'>(initialData.sectionId ? 'section' : 'all');
 	let selectedSectionId = $state(initialData.sectionId ?? initialData.sections[0]?.id ?? '');
 	let lastSyncedKey = `${initialData.query}::${initialData.sectionId ?? ''}::${initialData.contentType ?? ''}`;
-
-	$effect(() => {
-		hydrated = true;
-	});
 
 	$effect(() => {
 		const nextKey = `${data.query}::${data.sectionId ?? ''}::${data.contentType ?? ''}`;
@@ -97,6 +98,9 @@
 			page: currentPage
 		})
 	);
+
+	const codeClass =
+		'rounded-md border border-hairline bg-muted px-1.5 py-px font-mono text-[0.85em] text-foreground';
 </script>
 
 <svelte:head>
@@ -107,24 +111,36 @@
 	>
 </svelte:head>
 
-<section aria-labelledby="search-page-title" class="search-page">
-	<header class="page-header">
-		<h1 id="search-page-title" tabindex="-1">{t('page.search')}</h1>
-		<p class="page-subtitle">
-			{t('search.subtitle')}
-		</p>
+<!-- Search (docs/designs/izgah-ui-v5.md §5.4): one large field, the scope as a segmented control,
+     the content-type filter, then the summary and the highlighted results. -->
+<section
+	aria-labelledby="search-page-title"
+	class="search-page mx-auto grid w-full max-w-[720px] gap-6"
+>
+	<header class="grid gap-1">
+		<h1
+			id="search-page-title"
+			tabindex="-1"
+			class="text-2xl font-semibold tracking-[-0.02em] outline-none"
+		>
+			{t('page.search')}
+		</h1>
+		<p class="text-[14px] text-muted-foreground">{t('search.subtitle')}</p>
 	</header>
 
-	<search aria-label={t('search.panel')} class="search-panel">
-		<form method="GET" action="/search" class="search-form">
+	<search aria-label={t('search.panel')} class="search-panel grid min-w-0 gap-3">
+		<form method="GET" action="/search" class="search-form grid gap-3">
 			{#if data.contentType}
 				<input type="hidden" name="type" value={data.contentType} />
 			{/if}
 
-			<div class="search-input-row">
-				<label for="search-page-q" class="visually-hidden">{t('search.termLabel')}</label>
-				<div class="search-input-wrap">
-					<span class="search-input-icon" aria-hidden="true"> </span>
+			<div class="flex gap-2">
+				<label for="search-page-q" class="sr-only">{t('search.termLabel')}</label>
+				<div class="relative flex min-w-0 flex-1 items-center">
+					<SearchIcon
+						class="pointer-events-none absolute start-3 size-4 text-muted-foreground"
+						aria-hidden="true"
+					/>
 					<input
 						id="search-page-q"
 						type="search"
@@ -138,22 +154,27 @@
 						autocapitalize="none"
 						spellcheck={false}
 						enterkeyhint="search"
-						class="input search-input"
+						class="search-input h-11 w-full min-w-0 rounded-lg border border-input bg-card ps-9 pe-3 text-[15px] shadow-xs transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
 					/>
 				</div>
-				<button type="submit" class="btn btn-primary search-submit">{t('search.submit')}</button>
+				<button type="submit" class="search-submit {buttonVariants({ size: 'lg' })} h-11 px-4">
+					{t('search.submit')}
+				</button>
 			</div>
 
 			{#if data.sections.length > 0}
 				<!-- The radios keep their shared name after hydration so they stay one group (F15). -->
-				<fieldset class="scope-fieldset">
-					<legend class="visually-hidden">{t('search.scope')}</legend>
-					<div class="segmented scope-segmented">
-						<label class="seg-item scope-seg" class:is-active={scopeMode === 'all'}>
+				<fieldset class="scope-fieldset m-0 flex min-w-0 flex-wrap items-center gap-2 border-0 p-0">
+					<legend class="sr-only">{t('search.scope')}</legend>
+					<div class="scope-segmented inline-flex rounded-lg bg-muted p-0.5 text-[13px]">
+						<label
+							class="scope-seg relative inline-flex h-8 cursor-pointer items-center rounded-md px-3 font-medium text-muted-foreground transition-colors has-checked:bg-background has-checked:text-foreground has-checked:shadow-xs has-focus-visible:ring-3 has-focus-visible:ring-ring/50 pointer-coarse:h-11"
+						>
 							<input
 								type="radio"
 								name="scope"
 								value="all"
+								class="absolute inset-0 m-0 size-full cursor-pointer opacity-0"
 								checked={scopeMode === 'all'}
 								onchange={() => {
 									scopeMode = 'all';
@@ -161,11 +182,14 @@
 							/>
 							<span>{t('search.scopeAll', { name: instanceName() })}</span>
 						</label>
-						<label class="seg-item scope-seg" class:is-active={scopeMode === 'section'}>
+						<label
+							class="scope-seg relative inline-flex h-8 cursor-pointer items-center rounded-md px-3 font-medium text-muted-foreground transition-colors has-checked:bg-background has-checked:text-foreground has-checked:shadow-xs has-focus-visible:ring-3 has-focus-visible:ring-ring/50 pointer-coarse:h-11"
+						>
 							<input
 								type="radio"
 								name="scope"
 								value="section"
+								class="absolute inset-0 m-0 size-full cursor-pointer opacity-0"
 								checked={scopeMode === 'section'}
 								onchange={() => {
 									scopeMode = 'section';
@@ -177,8 +201,8 @@
 							<span>{t('search.scopeSection')}</span>
 						</label>
 					</div>
-					{#if scopeMode === 'section' || !hydrated}
-						<label for="search-page-section" class="visually-hidden">
+					{#if scopeMode === 'section'}
+						<label for="search-page-section" class="sr-only">
 							{t('search.pickSection')}
 						</label>
 						<select
@@ -189,7 +213,7 @@
 								selectedSectionId = event.currentTarget.value;
 								scopeMode = 'section';
 							}}
-							class="select section-select"
+							class="section-select h-9 rounded-lg border border-input bg-card px-2.5 text-[13px] outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30 pointer-coarse:h-11"
 						>
 							{#each data.sections as section (section.id)}
 								<option value={section.id}>{section.name}</option>
@@ -200,7 +224,7 @@
 			{/if}
 		</form>
 
-		<div class="search-filters-row">
+		<div class="search-filters-row border-t border-hairline pt-3">
 			<FeedFilterBar
 				basePath="/search"
 				activeType={data.contentType}
@@ -210,47 +234,55 @@
 	</search>
 
 	{#if !data.executed}
-		<div class="empty-state-box search-empty">
-			<h2 class="empty-heading">{t('search.emptyHeading')}</h2>
-			<ul class="tips" role="list">
-				<li>{t('search.tipNotes')} <code>{t('search.tipNotesExample')}</code></li>
-				<li>{t('search.tipForms')} <code>{t('search.tipFormsExample')}</code></li>
-				<li>{t('search.tipUrl')} <code>sveltejs/kit</code></li>
-				<li>{t('search.tipQuotes')} <code>"local first" -react</code></li>
+		<div class="search-empty grid gap-4 rounded-xl border border-dashed p-6">
+			<h2 class="text-[15px] font-semibold">{t('search.emptyHeading')}</h2>
+			<ul class="tips grid gap-2 text-[13.5px] text-muted-foreground" role="list">
+				<li>{t('search.tipNotes')} <code class={codeClass}>{t('search.tipNotesExample')}</code></li>
+				<li>{t('search.tipForms')} <code class={codeClass}>{t('search.tipFormsExample')}</code></li>
+				<li>{t('search.tipUrl')} <code class={codeClass}>sveltejs/kit</code></li>
+				<li>{t('search.tipQuotes')} <code class={codeClass}>"local first" -react</code></li>
 			</ul>
-			<p class="kbd-hint-line kbd-hint">
+			<p class="kbd-hint inline-flex items-center gap-1.5 text-[12.5px] text-muted-foreground">
+				<Kbd>/</Kbd>
 				{t('search.slashHint')}
 			</p>
 		</div>
 	{:else if data.items.length === 0}
-		<div class="empty-state-box search-empty" role="status">
-			<h2 class="empty-heading">{t('search.noResults')}</h2>
-			<p class="empty-desc">
+		<div
+			class="search-empty grid justify-items-start gap-3 rounded-xl border border-dashed p-6"
+			role="status"
+		>
+			<SearchX class="size-5 text-muted-foreground" aria-hidden="true" />
+			<h2 class="text-[15px] font-semibold">{t('search.noResults')}</h2>
+			<p class="text-[14px] text-muted-foreground">
 				{activeSectionObj
 					? t('search.noMatchInSection', { query: data.query, section: activeSectionObj.name })
 					: t('search.noMatch', { query: data.query })}
 			</p>
-			<ul class="tips" role="list">
+			<ul class="tips grid list-disc gap-1.5 ps-5 text-[13.5px] text-muted-foreground" role="list">
 				<li>{t('search.tipShorter')}</li>
 				<li>{t('search.tipOwnerRepo')}</li>
 			</ul>
 			{#if activeSectionObj || data.contentType}
-				<p>
-					<a
-						href={buildSearchUrl({ q: data.query, sectionId: null, type: null })}
-						class="btn btn-subtle btn-sm"
-					>
-						{t('search.searchAllUnfiltered', { name: instanceName() })}
-					</a>
-				</p>
+				<a
+					href={buildSearchUrl({ q: data.query, sectionId: null, type: null })}
+					class={buttonVariants({ variant: 'outline', size: 'sm' })}
+				>
+					{t('search.searchAllUnfiltered', { name: instanceName() })}
+				</a>
 			{/if}
 		</div>
 	{:else}
-		<p class="search-summary" role="status">
-			<strong>{formatNumber(data.totalCount)}</strong>
-			{t('search.resultsFound', { count: data.totalCount })}
+		<p
+			class="search-summary flex flex-wrap items-baseline gap-x-1.5 border-b border-hairline pb-3 text-[13px] text-muted-foreground tabular-nums"
+			role="status"
+		>
+			<span>
+				<strong class="font-semibold text-foreground">{formatNumber(data.totalCount)}</strong>
+				{t('search.resultsFound', { count: data.totalCount })}
+			</span>
 			{#if pageCount > 1}<span class="range">
-					{t('search.range', { from: firstShown, to: lastShown })}
+					· {t('search.range', { from: firstShown, to: lastShown })}
 				</span>{/if}
 			<span class="range">
 				·
@@ -260,7 +292,7 @@
 			</span>
 		</p>
 
-		<ul class="feed-list search-results" role="list">
+		<ul class="feed-list search-results grid gap-3" role="list">
 			{#each data.items as item, index (item.id)}
 				<li>
 					<PostCard
@@ -278,208 +310,38 @@
 		</ul>
 
 		{#if pageCount > 1}
-			<nav class="pagination-bar" aria-label={t('search.pagination')}>
+			<nav
+				class="pagination-bar flex flex-wrap items-center justify-between gap-3 border-t border-hairline pt-4"
+				aria-label={t('search.pagination')}
+			>
 				{#if currentPage > 1}
-					<a href={pageHref(currentPage - 1)} class="btn btn-subtle btn-sm" rel="prev">
+					<a
+						href={pageHref(currentPage - 1)}
+						class={buttonVariants({ variant: 'outline', size: 'sm' })}
+						rel="prev"
+					>
+						<ChevronLeft aria-hidden="true" />
 						{t('common.prevPage')}
 					</a>
+				{:else}
+					<span></span>
 				{/if}
-				<span class="page-status">
+				<span class="page-status text-[12.5px] text-muted-foreground tabular-nums">
 					{t('common.pageOf', { page: currentPage, pages: pageCount })}
 				</span>
 				{#if currentPage < pageCount}
-					<a href={pageHref(currentPage + 1)} class="btn btn-subtle btn-sm" rel="next">
+					<a
+						href={pageHref(currentPage + 1)}
+						class={buttonVariants({ variant: 'outline', size: 'sm' })}
+						rel="next"
+					>
 						{t('common.nextPage')}
+						<ChevronRight aria-hidden="true" />
 					</a>
+				{:else}
+					<span></span>
 				{/if}
 			</nav>
 		{/if}
 	{/if}
 </section>
-
-<style>
-	.search-page {
-		display: grid;
-		gap: var(--space-5);
-		max-inline-size: var(--read-w);
-	}
-
-	.page-header {
-		display: grid;
-		gap: var(--space-1);
-	}
-
-	.page-header h1 {
-		font: var(--k-text-display);
-		letter-spacing: -0.02em;
-		color: var(--k-color-text);
-	}
-
-	.page-subtitle {
-		font: var(--k-text-ui);
-		font-weight: 400;
-		color: var(--k-color-text-muted);
-	}
-
-	.search-panel {
-		display: grid;
-		gap: var(--space-3);
-		min-inline-size: 0;
-	}
-
-	.search-form {
-		display: grid;
-		gap: var(--space-3);
-	}
-
-	.search-input-row {
-		display: flex;
-		gap: var(--space-2);
-	}
-
-	.search-input-wrap {
-		position: relative;
-		flex: 1;
-		min-inline-size: 0;
-		display: flex;
-		align-items: center;
-	}
-
-	.search-input-icon {
-		position: absolute;
-		inset-inline-start: 12px;
-		display: inline-flex;
-		color: var(--k-color-text-muted);
-		pointer-events: none;
-	}
-
-	.search-input {
-		min-block-size: 42px;
-		padding-inline-start: 38px;
-	}
-
-	.search-submit {
-		min-block-size: 42px;
-	}
-
-	.scope-fieldset {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: var(--space-2);
-		margin: 0;
-		padding: 0;
-		border: 0;
-		min-inline-size: 0;
-	}
-
-	.scope-seg {
-		position: relative;
-		min-block-size: 30px;
-	}
-
-	.scope-seg input {
-		/* Transparent radio covering the whole segment: receives direct clicks and check() reliably. */
-		position: absolute;
-		inset: 0;
-		inline-size: 100%;
-		block-size: 100%;
-		margin: 0;
-		opacity: 0;
-		cursor: pointer;
-	}
-
-	.section-select {
-		inline-size: auto;
-		min-block-size: 36px;
-		padding-block: 0;
-		font: var(--k-text-ui);
-	}
-
-	.search-filters-row {
-		padding-block-start: var(--space-2);
-		border-block-start: 1px solid var(--k-color-line);
-	}
-
-	@media (pointer: coarse) {
-		.scope-seg,
-		.section-select {
-			min-block-size: 44px;
-		}
-	}
-
-	/* Strict serif boundary: empty-state h2 stays --font-sans (--k-text-section). */
-	.empty-heading {
-		font: var(--k-text-section);
-		color: var(--k-color-text);
-	}
-
-	.empty-desc {
-		color: var(--k-color-text-secondary);
-	}
-
-	.tips {
-		display: grid;
-		gap: var(--space-2);
-		margin: 0;
-		padding-inline-start: var(--space-5);
-		font: var(--k-text-hint);
-		color: var(--k-color-text-secondary);
-	}
-
-	.tips code {
-		padding: 1px 6px;
-		font-family: var(--font-mono);
-		font-size: 0.875em;
-		color: var(--k-color-text);
-		background: var(--k-color-surface-2);
-		border: 1px solid var(--k-color-line);
-		border-radius: var(--k-radius-xs);
-	}
-
-	.kbd-hint-line {
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-		font: var(--k-text-hint);
-		color: var(--k-color-text-muted);
-	}
-
-	.search-summary {
-		font: var(--k-text-meta);
-		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-muted);
-		padding-block-end: var(--space-3);
-		border-block-end: 1px solid var(--k-color-line);
-	}
-
-	.search-summary strong {
-		color: var(--k-color-text);
-		font-weight: 600;
-	}
-
-	.search-results {
-		gap: var(--space-3);
-	}
-
-	.pagination-bar {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: var(--space-3);
-		padding-block: var(--space-4);
-		border-block-start: 1px solid var(--k-color-line);
-	}
-
-	.page-status {
-		font: var(--k-text-meta);
-		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-muted);
-	}
-
-	@media (forced-colors: active) {
-		.search-panel {
-			box-shadow: none;
-		}
-	}
-</style>
