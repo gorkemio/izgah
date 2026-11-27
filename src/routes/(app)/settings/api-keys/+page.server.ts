@@ -12,7 +12,7 @@ import { setHeadersOnce } from '#lib/server/http/headers.ts';
 import type { Actions, PageServerLoad } from './$types';
 import { t } from '#lib/i18n/index.ts';
 
-export const load: PageServerLoad = async ({ locals, request, setHeaders, url }) => {
+export const load: PageServerLoad = async ({ locals, request, setHeaders }) => {
 	setHeadersOnce({ request, setHeaders }, { 'Cache-Control': 'no-store' });
 
 	if (!locals.user || !locals.session) {
@@ -24,9 +24,7 @@ export const load: PageServerLoad = async ({ locals, request, setHeaders, url })
 	return {
 		user: locals.user,
 		apiKeys,
-		maxKeys: MAX_ACTIVE_API_KEYS_PER_USER,
-		// No-JS revoke confirmation (`?revoke=<id>`), mirroring the share `?delete=` fallback.
-		revokeKeyId: url.searchParams.get('revoke')
+		maxKeys: MAX_ACTIVE_API_KEYS_PER_USER
 	};
 };
 

@@ -1,15 +1,14 @@
 <script lang="ts">
 	import { cssText, t } from '#lib/i18n/index.ts';
 	import { pageTitle } from '#lib/instance.ts';
-	import { flushSync, onMount, untrack } from 'svelte';
+	import { flushSync, untrack } from 'svelte';
 	import { applyAction, enhance } from '$app/forms';
 	import type { AdminSectionItem } from '#lib/server/admin/service.ts';
-	import Dialog from '#lib/components/legacy/Dialog.svelte';
+	import Dialog from '#lib/components/platform/Dialog.svelte';
 	import type { ActionData, PageData } from './$types';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
-	let hydrated = $state(false);
 	let busy = $state(false);
 
 	let createName = $state('');
@@ -61,10 +60,6 @@
 	let deleteTarget = $state<AdminSectionItem | null>(null);
 	let deleteOpener = $state<HTMLElement | null>(null);
 	let moveTargetSectionId = $state('');
-
-	onMount(() => {
-		hydrated = true;
-	});
 
 	$effect(() => {
 		if (data.sections !== lastSyncedDataRef) {
@@ -228,36 +223,6 @@
 	const alternativeSections = $derived(
 		orderedSections.filter((section) => section.id !== deleteTarget?.id)
 	);
-
-	const editFallback = $derived(
-		data.editSectionId ? (data.sections.find((s) => s.id === data.editSectionId) ?? null) : null
-	);
-	const deleteFallback = $derived(
-		data.deleteSectionId ? (data.sections.find((s) => s.id === data.deleteSectionId) ?? null) : null
-	);
-	const deleteFallbackAlternatives = $derived(
-		data.sections.filter((section) => section.id !== deleteFallback?.id)
-	);
-
-	let handledFallbackParams = false;
-	$effect(() => {
-		// `?edit=` / `?delete=` URLs opened with JS show the regular dialogs.
-		if (!hydrated || handledFallbackParams) {
-			return;
-		}
-		handledFallbackParams = true;
-		if (editFallback) {
-			editTarget = editFallback;
-			editName = editFallback.name;
-			editSlug = editFallback.slug;
-			editDescription = editFallback.description ?? '';
-			editDialogOpen = true;
-		} else if (deleteFallback) {
-			deleteTarget = deleteFallback;
-			moveTargetSectionId = deleteFallbackAlternatives[0]?.id ?? '';
-			deleteDialogOpen = true;
-		}
-	});
 </script>
 
 <svelte:head>
@@ -286,107 +251,6 @@
 		<div class="banner banner-error" role="alert">
 			<span>{form.error}</span>
 		</div>
-	{/if}
-
-	{#if !hydrated && editFallback}
-		<section class="panel" aria-labelledby="edit-fallback-heading">
-			<h2 id="edit-fallback-heading">
-				{t('sectionsAdmin.editNamed', { name: editFallback.name })}
-			</h2>
-			<form method="POST" action="?/update" class="dialog-form">
-				<input type="hidden" name="sectionId" value={editFallback.id} />
-				<div class="field">
-					<label for="fallback-section-name">{t('sectionsAdmin.name')}</label>
-					<input
-						id="fallback-section-name"
-						name="name"
-						type="text"
-						required
-						maxlength="80"
-						value={editFallback.name}
-					/>
-				</div>
-				<div class="field">
-					<label for="fallback-section-slug">{t('sectionsAdmin.slug')}</label>
-					<input
-						id="fallback-section-slug"
-						name="slug"
-						type="text"
-						required
-						maxlength="64"
-						autocapitalize="none"
-						spellcheck={false}
-						value={editFallback.slug}
-					/>
-				</div>
-				<div class="field">
-					<label for="fallback-section-description">{t('sectionsAdmin.description')}</label>
-					<input
-						id="fallback-section-description"
-						name="description"
-						type="text"
-						maxlength="280"
-						value={editFallback.description ?? ''}
-					/>
-				</div>
-				<div class="dialog-footer">
-					<a href="/admin/sections" class="btn btn-outline">{t('common.cancel')}</a>
-					<button type="submit" class="btn btn-primary">{t('share.saveChanges')}</button>
-				</div>
-			</form>
-		</section>
-	{/if}
-
-	{#if !hydrated && deleteFallback}
-		<section class="panel" aria-labelledby="delete-fallback-heading">
-			<h2 id="delete-fallback-heading">
-				{t('sectionsAdmin.deleteNamed', { name: deleteFallback.name })}
-			</h2>
-			{#if deleteFallback.exclusiveSilentShareCount > 0}
-				<div class="conflict-box" role="alert">
-					<p>
-						{t('sectionsAdmin.exclusiveFallback', {
-							count: deleteFallback.exclusiveSilentShareCount
-						})}
-					</p>
-					{#if deleteFallbackAlternatives.length > 0}
-						<form method="POST" action="?/resolveSilentShares" class="resolve-form">
-							<input type="hidden" name="sourceSectionId" value={deleteFallback.id} />
-							<input type="hidden" name="mode" value="move" />
-							<div class="field">
-								<label for="fallback-resolve-target">{t('sectionsAdmin.target')}</label>
-								<select id="fallback-resolve-target" name="targetSectionId">
-									{#each deleteFallbackAlternatives as alt (alt.id)}
-										<option value={alt.id}>{alt.name}</option>
-									{/each}
-								</select>
-							</div>
-							<button type="submit" class="btn btn-outline">{t('sectionsAdmin.moveSilent')}</button>
-						</form>
-					{/if}
-					<form method="POST" action="?/resolveSilentShares" class="resolve-form">
-						<input type="hidden" name="sourceSectionId" value={deleteFallback.id} />
-						<input type="hidden" name="mode" value="publish" />
-						<button type="submit" class="btn btn-outline">{t('sectionsAdmin.publish')}</button>
-					</form>
-				</div>
-			{:else}
-				<p class="dialog-desc">
-					{t('sectionsAdmin.deleteEffect')}
-				</p>
-			{/if}
-			<form method="POST" action="?/delete" class="dialog-footer">
-				<input type="hidden" name="sectionId" value={deleteFallback.id} />
-				<a href="/admin/sections" class="btn btn-outline">{t('common.cancel')}</a>
-				<button
-					type="submit"
-					class="btn btn-danger"
-					disabled={deleteFallback.exclusiveSilentShareCount > 0}
-				>
-					{t('sectionsAdmin.deleteConfirm')}
-				</button>
-			</form>
-		</section>
 	{/if}
 
 	<section class="panel" aria-labelledby="create-section-heading">
@@ -562,8 +426,7 @@
 											<button
 												type="submit"
 												class="btn btn-subtle btn-sm"
-												disabled={!hydrated ? atTop : undefined}
-												aria-disabled={hydrated && atTop ? 'true' : undefined}
+												aria-disabled={atTop ? 'true' : undefined}
 												onclick={(e) => {
 													if (atTop) {
 														e.preventDefault();
@@ -611,8 +474,7 @@
 											<button
 												type="submit"
 												class="btn btn-subtle btn-sm"
-												disabled={!hydrated ? atBottom : undefined}
-												aria-disabled={hydrated && atBottom ? 'true' : undefined}
+												aria-disabled={atBottom ? 'true' : undefined}
 												onclick={(e) => {
 													if (atBottom) {
 														e.preventDefault();
@@ -629,33 +491,21 @@
 								</td>
 								<td>
 									<div class="row-actions">
-										{#if hydrated}
-											<button
-												type="button"
-												class="btn btn-ghost btn-sm"
-												onclick={(event) => openEditDialog(section, event)}
-											>
-												{t('common.edit')} <span class="visually-hidden">({section.name})</span>
-											</button>
+										<button
+											type="button"
+											class="btn btn-ghost btn-sm"
+											onclick={(event) => openEditDialog(section, event)}
+										>
+											{t('common.edit')} <span class="visually-hidden">({section.name})</span>
+										</button>
 
-											<button
-												type="button"
-												class="btn btn-danger-soft btn-sm"
-												onclick={(event) => openDeleteDialog(section, event)}
-											>
-												{t('common.delete')} <span class="visually-hidden">({section.name})</span>
-											</button>
-										{:else}
-											<a href="?edit={encodeURIComponent(section.id)}" class="btn btn-ghost btn-sm">
-												{t('common.edit')} <span class="visually-hidden">({section.name})</span>
-											</a>
-											<a
-												href="?delete={encodeURIComponent(section.id)}"
-												class="btn btn-danger-soft btn-sm"
-											>
-												{t('common.delete')} <span class="visually-hidden">({section.name})</span>
-											</a>
-										{/if}
+										<button
+											type="button"
+											class="btn btn-danger-soft btn-sm"
+											onclick={(event) => openDeleteDialog(section, event)}
+										>
+											{t('common.delete')} <span class="visually-hidden">({section.name})</span>
+										</button>
 									</div>
 								</td>
 							</tr>

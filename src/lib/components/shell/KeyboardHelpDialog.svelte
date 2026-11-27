@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { t } from '#lib/i18n/index.ts';
-	import Dialog from '#lib/components/legacy/Dialog.svelte';
+	import Dialog from '#lib/components/platform/Dialog.svelte';
 	import type { ShortcutPreference } from '#lib/client/shortcuts.svelte.ts';
 
 	interface Props {

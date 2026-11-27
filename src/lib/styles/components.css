@@ -400,27 +400,6 @@
 		box-decoration-break: clone;
 	}
 
-	/* Skeleton: a still placeholder; Künye moves only colour and the list → detail View Transition. */
-	.skeleton {
-		display: block;
-		background: var(--muted);
-		border-radius: 4px;
-	}
-
-	.skeleton-line {
-		block-size: 0.875rem;
-		margin-block: var(--space-1);
-	}
-
-	.skeleton-thumb {
-		aspect-ratio: 1200 / 630;
-		border-radius: 6px;
-	}
-
-	.skeleton-circle {
-		border-radius: 9999px;
-	}
-
 	/* Feed structure ------------------------------------------------------ */
 	.day-heading {
 		position: sticky;
@@ -725,10 +704,6 @@
 			appearance: auto;
 			background-image: none;
 			padding-inline-end: var(--space-6);
-		}
-
-		.skeleton {
-			border: 1px solid CanvasText;
 		}
 
 		.empty-state-box {

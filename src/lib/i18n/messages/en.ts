@@ -339,7 +339,6 @@ export const en = {
 	'comment.countLabel': '{count, plural, one {# comment} other {# comments}} — {title}',
 	'comment.deleteBy': 'Delete {name}’s comment ({index})',
 	'comment.deleteConfirm': 'Are you sure you want to delete the comment written by {name}?',
-	'comment.deleteConfirmShort': 'Are you sure you want to delete this comment?',
 	'comment.deleteFailed': 'The comment could not be deleted.',
 	'comment.deleteTitle': 'Delete comment',
 	'comment.deleteUnexpected': 'Something went wrong while deleting the comment.',
@@ -765,22 +764,16 @@ export const en = {
 	'sectionsAdmin.colSection': 'Section',
 	'sectionsAdmin.create': 'Add a new section',
 	'sectionsAdmin.deleteConfirm': 'Yes, delete the section',
-	'sectionsAdmin.deleteEffect':
-		'Deleting removes the section from its shares; shares with no other section move to Unassigned.',
 	'sectionsAdmin.deleteEffectNamed':
 		'When {name} is deleted, it is removed from its feed shares; shares that belonged only to this section move to Unassigned.',
-	'sectionsAdmin.deleteNamed': 'Delete section: {name}',
 	'sectionsAdmin.deleteTitle': 'Delete section',
 	'sectionsAdmin.description': 'Description',
 	'sectionsAdmin.descriptionOptional': 'Description (optional)',
 	'sectionsAdmin.descriptionPlaceholder': 'What kind of links belong in this section',
 	'sectionsAdmin.down': 'Down',
-	'sectionsAdmin.editNamed': 'Edit section: {name}',
 	'sectionsAdmin.editTitle': 'Edit section',
 	'sectionsAdmin.exclusiveDialog':
 		'{count, plural, one {# silent share} other {# silent shares}} in {name} belong only to this section. Move them to another section or make them visible in the feed before deleting the section.',
-	'sectionsAdmin.exclusiveFallback':
-		'{count, plural, one {# silent share} other {# silent shares}} belong only to this section. Move them to another section or make them visible in the feed before deleting.',
 	'sectionsAdmin.lead':
 		'Add team topic sections, edit their names and URL slugs, reorder them or delete them safely.',
 	'sectionsAdmin.moveSilent': 'Move silent shares',
@@ -990,8 +983,6 @@ export const en = {
 	'users.disableConfirm': 'Yes, deactivate',
 	'users.disableDialog':
 		'When {name} ({email}) is deactivated, their web sessions and all personal API keys stop working immediately. Links and comments they shared stay in the archive.',
-	'users.disableFallback':
-		'When {name} ({email}) is deactivated, their web sessions and all personal API keys stop working immediately. Their posts and comments stay in the archive.',
 	'users.disableTitle': 'Deactivate member',
 	'users.disabledAt': 'Deactivated ({date})',
 	'users.disabling': 'Deactivating…',
@@ -1000,7 +991,6 @@ export const en = {
 		'A one-time invite link is created for the new member and shown only once on this screen.',
 	'users.inviteLinkTitle': 'One-time invite link',
 	'users.inviteTitle': 'Invite a new member',
-	'users.issuedFor': 'Created for {name} ({email}). Valid until:',
 	'users.kpiAccounts': '{count, plural, one {# registered account} other {# registered accounts}}',
 	'users.kpiActive': 'Active members',
 	'users.kpiAdmins': '{count, plural, one {# admin} other {# admins}}',

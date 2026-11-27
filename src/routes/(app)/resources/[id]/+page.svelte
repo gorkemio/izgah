@@ -8,7 +8,7 @@
 	import { untrack } from 'svelte';
 	import PostCard from '#lib/components/feed/PostCard.svelte';
 	import ResourceHero from '#lib/components/resource/ResourceHero.svelte';
-	import Dialog from '#lib/components/legacy/Dialog.svelte';
+	import Dialog from '#lib/components/platform/Dialog.svelte';
 	import MemberAvatar from '#lib/components/member/MemberAvatar.svelte';
 	import { buttonVariants } from '#lib/components/ui/button/index.ts';
 	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
