@@ -557,6 +557,12 @@ kbd {
 	object-position: center top;
 }
 
+/* The extension popup, cut off at the tile's foot like the phone. */
+.tile-shot.is-popup {
+	min-height: 380px;
+	border-radius: 12px 12px 0 0;
+}
+
 @media (max-width: 900px) {
 	.bento {
 		grid-template-columns: minmax(0, 1fr);
@@ -930,19 +936,6 @@ kbd {
 	background: var(--accent);
 }
 
-.mini-keys {
-	display: flex;
-	gap: 6px;
-}
-
-.mini-keys kbd {
-	min-width: 44px;
-	padding: 6px 10px;
-	border-radius: 8px;
-	font-size: 0.95rem;
-}
-
-.mini-chips,
 .mini-suggest {
 	display: flex;
 	flex-wrap: wrap;
@@ -951,7 +944,6 @@ kbd {
 	margin-top: 14px;
 }
 
-.mini-chips li,
 .mini-suggest span {
 	padding: 3px 10px;
 	border: 1px solid var(--line);
