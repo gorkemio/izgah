@@ -3,6 +3,8 @@
 	*::before,
 	*::after {
 		box-sizing: border-box;
+		/* shadcn-svelte's `border` utility expects the theme border colour, not currentColor. */
+		border-color: var(--border);
 	}
 
 	html {

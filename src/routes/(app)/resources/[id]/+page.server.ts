@@ -58,7 +58,7 @@ async function loadVisibleAiSummary(resourceId: string): Promise<string | null> 
 	return row?.summary ?? null;
 }
 
-export const load: PageServerLoad = async ({ depends, locals, params, url }) => {
+export const load: PageServerLoad = async ({ depends, locals, params }) => {
 	depends('app:feed');
 
 	if (!locals.user) {
@@ -76,9 +76,7 @@ export const load: PageServerLoad = async ({ depends, locals, params, url }) => 
 
 	return {
 		...discussion,
-		aiSummary: await loadVisibleAiSummary(params.id),
-		editCommentId: url.searchParams.get('editComment') || null,
-		deleteCommentId: url.searchParams.get('deleteComment') || null
+		aiSummary: await loadVisibleAiSummary(params.id)
 	};
 };
 

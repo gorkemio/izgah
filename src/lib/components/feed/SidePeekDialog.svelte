@@ -4,7 +4,16 @@
 	import { MediaQuery } from 'svelte/reactivity';
 	import { watchImageError } from '#lib/client/image-error.ts';
 	import { toasts } from '#lib/client/toast.svelte.ts';
-	import Skeleton from '#lib/components/legacy/Skeleton.svelte';
+	import MemberAvatar from '#lib/components/member/MemberAvatar.svelte';
+	import { buttonVariants } from '#lib/components/ui/button/index.ts';
+	import { Skeleton } from '#lib/components/ui/skeleton/index.ts';
+	import Copy from '@lucide/svelte/icons/copy';
+	import ExternalLink from '@lucide/svelte/icons/external-link';
+	import Heart from '@lucide/svelte/icons/heart';
+	import Maximize2 from '@lucide/svelte/icons/maximize-2';
+	import MessageCircle from '@lucide/svelte/icons/message-circle';
+	import Sparkles from '@lucide/svelte/icons/sparkles';
+	import X from '@lucide/svelte/icons/x';
 	import { formatWhen } from '#lib/format/date.ts';
 	import type { ContentType, ProviderMeta, UnfurlStatus } from '#lib/types/domain.ts';
 	import { resourceFacts } from '#lib/format/kunye.ts';
@@ -17,6 +26,7 @@
 		author: {
 			id: string;
 			name: string;
+			avatarAssetKey?: string | null;
 		};
 		sections: Array<{
 			id: string;
@@ -32,6 +42,7 @@
 		author: {
 			id: string;
 			name: string;
+			avatarAssetKey?: string | null;
 		};
 	}
 
@@ -49,6 +60,7 @@
 			thumbnailAssetKey: string | null;
 			thumbnailWidth: number | null;
 			thumbnailHeight: number | null;
+			siteIconAssetKey?: string | null;
 			likeCount: number;
 			commentCount: number;
 			likedByViewer: boolean;
@@ -246,42 +258,49 @@
 
 <dialog
 	bind:this={dialogEl}
-	class="side-peek-dialog"
+	class="side-peek-dialog bg-background text-foreground"
 	class:is-docked={docked}
 	closedby={docked ? 'none' : 'any'}
 	aria-labelledby={titleId}
 	onclose={handleClose}
 >
 	{#if item && resource}
-		<header class="peek-header">
-			<div class="peek-header-actions">
-				<a href="/resources/{resource.id}" class="peek-full-link">{t('peek.openFull')}</a>
-				<!-- The docked pane keeps focus in the register; the modal drawer takes it. -->
-				<!-- svelte-ignore a11y_autofocus -->
-				<button
-					type="button"
-					class="peek-close"
-					aria-label={t('peek.close')}
-					autofocus={!wide.current}
-					onclick={() => dialogEl?.close('close')}
-				>
-					{t('common.close')}
-				</button>
-			</div>
+		<header class="flex items-center justify-end gap-1 border-b border-hairline px-3 py-2">
+			<a
+				href="/resources/{resource.id}"
+				class="peek-full-link {buttonVariants({ variant: 'ghost', size: 'sm' })}"
+			>
+				<Maximize2 aria-hidden="true" />
+				{t('peek.openFull')}
+			</a>
+			<!-- The docked pane keeps focus in the register; the modal drawer takes it. -->
+			<!-- svelte-ignore a11y_autofocus -->
+			<button
+				type="button"
+				class="peek-close {buttonVariants({ variant: 'ghost', size: 'icon-sm' })}"
+				aria-label={t('peek.close')}
+				autofocus={!wide.current}
+				onclick={() => dialogEl?.close('close')}
+			>
+				<X aria-hidden="true" />
+			</button>
 		</header>
 
-		<div class="peek-body">
-			<!-- Same catalogue order as the resource page (izgah-ui-v4 §5). -->
-			<section class="peek-hero" class:has-cover={showThumbnail && resource.thumbnailAssetKey}>
-				<div class="peek-head">
-					<h2 id={titleId} class="peek-title">{displayTitle}</h2>
-					<p class="peek-kunye">{resourceFacts(resource).join(' · ')}</p>
-				</div>
+		<div class="peek-body grid content-start gap-6 overflow-y-auto overscroll-contain p-5">
+			<!-- Same order as the resource hero (izgah-ui-v5.md §5.3). -->
+			<section class="grid gap-3.5">
+				<p class="flex min-w-0 items-center gap-2 text-[12.5px] text-muted-foreground">
+					<span class="min-w-0 truncate tabular-nums">{resourceFacts(resource).join(' · ')}</span>
+				</p>
+				<h2 id={titleId} class="peek-title text-xl leading-snug font-semibold tracking-[-0.015em]">
+					{displayTitle}
+				</h2>
 
 				{#if showThumbnail && resource.thumbnailAssetKey}
-					<div class="peek-cover">
+					<div class="aspect-[1200/630] overflow-hidden rounded-lg bg-muted ring-1 ring-hairline">
 						<img
 							bind:this={coverImgEl}
+							class="size-full object-cover"
 							src="/media/thumbnails/{encodeURIComponent(resource.thumbnailAssetKey)}"
 							alt=""
 							width={resource.thumbnailWidth ?? 1200}
@@ -292,125 +311,205 @@
 				{/if}
 
 				{#if resource.description}
-					<p class="peek-desc">{resource.description}</p>
+					<p class="text-[14px] leading-relaxed text-muted-foreground">{resource.description}</p>
 				{/if}
 
 				{#if detail?.aiSummary}
-					<div class="ai-summary">
-						<span class="ai-summary-label">{t('resource.aiSummary')}</span>
-						<p>{detail.aiSummary}</p>
+					<div class="ai-summary grid gap-1.5 rounded-lg border border-hairline bg-muted/50 p-3">
+						<span
+							class="inline-flex items-center gap-1.5 text-[11.5px] font-medium tracking-wide text-muted-foreground uppercase"
+						>
+							<Sparkles class="size-3.5" aria-hidden="true" />
+							{t('resource.aiSummary')}
+						</span>
+						<p class="text-[13.5px] leading-relaxed">{detail.aiSummary}</p>
 					</div>
 				{/if}
 
-				<div class="peek-cta-row">
+				<div class="flex flex-wrap items-center gap-2">
 					<a
 						href={item.rawUrl}
 						target="_blank"
 						rel="noopener noreferrer"
-						class="btn btn-primary btn-sm"
+						class={buttonVariants({ size: 'sm' })}
 					>
+						<ExternalLink aria-hidden="true" />
 						{t('resource.visit')}
 					</a>
 					<button
 						type="button"
-						class="btn btn-outline btn-sm"
+						class={buttonVariants({ variant: 'outline', size: 'sm' })}
 						aria-label={t('link.copyLabel', { title: displayTitle })}
 						onclick={copyUrl}
 					>
+						<Copy aria-hidden="true" />
 						{t('share.copyShort')}
 					</button>
-					<div class="peek-stats">
-						<span>{t('common.likeCount', { count: resource.likeCount })}</span>
-						<span aria-hidden="true">·</span>
-						<span>{t('common.commentCount', { count: resource.commentCount })}</span>
+					<div
+						class="ms-auto inline-flex items-center gap-3 text-[12.5px] text-muted-foreground tabular-nums"
+					>
+						<span
+							class="inline-flex items-center gap-1"
+							title={t('common.likeCount', { count: resource.likeCount })}
+						>
+							<Heart class="size-3.5" aria-hidden="true" />
+							<span class="sr-only">{t('common.likeCount', { count: resource.likeCount })}</span>
+							<span aria-hidden="true">{resource.likeCount}</span>
+						</span>
+						<span
+							class="inline-flex items-center gap-1"
+							title={t('common.commentCount', { count: resource.commentCount })}
+						>
+							<MessageCircle class="size-3.5" aria-hidden="true" />
+							<span class="sr-only">
+								{t('common.commentCount', { count: resource.commentCount })}
+							</span>
+							<span aria-hidden="true">{resource.commentCount}</span>
+						</span>
 					</div>
 				</div>
 			</section>
 
 			{#if status === 'loading'}
-				<div class="peek-section" aria-busy="true" aria-label={t('peek.loading')}>
-					<p class="peek-section-title">{t('resource.shareHistory')}</p>
-					<Skeleton variant="line" lines={3} />
+				<div
+					class="grid gap-3 border-t border-hairline pt-5"
+					aria-busy="true"
+					aria-label={t('peek.loading')}
+				>
+					<p class="text-[13px] font-medium">{t('resource.shareHistory')}</p>
+					<Skeleton class="h-3.5 w-full" />
+					<Skeleton class="h-3.5 w-4/5" />
+					<Skeleton class="h-3.5 w-3/5" />
 				</div>
-				<div class="peek-section" aria-busy="true">
-					<p class="peek-section-title">{t('peek.recentComments')}</p>
-					<Skeleton variant="line" lines={3} />
+				<div class="grid gap-3 border-t border-hairline pt-5" aria-busy="true">
+					<p class="text-[13px] font-medium">{t('peek.recentComments')}</p>
+					<Skeleton class="h-3.5 w-full" />
+					<Skeleton class="h-3.5 w-2/3" />
 				</div>
 			{:else if status === 'error'}
-				<div class="peek-error" role="alert">
+				<div
+					class="grid justify-items-start gap-3 rounded-lg border border-destructive/40 bg-destructive/5 p-3 text-[13.5px] text-destructive"
+					role="alert"
+				>
 					<p>{errorMessage}</p>
-					<a href="/resources/{resource.id}" class="btn btn-outline btn-sm">
+					<a
+						href="/resources/{resource.id}"
+						class={buttonVariants({ variant: 'outline', size: 'sm' })}
+					>
 						{t('peek.openFullArrow')}
 					</a>
 				</div>
 			{:else if status === 'ready' && detail}
-				<section class="peek-section" aria-labelledby="peek-shares-heading">
-					<div class="peek-section-head">
-						<h3 id="peek-shares-heading" class="peek-section-title">
-							{t('resource.shareHistoryCount', { count: detail.shares.length })}
-						</h3>
-					</div>
+				<section
+					class="grid gap-3 border-t border-hairline pt-5"
+					aria-labelledby="peek-shares-heading"
+				>
+					<h3 id="peek-shares-heading" class="text-[13px] font-medium">
+						{t('resource.shareHistoryCount', { count: detail.shares.length })}
+					</h3>
 
 					{#if detail.originalShareDeleted}
-						<p class="peek-muted-note">{t('peek.originalDeleted')}</p>
+						<p class="text-[12.5px] text-muted-foreground">{t('peek.originalDeleted')}</p>
 					{/if}
 
-					<ol class="peek-timeline" role="list">
+					<ol class="grid gap-4" role="list">
 						{#each detail.shares as share (share.id)}
-							<li class="peek-timeline-item">
-								<div class="peek-row-head">
-									<strong class="peek-author">{share.author.name}</strong>
-									<time class="peek-time" datetime={share.createdAt}>
-										{formatWhen(share.createdAt)}
-									</time>
+							<li class="flex gap-2.5">
+								<MemberAvatar
+									id={share.author.id}
+									name={share.author.name}
+									avatarAssetKey={share.author.avatarAssetKey}
+									class="size-6 text-[10px]"
+								/>
+								<div class="grid min-w-0 flex-1 gap-1">
+									<p class="flex flex-wrap items-baseline gap-x-2 text-[13px]">
+										<strong class="font-medium">{share.author.name}</strong>
+										<time
+											class="text-[12px] text-muted-foreground tabular-nums"
+											datetime={share.createdAt}
+										>
+											{formatWhen(share.createdAt)}
+										</time>
+									</p>
+									{#if share.note}
+										<p
+											class="text-[13.5px] leading-relaxed [overflow-wrap:anywhere] whitespace-pre-line"
+										>
+											{share.note}
+										</p>
+									{/if}
+									{#if share.sections.length > 0}
+										<div class="flex flex-wrap gap-1.5">
+											{#each share.sections as section (section.id)}
+												<a
+													href="/sections/{section.slug}"
+													class="rounded-full border border-hairline px-2 py-0.5 text-[12px] text-muted-foreground no-underline hover:bg-accent hover:text-foreground"
+												>
+													{section.name}
+												</a>
+											{/each}
+										</div>
+									{/if}
 								</div>
-								{#if share.note}
-									<p class="peek-note">{share.note}</p>
-								{/if}
-								{#if share.sections.length > 0}
-									<div class="peek-tags">
-										{#each share.sections as section (section.id)}
-											<a href="/sections/{section.slug}" class="tag">{section.name}</a>
-										{/each}
-									</div>
-								{/if}
 							</li>
 						{/each}
 					</ol>
 				</section>
 
-				<section class="peek-section" aria-labelledby="peek-comments-heading">
-					<div class="peek-section-head">
-						<h3 id="peek-comments-heading" class="peek-section-title">
+				<section
+					class="grid gap-3 border-t border-hairline pt-5"
+					aria-labelledby="peek-comments-heading"
+				>
+					<div class="flex items-center justify-between gap-2">
+						<h3 id="peek-comments-heading" class="text-[13px] font-medium">
 							{t('comment.headingShort', { count: detail.comments.length })}
 						</h3>
 						{#if hasHiddenComments}
-							<a href="/resources/{resource.id}#comments" class="peek-inline-link">
+							<a href="/resources/{resource.id}#comments" class="text-[12.5px] text-link">
 								{t('peek.seeAll')}
 							</a>
 						{/if}
 					</div>
 
 					{#if recentComments.length === 0}
-						<p class="peek-muted-note">{t('peek.noComments')}</p>
+						<p class="text-[12.5px] text-muted-foreground">{t('peek.noComments')}</p>
 					{:else}
-						<ol class="peek-comments" role="list">
+						<ol class="grid gap-4" role="list">
 							{#each recentComments as comment (comment.id)}
-								<li class="peek-comment-item">
-									<div class="peek-row-head">
-										<strong class="peek-author">{comment.author.name}</strong>
-										<time class="peek-time" datetime={comment.createdAt}>
-											{formatWhen(comment.createdAt)}
-										</time>
+								<li class="flex gap-2.5">
+									<MemberAvatar
+										id={comment.author.id}
+										name={comment.author.name}
+										avatarAssetKey={comment.author.avatarAssetKey}
+										class="size-6 text-[10px]"
+									/>
+									<div class="grid min-w-0 flex-1 gap-1">
+										<p class="flex flex-wrap items-baseline gap-x-2 text-[13px]">
+											<strong class="font-medium">{comment.author.name}</strong>
+											<time
+												class="text-[12px] text-muted-foreground tabular-nums"
+												datetime={comment.createdAt}
+											>
+												{formatWhen(comment.createdAt)}
+											</time>
+										</p>
+										<p
+											class="text-[13.5px] leading-relaxed [overflow-wrap:anywhere] whitespace-pre-line"
+										>
+											{comment.body}
+										</p>
 									</div>
-									<p class="peek-note">{comment.body}</p>
 								</li>
 							{/each}
 						</ol>
 					{/if}
 
-					<div class="peek-section-foot">
-						<a href="/resources/{resource.id}#comments" class="btn btn-outline btn-sm">
+					<div>
+						<a
+							href="/resources/{resource.id}#comments"
+							class={buttonVariants({ variant: 'outline', size: 'sm' })}
+						>
+							<MessageCircle aria-hidden="true" />
 							{detail.comments.length > 0 ? t('peek.join') : t('peek.firstComment')}
 						</a>
 					</div>
@@ -421,6 +520,7 @@
 </dialog>
 
 <style>
+	/* Placement only; the look comes from utilities (izgah-ui-v5.md §5.3). */
 	dialog.side-peek-dialog {
 		margin: 0;
 		margin-inline-start: auto;
@@ -433,11 +533,9 @@
 		max-block-size: 100dvh;
 		padding: 0;
 		border: 0;
-		border-inline-start: 1px solid var(--k-color-line);
+		border-inline-start: 1px solid var(--hairline);
 		border-radius: 0;
-		background: var(--k-color-bg);
-		color: var(--k-color-text);
-		box-shadow: var(--k-shadow-lg);
+		box-shadow: var(--elevation-xl);
 		overflow: hidden;
 	}
 
@@ -459,245 +557,9 @@
 	}
 
 	dialog.side-peek-dialog::backdrop {
-		background: var(--k-color-backdrop);
+		background: var(--backdrop);
 		overflow: hidden;
 		overscroll-behavior: contain;
-	}
-
-	.peek-header {
-		display: flex;
-		align-items: center;
-		justify-content: flex-end;
-		gap: var(--space-3);
-		padding: var(--space-3) var(--space-4);
-		border-block-end: 1px solid var(--k-color-line);
-	}
-
-	.peek-full-link {
-		font: var(--k-text-ui);
-		font-size: 0.875rem;
-		color: var(--k-color-link);
-	}
-
-	.peek-close {
-		min-block-size: 28px;
-		padding: 0 4px;
-		font: var(--k-text-ui);
-		font-size: 0.875rem;
-		color: var(--k-color-text-secondary);
-		background: transparent;
-		border: 0;
-		border-radius: var(--k-radius-sm);
-		cursor: pointer;
-	}
-
-	.peek-close:hover {
-		color: var(--k-color-text);
-		text-decoration: underline;
-		text-underline-offset: 0.3em;
-	}
-
-	.peek-header-actions {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--space-2);
-		flex: none;
-	}
-
-	.peek-body {
-		overflow-y: auto;
-		overscroll-behavior: contain;
-		padding: var(--space-5);
-		display: grid;
-		gap: var(--space-5);
-		align-content: start;
-	}
-
-	.peek-hero {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr);
-		gap: var(--space-3) var(--space-4);
-		align-items: start;
-	}
-
-	.peek-hero.has-cover {
-		grid-template-columns: minmax(0, 1fr) 120px;
-	}
-
-	.peek-hero > :not(.peek-head, .peek-cover) {
-		grid-column: 1 / -1;
-	}
-
-	.peek-head {
-		display: grid;
-		gap: var(--space-1);
-		min-inline-size: 0;
-	}
-
-	.peek-kunye {
-		font: var(--k-text-meta);
-		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-muted);
-	}
-
-	.peek-title {
-		font-size: 1.25rem;
-		font-weight: 600;
-		line-height: 1.3;
-		color: var(--k-color-text);
-	}
-
-	.peek-cover {
-		overflow: hidden;
-		aspect-ratio: 16 / 10;
-		border-radius: var(--k-radius-xs);
-		background: var(--k-color-surface-2);
-	}
-
-	.peek-cover img {
-		display: block;
-		inline-size: 100%;
-		block-size: 100%;
-		object-fit: cover;
-	}
-
-	.peek-desc {
-		font: var(--k-text-body);
-		font-size: 0.90625rem;
-		color: var(--k-color-text-secondary);
-	}
-
-	.peek-cta-row {
-		display: flex;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: var(--space-2);
-		padding-block-start: var(--space-1);
-	}
-
-	.peek-stats {
-		margin-inline-start: auto;
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-		font: var(--k-text-meta);
-		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-muted);
-	}
-
-	.peek-section {
-		display: grid;
-		gap: var(--space-3);
-		padding-block-start: var(--space-4);
-		border-block-start: 1px solid var(--k-color-line);
-	}
-
-	.peek-section-head {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: var(--space-2);
-	}
-
-	.peek-section-title {
-		font: var(--k-text-section);
-		font-size: 0.9375rem;
-		color: var(--k-color-text);
-	}
-
-	.peek-inline-link {
-		font: var(--k-text-ui);
-		font-size: 0.8125rem;
-		color: var(--k-color-link);
-	}
-
-	.peek-timeline {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: grid;
-		gap: var(--space-4);
-	}
-
-	.peek-timeline-item {
-		display: grid;
-		gap: 6px;
-	}
-
-	.peek-comments {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: grid;
-	}
-
-	.peek-comment-item {
-		display: grid;
-		gap: 6px;
-		padding-block: var(--space-3);
-		border-block-end: 1px solid var(--k-color-line);
-	}
-
-	.peek-comment-item:first-child {
-		padding-block-start: 0;
-	}
-
-	.peek-comment-item:last-child {
-		border-block-end: 0;
-		padding-block-end: 0;
-	}
-
-	.peek-row-head {
-		display: flex;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: var(--space-2);
-	}
-
-	.peek-author {
-		font: var(--k-text-ui);
-		font-weight: 600;
-		color: var(--k-color-text);
-	}
-
-	.peek-time {
-		font: var(--k-text-meta);
-		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-muted);
-	}
-
-	.peek-note {
-		font: var(--k-text-body);
-		font-size: 0.90625rem;
-		white-space: pre-line;
-		overflow-wrap: anywhere;
-		color: var(--k-color-text);
-	}
-
-	.peek-tags {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 6px;
-	}
-
-	.peek-muted-note {
-		font: var(--k-text-hint);
-		color: var(--k-color-text-muted);
-	}
-
-	.peek-section-foot {
-		display: flex;
-		justify-content: flex-start;
-	}
-
-	.peek-error {
-		display: grid;
-		justify-items: start;
-		gap: var(--space-3);
-		padding: var(--space-3) 0;
-		border-block: 1px solid var(--k-color-danger);
-		color: var(--k-color-danger);
-		font: var(--k-text-ui);
 	}
 
 	@media (forced-colors: active) {
