@@ -425,7 +425,10 @@
 	</nav>
 
 	<div class="resource-main grid min-w-0 content-start gap-6">
-		<div class="rounded-xl border bg-card p-5 shadow-sm sm:p-6">
+		<div
+			class="rounded-xl border bg-card p-5 shadow-sm sm:p-6"
+			style="view-transition-name: active-resource-card"
+		>
 			<ResourceHero
 				resource={data.resource}
 				originalShareDeleted={data.originalShareDeleted}

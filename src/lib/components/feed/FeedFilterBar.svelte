@@ -14,6 +14,31 @@
 
 	let { basePath, activeType, preserveParams }: Props = $props();
 
+	// The active pill slides between items (izgah-ui-v5.md §6, "Tabs, toggle groups"); before
+	// hydration and under reduced effects the active link draws its own background instead.
+	let listEl = $state<HTMLUListElement | null>(null);
+	let indicator = $state<{ x: number; width: number } | null>(null);
+
+	function measure() {
+		const active = listEl?.querySelector<HTMLElement>('a[aria-current="page"]');
+		indicator = active ? { x: active.offsetLeft, width: active.offsetWidth } : null;
+	}
+
+	$effect(() => {
+		void activeType;
+		measure();
+	});
+
+	$effect(() => {
+		const el = listEl;
+		if (!el || typeof ResizeObserver === 'undefined') {
+			return;
+		}
+		const observer = new ResizeObserver(measure);
+		observer.observe(el);
+		return () => observer.disconnect();
+	});
+
 	const FILTER_ITEMS: ReadonlyArray<{ param: ContentType | null; label: string }> = [
 		{ param: null, label: t('filter.all') },
 		{ param: 'article', label: t('contentType.article') },
@@ -45,13 +70,20 @@
 	class="feed-filter mb-4 flex w-fit max-w-full overflow-x-auto rounded-lg border border-hairline bg-muted p-0.5 text-[12.5px]"
 	aria-label={t('filter.label')}
 >
-	<ul role="list" class="flex gap-0.5">
+	<ul role="list" class="relative flex gap-0.5" class:has-indicator={indicator} bind:this={listEl}>
+		{#if indicator}
+			<li
+				aria-hidden="true"
+				class="filter-indicator pointer-events-none absolute inset-y-0 left-0 rounded-md bg-card shadow-sm"
+				style="translate: {indicator.x}px 0; width: {indicator.width}px"
+			></li>
+		{/if}
 		{#each FILTER_ITEMS as item (item.param ?? 'all')}
 			<li>
 				<a
 					href={buildFilterHref(item.param)}
 					aria-current={item.param === activeType ? 'page' : undefined}
-					class="block rounded-md px-2.5 py-1 whitespace-nowrap text-muted-foreground no-underline transition-colors hover:text-foreground aria-[current=page]:bg-card aria-[current=page]:font-medium aria-[current=page]:text-foreground aria-[current=page]:shadow-sm pointer-coarse:py-2.5"
+					class="filter-link relative block rounded-md px-2.5 py-1 whitespace-nowrap text-muted-foreground no-underline transition-colors hover:text-foreground aria-[current=page]:bg-card aria-[current=page]:font-medium aria-[current=page]:text-foreground aria-[current=page]:shadow-sm pointer-coarse:py-2.5"
 				>
 					{item.label}
 				</a>
@@ -59,3 +91,20 @@
 		{/each}
 	</ul>
 </nav>
+
+<style>
+	.filter-indicator {
+		transition:
+			translate var(--dur-panel) cubic-bezier(0.2, 0.8, 0.2, 1),
+			width var(--dur-panel) cubic-bezier(0.2, 0.8, 0.2, 1);
+	}
+
+	/* With the sliding pill in place the active link only changes its text. */
+	.has-indicator :global(.filter-link[aria-current='page']) {
+		background: transparent;
+	}
+
+	.has-indicator :global(.filter-link[aria-current='page']:not(:focus-visible)) {
+		box-shadow: none;
+	}
+</style>

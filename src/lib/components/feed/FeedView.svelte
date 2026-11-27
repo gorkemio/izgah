@@ -3,6 +3,8 @@
 	import { goto, invalidate, preloadData } from '$app/navigation';
 	import { page } from '$app/state';
 	import { tick, untrack } from 'svelte';
+	import { flip } from 'svelte/animate';
+	import { DURATION, duration, motionFly } from '#lib/motion/index.ts';
 	import { toasts } from '#lib/client/toast.svelte.ts';
 	import FeedFilterBar from '#lib/components/feed/FeedFilterBar.svelte';
 	import NewPostsPill from '#lib/components/feed/NewPostsPill.svelte';
@@ -474,7 +476,12 @@
 					{#each group.items as item (item.id)}
 						{@const index = indexById.get(item.id) ?? 0}
 						{@const firstSeen = lastSeenMarker?.firstSeenId === item.id}
-						<li class:is-deferred={index >= DEFERRED_FROM_INDEX} class:is-first-seen={firstSeen}>
+						<li
+							class:is-deferred={index >= DEFERRED_FROM_INDEX}
+							class:is-first-seen={firstSeen}
+							in:motionFly={{ y: -8 }}
+							animate:flip={{ duration: duration(DURATION.base) }}
+						>
 							{#if firstSeen && lastSeenMarker}
 								<p class="last-seen-label">
 									<span aria-hidden="true">

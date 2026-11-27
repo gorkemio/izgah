@@ -4,12 +4,20 @@
 	import { startVisibilityPoller } from '#lib/client/visibility-poller.ts';
 	import Bell from '@lucide/svelte/icons/bell';
 	import * as Popover from '#lib/components/ui/popover/index.ts';
+	import { Tween } from 'svelte/motion';
+	import { cubicOut } from 'svelte/easing';
+	import { DURATION, duration } from '#lib/motion/index.ts';
 	import type { NotificationFeedItem } from '#lib/server/interactions/service.ts';
 
 	const POLL_INTERVAL_MS = 60_000;
 	const VISIBILITY_MIN_ELAPSED_MS = 15_000;
 
 	let unreadCount = $state(0);
+	// The badge rolls to new counts (izgah-ui-v5.md §6, "Counters and badges").
+	const badgeCount = Tween.of(() => unreadCount, {
+		duration: () => duration(DURATION.slow),
+		easing: cubicOut
+	});
 	let items = $state<NotificationFeedItem[]>([]);
 	let loadError = $state(false);
 	let markingAll = $state(false);
@@ -140,7 +148,7 @@
 				class="notification-badge ml-auto text-[11px] font-medium text-primary tabular-nums max-md:absolute max-md:top-1 max-md:right-1 max-md:grid max-md:min-w-4 max-md:place-items-center max-md:rounded-full max-md:bg-primary max-md:px-1 max-md:text-[10px] max-md:text-primary-foreground"
 				aria-hidden="true"
 			>
-				{unreadCount}
+				{Math.round(badgeCount.current)}
 			</span>
 		{/if}
 	</Popover.Trigger>
