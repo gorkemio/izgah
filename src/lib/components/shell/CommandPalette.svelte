@@ -561,7 +561,8 @@
 		<div class="cmdk-input-row">
 			<input
 				bind:this={inputEl}
-				class="cmdk-input"
+				class="field-bare cmdk-input"
+				autocorrect="off"
 				type="search"
 				bind:value={query}
 				role="combobox"

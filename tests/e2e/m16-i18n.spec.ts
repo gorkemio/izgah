@@ -98,12 +98,16 @@ test.describe('English UI and language switching', () => {
 		await expect(page.locator('#main-content h1')).toHaveText('Account settings');
 		await expect(page.locator('html[data-hydrated]')).toHaveCount(1);
 
+		// Choosing a language does not reload the page on its own (WCAG 3.2.2); Apply does.
 		await page.getByRole('radio', { name: 'Türkçe' }).check();
+		await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+		await page.locator('form.locale-form').getByRole('button', { name: 'Apply' }).click();
 		await expect(page.locator('html')).toHaveAttribute('lang', 'tr');
 		await expect(page.locator('#main-content h1')).toHaveText('Hesap ayarları');
 		await expect(page.locator('html[data-hydrated]')).toHaveCount(1);
 
 		await page.getByRole('radio', { name: 'English' }).check();
+		await page.locator('form.locale-form').getByRole('button', { name: 'Uygula' }).click();
 		await expect(page.locator('html')).toHaveAttribute('lang', 'en');
 		await expect(page.locator('#main-content h1')).toHaveText('Account settings');
 	});

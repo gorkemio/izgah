@@ -270,7 +270,11 @@
 				</div>
 				<div class="settings-row-control">
 					<!-- Plain POST + 303: the page reloads in the new language (izgah-i18n-oss.md §2). -->
-					<form method="POST" action="?/setLocale" class="locale-form">
+					<form
+						method="POST"
+						action="?/setLocale"
+						class="locale-form grid justify-items-start gap-3"
+					>
 						<fieldset class="radio-list locale-options" aria-labelledby="language-heading">
 							{#each LOCALES as code (code)}
 								<label class="radio-option">
@@ -280,15 +284,14 @@
 										value={code}
 										lang={code}
 										checked={currentLocale === code}
-										onchange={(event) => event.currentTarget.form?.requestSubmit()}
 									/>
 									<span lang={code}>{LOCALE_NATIVE_NAMES[code]}</span>
 								</label>
 							{/each}
 						</fieldset>
-						<noscript>
-							<button type="submit" class="btn btn-outline">{t('common.apply')}</button>
-						</noscript>
+						<!-- An explicit Apply: changing the radio alone must not reload the page, or arrowing
+						     through the options would navigate away (WCAG 3.2.2). -->
+						<button type="submit" class="btn btn-outline btn-sm">{t('common.apply')}</button>
 					</form>
 				</div>
 			</div>

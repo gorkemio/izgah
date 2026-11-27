@@ -422,7 +422,12 @@
 										<label for="role-{user.id}" class="visually-hidden">
 											{t('users.roleFor', { name: user.name })}
 										</label>
-										<select id="role-{user.id}" name="role" value={user.role} class="role-select">
+										<select
+											id="role-{user.id}"
+											name="role"
+											value={user.role}
+											class="role-select w-auto pointer-fine:min-h-7 pointer-fine:py-0 pointer-fine:text-[13px]"
+										>
 											<option value="member">{t('role.member')}</option>
 											<option value="admin">{t('role.admin')}</option>
 										</select>
@@ -563,7 +568,7 @@
 						type="url"
 						readonly
 						value={activeIssuedLink?.url ?? ''}
-						class="readonly-url-input"
+						class="readonly-url-input min-w-0 flex-1 font-mono pointer-fine:text-[13px]"
 					/>
 					<div class="copy-btn-wrapper">
 						<button
@@ -716,20 +721,6 @@
 	.copy-field-group label {
 		font: var(--type-ui);
 		font-weight: 600;
-	}
-
-	.readonly-url-input {
-		inline-size: 100%;
-		min-block-size: 38px;
-		padding: var(--space-2) var(--space-3);
-		border: 1px solid var(--input);
-		border-radius: 6px;
-		background: var(--muted);
-		color: var(--foreground);
-		flex: 1 1 16rem;
-		font-family: var(--font-mono);
-		font-size: 0.8125rem;
-		font-variant-numeric: tabular-nums;
 	}
 
 	.role-fieldset {
@@ -919,25 +910,6 @@
 		flex-wrap: nowrap;
 		align-items: center;
 		gap: var(--space-1);
-	}
-
-	.role-select {
-		min-block-size: 30px;
-		padding: 0 var(--space-5) 0 var(--space-2);
-		font: var(--type-ui);
-		font-size: 0.8125rem;
-		color: var(--foreground);
-		background: var(--muted);
-		border: 1px solid var(--input);
-		border-radius: 6px;
-		cursor: pointer;
-		transition:
-			border-color var(--dur-fast) var(--ease),
-			background-color var(--dur-fast) var(--ease);
-	}
-
-	.role-select:hover {
-		border-color: var(--muted-foreground);
 	}
 
 	.passive-role {

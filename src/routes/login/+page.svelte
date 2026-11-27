@@ -196,6 +196,8 @@
 					name="email"
 					type="email"
 					autocomplete="username"
+					autocorrect="off"
+					autocapitalize="none"
 					spellcheck="false"
 					enterkeyhint="next"
 					required

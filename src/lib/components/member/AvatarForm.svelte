@@ -77,10 +77,11 @@
 				<input
 					id="avatar-file"
 					class="sr-only"
+					tabindex="-1"
+					aria-hidden="true"
 					type="file"
 					name="avatar"
 					accept={ACCEPT}
-					aria-describedby="avatar-hint{error ? ' avatar-error' : ''}"
 					disabled={busy}
 					bind:this={fileInput}
 					onchange={onFileChosen}
@@ -90,6 +91,7 @@
 					variant="outline"
 					size="sm"
 					disabled={busy}
+					aria-describedby="avatar-hint{error ? ' avatar-error' : ''}"
 					onclick={() => fileInput?.click()}
 				>
 					<Camera aria-hidden="true" />

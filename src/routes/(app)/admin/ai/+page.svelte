@@ -140,6 +140,8 @@
 							type="url"
 							inputmode="url"
 							autocomplete="off"
+							autocorrect="off"
+							autocapitalize="none"
 							spellcheck="false"
 							placeholder="http://127.0.0.1:11434/v1"
 							value={settings.baseUrl ?? ''}
