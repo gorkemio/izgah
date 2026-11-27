@@ -7,6 +7,7 @@
 	import { enhance, type SubmitFunction } from '$app/forms';
 	import { goto, invalidate } from '$app/navigation';
 	import { untrack } from 'svelte';
+	import { freshShare } from '#lib/client/fresh-share.svelte.ts';
 	import { toasts } from '#lib/client/toast.svelte.ts';
 	import Dialog from '#lib/components/legacy/Dialog.svelte';
 	import { extractFirstUrlFromText } from '#lib/links/parse-url.ts';
@@ -363,6 +364,9 @@
 
 			if (result.type === 'success') {
 				const shareId = (result.data as { shareId?: unknown } | undefined)?.shareId;
+				if (typeof shareId === 'string') {
+					freshShare.mark(shareId);
+				}
 				resetForm();
 				open = false;
 				toasts.push(t('composer.shared'), {

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { effectsReduced } from '#lib/motion/index.ts';
 	import { t } from '#lib/i18n/index.ts';
 	import { untrack, type Snippet } from 'svelte';
 	import { goto, onNavigate } from '$app/navigation';
@@ -358,11 +359,11 @@
 		const isResourceTransition = Boolean(
 			fromPath?.startsWith('/resources/') || toPath?.startsWith('/resources/')
 		);
-		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		// Reduced motion and the "Reduced" effect level skip the transition (izgah-ui-v5.md §7).
 		const canUseViewTransition =
 			isResourceTransition &&
 			typeof document.startViewTransition === 'function' &&
-			!prefersReducedMotion;
+			!effectsReduced();
 
 		const navigationType = navigation.type;
 		const targetHash = navigation.to?.url.hash;

@@ -2,6 +2,7 @@
 	import type { Snippet } from 'svelte';
 	import { watchImageError } from '#lib/client/image-error.ts';
 	import Highlight from '#lib/components/ui/Highlight.svelte';
+	import { DURATION, duration, motionFade } from '#lib/motion/index.ts';
 	import type { FeedShareItem } from '#lib/types/feed.ts';
 
 	interface Props {
@@ -143,7 +144,9 @@
 		{/if}
 	</div>
 	{#if showThumbnail && item.resource.thumbnailAssetKey}
+		<!-- Cross-fades in when a pending preview finishes (izgah-ui-v5.md §6); no intro on first render. -->
 		<div
+			in:motionFade={{ duration: duration(DURATION.base) }}
 			class="card-thumbnail-frame aspect-[16/10] w-24 shrink-0 self-start overflow-hidden rounded-md bg-muted ring-1 ring-hairline sm:w-28"
 		>
 			<img

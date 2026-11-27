@@ -5,6 +5,7 @@
 <script lang="ts">
 	import { t } from '#lib/i18n/index.ts';
 	import { formatDate, formatDateTime, formatShortDate, formatTime } from '#lib/format/date.ts';
+	import { freshShare } from '#lib/client/fresh-share.svelte.ts';
 	import { restoreShare } from '#lib/client/restore-share.ts';
 	import { toasts } from '#lib/client/toast.svelte.ts';
 	import { enhance, type SubmitFunction } from '$app/forms';
@@ -258,6 +259,12 @@
 		}
 		articleEl.setAttribute('data-vt-card', 'true');
 		articleEl.style.viewTransitionName = 'active-resource-card';
+		// The thumbnail morphs into the resource page's cover (izgah-ui-v5.md §6).
+		const cover = articleEl.querySelector<HTMLElement>('.card-thumbnail-frame');
+		if (cover) {
+			cover.setAttribute('data-vt-card', 'true');
+			cover.style.viewTransitionName = `resource-cover-${item.resource.id}`;
+		}
 	}
 
 	const handleDeleteEnhance: SubmitFunction = () => {
@@ -322,6 +329,7 @@
 			? 'border-[color-mix(in_oklab,var(--primary)_45%,transparent)]'
 			: 'border-hairline hover:border-[color-mix(in_oklab,var(--foreground)_16%,transparent)]'}"
 		class:is-unseen={unseen}
+		class:is-fresh={freshShare.id === item.id}
 		class:is-compact={compact}
 		tabindex="-1"
 		aria-current={selected ? 'true' : undefined}
@@ -345,6 +353,7 @@
 						class="post-time text-muted-foreground tabular-nums no-underline hover:text-foreground hover:underline"
 						href="/resources/{item.resource.id}#share-{item.id}"
 						title={formatDateTime(item.createdAt)}
+						onclick={markCardForViewTransition}
 					>
 						<span class="sr-only">
 							{t('share.sharedAt', { date: formatDate(item.createdAt) })}
@@ -742,6 +751,18 @@
 </div>
 
 <style>
+	/* The viewer's own new share briefly takes the accent border (izgah-ui-v5.md §6). */
+	.share-card.is-fresh {
+		animation: izgah-fresh 2.4s cubic-bezier(0.2, 0, 0, 1) both;
+	}
+
+	@keyframes izgah-fresh {
+		from {
+			border-color: var(--primary);
+			box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 25%, transparent);
+		}
+	}
+
 	/* Feed entry (izgah-ui-v5.md §5.1). Most styling is in Tailwind classes above; these rules cover
 	   the shared action, chip and menu items and the edit and delete dialogs. */
 	.share-card :global(.card-action) {
