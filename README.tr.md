@@ -8,25 +8,33 @@
 [Web sitesi](https://izgah.com/tr/) · [Kendi sunucunuza kurulum](#kendi-sunucunuza-kurulum) · [Tarayıcı eklentileri](#tarayıcı-eklentileri) · [Geliştirme](#geliştirme) · [English](./README.md)
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./docs/images/feed-dark.png">
-  <img alt="İzgah akışı: bugün paylaşılan bağlantılar; her birinde üyenin notu, bağlantı başlığı ve tek satırlık künye (site, tür, bölüm, yorumlar, beğeniler)." src="./docs/images/feed-light.png">
+  <source media="(prefers-color-scheme: dark)" srcset="./docs/images/feed-tr-dark.png">
+  <img alt="İzgah akışı: bölümlerin listelendiği bir kenar çubuğu ve dün paylaşılan bağlantılar; her birinde üyenin avatarı ve notu, site, başlık, açıklama ve önizleme görseliyle bir bağlantı kartı, bölüm etiketleri, yorumlar ve beğeniler." src="./docs/images/feed-tr-light.png">
 </picture>
 
 > [izgah.com](https://izgah.com/tr/) yalnızca projeyi tanıtır; orada bir İzgah örneği **çalışmaz**. Her ekip İzgah'ı kendi sunucusunda ve alan adında çalıştırır.
 
 ## Özellikler
 
-- **Akış** — paylaşılan bağlantıların ters kronolojik kaydı. Önce üyenin notu gelir; ardından bağlantı ve tek satırlık künyesi (site, tür, dil, bölümler, yorumlar, beğeniler). Yeni paylaşımlar duyurulur, imlecinizin altına kendiliğinden eklenmez.
+- **Akış** — paylaşılan bağlantılar, en yenisi üstte, günlere ayrılmış. Her girdide üyenin avatarı ve notu, ardından sitenin simgesi, başlık, açıklama ve önizleme görseliyle bir bağlantı kartı, bölümleri, yorumları ve beğenileri görünür. Yeni paylaşımlar duyurulur, imlecinizin altına kendiliğinden eklenmez; silinen bir paylaşım birkaç saniye içinde geri alınabilir.
 - **Bir bağlantı, bir tartışma** — bağlantılar kanonik adreslerine göre tekilleştirilir; aynı bağlantı ikinci kez paylaşıldığında yeni bir tartışma açılmaz, mevcut tartışmaya katılır.
 - **Bölümler** — yöneticilerin yönettiği konular. Bir bağlantı birden fazla bölümde olabilir; yöneticiler akışa düşürmeden "sessiz" başvuru bağlantıları ekleyebilir.
 - **Arama** — başlık, açıklama, not ve URL parçalarında Türkçe ve İngilizce tam metin arama, `⌘K` / `Ctrl+K` komut paleti ve `j` / `k` ile klavyeden gezinme.
 - **Akıllı ekleme** — notta `#bölüm` yazmak bağlantıyı o bölüme koyar; bölümler ekibin geçmişine göre önerilir. Yöneticiler isteğe bağlı olarak OpenRouter, Anthropic, OpenAI, Gemini ya da yerel, OpenAI uyumlu bir modeli bağlayıp kısa özet, arama anahtar kelimesi ve bölüm önerisi alabilir. Yapay zekâ, yapılandırılana kadar kapalıdır.
 - **Bağlantı önizlemeleri** — SSRF korumalı, süreç içi bir işçi başlık, açıklama ve kapak görsellerini çeker; küçültülmüş WebP görselleri yerelde saklar.
 - **Tarayıcı eklentileri** — Chrome, Firefox ve Safari eklentileri açık sekmeyi ya da sağ tıklanan bağlantıyı kişisel API anahtarıyla paylaşır.
-- **Sunucuda çizilir, hızlı açılır** — her sayfa sunucuda oluşturulur, her değişiklik sunucudaki bir form işleminden geçer; arayüz bunun üzerine ikonlar, önizlemeler ve hareket ekler, efektleri azaltma ayarı da vardır.
+- **Sunucuda çizilir, hızlı açılır** — her sayfa sunucuda oluşturulur, her değişiklik sunucudaki bir form işleminden geçer. JavaScript gereklidir; arayüz bunun üzerine hareket ekler, efektleri azaltan bir ayar da vardır.
+- **Profil fotoğrafları** — üyeler fotoğraf yükleyebilir (sunucuda yeniden kodlanır, üst verisi silinir); fotoğrafı olmayanlar kendi renklerinde baş harfleriyle görünür.
 - **Baştan erişilebilir** — açık ve koyu tema, her biri standart ve yüksek kontrast paletle; hepsi WCAG 2.2 AA (yüksek kontrastta AAA). Açtığınız bağlantılar tarayıcının kendi `:visited` geçmişiyle solar; sunucu hiçbir şey kaydetmez.
 - **İngilizce ve Türkçe** — her üye dilini seçer; varsayılanı örnek belirler.
 - **Küçük ayak izi** — tek Node.js konteyneri ve PostgreSQL. Harici e-posta, kuyruk veya önbellek servisi yok.
+
+<table>
+  <tr>
+    <td width="58%"><picture><source media="(prefers-color-scheme: dark)" srcset="./site/assets/shots/resource-tr-dark.webp"><img alt="Bir bağlantının sayfası: kapak görseli, beğeniler, paylaşım geçmişi ve tartışma." src="./site/assets/shots/resource-tr-light.webp"></picture></td>
+    <td width="42%"><picture><source media="(prefers-color-scheme: dark)" srcset="./site/assets/shots/palette-tr-dark.webp"><img alt="Komut paleti css için arama yapıyor; eşleşen bağlantılar vurgulu." src="./site/assets/shots/palette-tr-light.webp"></picture></td>
+  </tr>
+</table>
 
 ## Kendi sunucunuza kurulum
 
@@ -123,7 +131,7 @@ pnpm test        # birim ve PostgreSQL entegrasyon testleri
 pnpm test:e2e    # Playwright: Chromium, Firefox, WebKit ve mobil
 ```
 
-SvelteKit 3 (Svelte 5), Node.js 22, PostgreSQL 16 (`unaccent`, `pg_trgm`), Drizzle ORM ve Better Auth ile yazılmıştır; eklentiler WXT kullanır. Arayüz çatısı yoktur: yerel `<dialog>`, `popover`, View Transitions ve container query'ler.
+SvelteKit 3 (Svelte 5), Node.js 22, PostgreSQL 16 (`unaccent`, `pg_trgm`), Drizzle ORM ve Better Auth ile yazılmıştır; eklentiler WXT kullanır. Arayüz; Tailwind CSS, Bits UI üzerindeki shadcn-svelte bileşenleri, Lucide ikonları ve Geist yazı tipiyle kurulur; uygun yerlerde yerel `<dialog>`, `popover` ve View Transitions kullanılır.
 
 ## Belgeler
 
@@ -140,4 +148,4 @@ Hata bildirimleri, çeviriler ve pull request'ler memnuniyetle karşılanır. Ha
 
 ## Lisans
 
-İzgah, [GNU Affero Genel Kamu Lisansı v3.0](./LICENSE) ile lisanslanmış özgür bir yazılımdır. Değiştirilmiş bir sürümü ağ üzerinden başkalarına sunarsanız kaynak kodunu da sunmanız gerekir. Paketlenen yazı tipi Atkinson Hyperlegible Next, SIL Open Font License ile lisanslıdır; bkz. [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).
+İzgah, [GNU Affero Genel Kamu Lisansı v3.0](./LICENSE) ile lisanslanmış özgür bir yazılımdır. Değiştirilmiş bir sürümü ağ üzerinden başkalarına sunarsanız kaynak kodunu da sunmanız gerekir. Paketlenen yazı tipi Geist, SIL Open Font License ile lisanslıdır; bkz. [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).

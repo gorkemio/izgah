@@ -404,7 +404,7 @@ Integration tests follow the patterns of `tests/integration/m4-unfurl-worker-and
 
 ## 12. izgah.com
 
-*   Rebuilt in the v5 style without a build step: hand-written CSS on the generated `site/palette.css` and a small script. An aurora hero with the statement and a copyable install command, a live v5 product specimen, a bento grid of real features, how it runs (one container), "What it doesn't do", "What runs on your server, and what leaves it", and the roadmap, in English and Turkish.
+*   Rebuilt in the v5 style without a build step: hand-written CSS on the generated `site/palette.css` and a small script. A hero with the statement, the two actions and a framed screenshot of the feed (the phone screenshot beside it, and instead of it on small screens), a bento grid of real features with screenshots and small HTML vignettes, the install commands with a Copy button, "What runs on your server, and what leaves it", "What it doesn't do", the roadmap and a closing call to action, in English and Turkish. No aurora or gradients, following §3.0.
 *   The honesty rules of [izgah-ui-v4.md](./izgah-ui-v4.md) §6 stay: concrete facts only, no invented testimonials, logos or statistics.
 *   Claims that Izgah works without JavaScript are removed here and in `README.md` and `README.tr.md`.
 
@@ -508,3 +508,5 @@ Work happens on the `feat/ui-v5` branch; `main` receives v5 in one step after M1
 | Fetching site icons widens outbound requests | The SSRF-guarded `safe-fetch`, size and type limits, a 30-day cache per domain |
 | Profile photos bring user-uploaded images | Re-encoding, size and pixel limits, a rate limit, audit logging and admin removal |
 | The extension size budget | CSS-only changes and no new font in the extension |
+
+*   **2026-11-27 (M10 redone, maintainer):** the first M10 only swapped the site's type and colours and left the Künye page; the maintainer asked for a real redesign. izgah.com now uses real screenshots of the app on the demo data (`site/assets/shots/`, English and Turkish, light and dark, WebP) instead of the hand-set specimen, which is gone with `specimen.js` and the specimen's scheme-pinning selectors in `scripts/tokens/build.ts`. The READMEs use the same screenshots, and the link preview images were retaken.

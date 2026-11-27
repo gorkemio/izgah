@@ -21,8 +21,8 @@
 			type="font/woff2"
 			crossorigin
 		/>
-		<link rel="stylesheet" href="./palette.css?v=2026-11-27-1" />
-		<link rel="stylesheet" href="./styles.css?v=2026-11-27-1" />
+		<link rel="stylesheet" href="./palette.css?v=2026-11-27-2" />
+		<link rel="stylesheet" href="./styles.css?v=2026-11-27-2" />
 		<meta property="og:title" content="Izgah — a shared link library for small teams" />
 		<meta
 			property="og:description"
@@ -31,269 +31,507 @@
 		<meta property="og:image" content="https://izgah.com/assets/og.png" />
 		<meta property="og:url" content="https://izgah.com/" />
 		<meta name="twitter:card" content="summary_large_image" />
-		<script src="./specimen.js?v=2026-11-27-1" defer></script>
+		<script src="./site.js?v=2026-11-27-2" defer></script>
 	</head>
 	<body>
+		<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+			<!-- Lucide icons (ISC licence), see THIRD_PARTY_NOTICES.md -->
+			<symbol id="i-arrow-right" viewBox="0 0 24 24">
+				<path d="M5 12h14" />
+				<path d="m12 5 7 7-7 7" />
+			</symbol>
+			<symbol id="i-arrow-up-right" viewBox="0 0 24 24">
+				<path d="M7 7h10v10" />
+				<path d="M7 17 17 7" />
+			</symbol>
+			<symbol id="i-messages" viewBox="0 0 24 24">
+				<path
+					d="M16 10a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 14.286V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"
+				/>
+				<path
+					d="M20 9a2 2 0 0 1 2 2v10.286a.71.71 0 0 1-1.212.502l-2.202-2.202A2 2 0 0 0 17.172 19H10a2 2 0 0 1-2-2v-1"
+				/>
+			</symbol>
+			<symbol id="i-hash" viewBox="0 0 24 24">
+				<line x1="4" x2="20" y1="9" y2="9" />
+				<line x1="4" x2="20" y1="15" y2="15" />
+				<line x1="10" x2="8" y1="3" y2="21" />
+				<line x1="16" x2="14" y1="3" y2="21" />
+			</symbol>
+			<symbol id="i-command" viewBox="0 0 24 24">
+				<path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
+			</symbol>
+			<symbol id="i-puzzle" viewBox="0 0 24 24">
+				<path
+					d="M15.39 4.39a1 1 0 0 0 1.68-.474 2.5 2.5 0 1 1 3.014 3.015 1 1 0 0 0-.474 1.68l1.683 1.682a2.414 2.414 0 0 1 0 3.414L19.61 15.39a1 1 0 0 1-1.68-.474 2.5 2.5 0 1 0-3.014 3.015 1 1 0 0 1 .474 1.68l-1.683 1.682a2.414 2.414 0 0 1-3.414 0L8.61 19.61a1 1 0 0 0-1.68.474 2.5 2.5 0 1 1-3.014-3.015 1 1 0 0 0 .474-1.68l-1.683-1.682a2.414 2.414 0 0 1 0-3.414L4.39 8.61a1 1 0 0 1 1.68.474 2.5 2.5 0 1 0 3.014-3.015 1 1 0 0 1-.474-1.68l1.683-1.682a2.414 2.414 0 0 1 3.414 0z"
+				/>
+			</symbol>
+			<symbol id="i-sparkles" viewBox="0 0 24 24">
+				<path
+					d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"
+				/>
+				<path d="M20 2v4" />
+				<path d="M22 4h-4" />
+				<circle cx="4" cy="20" r="2" />
+			</symbol>
+			<symbol id="i-contrast" viewBox="0 0 24 24">
+				<circle cx="12" cy="12" r="10" />
+				<path d="M12 18a6 6 0 0 0 0-12v12z" />
+			</symbol>
+			<symbol id="i-languages" viewBox="0 0 24 24">
+				<path d="m5 8 6 6" />
+				<path d="m4 14 6-6 2-3" />
+				<path d="M2 5h12" />
+				<path d="M7 2h1" />
+				<path d="m22 22-5-10-5 10" />
+				<path d="M14 18h6" />
+			</symbol>
+			<symbol id="i-copy" viewBox="0 0 24 24">
+				<rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+				<path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+			</symbol>
+			<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></symbol>
+			<symbol id="i-server" viewBox="0 0 24 24">
+				<rect width="20" height="8" x="2" y="2" rx="2" ry="2" />
+				<rect width="20" height="8" x="2" y="14" rx="2" ry="2" />
+				<line x1="6" x2="6.01" y1="6" y2="6" />
+				<line x1="6" x2="6.01" y1="18" y2="18" />
+			</symbol>
+			<symbol id="i-shield-check" viewBox="0 0 24 24">
+				<path
+					d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+				/>
+				<path d="m9 12 2 2 4-4" />
+			</symbol>
+		</svg>
+
 		<a class="skip-link" href="#main">Skip to content</a>
-		<div class="site">
-			<header class="site-head">
-				<a class="wordmark" href="./" aria-label="Izgah, home">iz<span class="gah">gah</span></a>
-				<nav aria-label="Site">
+
+		<header class="site-head">
+			<div class="wrap">
+				<a class="brand" href="./" aria-label="Izgah, home"
+					><span class="brand-mark" aria-hidden="true"></span>Izgah</a
+				>
+				<nav class="site-nav" aria-label="Site">
 					<ul>
-						<li><a href="https://github.com/gorkemio/izgah#readme">Docs</a></li>
-						<li><a href="https://github.com/gorkemio/izgah">Source</a></li>
+						<li class="nav-optional"><a href="#features">Features</a></li>
+						<li class="nav-optional"><a href="#install">Self-host</a></li>
+						<li>
+							<a href="https://github.com/gorkemio/izgah"
+								>GitHub<svg class="icon" aria-hidden="true"><use href="#i-arrow-up-right" /></svg
+							></a>
+						</li>
 						<li><a href="./tr/" hreflang="tr" lang="tr">Türkçe</a></li>
 					</ul>
 				</nav>
-			</header>
+			</div>
+		</header>
 
-			<main id="main">
-				<h1 class="statement">Your team keeps finding good links. Izgah keeps them findable.</h1>
-				<p class="lede">
-					A small, self-hosted feed where a team shares the links it finds, each with a note, filed
-					in sections, with one discussion per link. Open source under the AGPL. One container and
-					PostgreSQL.
-				</p>
+		<main id="main">
+			<section class="hero" aria-labelledby="hero-title">
+				<div class="wrap">
+					<p class="eyebrow"><b>Open source</b> Self-hosted · AGPL-3.0</p>
+					<h1 id="hero-title">
+						Your team keeps finding good links. <span>Izgah keeps them findable.</span>
+					</h1>
+					<p class="lede">
+						A small feed on your own server where a team shares the links it finds, each with a
+						note, filed in sections, with one discussion per link.
+					</p>
+					<div class="actions">
+						<a class="btn btn-primary" href="#install"
+							>Run it on your server<svg class="icon" aria-hidden="true">
+								<use href="#i-arrow-right" /></svg
+						></a>
+						<a class="btn btn-secondary" href="https://github.com/gorkemio/izgah"
+							>View the source</a
+						>
+					</div>
+					<ul class="hero-meta">
+						<li>
+							<svg class="icon" aria-hidden="true"><use href="#i-server" /></svg>One container and
+							PostgreSQL
+						</li>
+						<li>
+							<svg class="icon" aria-hidden="true"><use href="#i-languages" /></svg>English and
+							Turkish
+						</li>
+						<li>
+							<svg class="icon" aria-hidden="true"><use href="#i-puzzle" /></svg>Chrome, Firefox and
+							Safari extensions
+						</li>
+					</ul>
+					<figure class="showcase">
+						<div class="frame">
+							<picture>
+								<source
+									media="(max-width: 720px) and (prefers-color-scheme: dark)"
+									srcset="./assets/shots/mobile-en-dark.webp"
+									width="780"
+									height="1688"
+								/>
+								<source
+									media="(max-width: 720px)"
+									srcset="./assets/shots/mobile-en-light.webp"
+									width="780"
+									height="1688"
+								/>
+								<source
+									media="(prefers-color-scheme: dark)"
+									srcset="./assets/shots/feed-en-dark.webp"
+								/>
+								<img
+									src="./assets/shots/feed-en-light.webp"
+									width="2000"
+									height="1250"
+									alt="The Izgah feed: a sidebar with sections, and links shared yesterday, each with the member's avatar and note, a link card with the site, title, description and preview image, section tags, comments and likes."
+									fetchpriority="high"
+								/>
+							</picture>
+						</div>
+						<picture>
+							<source
+								media="(prefers-color-scheme: dark)"
+								srcset="./assets/shots/mobile-en-dark.webp"
+							/>
+							<img
+								class="phone"
+								src="./assets/shots/mobile-en-light.webp"
+								width="780"
+								height="1688"
+								alt="The same feed on a phone, with a tab bar at the bottom."
+								loading="lazy"
+							/>
+						</picture>
+					</figure>
+				</div>
+			</section>
 
-				<section class="specimen" aria-labelledby="specimen-title" data-specimen>
-					<div class="specimen-bar">
-						<p id="specimen-title" class="specimen-try">
-							<b>Try it.</b>
-							<span class="hint-keys"
-								><kbd>j</kbd> <kbd>k</kbd> move · <kbd>Space</kbd> opens the discussion · links you
-								open fade</span
-							><span class="hint-touch">Tap the comments to open the discussion.</span>
+			<section class="band band-muted" id="features" aria-labelledby="features-title">
+				<div class="wrap">
+					<div class="band-head reveal">
+						<p class="kicker">What it does</p>
+						<h2 id="features-title">A shared memory for the links your team passes around</h2>
+						<p>
+							It started as a WhatsApp group. Good links scrolled away within a day, the same video
+							was shared three times with three separate discussions, and nobody could find "that
+							article about…" a month later.
 						</p>
-						<fieldset class="theme-switch">
-							<legend class="visually-hidden">Specimen theme</legend>
-							<input type="radio" name="specimen-theme" id="specimen-light" value="light" />
-							<label for="specimen-light">Light</label>
-							<input type="radio" name="specimen-theme" id="specimen-dark" value="dark" />
-							<label for="specimen-dark">Dark</label>
-						</fieldset>
 					</div>
 
-					<div class="specimen-body">
-						<div class="specimen-board">
-							<div class="day">
-								<p class="day-heading">Today <span class="day-date">Wednesday 25 November</span></p>
-								<p class="day-count">3 links</p>
-							</div>
-
-							<article class="share-card" aria-labelledby="sp-title-1">
-								<p class="card-gutter">
-									<time datetime="2026-11-25T18:41">18:41</time> Deniz
-									<span class="unseen">new</span>
+					<ul class="bento">
+						<li class="tile tile-wide reveal">
+							<div class="tile-text">
+								<span class="tile-icon"
+									><svg class="icon" aria-hidden="true"><use href="#i-messages" /></svg
+								></span>
+								<h3>One link, one conversation</h3>
+								<p>
+									Links are matched by their canonical address. A second share joins the discussion
+									that already exists, and the page keeps every share beside it.
 								</p>
-								<div class="card-body">
-									<p class="share-note">
-										Tried the new models on a laptop; surprisingly fast on long PDFs.
-									</p>
-									<p id="sp-title-1" class="card-title">
-										<a href="https://github.com/ollama/ollama">ollama/ollama</a>
-									</p>
-									<div class="kunye">
-										<span>github.com</span><span>code</span><span>Go</span
-										><span class="section-chip">AI tools</span>
-										<details class="thread">
-											<summary class="kunye-action">2 comments</summary>
-											<ol class="comments">
-												<li><b>Mert</b> Same here on an M2; the 8B model was the sweet spot.</li>
-												<li><b>Elif</b> Could you write down the install steps?</li>
-											</ol>
-										</details>
-										<span>4 likes</span>
-									</div>
-								</div>
-							</article>
+							</div>
+							<div class="tile-shot">
+								<picture>
+									<source
+										media="(prefers-color-scheme: dark)"
+										srcset="./assets/shots/resource-en-dark.webp"
+									/>
+									<img
+										src="./assets/shots/resource-en-light.webp"
+										width="1400"
+										height="1033"
+										alt="A link's page with its cover image, a Go to source button, likes, the share history and the discussion."
+										loading="lazy"
+									/>
+								</picture>
+							</div>
+						</li>
 
-							<article class="share-card" aria-labelledby="sp-title-2" aria-current="true">
-								<p class="card-gutter"><time datetime="2026-11-25T17:02">17:02</time> Elif</p>
-								<div class="card-body">
-									<p class="share-note">We can delete half of our theme media queries with this.</p>
-									<p id="sp-title-2" class="card-title">
-										<a href="https://web.dev/articles/light-dark"
-											>CSS color-scheme-dependent colors with light-dark()</a
-										><a class="note-ref" href="#note-1" aria-label="Note 1">1</a>
-									</p>
-									<div class="kunye">
-										<span>web.dev</span><span>article</span
-										><span class="section-chip">Frontend</span><span>first: Can, 12 Nov</span>
-										<details class="thread">
-											<summary class="kunye-action">3 comments</summary>
-											<ol class="comments">
-												<li><b>Can</b> Safari support is in; let's come back to this.</li>
-												<li><b>Zeynep</b> The high-contrast palette works with it too.</li>
-												<li><b>Elif</b> Trying it on our tokens this week.</li>
-											</ol>
-										</details>
-										<button type="button" class="kunye-action is-idle" data-like hidden>
-											<span class="like-off">Like</span><span class="like-on">1 like</span>
-										</button>
-									</div>
-								</div>
-							</article>
+						<li class="tile reveal">
+							<div class="tile-text">
+								<span class="tile-icon"
+									><svg class="icon" aria-hidden="true"><use href="#i-hash" /></svg
+								></span>
+								<h3>Sections, and links that stay out of the feed</h3>
+								<p>
+									Admins keep the sections. A link can sit in several, and reference links can be
+									filed without showing up in the feed.
+								</p>
+							</div>
+							<div class="tile-visual">
+								<ul class="mini-rail" aria-hidden="true">
+									<li class="is-active"><span>#</span>Frontend</li>
+									<li><span>#</span>Design</li>
+									<li><span>#</span>AI tools</li>
+									<li><span>#</span>Long reads</li>
+								</ul>
+							</div>
+						</li>
 
-							<article class="share-card" aria-labelledby="sp-title-3">
-								<p class="card-gutter"><time datetime="2026-11-25T15:27">15:27</time> Mert</p>
-								<div class="card-body">
-									<p class="share-note">
-										Why opened links fade in Izgah, and why that stays private.
-									</p>
-									<p id="sp-title-3" class="card-title">
-										<a href="https://developer.chrome.com/blog/visited-links"
-											>Making :visited more private</a
-										><a class="note-ref" href="#note-3" aria-label="Note 3">3</a>
-									</p>
-									<div class="kunye">
-										<span>developer.chrome.com</span><span>article</span
-										><span class="section-chip">Frontend</span>
-									</div>
-									<p class="suggestion" data-suggestion>
-										Suggested section:
-										<span class="section-chip">Design</span>
-										<span class="suggestion-why">(earlier links from this site)</span
-										><a class="note-ref" href="#note-2" aria-label="Note 2">2</a>
-										<button type="button" class="kunye-action" data-suggestion-add hidden>
-											Add
-										</button>
-										<button type="button" class="kunye-action" data-suggestion-dismiss hidden>
-											Dismiss
-										</button>
-									</p>
-								</div>
-							</article>
-						</div>
+						<li class="tile reveal">
+							<div class="tile-text">
+								<span class="tile-icon"
+									><svg class="icon" aria-hidden="true"><use href="#i-puzzle" /></svg
+								></span>
+								<h3>Browser extensions</h3>
+								<p>
+									Chrome, Firefox and Safari. <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd> shares
+									the current tab; the extension talks only to your server.
+								</p>
+							</div>
+							<div class="tile-visual">
+								<p class="mini-keys" aria-hidden="true">
+									<kbd>Alt</kbd><kbd>Shift</kbd><kbd>I</kbd>
+								</p>
+								<ul class="mini-chips" aria-hidden="true">
+									<li>Chrome</li>
+									<li>Firefox</li>
+									<li>Safari</li>
+								</ul>
+							</div>
+						</li>
 
-						<ol class="notes">
-							<li id="note-1">
-								<b>One link, one conversation</b> Can shared it first; Elif's post joins the same
-								discussion.
+						<li class="tile tile-wide reveal">
+							<div class="tile-text">
+								<span class="tile-icon"
+									><svg class="icon" aria-hidden="true"><use href="#i-command" /></svg
+								></span>
+								<h3>Search in English and Turkish</h3>
+								<p>
+									Titles, notes, page text and URL fragments. <kbd>⌘K</kbd> from anywhere, and
+									<kbd>j</kbd> <kbd>k</kbd> through the feed.
+								</p>
+							</div>
+							<div class="tile-shot is-palette">
+								<picture>
+									<source
+										media="(prefers-color-scheme: dark)"
+										srcset="./assets/shots/palette-en-dark.webp"
+									/>
+									<img
+										src="./assets/shots/palette-en-light.webp"
+										width="1100"
+										height="836"
+										alt="The command palette searching for css, with matching links highlighted."
+										loading="lazy"
+									/>
+								</picture>
+							</div>
+						</li>
+
+						<li class="tile reveal">
+							<div class="tile-text">
+								<span class="tile-icon"
+									><svg class="icon" aria-hidden="true"><use href="#i-sparkles" /></svg
+								></span>
+								<h3>Smart capture, off by default</h3>
+								<p>
+									Type <code>#section</code> in a note and get suggestions from how your team files
+									things. If an admin adds a key, short summaries and AI section suggestions too.
+								</p>
+							</div>
+							<div class="tile-visual">
+								<div class="mini-note" aria-hidden="true">
+									<p>Worth a look before the redesign <span class="mini-tag">#design</span></p>
+									<p class="mini-suggest">Suggested <span>Design</span><span>Frontend</span></p>
+								</div>
+							</div>
+						</li>
+
+						<li class="tile reveal">
+							<div class="tile-text">
+								<span class="tile-icon"
+									><svg class="icon" aria-hidden="true"><use href="#i-contrast" /></svg
+								></span>
+								<h3>Calm and accessible</h3>
+								<p>
+									Light and dark themes with high-contrast palettes that meet WCAG 2.2 AA, and a
+									setting that turns motion down.
+								</p>
+							</div>
+							<div class="tile-visual">
+								<ul class="mini-themes" aria-hidden="true">
+									<li class="t-light"><span>Aa</span>Light</li>
+									<li class="t-dark"><span>Aa</span>Dark</li>
+									<li class="t-contrast"><span>Aa</span>High contrast</li>
+								</ul>
+							</div>
+						</li>
+
+						<li class="tile reveal">
+							<div class="tile-text">
+								<span class="tile-icon"
+									><svg class="icon" aria-hidden="true"><use href="#i-languages" /></svg
+								></span>
+								<h3>On every screen</h3>
+								<p>
+									Each member picks English or Turkish. On phones, a tab bar takes the sidebar's
+									place.
+								</p>
+							</div>
+							<div class="tile-shot is-phone">
+								<picture>
+									<source
+										media="(prefers-color-scheme: dark)"
+										srcset="./assets/shots/mobile-en-dark.webp"
+									/>
+									<img
+										src="./assets/shots/mobile-en-light.webp"
+										width="780"
+										height="1688"
+										alt=""
+										loading="lazy"
+									/>
+								</picture>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</section>
+
+			<section class="band" id="install" aria-labelledby="install-title">
+				<div class="wrap install-grid">
+					<div class="reveal">
+						<p class="kicker">Self-host</p>
+						<h2 id="install-title">Run it on your server</h2>
+						<ol class="steps">
+							<li>
+								<span><b>Start it with Docker</b>On any server, behind your reverse proxy.</span>
 							</li>
-							<li id="note-2">
-								<b>Sections that suggest themselves</b> From how your team filed this site before.
-								Optional AI, off by default.
+							<li>
+								<span
+									><b>Create the first admin</b>The command prints a one-time invite link; open it
+									and set a password.</span
+								>
 							</li>
-							<li id="note-3">
-								<b>Opened links fade</b> Your browser's own history. Izgah records nothing.
+							<li>
+								<span
+									><b>Invite your team</b>Izgah sends no e-mail: invites are links an admin passes
+									on.</span
+								>
 							</li>
 						</ol>
+						<p class="guides">
+							Step-by-step guides for
+							<a href="https://github.com/gorkemio/izgah/blob/main/docs/deploy/docker-compose.md"
+								>Docker Compose and Caddy</a
+							>
+							and
+							<a href="https://github.com/gorkemio/izgah/blob/main/docs/deploy/dokploy.md"
+								>Dokploy</a
+							>.
+						</p>
 					</div>
-
-					<p class="specimen-cap">
-						Set in the app's own type and colours. Not a screenshot: select the text.
-					</p>
-				</section>
-
-				<h2>Run it on your server</h2>
-				<pre
-					class="install"
-					tabindex="0"
-					aria-label="Install commands"
-				><code><span class="c"># on a server with Docker, behind your reverse proxy</span>
+					<div class="terminal reveal">
+						<div class="terminal-bar">
+							<span>Terminal</span>
+							<button type="button" class="copy-btn" data-copy="#install-code" hidden>
+								<span class="when-idle"
+									><svg class="icon" aria-hidden="true"><use href="#i-copy" /></svg>Copy</span
+								><span class="when-copied" role="status"
+									><svg class="icon" aria-hidden="true"><use href="#i-check" /></svg>Copied</span
+								>
+							</button>
+						</div>
+						<pre
+							tabindex="0"
+							aria-label="Install commands"
+						><code id="install-code"><span class="c"># on a server with Docker, behind your reverse proxy</span>
 git clone https://github.com/gorkemio/izgah && cd izgah
 export POSTGRES_PASSWORD='…' BETTER_AUTH_SECRET="$(openssl rand -hex 32)" ORIGIN='https://links.example.com'
 docker compose -f docker-compose.prod.yml up -d --build
 docker compose -f docker-compose.prod.yml exec app node build/cli.js create-admin --email you@example.com --name You</code></pre>
-				<p class="after">
-					Open the invite link it prints, set a password, invite your team. Step-by-step guides for
-					<a href="https://github.com/gorkemio/izgah/blob/main/docs/deploy/docker-compose.md"
-						>Docker Compose and Caddy</a
-					>
-					and
-					<a href="https://github.com/gorkemio/izgah/blob/main/docs/deploy/dokploy.md">Dokploy</a>.
-				</p>
+					</div>
+				</div>
+			</section>
 
-				<h2>What it does</h2>
-				<ul class="annotated">
-					<li>
-						<a href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-core.md"
-							>Sections, and links that stay out of the feed</a
-						>
-						<p>
-							Admins file links into sections. Reference links can sit in a section without showing
-							up in the feed.
-						</p>
-					</li>
-					<li>
-						<a href="https://github.com/gorkemio/izgah/blob/main/src/lib/server/search/service.ts"
-							>Search in English and Turkish</a
-						>
-						<p>Titles, notes, page text and URL fragments, with <kbd>⌘K</kbd> from anywhere.</p>
-					</li>
-					<li>
-						<a href="https://github.com/gorkemio/izgah/tree/main/extensions#readme"
-							>Browser extensions</a
-						>
-						<p>
-							Chrome, Firefox and Safari. <kbd>Alt+Shift+I</kbd> shares the current tab; the
-							extension talks only to your server.
-						</p>
-					</li>
-					<li>
-						<a
-							href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-smart-capture.md"
-							>Smart capture</a
-						>
-						<p>
-							Type <code>#section</code> in a note, get suggestions from how your team files things,
-							and, if an admin adds a key, short summaries and AI section suggestions. Off until you
-							turn it on.
-						</p>
-					</li>
-					<li>
-						<a href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-ui-v5.md"
-							>Calm, accessible interface</a
-						>
-						<p>
-							Server-rendered pages, light and dark themes with high-contrast palettes that meet
-							WCAG 2.2 AA, and a setting that turns motion and translucency down.
-						</p>
-					</li>
-				</ul>
+			<section class="band band-muted" aria-labelledby="privacy-title">
+				<div class="wrap">
+					<div class="band-head reveal">
+						<p class="kicker">Privacy</p>
+						<h2 id="privacy-title">What runs on your server, and what leaves it</h2>
+					</div>
+					<dl class="facts">
+						<div class="fact reveal">
+							<dt>
+								<svg class="icon" aria-hidden="true"><use href="#i-server" /></svg>Runs
+							</dt>
+							<dd>One Node.js container, PostgreSQL, and a folder of WebP images.</dd>
+						</div>
+						<div class="fact reveal">
+							<dt>
+								<svg class="icon" aria-hidden="true"><use href="#i-arrow-up-right" /></svg>Leaves
+							</dt>
+							<dd>
+								Requests to the pages your team shares, to read titles, icons and preview images;
+								GitHub's API for repository details. If an admin turns on AI: the link's title,
+								description, a text excerpt and your section names, to the provider you chose.
+							</dd>
+						</div>
+						<div class="fact reveal">
+							<dt>
+								<svg class="icon" aria-hidden="true"><use href="#i-shield-check" /></svg>Never
+							</dt>
+							<dd>
+								Analytics, telemetry or mail to us. There is no "us": izgah.com hosts no instances.
+							</dd>
+						</div>
+					</dl>
+				</div>
+			</section>
 
-				<h2>Why it exists</h2>
-				<p class="prose">
-					It started as a WhatsApp group. Good links scrolled away within a day, the same video was
-					shared three times with three separate discussions, and nobody could find "that article
-					about…" a month later.
-				</p>
+			<section class="band" aria-label="Scope and roadmap">
+				<div class="wrap">
+					<div class="pair">
+						<div class="reveal">
+							<h2>What it doesn't do</h2>
+							<p>
+								Izgah is not a personal bookmark manager. It doesn't archive whole pages, highlight
+								text or keep private folders. If that is what you need,
+								<a href="https://karakeep.app">Karakeep</a> and
+								<a href="https://linkwarden.app">Linkwarden</a> are good self-hosted choices.
+							</p>
+						</div>
+						<div class="reveal">
+							<h2>What comes next</h2>
+							<ul class="roadmap">
+								<li>Importing a chat export</li>
+								<li>Read later</li>
+								<li>Export and RSS</li>
+								<li>Sharing from phones</li>
+							</ul>
+							<p>
+								<a href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-roadmap.md"
+									>The whole roadmap</a
+								>
+								is a document in the repository.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
 
-				<h2>What it doesn't do</h2>
-				<p class="prose">
-					Izgah is not a personal bookmark manager. It doesn't archive whole pages, highlight text
-					or keep private folders. If that is what you need,
-					<a href="https://karakeep.app">Karakeep</a> and
-					<a href="https://linkwarden.app">Linkwarden</a> are good self-hosted choices.
-				</p>
+			<section class="band" aria-labelledby="closing-title">
+				<div class="wrap">
+					<div class="closing reveal">
+						<div>
+							<h2 id="closing-title">Give your team's links a home</h2>
+							<p>Free software under the GNU AGPL-3.0. Your server, your domain, your data.</p>
+						</div>
+						<div class="actions">
+							<a class="btn btn-primary" href="#install">Run it on your server</a>
+							<a class="btn btn-secondary" href="https://github.com/gorkemio/izgah#readme"
+								>Read the docs</a
+							>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
 
-				<h2>What runs on your server, and what leaves it</h2>
-				<dl class="facts">
-					<dt>Runs</dt>
-					<dd>One Node.js container, PostgreSQL, and a folder of WebP thumbnails.</dd>
-					<dt>Leaves</dt>
-					<dd>
-						Requests to the pages your team shares, to read titles and preview images; GitHub's API
-						for repository details. If an admin turns on AI: the link's title, description, a text
-						excerpt and your section names, to the provider you chose.
-					</dd>
-					<dt>Never</dt>
-					<dd>
-						Analytics, telemetry or mail to us. There is no "us": izgah.com hosts no instances.
-					</dd>
-				</dl>
-
-				<h2>Roadmap</h2>
-				<p class="prose">
-					Next: importing a chat export, read later, export and RSS, sharing from phones.
-					<a href="https://github.com/gorkemio/izgah/blob/main/docs/designs/izgah-roadmap.md"
-						>The whole roadmap</a
-					>
-					is a document in the repository.
-				</p>
-			</main>
-
-			<footer class="site-foot">
+		<footer class="site-foot">
+			<div class="wrap">
 				<p>Izgah is free software under the GNU AGPL-3.0.</p>
 				<ul>
 					<li><a href="https://github.com/gorkemio/izgah">Source</a></li>
@@ -302,7 +540,7 @@ docker compose -f docker-compose.prod.yml exec app node build/cli.js create-admi
 					</li>
 					<li><a href="https://github.com/gorkemio/izgah/blob/main/SECURITY.md">Security</a></li>
 				</ul>
-			</footer>
-		</div>
+			</div>
+		</footer>
 	</body>
 </html>
