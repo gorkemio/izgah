@@ -159,20 +159,23 @@
 	}
 
 	.kpi-box.has-dead {
-		color: var(--k-color-danger);
+		color: var(--destructive);
 	}
 
 	.kpi-box.has-dead h2 {
-		color: var(--k-color-danger);
+		color: var(--destructive);
 	}
 
 	.kpi-box.has-dead .kpi-value {
-		color: var(--k-color-danger);
+		color: var(--destructive);
 	}
 
 	.table-card {
-		border-block-start: 1px solid var(--k-color-text);
 		overflow: hidden;
+		background: var(--card);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		box-shadow: var(--elevation-sm);
 	}
 
 	.table-toolbar {
@@ -182,12 +185,12 @@
 		justify-content: space-between;
 		gap: var(--space-3);
 		padding: var(--space-3) var(--space-4);
-		border-block-end: 1px solid var(--k-color-line);
+		border-block-end: 1px solid var(--border);
 	}
 
 	.table-toolbar h2 {
 		margin: 0;
-		font: var(--k-text-section);
+		font: var(--type-section);
 		letter-spacing: -0.01em;
 		font-variant-numeric: tabular-nums;
 	}
@@ -203,7 +206,7 @@
 	}
 
 	.table-wrapper:focus-visible {
-		outline: 2px solid var(--k-color-accent);
+		outline: 2px solid var(--primary);
 		outline-offset: -2px;
 		box-shadow: none;
 	}
@@ -217,7 +220,7 @@
 	.responsive-jobs-table th,
 	.responsive-jobs-table td {
 		padding: 11px var(--space-4);
-		border-block-end: 1px solid var(--k-color-line);
+		border-block-end: 1px solid var(--border);
 		text-align: start;
 		vertical-align: top;
 	}
@@ -228,10 +231,10 @@
 	}
 
 	.responsive-jobs-table thead th {
-		background: var(--k-color-surface-2);
-		font: var(--k-text-micro);
+		background: var(--muted);
+		font: var(--type-micro);
 		font-weight: 600;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 		position: sticky;
 		inset-block-start: 0;
 		z-index: 1;
@@ -244,7 +247,7 @@
 	}
 
 	.responsive-jobs-table tbody tr:hover {
-		background: var(--k-color-surface-2);
+		background: var(--muted);
 	}
 
 	.job-url-stack {
@@ -260,14 +263,14 @@
 	}
 
 	.job-domain {
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 600;
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.job-link {
-		font: var(--k-text-meta);
-		color: var(--k-color-text-muted);
+		font: var(--type-meta);
+		color: var(--muted-foreground);
 		word-break: normal;
 		overflow-wrap: anywhere;
 	}
@@ -280,7 +283,7 @@
 	}
 
 	.responsive-jobs-table tbody td.num-col {
-		font: var(--k-text-meta);
+		font: var(--type-meta);
 		font-variant-numeric: tabular-nums;
 	}
 
@@ -294,9 +297,9 @@
 	}
 
 	.date-cell {
-		font: var(--k-text-meta);
+		font: var(--type-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 		white-space: nowrap;
 	}
 
@@ -305,29 +308,29 @@
 		display: inline-flex;
 		align-items: center;
 		padding: 2px 9px;
-		border-radius: var(--k-radius-pill);
-		border: 1px solid var(--k-color-danger-border);
-		background: var(--k-color-danger-soft);
-		font: var(--k-text-micro);
+		border-radius: 9999px;
+		border: 1px solid color-mix(in oklab, var(--destructive) 40%, transparent);
+		background: color-mix(in oklab, var(--destructive) 10%, transparent);
+		font: var(--type-micro);
 		font-variant-numeric: tabular-nums;
 		letter-spacing: 0.02em;
-		color: var(--k-color-danger);
+		color: var(--destructive);
 		white-space: nowrap;
 	}
 
 	.error-detail {
-		font: var(--k-text-hint);
-		color: var(--k-color-text-secondary);
+		font: var(--type-hint);
+		color: var(--muted-foreground);
 	}
 
 	.empty-state {
 		margin: 0;
 		padding: var(--space-5) var(--space-4);
-		border: 1px solid var(--k-color-line);
-		border-radius: var(--k-radius-sm);
-		background: var(--k-color-surface-2);
-		font: var(--k-text-ui);
-		color: var(--k-color-text-muted);
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		background: var(--muted);
+		font: var(--type-ui);
+		color: var(--muted-foreground);
 	}
 
 	@container (width < 640px) {
@@ -344,7 +347,7 @@
 		}
 
 		.responsive-jobs-table tr {
-			border-block-end: 2px solid var(--k-color-line);
+			border-block-end: 2px solid var(--border);
 			padding: var(--space-2) 0;
 		}
 
@@ -366,8 +369,8 @@
 		}
 
 		.responsive-jobs-table td::before {
-			font: var(--k-text-micro);
-			color: var(--k-color-text-muted);
+			font: var(--type-micro);
+			color: var(--muted-foreground);
 		}
 
 		.responsive-jobs-table td:nth-child(2)::before {

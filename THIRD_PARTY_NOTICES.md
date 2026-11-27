@@ -1,13 +1,15 @@
 # Third-party notices
 
-Izgah bundles the following third-party assets. Their licenses apply to those files only.
+Izgah bundles the following third-party assets and source code. Their licenses apply to those files only.
 
-| Component                                                                                                                                       | Where                     | License                   |
-| :---------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------ | :------------------------ |
-| [Atkinson Hyperlegible Next](https://github.com/googlefonts/atkinson-hyperlegible-next) (via `@fontsource-variable/atkinson-hyperlegible-next`) | web app, extensions, site | SIL Open Font License 1.1 |
+| Component                                                                                  | Where                     | License                   |
+| :----------------------------------------------------------------------------------------- | :------------------------ | :------------------------ |
+| [Geist](https://github.com/vercel/geist-font) (via `@fontsource-variable/geist`)           | web app, extensions, site | SIL Open Font License 1.1 |
+| [shadcn-svelte](https://github.com/huntabyte/shadcn-svelte) components, copied and adapted | `src/lib/components/ui/`  | MIT                       |
+| [Lucide](https://github.com/lucide-icons/lucide) icons (via `@lucide/svelte`)              | web app                   | ISC                       |
 
-The latin subset of Atkinson Hyperlegible Next in `src/lib/fonts/`, `extensions/src/styles/fonts/` and `site/assets/fonts/` is a Modified Version under the OFL: its zero is unslashed (`scripts/fonts/plain-zero.py`) and it is renamed "Atkinson Hyperlegible Next Izgah". The latin-ext subset is unmodified.
+The Geist font files are unmodified. The full text of the SIL Open Font License for Geist is in [`site/assets/fonts/OFL.txt`](./site/assets/fonts/OFL.txt) and [`extensions/public/OFL.txt`](./extensions/public/OFL.txt).
 
-The full text of the SIL Open Font License is in [`extensions/public/OFL.txt`](./extensions/public/OFL.txt).
+Interaction ideas from [21st.dev](https://21st.dev) were rewritten from scratch in Svelte (izgah-ui-v5.md §9); no 21st.dev source code is included.
 
 Runtime npm dependencies keep their own licenses; see each package in `node_modules` or `pnpm licenses list`.

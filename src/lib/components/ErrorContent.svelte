@@ -2,6 +2,10 @@
 	import { t } from '#lib/i18n/index.ts';
 	import { pageTitle } from '#lib/instance.ts';
 	import { page } from '$app/state';
+	import { buttonVariants } from '#lib/components/ui/button/index.ts';
+	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
+	import Copy from '@lucide/svelte/icons/copy';
+	import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
 
 	interface Props {
 		/** Where the "home" link points; signed-out visitors go to /login. */
@@ -66,112 +70,54 @@
 	<title>{pageTitle(heading)}</title>
 </svelte:head>
 
-<div class="error-content">
-	<p class="error-code" class:is-server-error={isServerError}>
+<!-- Error page (docs/designs/izgah-ui-v5.md §5.7): a quiet card with the status, the message, the
+     request id to quote and one way back. -->
+<div
+	class="error-content mx-auto grid w-full max-w-[32rem] justify-items-start gap-3 rounded-2xl border bg-card p-7 shadow-sm"
+>
+	<p
+		class="error-code inline-flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-0.5 text-[12px] font-medium text-muted-foreground tabular-nums"
+		class:is-server-error={isServerError}
+	>
+		{#if isServerError}
+			<TriangleAlert class="size-3.5" aria-hidden="true" />
+		{/if}
 		<span>{page.status}</span>
 	</p>
-	<h1 tabindex="-1">{heading}</h1>
-	<p class="error-message">{message}</p>
+	<h1 tabindex="-1" class="text-2xl font-semibold tracking-[-0.02em] outline-none">{heading}</h1>
+	<p class="error-message text-[14.5px] leading-relaxed text-muted-foreground">{message}</p>
 	{#if page.error?.requestId}
-		<div class="request-id-row">
-			<p class="request-id-label">
-				{t('error.requestId')} <code id="error-request-id">{page.error.requestId}</code>
+		<div
+			class="request-id-row flex w-full flex-wrap items-center gap-2 rounded-lg border border-hairline bg-muted/50 px-3 py-2"
+		>
+			<p class="request-id-label min-w-0 flex-1 text-[12.5px] text-muted-foreground">
+				{t('error.requestId')}
+				<code id="error-request-id" class="font-mono text-[12px] break-all text-foreground">
+					{page.error.requestId}
+				</code>
 			</p>
-			<button type="button" class="btn btn-subtle btn-sm" onclick={copyRequestId}>
+			<button
+				type="button"
+				class={buttonVariants({ variant: 'ghost', size: 'xs' })}
+				onclick={copyRequestId}
+			>
+				<Copy aria-hidden="true" />
 				<span>{t('common.copy')}</span>
 			</button>
-			<span class="copy-status" role="status">{copyStatus}</span>
+			<span class="copy-status sr-only" role="status">{copyStatus}</span>
 		</div>
 	{/if}
-	<p class="error-actions">
-		<a href={homeHref} class="btn btn-primary">
+	<p class="error-actions pt-2">
+		<a href={homeHref} class={buttonVariants()}>
+			<ArrowLeft aria-hidden="true" />
 			<span>{homeLabel}</span>
 		</a>
 	</p>
 </div>
 
 <style>
-	.error-content {
-		display: grid;
-		justify-items: start;
-		gap: var(--space-4);
-		max-inline-size: var(--read-w);
-		padding: var(--space-5) 0 0;
-		border-block-start: 1px solid var(--k-color-text);
-	}
-
-	.error-code {
-		font: var(--k-text-meta);
-		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-muted);
-	}
-
 	.error-code.is-server-error {
-		background: var(--k-color-danger-soft);
-		color: var(--k-color-danger);
-		border-color: var(--k-color-danger-border);
-	}
-
-	h1 {
-		font: var(--k-text-display);
-		letter-spacing: -0.02em;
-		color: var(--k-color-text);
-	}
-
-	.error-message {
-		font: var(--k-text-body);
-		color: var(--k-color-text-secondary);
-		max-inline-size: 52ch;
-	}
-
-	.request-id-row {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: var(--space-2);
-		font: var(--k-text-hint);
-		color: var(--k-color-text-secondary);
-	}
-
-	.request-id-label {
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-		flex-wrap: wrap;
-	}
-
-	.request-id-row code {
-		font: var(--k-text-meta);
-		padding: 2px 7px;
-		color: var(--k-color-text);
-		background: var(--k-color-surface-1);
-		border: 1px solid var(--k-color-line);
-		border-radius: var(--k-radius-xs);
-		overflow-wrap: anywhere;
-	}
-
-	.copy-status {
-		font: var(--k-text-meta);
-		color: var(--k-color-text-muted);
-	}
-
-	.error-actions {
-		margin-block-start: var(--space-1);
-	}
-
-	@media (max-width: 767px) {
-		.error-content {
-			padding-block-start: var(--space-4);
-		}
-	}
-
-	@media (forced-colors: active) {
-		.error-content,
-		.request-id-row,
-		.request-id-row code,
-		.error-code {
-			border-color: CanvasText;
-			box-shadow: none;
-		}
+		color: var(--destructive);
+		background: color-mix(in oklab, var(--destructive) 10%, transparent);
 	}
 </style>

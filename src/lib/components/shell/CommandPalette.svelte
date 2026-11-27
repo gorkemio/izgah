@@ -845,7 +845,7 @@
 		align-items: center;
 		gap: var(--space-2);
 		padding: 12px var(--space-4);
-		border-block-end: 1px solid var(--k-color-line);
+		border-block-end: 1px solid var(--border);
 	}
 
 	.cmdk-input {
@@ -853,8 +853,8 @@
 		min-inline-size: 0;
 		border: 0;
 		background: transparent;
-		font: var(--k-text-body);
-		color: var(--k-color-text);
+		font: var(--type-body);
+		color: var(--foreground);
 		outline: none;
 		box-shadow: none;
 	}
@@ -865,7 +865,7 @@
 	}
 
 	.cmdk-input::placeholder {
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 	}
 
 	.cmdk-input::-webkit-search-cancel-button {
@@ -881,21 +881,21 @@
 		padding: 2px;
 		background: transparent;
 		border: 0;
-		border-radius: var(--k-radius-xs);
-		color: var(--k-color-text-muted);
+		border-radius: 4px;
+		color: var(--muted-foreground);
 		cursor: pointer;
 	}
 
 	.cmdk-clear-btn {
-		font: var(--k-text-hint);
+		font: var(--type-hint);
 		text-decoration: underline;
-		text-decoration-color: var(--k-color-line-strong);
+		text-decoration-color: var(--input);
 		text-underline-offset: 0.2em;
 	}
 
 	.cmdk-clear-btn:hover {
-		color: var(--k-color-text);
-		background: var(--k-color-surface-2);
+		color: var(--foreground);
+		background: var(--muted);
 	}
 
 	.cmdk-scopes {
@@ -903,7 +903,7 @@
 		align-items: center;
 		gap: 6px;
 		padding: var(--space-2) var(--space-4);
-		border-block-end: 1px solid var(--k-color-line);
+		border-block-end: 1px solid var(--border);
 		overflow-x: auto;
 	}
 
@@ -912,10 +912,10 @@
 		align-items: center;
 		min-block-size: 26px;
 		padding: 0 10px;
-		border-radius: var(--k-radius-pill);
-		font: var(--k-text-ui);
+		border-radius: 9999px;
+		font: var(--type-ui);
 		font-size: 0.78125rem;
-		color: var(--k-color-text-secondary);
+		color: var(--muted-foreground);
 		background: transparent;
 		border: 1px solid transparent;
 		white-space: nowrap;
@@ -927,11 +927,11 @@
 	}
 
 	.cmdk-scope:hover:not(.is-active) {
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.cmdk-scope.is-active {
-		color: var(--k-color-text);
+		color: var(--foreground);
 		font-weight: 600;
 		text-decoration: underline;
 		text-underline-offset: 0.3em;
@@ -953,15 +953,15 @@
 
 	.cmdk-group-tail {
 		padding-block-start: var(--space-2);
-		border-block-start: 1px solid var(--k-color-line);
+		border-block-start: 1px solid var(--border);
 	}
 
 	.cmdk-group-label {
 		padding: 6px 10px 3px;
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-size: 0.75rem;
 		font-weight: 600;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 	}
 
 	.cmdk-item {
@@ -971,9 +971,9 @@
 		inline-size: 100%;
 		padding: var(--space-2) 10px;
 		border: 1px solid transparent;
-		border-radius: var(--k-radius-sm);
+		border-radius: 6px;
 		background: transparent;
-		color: var(--k-color-text);
+		color: var(--foreground);
 		text-align: start;
 		cursor: pointer;
 		transition:
@@ -982,8 +982,8 @@
 	}
 
 	.cmdk-item.is-selected {
-		background: var(--k-color-surface-2);
-		border-color: var(--k-color-line);
+		background: var(--muted);
+		border-color: var(--border);
 	}
 
 	.cmdk-item-main {
@@ -994,18 +994,18 @@
 	}
 
 	.cmdk-item-title {
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 500;
-		color: var(--k-color-text);
+		color: var(--foreground);
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
 
 	.cmdk-item-sub {
-		font: var(--k-text-hint);
+		font: var(--type-hint);
 		font-size: 0.75rem;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -1037,11 +1037,11 @@
 		gap: var(--space-2);
 		margin: var(--space-1) var(--space-2);
 		padding: var(--space-2) var(--space-3);
-		border-radius: var(--k-radius-sm);
-		background: var(--k-color-danger-soft);
-		border: 1px solid var(--k-color-danger-border);
-		color: var(--k-color-danger);
-		font: var(--k-text-hint);
+		border-radius: 6px;
+		background: color-mix(in oklab, var(--destructive) 10%, transparent);
+		border: 1px solid color-mix(in oklab, var(--destructive) 40%, transparent);
+		color: var(--destructive);
+		font: var(--type-hint);
 	}
 
 	.cmdk-inline-link {
@@ -1059,8 +1059,8 @@
 	}
 
 	.cmdk-empty-title {
-		font: var(--k-text-ui);
-		color: var(--k-color-text-secondary);
+		font: var(--type-ui);
+		color: var(--muted-foreground);
 	}
 
 	.cmdk-empty-actions {
@@ -1077,9 +1077,9 @@
 		justify-content: space-between;
 		gap: var(--space-3);
 		padding: 9px var(--space-4);
-		border-block-start: 1px solid var(--k-color-line);
-		font: var(--k-text-meta);
-		color: var(--k-color-text-muted);
+		border-block-start: 1px solid var(--border);
+		font: var(--type-meta);
+		color: var(--muted-foreground);
 	}
 
 	.cmdk-hints {
@@ -1096,8 +1096,8 @@
 	}
 
 	.cmdk-count {
-		font: var(--k-text-meta);
-		color: var(--k-color-text-muted);
+		font: var(--type-meta);
+		color: var(--muted-foreground);
 		white-space: nowrap;
 	}
 

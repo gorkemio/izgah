@@ -93,8 +93,8 @@
 		align-items: baseline;
 		gap: var(--space-1) var(--space-2);
 		margin-block-start: var(--space-2);
-		font: var(--k-text-hint);
-		color: var(--k-color-text-secondary);
+		font: var(--type-hint);
+		color: var(--muted-foreground);
 	}
 
 	.share-suggestions form {
@@ -102,12 +102,12 @@
 	}
 
 	.label {
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 	}
 
 	.auto-name {
 		font-weight: 600;
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.suggestion-add,
@@ -123,16 +123,16 @@
 
 	.suggestion-add {
 		font-weight: 600;
-		color: var(--k-color-accent-text);
+		color: var(--link);
 	}
 
 	.suggestion-dismiss {
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 	}
 
 	.suggestion-add:hover,
 	.suggestion-dismiss:hover {
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.suggestion-add:disabled,

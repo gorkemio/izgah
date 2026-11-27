@@ -181,11 +181,11 @@
 		min-inline-size: 36px;
 		min-block-size: 36px;
 		padding: 0 var(--space-2);
-		font: var(--k-text-ui);
-		color: var(--k-color-text);
+		font: var(--type-ui);
+		color: var(--foreground);
 		background: transparent;
-		border: 1px solid var(--k-color-line-strong);
-		border-radius: var(--k-radius-sm);
+		border: 1px solid var(--input);
+		border-radius: 6px;
 		cursor: pointer;
 		transition:
 			background-color var(--dur-fast) var(--ease),
@@ -193,7 +193,7 @@
 	}
 
 	:where(.popover-trigger):hover {
-		background: var(--k-color-surface-2);
+		background: var(--muted);
 	}
 
 	@media (pointer: coarse) {

@@ -129,9 +129,9 @@
 	legend {
 		margin-block-end: var(--space-2);
 		padding: 0;
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 600;
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.palette-choice {
@@ -139,21 +139,21 @@
 		gap: var(--space-2);
 		align-items: center;
 		min-block-size: 32px;
-		font: var(--k-text-body);
-		color: var(--k-color-text);
+		font: var(--type-body);
+		color: var(--foreground);
 		cursor: pointer;
 	}
 
 	.palette-choice input {
 		margin: 0;
-		accent-color: var(--k-color-text);
+		accent-color: var(--foreground);
 	}
 
 	.palette-hint {
 		flex-basis: 100%;
 		margin: 0;
-		font: var(--k-text-hint);
-		color: var(--k-color-text-muted);
+		font: var(--type-hint);
+		color: var(--muted-foreground);
 	}
 
 	@media (pointer: coarse) {

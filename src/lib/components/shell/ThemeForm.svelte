@@ -77,7 +77,7 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 7px;
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		cursor: pointer;
 		transition:
 			background-color var(--dur-fast) var(--ease),
@@ -145,7 +145,7 @@
 		align-items: center;
 		gap: var(--space-2);
 		min-block-size: 32px;
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 400;
 		color: var(--foreground);
 		cursor: pointer;

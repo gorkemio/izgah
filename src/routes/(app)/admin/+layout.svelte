@@ -73,7 +73,7 @@
 	}
 
 	.admin-subnav {
-		border-block-end: 1px solid var(--k-color-line);
+		border-block-end: 1px solid var(--border);
 	}
 
 	.admin-subnav-list {
@@ -106,10 +106,11 @@
 		gap: 6px;
 		min-block-size: 38px;
 		padding: var(--space-2) var(--space-3);
-		border-radius: var(--k-radius-sm) var(--k-radius-sm) 0 0;
-		color: var(--k-color-text-muted);
+		border-radius: 6px 6px 0 0;
+		border-block-end: 2px solid transparent;
+		color: var(--muted-foreground);
 		text-decoration: none;
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		white-space: nowrap;
 		transition:
 			background-color var(--dur-fast) var(--ease),
@@ -117,24 +118,28 @@
 	}
 
 	.admin-subnav-link:not([aria-current='page']):hover {
-		color: var(--k-color-text);
-		background: var(--k-color-surface-2);
+		color: var(--foreground);
+		background: var(--muted);
 		text-decoration: none;
 	}
 
+	/* The active tab sits on the rule with a 2px ink line (izgah-ui-v5.md §5.6); a border, so it
+	   survives forced-colors mode (WCAG 1.4.1). */
 	.admin-subnav-link[aria-current='page'],
 	.admin-subnav-link[aria-current='page']:hover {
-		color: var(--k-color-text);
-		font-weight: 600;
+		color: var(--foreground);
 		text-decoration: none;
+		border-block-end: 2px solid var(--foreground);
+		margin-block-end: -1px;
 	}
 
-	/* Border-based underline survives forced-colors mode (WCAG 1.4.1). */
-
 	.subnav-badge {
-		font: var(--k-text-meta);
+		padding: 0 6px;
+		font: var(--type-micro);
 		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
+		background: var(--muted);
+		border-radius: 9999px;
 	}
 
 	@media (pointer: coarse) {

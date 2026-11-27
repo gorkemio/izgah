@@ -727,3 +727,41 @@
 		{/snippet}
 	</Dialog>
 </div>
+
+<style>
+	/* Phones: the composer sticks above the tab bar (izgah-ui-v2 §8, kept in v5). */
+	@media (max-width: 767px) {
+		.comment-composer-form {
+			position: sticky;
+			inset-block-end: var(--tab-bar-h);
+			z-index: 10;
+			padding: var(--space-3);
+			margin-inline: -1.25rem;
+			margin-block-end: -1.25rem;
+			background: var(--card);
+			border-block-start: 1px solid var(--border);
+			border-radius: 0 0 12px 12px;
+		}
+
+		/* Collapsed to one line while empty and unfocused, so it never covers the thread. It stays
+		   open once it has text: on iOS tapping the submit button blurs the field, and collapsing
+		   then would move the button out from under the finger. */
+		.comment-composer-form:not(:focus-within):has(textarea:placeholder-shown) .composer-hint,
+		.comment-composer-form:not(:focus-within):has(textarea:placeholder-shown) .char-counter {
+			display: none;
+		}
+
+		.comment-composer-form:not(:focus-within):has(textarea:placeholder-shown) .comment-textarea {
+			min-block-size: 44px;
+			block-size: 44px;
+			resize: none;
+		}
+
+		/* The tab bar hides while typing or while the draft has text. */
+		.comment-composer-form:focus-within,
+		.comment-composer-form:has(textarea:not(:placeholder-shown)) {
+			inset-block-end: 0;
+			padding-block-end: max(var(--space-3), env(safe-area-inset-bottom));
+		}
+	}
+</style>

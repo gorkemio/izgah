@@ -42,7 +42,7 @@
 
 @layer base {
 	html {
-		font: var(--k-text-body);
+		font: var(--type-body);
 		/* UI v5 surfaces (izgah-ui-v5.md §3.1); screens not yet moved keep their --k-* colours. */
 		color: var(--foreground);
 		background: var(--background);
@@ -80,7 +80,7 @@
 
 	/* One family (izgah-ui-v4 §2): hierarchy from size and weight only. */
 	h1 {
-		font: var(--k-text-display);
+		font: var(--type-display);
 		letter-spacing: -0.01em;
 	}
 
@@ -92,7 +92,7 @@
 		color: inherit;
 		text-decoration-line: underline;
 		text-decoration-thickness: 1px;
-		text-decoration-color: var(--k-color-line-strong);
+		text-decoration-color: var(--input);
 		text-underline-offset: 0.2em;
 		transition:
 			color var(--dur-fast) var(--ease),
@@ -100,7 +100,7 @@
 	}
 
 	a:hover {
-		color: var(--k-color-accent-text);
+		color: var(--link);
 		text-decoration-color: currentColor;
 	}
 
@@ -111,22 +111,22 @@
 	 */
 	.content-link,
 	.content-link:link {
-		color: var(--k-color-link);
+		color: var(--link);
 		text-decoration-color: currentColor;
 	}
 
 	.content-link:visited {
-		color: var(--k-color-visited);
+		color: var(--visited);
 	}
 
 	.content-link:hover {
-		color: var(--k-color-link);
+		color: var(--link);
 		text-decoration-thickness: 2px;
 	}
 
 	::selection {
-		background: var(--k-color-accent);
-		color: var(--k-color-on-accent);
+		background: var(--primary);
+		color: var(--primary-foreground);
 	}
 
 	/*
@@ -138,8 +138,8 @@
 		outline: 2px solid transparent;
 		outline-offset: 2px;
 		box-shadow:
-			0 0 0 2px var(--k-color-bg),
-			0 0 0 4px var(--k-color-accent);
+			0 0 0 2px var(--background),
+			0 0 0 4px var(--primary);
 	}
 
 	code,
@@ -152,7 +152,7 @@
 
 	hr {
 		border: 0;
-		border-block-start: 1px solid var(--k-color-line);
+		border-block-start: 1px solid var(--border);
 	}
 
 	.visually-hidden:where(:not(:focus-within, :active)) {
@@ -176,18 +176,18 @@
 		align-items: center;
 		min-block-size: 44px;
 		padding: var(--space-2) var(--space-4);
-		background: var(--k-color-accent);
-		color: var(--k-color-on-accent);
-		font: var(--k-text-ui);
+		background: var(--primary);
+		color: var(--primary-foreground);
+		font: var(--type-ui);
 		font-weight: 600;
 		text-decoration: none;
-		border: 1px solid var(--k-color-accent);
-		border-radius: var(--k-radius-sm);
+		border: 1px solid var(--primary);
+		border-radius: 6px;
 		transform: translateY(-200%);
 	}
 
 	.skip-link:hover {
-		color: var(--k-color-on-accent);
+		color: var(--primary-foreground);
 	}
 
 	.skip-link:focus {
@@ -280,7 +280,7 @@
 		background: var(--warning-soft);
 		color: var(--foreground);
 		border-block-end: 1px solid var(--warning);
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		text-align: center;
 	}
 }

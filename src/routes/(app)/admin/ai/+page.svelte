@@ -416,13 +416,13 @@
 <style>
 	.ai-status {
 		margin: var(--space-2) 0 0;
-		font: var(--k-text-ui);
-		color: var(--k-color-text);
+		font: var(--type-ui);
+		color: var(--foreground);
 	}
 
 	.ai-today {
 		margin-inline-start: var(--space-2);
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 		font-variant-numeric: tabular-nums;
 	}
 
@@ -435,18 +435,18 @@
 		grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
 		gap: var(--space-5);
 		padding-block: var(--space-5);
-		border-block-start: 1px solid var(--k-color-line);
+		border-block-start: 1px solid var(--border);
 	}
 
 	.ai-row-text h2 {
 		margin: 0 0 var(--space-1);
-		font: var(--k-text-section);
+		font: var(--type-section);
 	}
 
 	.ai-row-text p {
 		margin: 0;
-		font: var(--k-text-hint);
-		color: var(--k-color-text-secondary);
+		font: var(--type-hint);
+		color: var(--muted-foreground);
 	}
 
 	.ai-row-control {
@@ -475,7 +475,7 @@
 	.ai-fieldset legend {
 		margin-block-end: var(--space-1);
 		padding: 0;
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 600;
 	}
 
@@ -483,7 +483,7 @@
 		display: flex;
 		gap: var(--space-2);
 		align-items: baseline;
-		font: var(--k-text-body);
+		font: var(--type-body);
 	}
 
 	.ai-check input {
@@ -493,8 +493,8 @@
 
 	.ai-check small {
 		display: block;
-		font: var(--k-text-hint);
-		color: var(--k-color-text-muted);
+		font: var(--type-hint);
+		color: var(--muted-foreground);
 	}
 
 	.is-muted {
@@ -510,7 +510,7 @@
 	.ai-sent {
 		margin: 0;
 		padding-inline-start: 1.1em;
-		font: var(--k-text-body);
+		font: var(--type-body);
 	}
 
 	.ai-limit-input {
@@ -520,7 +520,7 @@
 	.ai-usage {
 		inline-size: 100%;
 		border-collapse: collapse;
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-variant-numeric: tabular-nums;
 	}
 
@@ -528,11 +528,11 @@
 	.ai-usage td {
 		padding: var(--space-1) var(--space-3) var(--space-1) 0;
 		text-align: start;
-		border-block-end: 1px solid var(--k-color-line);
+		border-block-end: 1px solid var(--border);
 	}
 
 	.ai-usage thead th {
-		color: var(--k-color-text-secondary);
+		color: var(--muted-foreground);
 		font-weight: 600;
 	}
 
@@ -541,7 +541,7 @@
 	}
 
 	.ai-usage .is-bad {
-		color: var(--k-color-danger);
+		color: var(--destructive);
 	}
 
 	.ai-purge {

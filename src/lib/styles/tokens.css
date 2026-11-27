@@ -1,89 +1,14 @@
 /*
- * Künye design tokens (docs/designs/izgah-ui-v4.md §1–§3; mechanics from docs/designs/izgah-themes.md §4).
- *
- * Ink and paper: neutral white and near-black surfaces, one accent (link blue), rules instead of
- * boxes, no shadows except dialogs and popovers, corner radius at most 3px, one type family.
+ * Izgah design tokens (docs/designs/izgah-ui-v5.md §2, §3).
  *
  * Two layers:
- *   1. Palette slots (--light-*, --dark-*) live in palette.css, generated from tokens/izgah.json
- *      (`pnpm tokens`), the same source as the extensions and izgah.com.
- *   2. This file resolves them with light-dark() into the semantic layer (--k-color-*), so data-theme
- *      only switches color-scheme. The mapping is mirrored on .theme-preview so subtrees can render
- *      either scheme. It also holds type, spacing, radii, shell sizes and motion.
+ *   1. Palette slots (--v5-light-*, --v5-dark-*) live in palette.css, generated from
+ *      tokens/izgah.json (`pnpm tokens`), the same source as the extensions and izgah.com.
+ *   2. This file resolves them with light-dark() into the semantic roles below (shadcn-svelte names
+ *      plus Izgah's brand, status, surface and avatar roles), so data-theme only switches
+ *      color-scheme. It also holds type, spacing, shell sizes and motion.
  */
 @layer tokens {
-	/* Semantic & component layer (:root + .theme-preview). Unregistered custom properties keep
-	   light-dark() live on subtrees. */
-	:root,
-	.theme-preview {
-		--k-color-bg: var(--background); /* v5 page surface during the migration */
-		--k-color-surface-1: light-dark(var(--light-surface-1), var(--dark-surface-1));
-		--k-color-surface-2: light-dark(var(--light-surface-2), var(--dark-surface-2));
-		--k-color-surface-3: light-dark(var(--light-surface-3), var(--dark-surface-3));
-		--k-color-text: light-dark(var(--light-text), var(--dark-text));
-		--k-color-text-secondary: light-dark(var(--light-text-secondary), var(--dark-text-secondary));
-		--k-color-text-muted: light-dark(var(--light-text-muted), var(--dark-text-muted));
-		--k-color-line: light-dark(var(--light-line), var(--dark-line));
-		--k-color-line-strong: light-dark(var(--light-line-strong), var(--dark-line-strong));
-
-		--k-color-accent: light-dark(var(--accent-light), var(--accent-dark));
-		--k-color-on-accent: light-dark(var(--on-accent-light), var(--on-accent-dark));
-		--k-color-accent-soft: light-dark(var(--accent-soft-light), var(--accent-soft-dark));
-		--k-color-accent-text: light-dark(var(--accent-text-light), var(--accent-text-dark));
-		--k-color-accent-border: light-dark(var(--accent-border-light), var(--accent-border-dark));
-
-		/* Links look like links; opened links fade (§1, principle 2). */
-		--k-color-link: light-dark(var(--light-link), var(--dark-link));
-		--k-color-visited: light-dark(var(--light-visited), var(--dark-visited));
-
-		--k-color-danger: light-dark(var(--light-danger), var(--dark-danger));
-		--k-color-on-danger: light-dark(var(--light-on-danger), var(--dark-on-danger));
-		--k-color-danger-soft: light-dark(var(--light-danger-soft), var(--dark-danger-soft));
-		--k-color-danger-border: light-dark(var(--light-danger-border), var(--dark-danger-border));
-
-		--k-color-ok-soft: light-dark(var(--light-ok-soft), var(--dark-ok-soft));
-		--k-color-ok-text: light-dark(var(--light-ok-text), var(--dark-ok-text));
-		--k-color-ok-border: light-dark(var(--light-ok-border), var(--dark-ok-border));
-
-		--k-color-warn-soft: light-dark(var(--light-warn-soft), var(--dark-warn-soft));
-		--k-color-warn-text: light-dark(var(--light-warn-text), var(--dark-warn-text));
-		--k-color-warn-border: light-dark(var(--light-warn-border), var(--dark-warn-border));
-
-		--k-color-focus-inner: light-dark(var(--light-focus-inner), var(--dark-focus-inner));
-		--k-color-focus-outer: var(--k-color-link);
-		--k-color-highlight-bg: light-dark(var(--light-highlight-bg), var(--dark-highlight-bg));
-		--k-color-highlight-fg: light-dark(var(--light-highlight-fg), var(--dark-highlight-fg));
-		--k-color-backdrop: light-dark(var(--light-backdrop), var(--dark-backdrop));
-
-		/* Depth: only dialogs and popovers cast a shadow (light-dark() accepts only <color>). */
-		--k-shadow-lg: var(--light-shadow-lg);
-
-		/* Component layer: rules, not boxes; primary actions are ink. */
-		--card-bg: var(--k-color-bg);
-		--btn-primary-bg: var(--k-color-text);
-		--btn-primary-fg: var(--k-color-bg);
-		--rail-bg: var(--k-color-bg);
-		--rail-border: var(--k-color-line);
-		--input-bg: var(--k-color-bg);
-	}
-
-	.theme-preview.is-light {
-		--k-shadow-lg: var(--light-shadow-lg);
-	}
-
-	@media (prefers-color-scheme: dark) {
-		:root:not([data-theme='light']),
-		:root:not([data-theme='light']) .theme-preview:not(.is-light) {
-			--k-shadow-lg: var(--dark-shadow-lg);
-		}
-	}
-
-	:root[data-theme='dark'],
-	:root[data-theme='dark'] .theme-preview:not(.is-light),
-	.theme-preview.is-dark {
-		--k-shadow-lg: var(--dark-shadow-lg);
-	}
-
 	/* Typography, spacing, radii, shell dimensions and motion (§2, §3). */
 	:root {
 		color-scheme: light dark;
@@ -93,16 +18,16 @@
 		--font-display: var(--font-sans);
 		--font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-		/* Weights 400 / 500 / 600 only (§2). */
-		--k-text-display: 600 1.375rem / 1.25 var(--font-sans);
-		--k-text-day: 600 1rem / 1.3 var(--font-sans);
-		--k-text-title: 500 1rem / 1.4 var(--font-sans);
-		--k-text-section: 600 1rem / 1.35 var(--font-sans);
-		--k-text-body: 400 1rem / 1.5 var(--font-sans);
-		--k-text-ui: 500 0.875rem / 1.3 var(--font-sans);
-		--k-text-hint: 400 0.875rem / 1.45 var(--font-sans);
-		--k-text-meta: 400 0.8125rem / 1.3 var(--font-sans);
-		--k-text-micro: 500 0.8125rem / 1.2 var(--font-sans);
+		/* Type shorthands for scoped styles (izgah-ui-v5.md §3.3); weights 400 / 500 / 600. */
+		--type-display: 600 1.5rem / 1.25 var(--font-sans);
+		--type-day: 600 0.875rem / 1.3 var(--font-sans);
+		--type-title: 500 0.9375rem / 1.4 var(--font-sans);
+		--type-section: 600 0.9375rem / 1.35 var(--font-sans);
+		--type-body: 400 1rem / 1.5 var(--font-sans);
+		--type-ui: 500 0.875rem / 1.3 var(--font-sans);
+		--type-hint: 400 0.8125rem / 1.45 var(--font-sans);
+		--type-meta: 400 0.8125rem / 1.3 var(--font-sans);
+		--type-micro: 500 0.75rem / 1.2 var(--font-sans);
 
 		--space-1: 4px;
 		--space-2: 8px;
@@ -112,13 +37,6 @@
 		--space-6: 32px;
 		--space-7: 48px;
 		--gutter: 16px;
-
-		/* Corner radius at most 3px (§ principle 3). */
-		--k-radius-xs: 2px;
-		--k-radius-sm: 3px;
-		--k-radius-md: 3px;
-		--k-radius-lg: 3px;
-		--k-radius-pill: 3px;
 
 		/* Shell dimensions (§3). The entry gutter is shared with izgah.com. */
 		--rail-w: 248px;
@@ -157,18 +75,6 @@
 	@media (min-width: 1024px) {
 		:root {
 			--gutter: 32px;
-		}
-	}
-
-	/* High contrast and forced colors: no shadows at all. */
-	@media (prefers-contrast: more), (forced-colors: active) {
-		:root,
-		[data-light-theme],
-		[data-dark-theme],
-		.theme-preview {
-			--light-shadow-lg: none;
-			--dark-shadow-lg: none;
-			--k-shadow-lg: none;
 		}
 	}
 
@@ -334,45 +240,5 @@
 			--elevation-lg: none;
 			--elevation-xl: none;
 		}
-	}
-
-	/*
-	 * Migration bridge (izgah-ui-v5.md §2.2): screens not yet moved to v5 keep their Künye layout
-	 * but take the v5 (Jade) colours, radii and shadows through their --k-* variables, so the v5 shell
-	 * and the older content read as one product. Removed with the --k-* variables in M11.
-	 */
-	:root,
-	[data-v5-theme],
-	[data-scheme] {
-		--k-color-bg: var(--background);
-		--k-color-surface-1: var(--card);
-		--k-color-surface-2: var(--muted);
-		--k-color-surface-3: var(--secondary);
-		--k-color-text: var(--foreground);
-		--k-color-text-secondary: var(--muted-foreground);
-		--k-color-text-muted: var(--muted-foreground);
-		--k-color-line: var(--border);
-		--k-color-line-strong: var(--input);
-		--k-color-accent: var(--primary);
-		--k-color-on-accent: var(--primary-foreground);
-		--k-color-accent-text: var(--link);
-		--k-color-link: var(--link);
-		--k-color-visited: var(--visited);
-		--k-color-danger: var(--destructive);
-		--k-color-on-danger: var(--destructive-foreground);
-		--k-color-ok-soft: var(--success-soft);
-		--k-color-ok-text: var(--success);
-		--k-color-warn-soft: var(--warning-soft);
-		--k-color-warn-text: var(--warning);
-		--k-color-focus-outer: var(--ring);
-		--k-color-highlight-bg: var(--highlight);
-		--k-color-highlight-fg: var(--highlight-foreground);
-		--k-color-backdrop: var(--backdrop);
-		--k-shadow-lg: var(--elevation-lg);
-		--k-radius-xs: 4px;
-		--k-radius-sm: 6px;
-		--k-radius-md: 8px;
-		--k-radius-lg: 12px;
-		--k-radius-pill: 9999px;
 	}
 }

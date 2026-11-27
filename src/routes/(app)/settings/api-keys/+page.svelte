@@ -573,52 +573,54 @@
 	}
 
 	h1 {
-		font: var(--k-text-display);
+		font: var(--type-display);
 		letter-spacing: -0.02em;
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.lead {
 		margin: 0;
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 400;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 		font-variant-numeric: tabular-nums;
 	}
 
-	/* Underline subtabs matching /settings. */
+	/* Page tabs as a segmented control (izgah-ui-v5.md §5.6). */
 	.settings-subnav {
-		display: flex;
+		display: inline-flex;
+		justify-self: start;
 		flex-wrap: wrap;
-		gap: var(--space-2);
-		border-block-end: 1px solid var(--k-color-line);
+		gap: 2px;
+		padding: 3px;
+		background: var(--muted);
+		border-radius: 10px;
 	}
 
 	.settings-subnav a {
 		display: inline-flex;
 		align-items: center;
-		min-block-size: 38px;
-		padding: var(--space-2) var(--space-3) 10px;
-		margin-block-end: -1px;
-		font: var(--k-text-ui);
-		color: var(--k-color-text-muted);
+		min-block-size: 30px;
+		padding: 0 12px;
+		font: var(--type-ui);
+		color: var(--muted-foreground);
 		text-decoration: none;
-		border-block-end: 2px solid transparent;
+		border-radius: 7px;
 		transition:
 			color var(--dur-fast) var(--ease),
-			border-color var(--dur-fast) var(--ease);
+			background-color var(--dur-fast) var(--ease);
 	}
 
 	.settings-subnav a:not([aria-current='page']):hover {
-		color: var(--k-color-text);
+		color: var(--foreground);
 		text-decoration: none;
 	}
 
 	.settings-subnav a[aria-current='page'],
 	.settings-subnav a[aria-current='page']:hover {
-		color: var(--k-color-text);
-		font-weight: 600;
-		border-block-end-color: var(--k-color-accent);
+		color: var(--foreground);
+		background: var(--background);
+		box-shadow: var(--elevation-sm);
 		text-decoration: none;
 	}
 
@@ -628,7 +630,7 @@
 		}
 	}
 
-	/* Strict serif boundary: all h2 subheadings stay --font-sans (--k-text-section). */
+	/* Strict serif boundary: all h2 subheadings stay --font-sans (--type-section). */
 	.extension-control {
 		display: grid;
 		gap: var(--space-2);
@@ -640,33 +642,38 @@
 		font-family: var(--font-mono);
 	}
 
+	/* Each group is a card with a titled header (izgah-ui-v5.md §5.6). */
 	.settings-section {
 		display: grid;
-		gap: var(--space-2);
 		min-inline-size: 0;
+		background: var(--card);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		box-shadow: var(--elevation-sm);
 	}
 
 	.section-title {
-		font: var(--k-text-section);
-		color: var(--k-color-text);
-		padding-block-end: var(--space-2);
-		border-block-end: 1px solid var(--k-color-line);
+		font: var(--type-section);
+		color: var(--foreground);
+		padding: 14px 20px;
+		border-block-end: 1px solid var(--hairline);
 	}
 
 	.section-title-plain {
-		font: var(--k-text-section);
-		color: var(--k-color-text);
+		font: var(--type-section);
+		color: var(--foreground);
 	}
 
 	.settings-rows {
 		display: grid;
+		padding-inline: 20px;
 	}
 
 	.settings-row {
 		display: grid;
 		grid-template-columns: minmax(0, 1fr);
 		gap: var(--space-3);
-		padding-block: var(--space-5) 0;
+		padding-block: 18px;
 		align-items: start;
 	}
 
@@ -684,9 +691,9 @@
 	}
 
 	.settings-row-title {
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 600;
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.create-column {
@@ -701,9 +708,9 @@
 		display: grid;
 		gap: var(--space-3);
 		padding: var(--space-4);
-		background: var(--k-color-accent-soft);
-		border: 1px solid var(--k-color-accent-border);
-		border-radius: var(--k-radius-lg);
+		background: color-mix(in oklab, var(--primary) 12%, transparent);
+		border: 1px solid color-mix(in oklab, var(--primary) 40%, transparent);
+		border-radius: 12px;
 	}
 
 	@media (min-width: 640px) {
@@ -716,17 +723,17 @@
 		display: flex;
 		align-items: center;
 		gap: var(--space-2);
-		color: var(--k-color-accent-text);
+		color: var(--link);
 	}
 
 	.secret-box h2 {
-		font: var(--k-text-section);
-		color: var(--k-color-accent-text);
+		font: var(--type-section);
+		color: var(--link);
 	}
 
 	.secret-warning {
-		font: var(--k-text-hint);
-		color: var(--k-color-text);
+		font: var(--type-hint);
+		color: var(--foreground);
 	}
 
 	.secret-row {
@@ -737,13 +744,13 @@
 	}
 
 	.secret-row code {
-		font: var(--k-text-meta);
+		font: var(--type-meta);
 		font-variant-numeric: tabular-nums;
 		padding: var(--space-2) var(--space-3);
-		color: var(--k-color-text);
-		background: var(--k-color-surface-1);
-		border: 1px solid var(--k-color-accent-border);
-		border-radius: var(--k-radius-sm);
+		color: var(--foreground);
+		background: var(--card);
+		border: 1px solid color-mix(in oklab, var(--primary) 40%, transparent);
+		border-radius: 6px;
 		word-break: break-all;
 	}
 
@@ -757,9 +764,9 @@
 	.tip {
 		opacity: 0;
 		pointer-events: none;
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 600;
-		color: var(--k-color-accent-text);
+		color: var(--link);
 		transition: opacity var(--dur-fast) var(--ease);
 	}
 
@@ -774,7 +781,7 @@
 
 	.field input:is(:user-invalid, :global(.user-invalid-fallback)),
 	.field.is-invalid input {
-		border-color: var(--k-color-danger);
+		border-color: var(--destructive);
 	}
 
 	.error-msg {
@@ -792,15 +799,18 @@
 		display: grid;
 		gap: var(--space-3);
 		padding: var(--space-4);
-		background: var(--k-color-danger-soft);
-		border: 1px solid var(--k-color-danger-border);
-		border-radius: var(--k-radius-md);
+		background: color-mix(in oklab, var(--destructive) 10%, transparent);
+		border: 1px solid color-mix(in oklab, var(--destructive) 40%, transparent);
+		border-radius: 8px;
 	}
 
 	/* Studio table-card for active API keys. */
 	.table-card {
-		border-block-start: 1px solid var(--k-color-text);
 		overflow: hidden;
+		background: var(--card);
+		border: 1px solid var(--border);
+		border-radius: 12px;
+		box-shadow: var(--elevation-sm);
 	}
 
 	.table-toolbar {
@@ -809,19 +819,19 @@
 		justify-content: space-between;
 		gap: var(--space-2);
 		padding: var(--space-3) 0;
-		border-block-end: 1px solid var(--k-color-line);
+		border-block-end: 1px solid var(--border);
 	}
 
 	.toolbar-count {
-		font: var(--k-text-meta);
+		font: var(--type-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 	}
 
 	.empty-state {
 		padding: var(--space-5) var(--space-4);
-		font: var(--k-text-hint);
-		color: var(--k-color-text-muted);
+		font: var(--type-hint);
+		color: var(--muted-foreground);
 	}
 
 	.key-list {
@@ -838,7 +848,7 @@
 		justify-content: space-between;
 		gap: var(--space-3);
 		padding: var(--space-4);
-		border-block-end: 1px solid var(--k-color-line);
+		border-block-end: 1px solid var(--border);
 		transition: background-color var(--dur-fast) var(--ease);
 	}
 
@@ -847,7 +857,7 @@
 	}
 
 	.key-item:hover {
-		background: var(--k-color-surface-2);
+		background: var(--muted);
 	}
 
 	.key-meta {
@@ -864,37 +874,37 @@
 	}
 
 	.key-name {
-		font: var(--k-text-ui);
+		font: var(--type-ui);
 		font-weight: 600;
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.key-prefix {
-		font: var(--k-text-meta);
+		font: var(--type-meta);
 		font-variant-numeric: tabular-nums;
 		padding: 1px 7px;
-		color: var(--k-color-text-secondary);
-		background: var(--k-color-surface-2);
-		border: 1px solid var(--k-color-line);
-		border-radius: var(--k-radius-xs);
+		color: var(--muted-foreground);
+		background: var(--muted);
+		border: 1px solid var(--border);
+		border-radius: 4px;
 	}
 
 	.key-dates {
-		font: var(--k-text-meta);
+		font: var(--type-meta);
 		font-variant-numeric: tabular-nums;
-		color: var(--k-color-text-muted);
+		color: var(--muted-foreground);
 	}
 
 	.dialog-title {
-		font: var(--k-text-section);
+		font: var(--type-section);
 		font-size: 1.125rem;
 		margin-block-end: var(--space-3);
-		color: var(--k-color-text);
+		color: var(--foreground);
 	}
 
 	.dialog-body {
 		margin-block-end: var(--space-4);
-		color: var(--k-color-text-secondary);
+		color: var(--muted-foreground);
 	}
 
 	.dialog-actions {
